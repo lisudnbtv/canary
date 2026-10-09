@@ -9,3 +9,4 @@ services:
       - '../data-otservbr-global/scripts/ots:/canary/data-otservbr-global/scripts/ots:ro'
       - '../data-otservbr-global/world/otservbr.otbm:/canary/data-otservbr-global/world/otservbr.otbm:ro'
       - '../data-otservbr-global/scripts/quests/the_pits_of_inferno_quest/movements_throne.lua:/canary/data-otservbr-global/scripts/quests/the_pits_of_inferno_quest/movements_throne.lua:ro'
+      - '../data-otservbr-global/scripts/quests/the_annihilator/lever.lua:/canary/data-otservbr-global/scripts/quests/the_annihilator/lever.lua:ro'

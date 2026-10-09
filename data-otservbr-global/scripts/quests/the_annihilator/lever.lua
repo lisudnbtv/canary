@@ -1,9 +1,9 @@
+-- OTS: Annihilator przerobiony pod jednego gracza.
+-- Dzwignia dziala, gdy na polach stoi co najmniej jeden gracz (zamiast czterech),
+-- i mozna jej uzywac wielokrotnie: kazde pociagniecie czysci sale i stawia potwory od nowa.
 local setting = {
-	-- At what level can do the quest?
+	-- Od jakiego poziomu mozna zrobic quest?
 	requiredLevel = 100,
-	-- Can it be done daily? true = yes, false = no
-	daily = true,
-	-- Do not change from here down
 	centerDemonRoomPosition = { x = 33221, y = 31659, z = 13 },
 	demonsPositions = {
 		{ x = 33219, y = 31657, z = 13 },
@@ -24,59 +24,48 @@ local setting = {
 local lever = Action()
 
 function lever.onUse(player, item, fromPosition, target, toPosition, isHotkey)
-	if item.itemid == 2772 then
-		-- Checks if you have the 4 players and if they have the required level
-		for i = 1, #setting.playersPositions do
-			local creature = Tile(setting.playersPositions[i].fromPos):getTopCreature()
-			if not creature then
-				player:sendTextMessage(MESSAGE_EVENT_ADVANCE, "Four players are required to start the quest.")
+	-- Zbierz graczy stojacych na polach startowych.
+	local team = {}
+	for i = 1, #setting.playersPositions do
+		local tile = Tile(setting.playersPositions[i].fromPos)
+		local creature = tile and tile:getTopCreature()
+		if creature and creature:isPlayer() then
+			if creature:getLevel() < setting.requiredLevel then
+				player:sendTextMessage(MESSAGE_EVENT_ADVANCE, "Wymagany poziom: " .. setting.requiredLevel .. ".")
 				return true
 			end
-			if creature and creature:getLevel() < setting.requiredLevel then
-				player:sendTextMessage(MESSAGE_EVENT_ADVANCE, "All the players need to be level " .. setting.requiredLevel .. " or higher.")
-				return true
-			end
+			team[#team + 1] = { creature = creature, destination = setting.playersPositions[i].toPos }
 		end
-
-		-- Checks if there are still players inside the room, if so, return true
-		if roomIsOccupied(setting.centerDemonRoomPosition, true, 4, 4) then
-			player:sendTextMessage(MESSAGE_EVENT_ADVANCE, "A team is already inside the quest room.")
-			return true
-		end
-
-		-- Create monsters
-		for i = 1, #setting.demonsPositions do
-			Game.createMonster("Angry Demon", setting.demonsPositions[i])
-		end
-
-		-- Get players from the tiles "playersPositions" and teleport to the demons room if all of the above requirements are met
-		for i = 1, #setting.playersPositions do
-			local creature = Tile(setting.playersPositions[i].fromPos):getTopCreature()
-			if creature and creature:isPlayer() then
-				creature:teleportTo(setting.playersPositions[i].toPos)
-				creature:getPosition():sendMagicEffect(CONST_ME_TELEPORT)
-			else
-				return false
-			end
-		end
-		item:transform(2773)
-	elseif item.itemid == 2773 then
-		-- If it has "daily = true" then it will execute this function
-		if setting.daily then
-			player:sendCancelMessage(RETURNVALUE_NOTPOSSIBLE)
-			return true
-		end
-		-- Not be able to push the lever back if someone is still inside the monsters room
-		if roomIsOccupied(setting.centerDemonRoomPosition, true, 4, 4) then
-			player:sendTextMessage(MESSAGE_EVENT_ADVANCE, "A team is already inside the quest room.")
-			return true
-		end
-		-- Removes all monsters so that the next team can enter
-		if Position.removeMonster(setting.centerDemonRoomPosition, 4, 4) then
-			return true
-		end
-		item:transform(2772)
 	end
+
+	if #team == 0 then
+		player:sendTextMessage(MESSAGE_EVENT_ADVANCE, "Stan na jednym z czterech pol przy dzwigni i pociagnij ja.")
+		return true
+	end
+
+	if roomIsOccupied(setting.centerDemonRoomPosition, true, 4, 4) then
+		player:sendTextMessage(MESSAGE_EVENT_ADVANCE, "Ktos jest juz w sali walki.")
+		return true
+	end
+
+	-- Usun potwory z poprzedniego podejscia.
+	local leftovers = Game.getSpectators(setting.centerDemonRoomPosition, false, false, 8, 8, 6, 6)
+	for _, creature in ipairs(leftovers) do
+		if creature:isMonster() then
+			creature:remove()
+		end
+	end
+
+	for i = 1, #setting.demonsPositions do
+		Game.createMonster("Angry Demon", setting.demonsPositions[i])
+	end
+
+	for i = 1, #team do
+		team[i].creature:teleportTo(team[i].destination)
+		Position(team[i].destination):sendMagicEffect(CONST_ME_TELEPORT)
+	end
+
+	item:transform(item.itemid == 2772 and 2773 or 2772)
 	return true
 end
 

@@ -620,6 +620,8 @@ local bosses = {
 
 local quests = {
 	{ "Pits of Inferno: soft boots, avenger, arcane staff, arbalest", func = "OtsPoiStart" },
+	{ "Demon Helmet: steel boots, demon helmet, demon shield", 33324, 31575, 15, hint = "Pokonaj potwory w sali, pociagnij dzwignie po wschodniej stronie. Skrzynie sa na zachodzie, za kamieniem (pole PZ)." },
+	{ "The Annihilator: demon armor, magic sword, stonecutter axe", 33224, 31671, 13, plain = true, hint = "Stan na jednym z czterech pol przy dzwigni i pociagnij ja. Wymagany poziom 100. Skrzynie sa na wschod od sali walki (pola PZ)." },
 	{ "Black Knight: crown armor, crown shield", 32870, 31943, 11, hint = "Skrzynia z nagroda: ok. 11 krokow, kierunek poludnie. Przy skrzyni jest strefa PZ." },
 	{ "Circle Room: war hammer", 32496, 31946, 14, hint = "Skrzynia z nagroda: ok. 45 krokow, kierunek poludnie. Przy skrzyni jest strefa PZ." },
 	{ "Crusader Helmet: crusader helmet", 32456, 31938, 14, hint = "Skrzynia z nagroda: ok. 45 krokow, kierunek zachod. Przy skrzyni jest strefa PZ." },
@@ -696,14 +698,18 @@ local function travel(player, entry)
 	end
 
 	local from = player:getPosition()
-	if not entry.town then
+	local bare = entry.town or entry.plain
+	if not bare then
 		prepareSpot(destination)
 	end
 	player:teleportTo(destination)
 	from:sendMagicEffect(CONST_ME_POFF)
 	destination:sendMagicEffect(CONST_ME_TELEPORT)
-	if entry.town then
+	if bare then
 		player:sendTextMessage(MESSAGE_EVENT_ADVANCE, "Teleport: " .. entry[1])
+		if entry.hint then
+			player:sendTextMessage(MESSAGE_EVENT_ADVANCE, entry.hint)
+		end
 	else
 		player:sendTextMessage(MESSAGE_EVENT_ADVANCE, "Teleport: " .. entry[1] .. ". Stoisz w bezpiecznej strefie 3x3, obok jest teleport powrotny do Thais.")
 		if entry.hint then
