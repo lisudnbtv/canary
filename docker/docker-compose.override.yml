@@ -1,6 +1,9 @@
 ---
-# Lokalne dodatki OTS: wlasne skrypty Lua montowane do gotowego obrazu serwera.
+# Lokalne dodatki OTS: wlasne skrypty Lua montowane do gotowego obrazu serwera
+# oraz mapa trzymana na dysku, zeby nie pobierac jej przy kazdym starcie.
+# Mape tworzy C:\OTS\restart.bat (kopiuje ja z dzialajacego kontenera).
 services:
   server:
     volumes:
       - '../data-otservbr-global/scripts/ots:/canary/data-otservbr-global/scripts/ots:ro'
+      - '../data-otservbr-global/world/otservbr.otbm:/canary/data-otservbr-global/world/otservbr.otbm:ro'
