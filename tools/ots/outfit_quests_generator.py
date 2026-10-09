@@ -62,6 +62,8 @@ for k, o in enumerate(outfits):
     sgn = -1 if side == 0 else 1
     item(px, Y0 + 2 * sgn, TELEPORT, PAD_AID); pads[key(px, Y0 + 2 * sgn)] = dict(kind='room', index=k)
     item(px, Y0 + 3 * sgn, SIGN_A if sgn < 0 else SIGN_B, 0, '%s\nPotwory: %s\nDo pokonania: %d' % (o['name'], ', '.join(o['monsters']), KILLS))
+    floor(px, Y0 + 4 * sgn)                 # wysepka z postacia pokazujaca stroj
+    o['display'] = (px, Y0 + 4 * sgn, sgn)
     # sala
     col, row = k % COLS, k // COLS
     rx = X0 + col * STEP
@@ -143,7 +145,7 @@ local hubLobby = Position(%d, %d, %d)
 
 local quests = {''' % (KILLS, PAD_AID, CHEST_AID, KILLS, ROOM, *hall, *HUB_LOBBY))
 for o, r in zip(outfits, rooms):
-    L.append('\t{ name = %s, male = %d, female = %d, x = %d, y = %d, entry = Position(%d, %d, %d) },' % (q(o['name']), o['male'], o['female'], r['x'], r['y'], *r['entry']))
+    L.append('\t{ name = %s, male = %d, female = %d, x = %d, y = %d, entry = Position(%d, %d, %d), display = Position(%d, %d, %d), faceSouth = %s },' % (q(o['name']), o['male'], o['female'], r['x'], r['y'], *r['entry'], o['display'][0], o['display'][1], Z, 'true' if o['display'][2] < 0 else 'false'))
 L.append('}\n\nlocal pads = {')
 for k, a in sorted(pads.items()):
     L.append('\t[%s] = %s,' % (q(k), '{ room = %d }' % (a['index'] + 1) if a['kind'] == 'room' else '{ %s = true }' % a['kind']))
@@ -287,6 +289,54 @@ end
 
 chest:aid(CHEST_ACTION_ID)
 chest:register()
+
+-- Postacie pokazujace stroje: po jednej za kazdym padem w hali wyboru.
+-- Kazda ma wlasny typ NPC z nazwa stroju i jego wygladem z oboma dodatkami.
+local function displayName(quest)
+	return "Stroj " .. quest.name
+end
+
+for _, quest in ipairs(quests) do
+	local name = displayName(quest)
+	local npcType = Game.createNpcType(name)
+	local npcConfig = {}
+	npcConfig.name = name
+	npcConfig.description = name
+	npcConfig.health = 100
+	npcConfig.maxHealth = 100
+	npcConfig.walkInterval = 0
+	npcConfig.walkRadius = 0
+	npcConfig.outfit = {
+		lookType = quest.male > 0 and quest.male or quest.female,
+		lookHead = 78,
+		lookBody = 69,
+		lookLegs = 58,
+		lookFeet = 76,
+		lookAddons = 3,
+	}
+	npcConfig.flags = {
+		floorchange = false,
+	}
+	npcType:register(npcConfig)
+end
+
+local displays = GlobalEvent("OtsOutfitDisplays")
+
+function displays.onStartup()
+	local placed = 0
+	for _, quest in ipairs(quests) do
+		local npc = Game.createNpc(displayName(quest), quest.display, false, true)
+		if npc then
+			npc:setMasterPos(quest.display)
+			npc:setDirection(quest.faceSouth and DIRECTION_SOUTH or DIRECTION_NORTH)
+			placed = placed + 1
+		end
+	end
+	logger.info("[OTS stroje] Postacie pokazowe: {}/{}", placed, #quests)
+	return true
+end
+
+displays:register()
 ''')
 open('ots_outfit_quests.lua', 'w').write('\n'.join(L))
 xs = [k[0] for k in tiles]; ys = [k[1] for k in tiles]
