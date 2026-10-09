@@ -1,9 +1,11 @@
 ---
 # Lokalne dodatki OTS: wlasne skrypty Lua montowane do gotowego obrazu serwera
 # oraz mapa trzymana na dysku, zeby nie pobierac jej przy kazdym starcie.
+# Nadpisane sa tez pojedyncze skrypty questow przerobione pod jednego gracza.
 # Mape tworzy C:\OTS\restart.bat (kopiuje ja z dzialajacego kontenera).
 services:
   server:
     volumes:
       - '../data-otservbr-global/scripts/ots:/canary/data-otservbr-global/scripts/ots:ro'
       - '../data-otservbr-global/world/otservbr.otbm:/canary/data-otservbr-global/world/otservbr.otbm:ro'
+      - '../data-otservbr-global/scripts/quests/the_pits_of_inferno_quest/movements_throne.lua:/canary/data-otservbr-global/scripts/quests/the_pits_of_inferno_quest/movements_throne.lua:ro'

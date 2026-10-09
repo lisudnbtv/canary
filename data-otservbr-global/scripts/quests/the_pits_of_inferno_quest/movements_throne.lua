@@ -1,47 +1,138 @@
-local setting = {
-	[2080] = {
-		storage = Storage.Quest.U7_9.ThePitsOfInferno.ThroneInfernatil,
-		text = "You have touched Infernatil's throne and absorbed some of his spirit.",
-		effect = CONST_ME_FIREAREA,
-		toPosition = Position(32909, 32211, 15),
-	},
-	[2081] = {
-		storage = Storage.Quest.U7_9.ThePitsOfInferno.ThroneTafariel,
-		text = "You have touched Tafariel's throne and absorbed some of his spirit.",
-		effect = CONST_ME_MORTAREA,
-		toPosition = Position(32761, 32243, 15),
-	},
-	[2082] = {
+-- OTS: uproszczone Pits of Inferno dla jednego gracza.
+-- Zamiast powrotu do srodka PoI kazdy tron przenosi do nastepnej sali.
+-- Tron dziala dopiero po pokonaniu w sali tylu potworow, ile jest w niej spawnow.
+-- Dane sal (obszar, wejscie, liczba potworow) sa wyliczone z mapy.
+
+local rooms = {
+	{
+		name = "Verminor",
+		uid = 2082,
 		storage = Storage.Quest.U7_9.ThePitsOfInferno.ThroneVerminor,
-		text = "You have touched Verminor's throne and absorbed some of his spirit.",
+		value = 1,
 		effect = CONST_ME_POISONAREA,
-		toPosition = Position(32840, 32327, 15),
+		entry = Position(32860, 32352, 15),
+		kills = 65,
+		floor = 15,
+		rows = { [32324] = { 32836, 32836, 32840, 32840, 32844, 32847, 32852, 32856 }, [32325] = { 32836, 32837, 32840, 32841, 32843, 32856 }, [32326] = { 32834, 32837, 32840, 32841, 32843, 32856 }, [32327] = { 32834, 32838, 32841, 32846, 32852, 32855 }, [32328] = { 32834, 32838, 32840, 32846, 32851, 32855 }, [32329] = { 32834, 32838, 32851, 32856 }, [32330] = { 32834, 32838, 32851, 32856 }, [32331] = { 32834, 32839, 32842, 32848, 32851, 32856 }, [32332] = { 32834, 32838, 32843, 32847, 32852, 32856 }, [32333] = { 32834, 32856 }, [32334] = { 32834, 32835, 32838, 32843, 32846, 32856 }, [32335] = { 32834, 32835, 32838, 32838, 32843, 32843, 32846, 32847, 32852, 32856 }, [32336] = { 32853, 32856 }, [32337] = { 32854, 32855 }, [32338] = { 32834, 32846, 32854, 32855 }, [32339] = { 32834, 32846, 32854, 32855 }, [32340] = { 32834, 32847, 32852, 32852, 32854, 32855 }, [32341] = { 32834, 32856 }, [32342] = { 32843, 32856 }, [32343] = { 32843, 32847, 32852, 32856 }, [32344] = { 32836, 32838, 32843, 32848, 32851, 32856 }, [32345] = { 32836, 32838, 32843, 32848, 32853, 32856 }, [32346] = { 32834, 32840, 32843, 32845, 32847, 32848, 32853, 32856 }, [32347] = { 32834, 32840, 32847, 32848 }, [32348] = { 32835, 32839, 32847, 32848 }, [32349] = { 32835, 32845, 32847, 32848, 32850, 32850 }, [32350] = { 32835, 32850, 32854, 32854, 32859, 32859 }, [32351] = { 32835, 32839, 32844, 32850, 32854, 32854, 32857, 32861 }, [32352] = { 32834, 32840, 32843, 32850, 32854, 32861 }, [32353] = { 32834, 32840, 32843, 32850, 32854, 32861 }, [32354] = { 32834, 32840, 32843, 32850, 32854, 32857, 32860, 32861 }, [32355] = { 32834, 32837, 32839, 32840, 32843, 32850, 32854, 32857, 32860, 32860 }, [32356] = { 32839, 32840, 32843, 32850, 32854, 32856 }, [32357] = { 32839, 32840, 32843, 32845, 32848, 32850, 32854, 32856 }, [32358] = { 32836, 32837, 32839, 32840, 32843, 32845, 32848, 32850, 32855, 32856 }, [32359] = { 32836, 32840, 32855, 32856 }, [32360] = { 32834, 32840, 32855, 32856 }, [32361] = { 32834, 32840, 32843, 32844, 32849, 32853, 32855, 32856 }, [32362] = { 32834, 32840, 32843, 32844, 32849, 32856 }, [32363] = { 32834, 32840, 32843, 32846, 32849, 32856 }, [32364] = { 32834, 32835, 32837, 32840, 32843, 32846, 32849, 32856 }, [32365] = { 32834, 32835, 32843, 32846, 32849, 32850, 32852, 32856 }, [32366] = { 32834, 32835, 32844, 32846, 32849, 32850 }, [32367] = { 32834, 32835, 32837, 32846, 32849, 32850 }, [32368] = { 32834, 32846, 32849, 32850, 32852, 32856 }, [32369] = { 32834, 32839, 32844, 32845, 32849, 32856 }, [32370] = { 32834, 32840, 32843, 32854 }, [32371] = { 32834, 32840, 32843, 32854 } },
 	},
-	[2083] = {
-		storage = Storage.Quest.U7_9.ThePitsOfInferno.ThroneApocalypse,
-		text = "You have touched Apocalypse's throne and absorbed some of his spirit.",
-		effect = CONST_ME_EXPLOSIONAREA,
-		toPosition = Position(32875, 32267, 15),
-	},
-	[2084] = {
-		storage = Storage.Quest.U7_9.ThePitsOfInferno.ThroneBazir,
-		text = "You have touched Bazir's throne and absorbed some of his spirit.",
-		effect = CONST_ME_MAGIC_GREEN,
-		toPosition = Position(32745, 32385, 15),
-	},
-	[2085] = {
-		storage = Storage.Quest.U7_9.ThePitsOfInferno.ThroneAshfalor,
-		text = "You have touched Ashfalor's throne and absorbed some of his spirit.",
+	{
+		name = "Infernatil",
+		uid = 2080,
+		storage = Storage.Quest.U7_9.ThePitsOfInferno.ThroneInfernatil,
+		value = 1,
 		effect = CONST_ME_FIREAREA,
-		toPosition = Position(32839, 32310, 15),
+		entry = Position(32915, 32206, 15),
+		kills = 0,
+		floor = 15,
+		rows = { [32206] = { 32904, 32906, 32912, 32915 }, [32207] = { 32904, 32906, 32908, 32910, 32912, 32915 }, [32208] = { 32905, 32914 } },
 	},
-	[2086] = {
-		storage = Storage.Quest.U7_9.ThePitsOfInferno.ThronePumin,
-		text = "You have touched Pumin's throne and absorbed some of his spirit.",
+	{
+		name = "Tafariel",
+		uid = 2081,
+		storage = Storage.Quest.U7_9.ThePitsOfInferno.ThroneTafariel,
+		value = 1,
 		effect = CONST_ME_MORTAREA,
-		toPosition = Position(32785, 32279, 15),
+		entry = Position(32767, 32226, 15),
+		kills = 47,
+		floor = 15,
+		rows = { [32226] = { 32767, 32768, 32770, 32770, 32773, 32774, 32776, 32778, 32780, 32781, 32784, 32788 }, [32227] = { 32767, 32768, 32770, 32778, 32780, 32788 }, [32228] = { 32767, 32768, 32770, 32788 }, [32229] = { 32767, 32768, 32770, 32788 }, [32230] = { 32767, 32768, 32771, 32778, 32780, 32788 }, [32231] = { 32767, 32768, 32770, 32776, 32781, 32788 }, [32232] = { 32767, 32768, 32770, 32776, 32781, 32789 }, [32233] = { 32767, 32768, 32770, 32776, 32781, 32789 }, [32234] = { 32767, 32768, 32770, 32776, 32781, 32789 }, [32235] = { 32767, 32776, 32781, 32789 }, [32236] = { 32767, 32776, 32780, 32782 }, [32237] = { 32767, 32768, 32770, 32776, 32780, 32782 }, [32238] = { 32781, 32782 }, [32239] = { 32767, 32768, 32770, 32779, 32781, 32785 }, [32240] = { 32759, 32759, 32762, 32768, 32771, 32785 }, [32241] = { 32757, 32768, 32770, 32778, 32780, 32789 }, [32242] = { 32757, 32759, 32761, 32765, 32767, 32768, 32770, 32778, 32782, 32789 }, [32243] = { 32757, 32759, 32761, 32765, 32767, 32768, 32770, 32778, 32782, 32789 }, [32244] = { 32757, 32765, 32767, 32768, 32771, 32778, 32782, 32789 }, [32245] = { 32757, 32765, 32767, 32768, 32770, 32778, 32780, 32789 }, [32246] = { 32759, 32760, 32762, 32765, 32767, 32768, 32770, 32778, 32780, 32789 }, [32247] = { 32767, 32768, 32770, 32778, 32780, 32789 }, [32248] = { 32767, 32768, 32771, 32778, 32782, 32789 }, [32249] = { 32767, 32768, 32775, 32776 }, [32250] = { 32767, 32789 }, [32251] = { 32767, 32789 } },
+	},
+	{
+		name = "Apocalypse",
+		uid = 2083,
+		storage = Storage.Quest.U7_9.ThePitsOfInferno.ThroneApocalypse,
+		value = 1,
+		effect = CONST_ME_EXPLOSIONAREA,
+		entry = Position(32857, 32273, 15),
+		kills = 30,
+		floor = 15,
+		rows = { [32264] = { 32868, 32870, 32872, 32872, 32875, 32875 }, [32265] = { 32868, 32870, 32872, 32877 }, [32266] = { 32867, 32879 }, [32267] = { 32866, 32880 }, [32268] = { 32866, 32870, 32875, 32878 }, [32269] = { 32866, 32870, 32872, 32881 }, [32270] = { 32866, 32870, 32872, 32882 }, [32271] = { 32857, 32859, 32872, 32883 }, [32272] = { 32856, 32860, 32866, 32870, 32872, 32884 }, [32273] = { 32855, 32860, 32866, 32870, 32872, 32884 }, [32274] = { 32855, 32858, 32860, 32860, 32867, 32868, 32882, 32884 }, [32275] = { 32855, 32855, 32860, 32861, 32866, 32877, 32879, 32884 }, [32276] = { 32855, 32857, 32859, 32861, 32866, 32877, 32879, 32884 }, [32277] = { 32855, 32861, 32866, 32877, 32879, 32884 }, [32278] = { 32855, 32861, 32866, 32867, 32869, 32871, 32873, 32877, 32879, 32884 }, [32279] = { 32855, 32876, 32879, 32884 }, [32280] = { 32855, 32857, 32859, 32862, 32866, 32876, 32879, 32884 }, [32281] = { 32857, 32857, 32860, 32862, 32866, 32867, 32869, 32875, 32877, 32877, 32879, 32884 }, [32282] = { 32855, 32861, 32866, 32877, 32879, 32884 }, [32283] = { 32855, 32861, 32866, 32877, 32879, 32884 }, [32284] = { 32855, 32861, 32872, 32875, 32881, 32884 }, [32285] = { 32855, 32856, 32859, 32861, 32866, 32870, 32872, 32875, 32877, 32884 }, [32286] = { 32855, 32857, 32859, 32861, 32866, 32870, 32872, 32875, 32877, 32882 }, [32287] = { 32855, 32856, 32859, 32861, 32866, 32870, 32872, 32875, 32877, 32882 }, [32288] = { 32866, 32870, 32872, 32882 }, [32289] = { 32867, 32881 }, [32290] = { 32868, 32880 } },
+	},
+	{
+		name = "Pumin",
+		uid = 2086,
+		storage = Storage.Quest.U7_9.ThePitsOfInferno.ThronePumin,
+		value = 10,
+		effect = CONST_ME_MORTAREA,
+		entry = Position(32785, 32310, 15),
+		kills = 25,
+		floor = 15,
+		rows = { [32275] = { 32784, 32786 }, [32276] = { 32783, 32787 }, [32277] = { 32782, 32788 }, [32278] = { 32782, 32790 }, [32279] = { 32780, 32791 }, [32280] = { 32779, 32779, 32785, 32786 }, [32281] = { 32779, 32789, 32791, 32792 }, [32282] = { 32782, 32792 }, [32283] = { 32779, 32789, 32791, 32792 }, [32284] = { 32780, 32780, 32782, 32789, 32791, 32792 }, [32285] = { 32779, 32781, 32789, 32792 }, [32286] = { 32779, 32789, 32791, 32792 }, [32287] = { 32779, 32780, 32783, 32783, 32785, 32786, 32788, 32789, 32791, 32792 }, [32288] = { 32779, 32781, 32783, 32787, 32789, 32792 }, [32289] = { 32781, 32783, 32785, 32787, 32789, 32789, 32792, 32792 }, [32290] = { 32779, 32783, 32785, 32792 }, [32291] = { 32779, 32779, 32782, 32782, 32785, 32786, 32790, 32790 }, [32292] = { 32779, 32782, 32784, 32792 }, [32293] = { 32780, 32782, 32784, 32785, 32787, 32792 }, [32294] = { 32779, 32785, 32787, 32792 }, [32295] = { 32779, 32779, 32782, 32783, 32785, 32785, 32788, 32792 }, [32296] = { 32779, 32787, 32791, 32792 }, [32297] = { 32779, 32789, 32791, 32792 }, [32298] = { 32782, 32783, 32788, 32789 }, [32299] = { 32779, 32792 }, [32300] = { 32779, 32780, 32782, 32783, 32785, 32788, 32791, 32792 }, [32301] = { 32779, 32780, 32782, 32792 }, [32302] = { 32779, 32780, 32784, 32785 }, [32303] = { 32779, 32788, 32790, 32792 }, [32304] = { 32780, 32783, 32785, 32791 }, [32305] = { 32781, 32786, 32788, 32790 }, [32306] = { 32788, 32789 }, [32307] = { 32783, 32788 }, [32308] = { 32784, 32787 }, [32309] = { 32784, 32787 }, [32310] = { 32784, 32787 }, [32311] = { 32783, 32788 }, [32312] = { 32782, 32783, 32788, 32789 }, [32313] = { 32782, 32782, 32789, 32789 } },
+	},
+	{
+		name = "Bazir",
+		uid = 2084,
+		storage = Storage.Quest.U7_9.ThePitsOfInferno.ThroneBazir,
+		value = 1,
+		effect = CONST_ME_MAGIC_GREEN,
+		entry = Position(32713, 32382, 13),
+		kills = 0,
+		floor = 13,
+		rows = { [32381] = { 32712, 32714, 32716, 32718, 32720, 32722 }, [32382] = { 32712, 32714, 32716, 32718, 32720, 32722 }, [32383] = { 32712, 32714, 32716, 32718, 32720, 32722 }, [32384] = { 32712, 32714, 32716, 32718, 32720, 32722 }, [32385] = { 32712, 32714, 32716, 32718, 32720, 32722 }, [32386] = { 32712, 32714, 32716, 32718, 32720, 32722 }, [32387] = { 32712, 32714, 32716, 32718, 32720, 32722 }, [32388] = { 32712, 32722 }, [32389] = { 32712, 32722 }, [32390] = { 32712, 32722 }, [32391] = { 32712, 32722 }, [32392] = { 32712, 32722 }, [32393] = { 32712, 32722 }, [32394] = { 32712, 32722 } },
+	},
+	{
+		name = "Ashfalor",
+		uid = 2085,
+		storage = Storage.Quest.U7_9.ThePitsOfInferno.ThroneAshfalor,
+		value = 1,
+		effect = CONST_ME_FIREAREA,
+		entry = Position(32829, 32262, 15),
+		kills = 18,
+		floor = 15,
+		rows = { [32259] = { 32838, 32838 }, [32260] = { 32831, 32832, 32838, 32839 }, [32261] = { 32828, 32841 }, [32262] = { 32828, 32842 }, [32263] = { 32826, 32841 }, [32264] = { 32826, 32830, 32835, 32840 }, [32265] = { 32826, 32830, 32835, 32839 }, [32266] = { 32826, 32831, 32833, 32838 }, [32267] = { 32826, 32837 }, [32268] = { 32826, 32837 }, [32269] = { 32824, 32837 }, [32270] = { 32826, 32826, 32828, 32837 }, [32271] = { 32826, 32837 }, [32272] = { 32826, 32837 }, [32273] = { 32826, 32837 }, [32274] = { 32826, 32837 }, [32275] = { 32826, 32835, 32837, 32837 }, [32276] = { 32826, 32837 }, [32277] = { 32826, 32837 }, [32278] = { 32826, 32837 }, [32279] = { 32826, 32837 }, [32280] = { 32826, 32837 }, [32281] = { 32825, 32837 }, [32282] = { 32824, 32826, 32828, 32837 }, [32283] = { 32826, 32837 }, [32284] = { 32826, 32836 }, [32285] = { 32826, 32837 }, [32286] = { 32826, 32837 }, [32287] = { 32826, 32837 }, [32288] = { 32826, 32837 }, [32289] = { 32832, 32833 }, [32290] = { 32832, 32833 }, [32291] = { 32832, 32833 }, [32292] = { 32832, 32833 }, [32293] = { 32832, 32833 }, [32294] = { 32832, 32833 }, [32295] = { 32832, 32833 }, [32296] = { 32832, 32833 }, [32297] = { 32832, 32833 }, [32298] = { 32832, 32833 }, [32299] = { 32832, 32833 }, [32300] = { 32832, 32833 }, [32301] = { 32832, 32833 }, [32302] = { 32832, 32833 }, [32303] = { 32832, 32833 }, [32304] = { 32832, 32833 }, [32305] = { 32832, 32834, 32838, 32840, 32844, 32844 }, [32306] = { 32832, 32835, 32837, 32841, 32843, 32844 }, [32307] = { 32832, 32844 }, [32308] = { 32832, 32844 }, [32309] = { 32832, 32844 }, [32310] = { 32832, 32844 }, [32311] = { 32832, 32844 }, [32312] = { 32834, 32834, 32836, 32836, 32838, 32838, 32840, 32840, 32842, 32842 }, [32313] = { 32835, 32835, 32837, 32837, 32839, 32839, 32841, 32841, 32843, 32843 } },
 	},
 }
+
+local rewardRoom = Position(32814, 32233, 11)
+local PROGRESS_KEY = "ots-poi-room"
+
+local byUid = {}
+for index, room in ipairs(rooms) do
+	byUid[room.uid] = index
+end
+
+-- [guid gracza] = { room = numer sali, kills = pokonane potwory }
+local progress = {}
+
+local function inRoom(room, pos)
+	if pos.z ~= room.floor then
+		return false
+	end
+	local runs = room.rows[pos.y]
+	if not runs then
+		return false
+	end
+	for i = 1, #runs, 2 do
+		if pos.x >= runs[i] and pos.x <= runs[i + 1] then
+			return true
+		end
+	end
+	return false
+end
+
+local function enterRoom(player, index)
+	local room = rooms[index]
+	progress[player:getGuid()] = { room = index, kills = 0 }
+	player:kv():set(PROGRESS_KEY, index)
+	local from = player:getPosition()
+	player:teleportTo(room.entry)
+	from:sendMagicEffect(CONST_ME_POFF)
+	room.entry:sendMagicEffect(CONST_ME_TELEPORT)
+	if room.kills > 0 then
+		player:sendTextMessage(MESSAGE_EVENT_ADVANCE, string.format("Pits of Inferno, sala %d/%d: %s. Pokonaj %d potworow, potem wejdz na tron.", index, #rooms, room.name, room.kills))
+	else
+		player:sendTextMessage(MESSAGE_EVENT_ADVANCE, string.format("Pits of Inferno, sala %d/%d: %s. Ta sala jest pusta, wejdz na tron.", index, #rooms, room.name))
+	end
+end
+
+-- Wywolywane z menu teleportow: start albo kontynuacja od zapisanej sali.
+function OtsPoiStart(player)
+	local saved = tonumber(player:kv():get(PROGRESS_KEY)) or 1
+	if saved < 1 or saved > #rooms then
+		saved = 1
+	end
+	enterRoom(player, saved)
+end
 
 local throne = MoveEvent()
 
@@ -51,43 +142,71 @@ function throne.onStepIn(creature, item, position, fromPosition)
 		return true
 	end
 
-	local throne = setting[item.uid]
-	if not throne then
+	local index = byUid[item.uid]
+	if not index then
+		return true
+	end
+	local room = rooms[index]
+
+	local state = progress[player:getGuid()]
+	if not state or state.room ~= index then
+		state = { room = index, kills = 0 }
+		progress[player:getGuid()] = state
+	end
+
+	if state.kills < room.kills then
+		player:teleportTo(fromPosition, true)
+		player:sendTextMessage(MESSAGE_EVENT_ADVANCE, string.format("Tron jeszcze nie dziala. Pokonaj potwory w tej sali: %d/%d.", state.kills, room.kills))
 		return true
 	end
 
-	-- Check specific condition for UID 2086
-	if item.uid == 2086 then
-		if player:getStorageValue(throne.storage) == 9 then
-			player:setStorageValue(throne.storage, 10)
-			player:setStorageValue(Storage.Quest.U7_9.ThePitsOfInferno.ShortcutHubDoor, 1)
-			player:getPosition():sendMagicEffect(throne.effect)
-			player:say(throne.text, TALKTYPE_MONSTER_SAY)
-		else
-			player:teleportTo(throne.toPosition)
-			player:getPosition():sendMagicEffect(CONST_ME_MORTAREA)
-			player:say("Begone!", TALKTYPE_MONSTER_SAY)
-		end
-	else
-		-- Default behavior for other UIDs
-		if player:getStorageValue(throne.storage) ~= 1 then
-			player:setStorageValue(throne.storage, 1)
-			player:setStorageValue(Storage.Quest.U7_9.ThePitsOfInferno.ShortcutHubDoor, 1)
-			player:getPosition():sendMagicEffect(throne.effect)
-			player:say(throne.text, TALKTYPE_MONSTER_SAY)
-		else
-			player:teleportTo(throne.toPosition)
-			player:getPosition():sendMagicEffect(CONST_ME_MORTAREA)
-			player:say("Begone!", TALKTYPE_MONSTER_SAY)
-		end
+	player:setStorageValue(room.storage, room.value)
+	player:setStorageValue(Storage.Quest.U7_9.ThePitsOfInferno.ShortcutHubDoor, 1)
+	position:sendMagicEffect(room.effect)
+	player:say("You have touched " .. room.name .. "'s throne and absorbed some of his spirit.", TALKTYPE_MONSTER_SAY)
+
+	if index < #rooms then
+		enterRoom(player, index + 1)
+		return true
 	end
+
+	progress[player:getGuid()] = nil
+	player:kv():set(PROGRESS_KEY, 1)
+	player:teleportTo(rewardRoom)
+	rewardRoom:sendMagicEffect(CONST_ME_TELEPORT)
+	player:sendTextMessage(MESSAGE_EVENT_ADVANCE, "Pits of Inferno ukonczone. Jestes w pokoju nagrod (strefa PZ). Powrot: komenda !tp.")
 	return true
 end
 
 throne:type("stepin")
 
-for index, value in pairs(setting) do
-	throne:uid(index)
+for _, room in ipairs(rooms) do
+	throne:uid(room.uid)
 end
 
 throne:register()
+
+local kills = EventCallback("OtsPoiPlayerOnKill")
+
+function kills.playerOnKill(player, monster)
+	if not player or not monster then
+		return
+	end
+	local state = progress[player:getGuid()]
+	if not state then
+		return
+	end
+	local room = rooms[state.room]
+	if state.kills >= room.kills or monster:getMaster() or not inRoom(room, monster:getPosition()) then
+		return
+	end
+
+	state.kills = state.kills + 1
+	if state.kills >= room.kills then
+		player:sendTextMessage(MESSAGE_EVENT_ADVANCE, "Sala oczyszczona. Wejdz na tron, zeby przejsc dalej.")
+	elseif state.kills % 5 == 0 then
+		player:sendTextMessage(MESSAGE_EVENT_ADVANCE, string.format("Pits of Inferno: %d/%d potworow.", state.kills, room.kills))
+	end
+end
+
+kills:register()

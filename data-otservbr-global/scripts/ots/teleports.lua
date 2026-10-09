@@ -745,11 +745,23 @@ local function prepareSpot(center)
 	end
 end
 
-local function travel(player, entry)
+local function inFight(player)
 	local here = Tile(player:getPosition())
 	local protected = isSafe(player) or (here and here:hasFlag(TILESTATE_PROTECTIONZONE))
 	if player:getCondition(CONDITION_INFIGHT, CONDITIONID_DEFAULT) and not protected and not player:getGroup():getAccess() then
 		player:sendCancelMessage("Nie mozesz sie teleportowac w trakcie walki.")
+		return true
+	end
+	return false
+end
+
+-- Duze questy maja wlasne skrypty; menu wywoluje ich funkcje startowa.
+local bigQuests = {
+	{ "Pits of Inferno (7 sal, tron przenosi dalej)", "OtsPoiStart" },
+}
+
+local function travel(player, entry)
+	if inFight(player) then
 		return
 	end
 
@@ -798,6 +810,31 @@ local function openList(player, title, list, back)
 	window:setPriority(true) -- okno przejmuje klawiature: strzalki, Enter, Esc
 	-- Klient 15.x czyta te dwa pola w odwrotnej kolejnosci niz wysyla je serwer,
 	-- dlatego wartosci sa zamienione: Enter = przycisk 1, Esc = przycisk 2.
+	window:setDefaultEnterButton(2)
+	window:setDefaultEscapeButton(1)
+	window:sendToPlayer(player)
+end
+
+local function openBigQuests(player)
+	local window = ModalWindow({ title = "Duze questy", message = "Wybierz quest. Zapisany postep jest kontynuowany." })
+	for i = 1, #bigQuests do
+		local quest = bigQuests[i]
+		window:addChoice(quest[1], function(target)
+			local start = _G[quest[2]]
+			if not start then
+				target:sendCancelMessage("Ten quest nie jest jeszcze dostepny.")
+				return
+			end
+			if not inFight(target) then
+				start(target)
+			end
+		end)
+	end
+	window:addButton("Wybierz")
+	window:addButton("Wstecz", function(target)
+		openMain(target)
+	end)
+	window:setPriority(true)
 	window:setDefaultEnterButton(2)
 	window:setDefaultEscapeButton(1)
 	window:sendToPlayer(player)
@@ -853,8 +890,11 @@ openMain = function(player)
 			openMain(again)
 		end)
 	end)
-	window:addChoice("Questy [" .. #quests .. "]", function(target)
-		openList(target, "Questy", quests, function(again)
+	window:addChoice("Duze questy [" .. #bigQuests .. "]", function(target)
+		openBigQuests(target)
+	end)
+	window:addChoice("Male questy [" .. #quests .. "]", function(target)
+		openList(target, "Male questy", quests, function(again)
 			openMain(again)
 		end)
 	end)
