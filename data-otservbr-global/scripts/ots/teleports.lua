@@ -5,6 +5,7 @@
 local ENTRY_ACTION_ID = 64990
 local ENTRY_ITEM_ID = 1949 -- magic forcefield
 local ENTRY_TOWN = "thais"
+local RETURN_ACTION_ID = 64991 -- teleport powrotny do swiatyni
 
 local hunts = {
 	{ label = "Exp do 100 (start)", list = {
@@ -618,8 +619,46 @@ local bosses = {
 }
 
 
+local templePosition = nil -- swiatynia w Thais, ustawiana przy starcie serwera
+local safeTiles = {} -- pola bezpiecznych stref 3x3
+local preparedSpots = {} -- cele, ktore maja juz strefe i teleport powrotny
+
+local function key(pos)
+	return pos.x .. ":" .. pos.y .. ":" .. pos.z
+end
+
+local function isSafe(creature)
+	return creature and safeTiles[key(creature:getPosition())] == true
+end
+
+local function prepareSpot(center)
+	local id = key(center)
+	if preparedSpots[id] then
+		return
+	end
+	preparedSpots[id] = true
+
+	local returnPlaced = false
+	for dx = -1, 1 do
+		for dy = -1, 1 do
+			local pos = Position(center.x + dx, center.y + dy, center.z)
+			safeTiles[key(pos)] = true
+			if not returnPlaced and templePosition and not (dx == 0 and dy == 0) then
+				local tile = Tile(pos)
+				if tile and tile:isWalkable(false, false, true, true, false) and tile:getItemCount() == 0 then
+					local item = Game.createItem(ENTRY_ITEM_ID, 1, pos)
+					if item then
+						item:setActionId(RETURN_ACTION_ID)
+						returnPlaced = true
+					end
+				end
+			end
+		end
+	end
+end
+
 local function travel(player, entry)
-	if player:getCondition(CONDITION_INFIGHT, CONDITIONID_DEFAULT) and not player:getGroup():getAccess() then
+	if player:getCondition(CONDITION_INFIGHT, CONDITIONID_DEFAULT) and not isSafe(player) and not player:getGroup():getAccess() then
 		player:sendCancelMessage("Nie mozesz sie teleportowac w trakcie walki.")
 		return
 	end
@@ -636,10 +675,17 @@ local function travel(player, entry)
 	end
 
 	local from = player:getPosition()
+	if not entry.town then
+		prepareSpot(destination)
+	end
 	player:teleportTo(destination)
 	from:sendMagicEffect(CONST_ME_POFF)
 	destination:sendMagicEffect(CONST_ME_TELEPORT)
-	player:sendTextMessage(MESSAGE_EVENT_ADVANCE, "Teleport: " .. entry[1])
+	if entry.town then
+		player:sendTextMessage(MESSAGE_EVENT_ADVANCE, "Teleport: " .. entry[1])
+	else
+		player:sendTextMessage(MESSAGE_EVENT_ADVANCE, "Teleport: " .. entry[1] .. ". Stoisz w bezpiecznej strefie 3x3, obok jest teleport powrotny do Thais.")
+	end
 end
 
 local openMain
@@ -683,10 +729,14 @@ local function openTowns(player)
 	for _, town in ipairs(Game.getTowns()) do
 		local pos = town:getTemplePosition()
 		if pos and pos.x > 0 then
-			list[#list + 1] = { town:getName(), pos.x, pos.y, pos.z }
+			list[#list + 1] = { town:getName(), pos.x, pos.y, pos.z, town = true }
 		end
 	end
 	table.sort(list, function(a, b)
+		local aFirst, bFirst = a[1]:lower() == ENTRY_TOWN, b[1]:lower() == ENTRY_TOWN
+		if aFirst ~= bFirst then
+			return aFirst
+		end
 		return a[1] < b[1]
 	end)
 	openList(player, "Miasta", list, function(target)
@@ -741,6 +791,50 @@ entryStep:type("stepin")
 entryStep:aid(ENTRY_ACTION_ID)
 entryStep:register()
 
+-- Teleport powrotny (tylko gracze, potwory zostaja na miejscu)
+local returnStep = MoveEvent()
+
+function returnStep.onStepIn(creature, item, position, fromPosition)
+	local player = creature:getPlayer()
+	if not player or not templePosition then
+		return true
+	end
+	player:teleportTo(templePosition)
+	position:sendMagicEffect(CONST_ME_POFF)
+	templePosition:sendMagicEffect(CONST_ME_TELEPORT)
+	return true
+end
+
+returnStep:type("stepin")
+returnStep:aid(RETURN_ACTION_ID)
+returnStep:register()
+
+-- Bezpieczna strefa: blokada atakow w obie strony na polach 3x3
+local safeTarget = EventCallback("OtsSafeZoneTargetCombat")
+
+function safeTarget.creatureOnTargetCombat(attacker, target)
+	if isSafe(target) and target:isPlayer() then
+		return RETURNVALUE_ACTIONNOTPERMITTEDINPROTECTIONZONE
+	end
+	if attacker and attacker:isPlayer() and isSafe(attacker) then
+		return RETURNVALUE_ACTIONNOTPERMITTEDINPROTECTIONZONE
+	end
+	return RETURNVALUE_NOERROR
+end
+
+safeTarget:register()
+
+local safeArea = EventCallback("OtsSafeZoneAreaCombat")
+
+function safeArea.creatureOnAreaCombat(creature, tile, isAggressive)
+	if isAggressive and tile and safeTiles[key(tile:getPosition())] then
+		return RETURNVALUE_ACTIONNOTPERMITTEDINPROTECTIONZONE
+	end
+	return RETURNVALUE_NOERROR
+end
+
+safeArea:register()
+
 local offsets = {
 	{ 0, -2 }, { 2, 0 }, { -2, 0 }, { 0, 2 }, { 2, -2 }, { -2, -2 }, { 2, 2 }, { -2, 2 },
 	{ 0, -3 }, { 3, 0 }, { -3, 0 }, { 0, 3 }, { 1, -1 }, { -1, -1 }, { 1, 1 }, { -1, 1 },
@@ -757,6 +851,7 @@ function placeEntry.onStartup()
 			break
 		end
 	end
+	templePosition = temple
 	if not temple then
 		logger.warn("[OTS teleporty] Nie znaleziono miasta '{}'. Uzyj komendy !tp.", ENTRY_TOWN)
 		return true
