@@ -17,3 +17,8 @@ services:
       - '../data-otservbr-global/world/custom/ots-hub-house.xml:/canary/data-otservbr-global/world/custom/ots-hub-house.xml:ro'
       - '../data-otservbr-global/world/custom/ots-hub-npc.xml:/canary/data-otservbr-global/world/custom/ots-hub-npc.xml:ro'
       - '../data-otservbr-global/world/custom/ots-hub-zones.xml:/canary/data-otservbr-global/world/custom/ots-hub-zones.xml:ro'
+      - '../data-otservbr-global/world/custom/ots-outfits.otbm:/canary/data-otservbr-global/world/custom/ots-outfits.otbm:ro'
+      - '../data-otservbr-global/world/custom/ots-outfits-monster.xml:/canary/data-otservbr-global/world/custom/ots-outfits-monster.xml:ro'
+      - '../data-otservbr-global/world/custom/ots-outfits-house.xml:/canary/data-otservbr-global/world/custom/ots-outfits-house.xml:ro'
+      - '../data-otservbr-global/world/custom/ots-outfits-npc.xml:/canary/data-otservbr-global/world/custom/ots-outfits-npc.xml:ro'
+      - '../data-otservbr-global/world/custom/ots-outfits-zones.xml:/canary/data-otservbr-global/world/custom/ots-outfits-zones.xml:ro'

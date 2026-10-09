@@ -1,0 +1,788 @@
+-- OTS: questy na stroje. Plik generowany razem z mapa world/custom/ots-outfits.otbm.
+-- Kazdy stroj ma wlasna sale: pokonaj 20 potworow, potem otworz skrzynie.
+-- Nagroda: stroj z oboma dodatkami (wersja meska i zenska).
+
+local PAD_ACTION_ID = 64994
+local CHEST_ACTION_ID = 64995
+local REQUIRED_KILLS = 20
+local ROOM_SIZE = 13
+local hall = Position(30096, 31000, 7)
+local hubLobby = Position(30013, 30000, 7)
+
+local quests = {
+	{ name = "Citizen", male = 128, female = 136, x = 30000, y = 31060, entry = Position(30006, 31073, 7) },
+	{ name = "Hunter", male = 129, female = 137, x = 30032, y = 31060, entry = Position(30038, 31073, 7) },
+	{ name = "Mage", male = 130, female = 138, x = 30064, y = 31060, entry = Position(30070, 31073, 7) },
+	{ name = "Knight", male = 131, female = 139, x = 30096, y = 31060, entry = Position(30102, 31073, 7) },
+	{ name = "Nobleman", male = 132, female = 140, x = 30128, y = 31060, entry = Position(30134, 31073, 7) },
+	{ name = "Summoner", male = 133, female = 141, x = 30160, y = 31060, entry = Position(30166, 31073, 7) },
+	{ name = "Warrior", male = 134, female = 142, x = 30192, y = 31060, entry = Position(30198, 31073, 7) },
+	{ name = "Barbarian", male = 143, female = 147, x = 30224, y = 31060, entry = Position(30230, 31073, 7) },
+	{ name = "Druid", male = 144, female = 148, x = 30256, y = 31060, entry = Position(30262, 31073, 7) },
+	{ name = "Wizard", male = 145, female = 149, x = 30288, y = 31060, entry = Position(30294, 31073, 7) },
+	{ name = "Oriental", male = 146, female = 150, x = 30320, y = 31060, entry = Position(30326, 31073, 7) },
+	{ name = "Pirate", male = 151, female = 155, x = 30352, y = 31060, entry = Position(30358, 31073, 7) },
+	{ name = "Assassin", male = 152, female = 156, x = 30000, y = 31092, entry = Position(30006, 31105, 7) },
+	{ name = "Beggar", male = 153, female = 157, x = 30032, y = 31092, entry = Position(30038, 31105, 7) },
+	{ name = "Shaman", male = 154, female = 158, x = 30064, y = 31092, entry = Position(30070, 31105, 7) },
+	{ name = "Norseman", male = 251, female = 252, x = 30096, y = 31092, entry = Position(30102, 31105, 7) },
+	{ name = "Nightmare", male = 268, female = 269, x = 30128, y = 31092, entry = Position(30134, 31105, 7) },
+	{ name = "Jester", male = 273, female = 270, x = 30160, y = 31092, entry = Position(30166, 31105, 7) },
+	{ name = "Brotherhood", male = 278, female = 279, x = 30192, y = 31092, entry = Position(30198, 31105, 7) },
+	{ name = "Demon Hunter", male = 289, female = 288, x = 30224, y = 31092, entry = Position(30230, 31105, 7) },
+	{ name = "Yalaharian", male = 325, female = 324, x = 30256, y = 31092, entry = Position(30262, 31105, 7) },
+	{ name = "Newly Wed", male = 328, female = 329, x = 30288, y = 31092, entry = Position(30294, 31105, 7) },
+	{ name = "Warmaster", male = 335, female = 336, x = 30320, y = 31092, entry = Position(30326, 31105, 7) },
+	{ name = "Wayfarer", male = 367, female = 366, x = 30352, y = 31092, entry = Position(30358, 31105, 7) },
+	{ name = "Afflicted", male = 430, female = 431, x = 30000, y = 31124, entry = Position(30006, 31137, 7) },
+	{ name = "Elementalist", male = 432, female = 433, x = 30032, y = 31124, entry = Position(30038, 31137, 7) },
+	{ name = "Deepling", male = 463, female = 464, x = 30064, y = 31124, entry = Position(30070, 31137, 7) },
+	{ name = "Insectoid", male = 465, female = 466, x = 30096, y = 31124, entry = Position(30102, 31137, 7) },
+	{ name = "Entrepreneur", male = 472, female = 471, x = 30128, y = 31124, entry = Position(30134, 31137, 7) },
+	{ name = "Crystal Warlord", male = 512, female = 513, x = 30160, y = 31124, entry = Position(30166, 31137, 7) },
+	{ name = "Soil Guardian", male = 516, female = 514, x = 30192, y = 31124, entry = Position(30198, 31137, 7) },
+	{ name = "Demon", male = 541, female = 542, x = 30224, y = 31124, entry = Position(30230, 31137, 7) },
+	{ name = "Cave Explorer", male = 574, female = 575, x = 30256, y = 31124, entry = Position(30262, 31137, 7) },
+	{ name = "Dream Warden", male = 577, female = 578, x = 30288, y = 31124, entry = Position(30294, 31137, 7) },
+	{ name = "Glooth Engineer", male = 610, female = 618, x = 30320, y = 31124, entry = Position(30326, 31137, 7) },
+	{ name = "Jersey", male = 619, female = 620, x = 30352, y = 31124, entry = Position(30358, 31137, 7) },
+	{ name = "Champion", male = 633, female = 632, x = 30000, y = 31156, entry = Position(30006, 31169, 7) },
+	{ name = "Conjurer", male = 634, female = 635, x = 30032, y = 31156, entry = Position(30038, 31169, 7) },
+	{ name = "Beastmaster", male = 637, female = 636, x = 30064, y = 31156, entry = Position(30070, 31169, 7) },
+	{ name = "Chaos Acolyte", male = 665, female = 664, x = 30096, y = 31156, entry = Position(30102, 31169, 7) },
+	{ name = "Death Herald", male = 667, female = 666, x = 30128, y = 31156, entry = Position(30134, 31169, 7) },
+	{ name = "Ranger", male = 684, female = 683, x = 30160, y = 31156, entry = Position(30166, 31169, 7) },
+	{ name = "Ceremonial Garb", male = 695, female = 694, x = 30192, y = 31156, entry = Position(30198, 31169, 7) },
+	{ name = "Puppeteer", male = 697, female = 696, x = 30224, y = 31156, entry = Position(30230, 31169, 7) },
+	{ name = "Spirit Caller", male = 699, female = 698, x = 30256, y = 31156, entry = Position(30262, 31169, 7) },
+	{ name = "Evoker", male = 725, female = 724, x = 30288, y = 31156, entry = Position(30294, 31169, 7) },
+	{ name = "Seaweaver", male = 733, female = 732, x = 30320, y = 31156, entry = Position(30326, 31169, 7) },
+	{ name = "Recruiter", male = 746, female = 745, x = 30352, y = 31156, entry = Position(30358, 31169, 7) },
+	{ name = "Sea Dog", male = 750, female = 749, x = 30000, y = 31188, entry = Position(30006, 31201, 7) },
+	{ name = "Royal Pumpkin", male = 760, female = 759, x = 30032, y = 31188, entry = Position(30038, 31201, 7) },
+	{ name = "Rift Warrior", male = 846, female = 845, x = 30064, y = 31188, entry = Position(30070, 31201, 7) },
+	{ name = "Winter Warden", male = 853, female = 852, x = 30096, y = 31188, entry = Position(30102, 31201, 7) },
+	{ name = "Philosopher", male = 873, female = 874, x = 30128, y = 31188, entry = Position(30134, 31201, 7) },
+	{ name = "Arena Champion", male = 884, female = 885, x = 30160, y = 31188, entry = Position(30166, 31201, 7) },
+	{ name = "Lupine Warden", male = 899, female = 900, x = 30192, y = 31188, entry = Position(30198, 31201, 7) },
+	{ name = "Grove Keeper", male = 908, female = 909, x = 30224, y = 31188, entry = Position(30230, 31201, 7) },
+	{ name = "Festive", male = 931, female = 929, x = 30256, y = 31188, entry = Position(30262, 31201, 7) },
+	{ name = "Pharaoh", male = 955, female = 956, x = 30288, y = 31188, entry = Position(30294, 31201, 7) },
+	{ name = "Trophy Hunter", male = 957, female = 958, x = 30320, y = 31188, entry = Position(30326, 31201, 7) },
+	{ name = "Retro Warrior", male = 962, female = 963, x = 30352, y = 31188, entry = Position(30358, 31201, 7) },
+	{ name = "Retro Summoner", male = 964, female = 965, x = 30000, y = 31220, entry = Position(30006, 31233, 7) },
+	{ name = "Retro Nobleman", male = 966, female = 967, x = 30032, y = 31220, entry = Position(30038, 31233, 7) },
+	{ name = "Retro Mage", male = 968, female = 969, x = 30064, y = 31220, entry = Position(30070, 31233, 7) },
+	{ name = "Retro Knight", male = 970, female = 971, x = 30096, y = 31220, entry = Position(30102, 31233, 7) },
+	{ name = "Retro Hunter", male = 972, female = 973, x = 30128, y = 31220, entry = Position(30134, 31233, 7) },
+	{ name = "Retro Citizen", male = 974, female = 975, x = 30160, y = 31220, entry = Position(30166, 31233, 7) },
+	{ name = "Herbalist", male = 1021, female = 1020, x = 30192, y = 31220, entry = Position(30198, 31233, 7) },
+	{ name = "Sun Priest", male = 1023, female = 1024, x = 30224, y = 31220, entry = Position(30230, 31233, 7) },
+	{ name = "Makeshift Warrior", male = 1042, female = 1043, x = 30256, y = 31220, entry = Position(30262, 31233, 7) },
+	{ name = "Siege Master", male = 1051, female = 1050, x = 30288, y = 31220, entry = Position(30294, 31233, 7) },
+	{ name = "Mercenary", male = 1056, female = 1057, x = 30320, y = 31220, entry = Position(30326, 31233, 7) },
+	{ name = "Battle Mage", male = 1069, female = 1070, x = 30352, y = 31220, entry = Position(30358, 31233, 7) },
+	{ name = "Discoverer", male = 1094, female = 1095, x = 30000, y = 31252, entry = Position(30006, 31265, 7) },
+	{ name = "Sinister Archer", male = 1102, female = 1103, x = 30032, y = 31252, entry = Position(30038, 31265, 7) },
+	{ name = "Pumpkin Mummy", male = 1127, female = 1128, x = 30064, y = 31252, entry = Position(30070, 31265, 7) },
+	{ name = "Dream Warrior", male = 1146, female = 1147, x = 30096, y = 31252, entry = Position(30102, 31265, 7) },
+	{ name = "Percht Raider", male = 1161, female = 1162, x = 30128, y = 31252, entry = Position(30134, 31265, 7) },
+	{ name = "Owl Keeper", male = 1173, female = 1174, x = 30160, y = 31252, entry = Position(30166, 31265, 7) },
+	{ name = "Guidon Bearer", male = 1186, female = 1187, x = 30192, y = 31252, entry = Position(30198, 31265, 7) },
+	{ name = "Void Master", male = 1202, female = 1203, x = 30224, y = 31252, entry = Position(30230, 31265, 7) },
+	{ name = "Veteran Paladin", male = 1204, female = 1205, x = 30256, y = 31252, entry = Position(30262, 31265, 7) },
+	{ name = "Lion of War", male = 1206, female = 1207, x = 30288, y = 31252, entry = Position(30294, 31265, 7) },
+	{ name = "Golden", male = 1210, female = 1211, x = 30320, y = 31252, entry = Position(30326, 31265, 7) },
+	{ name = "Hand of the Inquisition", male = 1243, female = 1244, x = 30352, y = 31252, entry = Position(30358, 31265, 7) },
+	{ name = "Breezy Garb", male = 1245, female = 1246, x = 30000, y = 31284, entry = Position(30006, 31297, 7) },
+	{ name = "Orcsoberfest Garb", male = 1251, female = 1252, x = 30032, y = 31284, entry = Position(30038, 31297, 7) },
+	{ name = "Poltergeist", male = 1270, female = 1271, x = 30064, y = 31284, entry = Position(30070, 31297, 7) },
+	{ name = "Herder", male = 1279, female = 1280, x = 30096, y = 31284, entry = Position(30102, 31297, 7) },
+	{ name = "Falconer", male = 1282, female = 1283, x = 30128, y = 31284, entry = Position(30134, 31297, 7) },
+	{ name = "Dragon Slayer", male = 1288, female = 1289, x = 30160, y = 31284, entry = Position(30166, 31297, 7) },
+	{ name = "Trailblazer", male = 1292, female = 1293, x = 30192, y = 31284, entry = Position(30198, 31297, 7) },
+	{ name = "Revenant", male = 1322, female = 1323, x = 30224, y = 31284, entry = Position(30230, 31297, 7) },
+	{ name = "Jouster", male = 1331, female = 1332, x = 30256, y = 31284, entry = Position(30262, 31297, 7) },
+	{ name = "Moth Cape", male = 1338, female = 1339, x = 30288, y = 31284, entry = Position(30294, 31297, 7) },
+	{ name = "Rascoohan", male = 1371, female = 1372, x = 30320, y = 31284, entry = Position(30326, 31297, 7) },
+	{ name = "Merry Garb", male = 1382, female = 1383, x = 30352, y = 31284, entry = Position(30358, 31297, 7) },
+	{ name = "Rune Master", male = 1384, female = 1385, x = 30000, y = 31316, entry = Position(30006, 31329, 7) },
+	{ name = "Citizen of Issavi", male = 1386, female = 1387, x = 30032, y = 31316, entry = Position(30038, 31329, 7) },
+	{ name = "Forest Warden", male = 1415, female = 1416, x = 30064, y = 31316, entry = Position(30070, 31329, 7) },
+	{ name = "Royal Bounacean Advisor", male = 1436, female = 1437, x = 30096, y = 31316, entry = Position(30102, 31329, 7) },
+	{ name = "Dragon Knight", male = 1444, female = 1445, x = 30128, y = 31316, entry = Position(30134, 31329, 7) },
+	{ name = "Arbalester", male = 1449, female = 1450, x = 30160, y = 31316, entry = Position(30166, 31329, 7) },
+	{ name = "Royal Costume", male = 1457, female = 1456, x = 30192, y = 31316, entry = Position(30198, 31329, 7) },
+	{ name = "Formal Dress", male = 1460, female = 1461, x = 30224, y = 31316, entry = Position(30230, 31329, 7) },
+	{ name = "Ghost Blade", male = 1489, female = 1490, x = 30256, y = 31316, entry = Position(30262, 31329, 7) },
+	{ name = "Nordic Chieftain", male = 1500, female = 1501, x = 30288, y = 31316, entry = Position(30294, 31329, 7) },
+	{ name = "Fire-Fighter", male = 1568, female = 1569, x = 30320, y = 31316, entry = Position(30326, 31329, 7) },
+	{ name = "Fencer", male = 1575, female = 1576, x = 30352, y = 31316, entry = Position(30358, 31329, 7) },
+	{ name = "Shadowlotus Disciple", male = 1581, female = 1582, x = 30000, y = 31348, entry = Position(30006, 31361, 7) },
+	{ name = "Ancient Aucar", male = 1597, female = 1598, x = 30032, y = 31348, entry = Position(30038, 31361, 7) },
+	{ name = "Frost Tracer", male = 1612, female = 1613, x = 30064, y = 31348, entry = Position(30070, 31361, 7) },
+	{ name = "Armoured Archer", male = 1618, female = 1619, x = 30096, y = 31348, entry = Position(30102, 31361, 7) },
+	{ name = "Decaying Defender", male = 1662, female = 1663, x = 30128, y = 31348, entry = Position(30134, 31361, 7) },
+	{ name = "Darklight Evoker", male = 1675, female = 1676, x = 30160, y = 31348, entry = Position(30166, 31361, 7) },
+	{ name = "Flamefury Mage", male = 1680, female = 1681, x = 30192, y = 31348, entry = Position(30198, 31361, 7) },
+	{ name = "Doom Knight", male = 1713, female = 1714, x = 30224, y = 31348, entry = Position(30230, 31361, 7) },
+	{ name = "Draccoon Herald", male = 1722, female = 1723, x = 30256, y = 31348, entry = Position(30262, 31361, 7) },
+	{ name = "Celestial Avenger", male = 1725, female = 1726, x = 30288, y = 31348, entry = Position(30294, 31361, 7) },
+	{ name = "Blade Dancer", male = 1745, female = 1746, x = 30320, y = 31348, entry = Position(30326, 31361, 7) },
+	{ name = "Rootwalker", male = 1774, female = 1775, x = 30352, y = 31348, entry = Position(30358, 31361, 7) },
+	{ name = "Beekeeper", male = 1776, female = 1777, x = 30000, y = 31380, entry = Position(30006, 31393, 7) },
+	{ name = "Fiend Slayer", male = 1809, female = 1808, x = 30032, y = 31380, entry = Position(30038, 31393, 7) },
+	{ name = "Winged Druid", male = 1831, female = 1832, x = 30064, y = 31380, entry = Position(30070, 31393, 7) },
+	{ name = "Monk", male = 1824, female = 1825, x = 30096, y = 31380, entry = Position(30102, 31393, 7) },
+	{ name = "Martial Artist", male = 1837, female = 1838, x = 30128, y = 31380, entry = Position(30134, 31393, 7) },
+	{ name = "Illuminator", male = 0, female = 1860, x = 30160, y = 31380, entry = Position(30166, 31393, 7) },
+}
+
+local pads = {
+	["30000:31000:7"] = { hub = true },
+	["30003:30998:7"] = { room = 1 },
+	["30003:31002:7"] = { room = 2 },
+	["30006:30998:7"] = { room = 3 },
+	["30006:31002:7"] = { room = 4 },
+	["30007:31059:7"] = { hall = true },
+	["30007:31074:7"] = { hall = true },
+	["30007:31091:7"] = { hall = true },
+	["30007:31106:7"] = { hall = true },
+	["30007:31123:7"] = { hall = true },
+	["30007:31138:7"] = { hall = true },
+	["30007:31155:7"] = { hall = true },
+	["30007:31170:7"] = { hall = true },
+	["30007:31187:7"] = { hall = true },
+	["30007:31202:7"] = { hall = true },
+	["30007:31219:7"] = { hall = true },
+	["30007:31234:7"] = { hall = true },
+	["30007:31251:7"] = { hall = true },
+	["30007:31266:7"] = { hall = true },
+	["30007:31283:7"] = { hall = true },
+	["30007:31298:7"] = { hall = true },
+	["30007:31315:7"] = { hall = true },
+	["30007:31330:7"] = { hall = true },
+	["30007:31347:7"] = { hall = true },
+	["30007:31362:7"] = { hall = true },
+	["30007:31379:7"] = { hall = true },
+	["30007:31394:7"] = { hall = true },
+	["30009:30998:7"] = { room = 5 },
+	["30009:31002:7"] = { room = 6 },
+	["30012:30998:7"] = { room = 7 },
+	["30012:31002:7"] = { room = 8 },
+	["30015:30998:7"] = { room = 9 },
+	["30015:31002:7"] = { room = 10 },
+	["30018:30998:7"] = { room = 11 },
+	["30018:31002:7"] = { room = 12 },
+	["30021:30998:7"] = { room = 13 },
+	["30021:31002:7"] = { room = 14 },
+	["30024:30998:7"] = { room = 15 },
+	["30024:31002:7"] = { room = 16 },
+	["30027:30998:7"] = { room = 17 },
+	["30027:31002:7"] = { room = 18 },
+	["30030:30998:7"] = { room = 19 },
+	["30030:31002:7"] = { room = 20 },
+	["30033:30998:7"] = { room = 21 },
+	["30033:31002:7"] = { room = 22 },
+	["30036:30998:7"] = { room = 23 },
+	["30036:31002:7"] = { room = 24 },
+	["30039:30998:7"] = { room = 25 },
+	["30039:31002:7"] = { room = 26 },
+	["30039:31059:7"] = { hall = true },
+	["30039:31074:7"] = { hall = true },
+	["30039:31091:7"] = { hall = true },
+	["30039:31106:7"] = { hall = true },
+	["30039:31123:7"] = { hall = true },
+	["30039:31138:7"] = { hall = true },
+	["30039:31155:7"] = { hall = true },
+	["30039:31170:7"] = { hall = true },
+	["30039:31187:7"] = { hall = true },
+	["30039:31202:7"] = { hall = true },
+	["30039:31219:7"] = { hall = true },
+	["30039:31234:7"] = { hall = true },
+	["30039:31251:7"] = { hall = true },
+	["30039:31266:7"] = { hall = true },
+	["30039:31283:7"] = { hall = true },
+	["30039:31298:7"] = { hall = true },
+	["30039:31315:7"] = { hall = true },
+	["30039:31330:7"] = { hall = true },
+	["30039:31347:7"] = { hall = true },
+	["30039:31362:7"] = { hall = true },
+	["30039:31379:7"] = { hall = true },
+	["30039:31394:7"] = { hall = true },
+	["30042:30998:7"] = { room = 27 },
+	["30042:31002:7"] = { room = 28 },
+	["30045:30998:7"] = { room = 29 },
+	["30045:31002:7"] = { room = 30 },
+	["30048:30998:7"] = { room = 31 },
+	["30048:31002:7"] = { room = 32 },
+	["30051:30998:7"] = { room = 33 },
+	["30051:31002:7"] = { room = 34 },
+	["30054:30998:7"] = { room = 35 },
+	["30054:31002:7"] = { room = 36 },
+	["30057:30998:7"] = { room = 37 },
+	["30057:31002:7"] = { room = 38 },
+	["30060:30998:7"] = { room = 39 },
+	["30060:31002:7"] = { room = 40 },
+	["30063:30998:7"] = { room = 41 },
+	["30063:31002:7"] = { room = 42 },
+	["30066:30998:7"] = { room = 43 },
+	["30066:31002:7"] = { room = 44 },
+	["30069:30998:7"] = { room = 45 },
+	["30069:31002:7"] = { room = 46 },
+	["30071:31059:7"] = { hall = true },
+	["30071:31074:7"] = { hall = true },
+	["30071:31091:7"] = { hall = true },
+	["30071:31106:7"] = { hall = true },
+	["30071:31123:7"] = { hall = true },
+	["30071:31138:7"] = { hall = true },
+	["30071:31155:7"] = { hall = true },
+	["30071:31170:7"] = { hall = true },
+	["30071:31187:7"] = { hall = true },
+	["30071:31202:7"] = { hall = true },
+	["30071:31219:7"] = { hall = true },
+	["30071:31234:7"] = { hall = true },
+	["30071:31251:7"] = { hall = true },
+	["30071:31266:7"] = { hall = true },
+	["30071:31283:7"] = { hall = true },
+	["30071:31298:7"] = { hall = true },
+	["30071:31315:7"] = { hall = true },
+	["30071:31330:7"] = { hall = true },
+	["30071:31347:7"] = { hall = true },
+	["30071:31362:7"] = { hall = true },
+	["30071:31379:7"] = { hall = true },
+	["30071:31394:7"] = { hall = true },
+	["30072:30998:7"] = { room = 47 },
+	["30072:31002:7"] = { room = 48 },
+	["30075:30998:7"] = { room = 49 },
+	["30075:31002:7"] = { room = 50 },
+	["30078:30998:7"] = { room = 51 },
+	["30078:31002:7"] = { room = 52 },
+	["30081:30998:7"] = { room = 53 },
+	["30081:31002:7"] = { room = 54 },
+	["30084:30998:7"] = { room = 55 },
+	["30084:31002:7"] = { room = 56 },
+	["30087:30998:7"] = { room = 57 },
+	["30087:31002:7"] = { room = 58 },
+	["30090:30998:7"] = { room = 59 },
+	["30090:31002:7"] = { room = 60 },
+	["30093:30998:7"] = { room = 61 },
+	["30093:31002:7"] = { room = 62 },
+	["30096:30998:7"] = { room = 63 },
+	["30096:31002:7"] = { room = 64 },
+	["30099:30998:7"] = { room = 65 },
+	["30099:31002:7"] = { room = 66 },
+	["30102:30998:7"] = { room = 67 },
+	["30102:31002:7"] = { room = 68 },
+	["30103:31059:7"] = { hall = true },
+	["30103:31074:7"] = { hall = true },
+	["30103:31091:7"] = { hall = true },
+	["30103:31106:7"] = { hall = true },
+	["30103:31123:7"] = { hall = true },
+	["30103:31138:7"] = { hall = true },
+	["30103:31155:7"] = { hall = true },
+	["30103:31170:7"] = { hall = true },
+	["30103:31187:7"] = { hall = true },
+	["30103:31202:7"] = { hall = true },
+	["30103:31219:7"] = { hall = true },
+	["30103:31234:7"] = { hall = true },
+	["30103:31251:7"] = { hall = true },
+	["30103:31266:7"] = { hall = true },
+	["30103:31283:7"] = { hall = true },
+	["30103:31298:7"] = { hall = true },
+	["30103:31315:7"] = { hall = true },
+	["30103:31330:7"] = { hall = true },
+	["30103:31347:7"] = { hall = true },
+	["30103:31362:7"] = { hall = true },
+	["30103:31379:7"] = { hall = true },
+	["30103:31394:7"] = { hall = true },
+	["30105:30998:7"] = { room = 69 },
+	["30105:31002:7"] = { room = 70 },
+	["30108:30998:7"] = { room = 71 },
+	["30108:31002:7"] = { room = 72 },
+	["30111:30998:7"] = { room = 73 },
+	["30111:31002:7"] = { room = 74 },
+	["30114:30998:7"] = { room = 75 },
+	["30114:31002:7"] = { room = 76 },
+	["30117:30998:7"] = { room = 77 },
+	["30117:31002:7"] = { room = 78 },
+	["30120:30998:7"] = { room = 79 },
+	["30120:31002:7"] = { room = 80 },
+	["30123:30998:7"] = { room = 81 },
+	["30123:31002:7"] = { room = 82 },
+	["30126:30998:7"] = { room = 83 },
+	["30126:31002:7"] = { room = 84 },
+	["30129:30998:7"] = { room = 85 },
+	["30129:31002:7"] = { room = 86 },
+	["30132:30998:7"] = { room = 87 },
+	["30132:31002:7"] = { room = 88 },
+	["30135:30998:7"] = { room = 89 },
+	["30135:31002:7"] = { room = 90 },
+	["30135:31059:7"] = { hall = true },
+	["30135:31074:7"] = { hall = true },
+	["30135:31091:7"] = { hall = true },
+	["30135:31106:7"] = { hall = true },
+	["30135:31123:7"] = { hall = true },
+	["30135:31138:7"] = { hall = true },
+	["30135:31155:7"] = { hall = true },
+	["30135:31170:7"] = { hall = true },
+	["30135:31187:7"] = { hall = true },
+	["30135:31202:7"] = { hall = true },
+	["30135:31219:7"] = { hall = true },
+	["30135:31234:7"] = { hall = true },
+	["30135:31251:7"] = { hall = true },
+	["30135:31266:7"] = { hall = true },
+	["30135:31283:7"] = { hall = true },
+	["30135:31298:7"] = { hall = true },
+	["30135:31315:7"] = { hall = true },
+	["30135:31330:7"] = { hall = true },
+	["30135:31347:7"] = { hall = true },
+	["30135:31362:7"] = { hall = true },
+	["30135:31379:7"] = { hall = true },
+	["30135:31394:7"] = { hall = true },
+	["30138:30998:7"] = { room = 91 },
+	["30138:31002:7"] = { room = 92 },
+	["30141:30998:7"] = { room = 93 },
+	["30141:31002:7"] = { room = 94 },
+	["30144:30998:7"] = { room = 95 },
+	["30144:31002:7"] = { room = 96 },
+	["30147:30998:7"] = { room = 97 },
+	["30147:31002:7"] = { room = 98 },
+	["30150:30998:7"] = { room = 99 },
+	["30150:31002:7"] = { room = 100 },
+	["30153:30998:7"] = { room = 101 },
+	["30153:31002:7"] = { room = 102 },
+	["30156:30998:7"] = { room = 103 },
+	["30156:31002:7"] = { room = 104 },
+	["30159:30998:7"] = { room = 105 },
+	["30159:31002:7"] = { room = 106 },
+	["30162:30998:7"] = { room = 107 },
+	["30162:31002:7"] = { room = 108 },
+	["30165:30998:7"] = { room = 109 },
+	["30165:31002:7"] = { room = 110 },
+	["30167:31059:7"] = { hall = true },
+	["30167:31074:7"] = { hall = true },
+	["30167:31091:7"] = { hall = true },
+	["30167:31106:7"] = { hall = true },
+	["30167:31123:7"] = { hall = true },
+	["30167:31138:7"] = { hall = true },
+	["30167:31155:7"] = { hall = true },
+	["30167:31170:7"] = { hall = true },
+	["30167:31187:7"] = { hall = true },
+	["30167:31202:7"] = { hall = true },
+	["30167:31219:7"] = { hall = true },
+	["30167:31234:7"] = { hall = true },
+	["30167:31251:7"] = { hall = true },
+	["30167:31266:7"] = { hall = true },
+	["30167:31283:7"] = { hall = true },
+	["30167:31298:7"] = { hall = true },
+	["30167:31315:7"] = { hall = true },
+	["30167:31330:7"] = { hall = true },
+	["30167:31347:7"] = { hall = true },
+	["30167:31362:7"] = { hall = true },
+	["30167:31379:7"] = { hall = true },
+	["30167:31394:7"] = { hall = true },
+	["30168:30998:7"] = { room = 111 },
+	["30168:31002:7"] = { room = 112 },
+	["30171:30998:7"] = { room = 113 },
+	["30171:31002:7"] = { room = 114 },
+	["30174:30998:7"] = { room = 115 },
+	["30174:31002:7"] = { room = 116 },
+	["30177:30998:7"] = { room = 117 },
+	["30177:31002:7"] = { room = 118 },
+	["30180:30998:7"] = { room = 119 },
+	["30180:31002:7"] = { room = 120 },
+	["30183:30998:7"] = { room = 121 },
+	["30183:31002:7"] = { room = 122 },
+	["30186:30998:7"] = { room = 123 },
+	["30186:31002:7"] = { room = 124 },
+	["30189:30998:7"] = { room = 125 },
+	["30189:31002:7"] = { room = 126 },
+	["30191:31000:7"] = { hub = true },
+	["30199:31059:7"] = { hall = true },
+	["30199:31074:7"] = { hall = true },
+	["30199:31091:7"] = { hall = true },
+	["30199:31106:7"] = { hall = true },
+	["30199:31123:7"] = { hall = true },
+	["30199:31138:7"] = { hall = true },
+	["30199:31155:7"] = { hall = true },
+	["30199:31170:7"] = { hall = true },
+	["30199:31187:7"] = { hall = true },
+	["30199:31202:7"] = { hall = true },
+	["30199:31219:7"] = { hall = true },
+	["30199:31234:7"] = { hall = true },
+	["30199:31251:7"] = { hall = true },
+	["30199:31266:7"] = { hall = true },
+	["30199:31283:7"] = { hall = true },
+	["30199:31298:7"] = { hall = true },
+	["30199:31315:7"] = { hall = true },
+	["30199:31330:7"] = { hall = true },
+	["30199:31347:7"] = { hall = true },
+	["30199:31362:7"] = { hall = true },
+	["30231:31059:7"] = { hall = true },
+	["30231:31074:7"] = { hall = true },
+	["30231:31091:7"] = { hall = true },
+	["30231:31106:7"] = { hall = true },
+	["30231:31123:7"] = { hall = true },
+	["30231:31138:7"] = { hall = true },
+	["30231:31155:7"] = { hall = true },
+	["30231:31170:7"] = { hall = true },
+	["30231:31187:7"] = { hall = true },
+	["30231:31202:7"] = { hall = true },
+	["30231:31219:7"] = { hall = true },
+	["30231:31234:7"] = { hall = true },
+	["30231:31251:7"] = { hall = true },
+	["30231:31266:7"] = { hall = true },
+	["30231:31283:7"] = { hall = true },
+	["30231:31298:7"] = { hall = true },
+	["30231:31315:7"] = { hall = true },
+	["30231:31330:7"] = { hall = true },
+	["30231:31347:7"] = { hall = true },
+	["30231:31362:7"] = { hall = true },
+	["30263:31059:7"] = { hall = true },
+	["30263:31074:7"] = { hall = true },
+	["30263:31091:7"] = { hall = true },
+	["30263:31106:7"] = { hall = true },
+	["30263:31123:7"] = { hall = true },
+	["30263:31138:7"] = { hall = true },
+	["30263:31155:7"] = { hall = true },
+	["30263:31170:7"] = { hall = true },
+	["30263:31187:7"] = { hall = true },
+	["30263:31202:7"] = { hall = true },
+	["30263:31219:7"] = { hall = true },
+	["30263:31234:7"] = { hall = true },
+	["30263:31251:7"] = { hall = true },
+	["30263:31266:7"] = { hall = true },
+	["30263:31283:7"] = { hall = true },
+	["30263:31298:7"] = { hall = true },
+	["30263:31315:7"] = { hall = true },
+	["30263:31330:7"] = { hall = true },
+	["30263:31347:7"] = { hall = true },
+	["30263:31362:7"] = { hall = true },
+	["30295:31059:7"] = { hall = true },
+	["30295:31074:7"] = { hall = true },
+	["30295:31091:7"] = { hall = true },
+	["30295:31106:7"] = { hall = true },
+	["30295:31123:7"] = { hall = true },
+	["30295:31138:7"] = { hall = true },
+	["30295:31155:7"] = { hall = true },
+	["30295:31170:7"] = { hall = true },
+	["30295:31187:7"] = { hall = true },
+	["30295:31202:7"] = { hall = true },
+	["30295:31219:7"] = { hall = true },
+	["30295:31234:7"] = { hall = true },
+	["30295:31251:7"] = { hall = true },
+	["30295:31266:7"] = { hall = true },
+	["30295:31283:7"] = { hall = true },
+	["30295:31298:7"] = { hall = true },
+	["30295:31315:7"] = { hall = true },
+	["30295:31330:7"] = { hall = true },
+	["30295:31347:7"] = { hall = true },
+	["30295:31362:7"] = { hall = true },
+	["30327:31059:7"] = { hall = true },
+	["30327:31074:7"] = { hall = true },
+	["30327:31091:7"] = { hall = true },
+	["30327:31106:7"] = { hall = true },
+	["30327:31123:7"] = { hall = true },
+	["30327:31138:7"] = { hall = true },
+	["30327:31155:7"] = { hall = true },
+	["30327:31170:7"] = { hall = true },
+	["30327:31187:7"] = { hall = true },
+	["30327:31202:7"] = { hall = true },
+	["30327:31219:7"] = { hall = true },
+	["30327:31234:7"] = { hall = true },
+	["30327:31251:7"] = { hall = true },
+	["30327:31266:7"] = { hall = true },
+	["30327:31283:7"] = { hall = true },
+	["30327:31298:7"] = { hall = true },
+	["30327:31315:7"] = { hall = true },
+	["30327:31330:7"] = { hall = true },
+	["30327:31347:7"] = { hall = true },
+	["30327:31362:7"] = { hall = true },
+	["30359:31059:7"] = { hall = true },
+	["30359:31074:7"] = { hall = true },
+	["30359:31091:7"] = { hall = true },
+	["30359:31106:7"] = { hall = true },
+	["30359:31123:7"] = { hall = true },
+	["30359:31138:7"] = { hall = true },
+	["30359:31155:7"] = { hall = true },
+	["30359:31170:7"] = { hall = true },
+	["30359:31187:7"] = { hall = true },
+	["30359:31202:7"] = { hall = true },
+	["30359:31219:7"] = { hall = true },
+	["30359:31234:7"] = { hall = true },
+	["30359:31251:7"] = { hall = true },
+	["30359:31266:7"] = { hall = true },
+	["30359:31283:7"] = { hall = true },
+	["30359:31298:7"] = { hall = true },
+	["30359:31315:7"] = { hall = true },
+	["30359:31330:7"] = { hall = true },
+	["30359:31347:7"] = { hall = true },
+	["30359:31362:7"] = { hall = true },
+}
+
+local chests = {
+	["30006:31058:7"] = 1,
+	["30006:31090:7"] = 13,
+	["30006:31122:7"] = 25,
+	["30006:31154:7"] = 37,
+	["30006:31186:7"] = 49,
+	["30006:31218:7"] = 61,
+	["30006:31250:7"] = 73,
+	["30006:31282:7"] = 85,
+	["30006:31314:7"] = 97,
+	["30006:31346:7"] = 109,
+	["30006:31378:7"] = 121,
+	["30038:31058:7"] = 2,
+	["30038:31090:7"] = 14,
+	["30038:31122:7"] = 26,
+	["30038:31154:7"] = 38,
+	["30038:31186:7"] = 50,
+	["30038:31218:7"] = 62,
+	["30038:31250:7"] = 74,
+	["30038:31282:7"] = 86,
+	["30038:31314:7"] = 98,
+	["30038:31346:7"] = 110,
+	["30038:31378:7"] = 122,
+	["30070:31058:7"] = 3,
+	["30070:31090:7"] = 15,
+	["30070:31122:7"] = 27,
+	["30070:31154:7"] = 39,
+	["30070:31186:7"] = 51,
+	["30070:31218:7"] = 63,
+	["30070:31250:7"] = 75,
+	["30070:31282:7"] = 87,
+	["30070:31314:7"] = 99,
+	["30070:31346:7"] = 111,
+	["30070:31378:7"] = 123,
+	["30102:31058:7"] = 4,
+	["30102:31090:7"] = 16,
+	["30102:31122:7"] = 28,
+	["30102:31154:7"] = 40,
+	["30102:31186:7"] = 52,
+	["30102:31218:7"] = 64,
+	["30102:31250:7"] = 76,
+	["30102:31282:7"] = 88,
+	["30102:31314:7"] = 100,
+	["30102:31346:7"] = 112,
+	["30102:31378:7"] = 124,
+	["30134:31058:7"] = 5,
+	["30134:31090:7"] = 17,
+	["30134:31122:7"] = 29,
+	["30134:31154:7"] = 41,
+	["30134:31186:7"] = 53,
+	["30134:31218:7"] = 65,
+	["30134:31250:7"] = 77,
+	["30134:31282:7"] = 89,
+	["30134:31314:7"] = 101,
+	["30134:31346:7"] = 113,
+	["30134:31378:7"] = 125,
+	["30166:31058:7"] = 6,
+	["30166:31090:7"] = 18,
+	["30166:31122:7"] = 30,
+	["30166:31154:7"] = 42,
+	["30166:31186:7"] = 54,
+	["30166:31218:7"] = 66,
+	["30166:31250:7"] = 78,
+	["30166:31282:7"] = 90,
+	["30166:31314:7"] = 102,
+	["30166:31346:7"] = 114,
+	["30166:31378:7"] = 126,
+	["30198:31058:7"] = 7,
+	["30198:31090:7"] = 19,
+	["30198:31122:7"] = 31,
+	["30198:31154:7"] = 43,
+	["30198:31186:7"] = 55,
+	["30198:31218:7"] = 67,
+	["30198:31250:7"] = 79,
+	["30198:31282:7"] = 91,
+	["30198:31314:7"] = 103,
+	["30198:31346:7"] = 115,
+	["30230:31058:7"] = 8,
+	["30230:31090:7"] = 20,
+	["30230:31122:7"] = 32,
+	["30230:31154:7"] = 44,
+	["30230:31186:7"] = 56,
+	["30230:31218:7"] = 68,
+	["30230:31250:7"] = 80,
+	["30230:31282:7"] = 92,
+	["30230:31314:7"] = 104,
+	["30230:31346:7"] = 116,
+	["30262:31058:7"] = 9,
+	["30262:31090:7"] = 21,
+	["30262:31122:7"] = 33,
+	["30262:31154:7"] = 45,
+	["30262:31186:7"] = 57,
+	["30262:31218:7"] = 69,
+	["30262:31250:7"] = 81,
+	["30262:31282:7"] = 93,
+	["30262:31314:7"] = 105,
+	["30262:31346:7"] = 117,
+	["30294:31058:7"] = 10,
+	["30294:31090:7"] = 22,
+	["30294:31122:7"] = 34,
+	["30294:31154:7"] = 46,
+	["30294:31186:7"] = 58,
+	["30294:31218:7"] = 70,
+	["30294:31250:7"] = 82,
+	["30294:31282:7"] = 94,
+	["30294:31314:7"] = 106,
+	["30294:31346:7"] = 118,
+	["30326:31058:7"] = 11,
+	["30326:31090:7"] = 23,
+	["30326:31122:7"] = 35,
+	["30326:31154:7"] = 47,
+	["30326:31186:7"] = 59,
+	["30326:31218:7"] = 71,
+	["30326:31250:7"] = 83,
+	["30326:31282:7"] = 95,
+	["30326:31314:7"] = 107,
+	["30326:31346:7"] = 119,
+	["30358:31058:7"] = 12,
+	["30358:31090:7"] = 24,
+	["30358:31122:7"] = 36,
+	["30358:31154:7"] = 48,
+	["30358:31186:7"] = 60,
+	["30358:31218:7"] = 72,
+	["30358:31250:7"] = 84,
+	["30358:31282:7"] = 96,
+	["30358:31314:7"] = 108,
+	["30358:31346:7"] = 120,
+}
+
+
+local function key(pos)
+	return pos.x .. ":" .. pos.y .. ":" .. pos.z
+end
+
+local function move(player, destination, message)
+	local from = player:getPosition()
+	player:teleportTo(destination)
+	from:sendMagicEffect(CONST_ME_POFF)
+	destination:sendMagicEffect(CONST_ME_TELEPORT)
+	if message then
+		player:sendTextMessage(MESSAGE_EVENT_ADVANCE, message)
+	end
+end
+
+local function progress(player, index)
+	return player:kv():scoped("ots-outfit-quests"):scoped(tostring(index))
+end
+
+local function killsOf(player, index)
+	return tonumber(progress(player, index):get("kills")) or 0
+end
+
+local function isDone(player, index)
+	return progress(player, index):get("done") == true
+end
+
+-- Ktora sala zawiera te pozycje (albo nil).
+local function roomAt(pos)
+	for index, quest in ipairs(quests) do
+		if pos.x >= quest.x and pos.x < quest.x + ROOM_SIZE and pos.y >= quest.y and pos.y < quest.y + ROOM_SIZE and pos.z == quest.entry.z then
+			return index
+		end
+	end
+	return nil
+end
+
+-- Wejscie z menu !tp i z hubu.
+function OtsOutfitHall(player)
+	move(player, hall, "Questy na stroje: kazdy pad prowadzi do sali jednego stroju (tabliczka za padem mowi, co tam czeka). Trudnosc rosnie z zachodu na wschod.")
+end
+
+local padStep = MoveEvent()
+
+function padStep.onStepIn(creature, item, position, fromPosition)
+	local player = creature:getPlayer()
+	if not player then
+		return true
+	end
+
+	local pad = pads[key(position)]
+	if not pad then
+		return true
+	end
+
+	if pad.room then
+		local quest = quests[pad.room]
+		local text
+		if isDone(player, pad.room) then
+			text = string.format("Stroj %s: quest juz wykonany.", quest.name)
+		else
+			text = string.format("Stroj %s: pokonane %d/%d. Skrzynia jest po polnocnej stronie sali.", quest.name, math.min(killsOf(player, pad.room), REQUIRED_KILLS), REQUIRED_KILLS)
+		end
+		move(player, quest.entry, text)
+	elseif pad.hall then
+		OtsOutfitHall(player)
+	elseif pad.hub then
+		move(player, hubLobby)
+	end
+	return true
+end
+
+padStep:type("stepin")
+padStep:aid(PAD_ACTION_ID)
+padStep:register()
+
+local kills = EventCallback("OtsOutfitQuestOnKill")
+
+function kills.playerOnKill(player, monster)
+	if not player or not monster or monster:getMaster() then
+		return
+	end
+	local index = roomAt(monster:getPosition())
+	if not index or isDone(player, index) then
+		return
+	end
+
+	local count = killsOf(player, index)
+	if count >= REQUIRED_KILLS then
+		return
+	end
+	count = count + 1
+	progress(player, index):set("kills", count)
+	if count >= REQUIRED_KILLS then
+		player:sendTextMessage(MESSAGE_EVENT_ADVANCE, string.format("Stroj %s: wymagane potwory pokonane. Otworz skrzynie po polnocnej stronie sali.", quests[index].name))
+	elseif count % 5 == 0 then
+		player:sendTextMessage(MESSAGE_EVENT_ADVANCE, string.format("Stroj %s: %d/%d potworow.", quests[index].name, count, REQUIRED_KILLS))
+	end
+end
+
+kills:register()
+
+local chest = Action()
+
+function chest.onUse(player, item, fromPosition, target, toPosition, isHotkey)
+	local index = chests[key(fromPosition)]
+	if not index then
+		return true
+	end
+	local quest = quests[index]
+
+	if isDone(player, index) then
+		player:sendTextMessage(MESSAGE_EVENT_ADVANCE, "Skrzynia jest pusta. Ten quest jest juz wykonany.")
+		return true
+	end
+
+	local count = killsOf(player, index)
+	if count < REQUIRED_KILLS then
+		player:sendTextMessage(MESSAGE_EVENT_ADVANCE, string.format("Skrzynia jest zamknieta. Pokonaj jeszcze %d potworow w tej sali.", REQUIRED_KILLS - count))
+		return true
+	end
+
+	if quest.male > 0 then
+		player:addOutfitAddon(quest.male, 3)
+	end
+	if quest.female > 0 then
+		player:addOutfitAddon(quest.female, 3)
+	end
+	progress(player, index):set("done", true)
+	player:getPosition():sendMagicEffect(CONST_ME_FIREWORK_YELLOW)
+	player:sendTextMessage(MESSAGE_EVENT_ADVANCE, string.format("Quest wykonany! Nowy stroj dostepny: %s (z oboma dodatkami).", quest.name))
+	return true
+end
+
+chest:aid(CHEST_ACTION_ID)
+chest:register()

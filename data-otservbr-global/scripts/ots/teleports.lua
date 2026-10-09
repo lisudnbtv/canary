@@ -695,6 +695,7 @@ local hubPads = {
 	["30006:30318:7"] = { hunt = hunts[8].list[3] },
 	["30006:30322:7"] = { hunt = hunts[8].list[4] },
 	["30008:29998:7"] = { wing = 3 },
+	["30009:30002:7"] = { outfits = true },
 	["30009:30038:7"] = { hunt = hunts[1].list[5] },
 	["30009:30042:7"] = { hunt = hunts[1].list[6] },
 	["30009:30078:7"] = { hunt = hunts[2].list[5] },
@@ -1382,6 +1383,11 @@ openMain = function(player)
 			openMain(again)
 		end)
 	end)
+	window:addChoice("Stroje (questy)", function(target)
+		if OtsOutfitHall and not inFight(target) then
+			OtsOutfitHall(target)
+		end
+	end)
 	window:addChoice("Miasta", function(target)
 		openTowns(target)
 	end)
@@ -1461,7 +1467,7 @@ hubLobbyMessage = function()
 	for i = 1, #hubWings do
 		names[i] = hubWings[i].label
 	end
-	return "Hub expowisk. Pady na polnocy, od zachodu: " .. table.concat(names, ", ") .. ". Pad na poludniu: Thais."
+	return "Hub expowisk. Pady na polnocy, od zachodu: " .. table.concat(names, ", ") .. ". Pady na poludniu: questy na stroje i Thais."
 end
 
 local hubStep = MoveEvent()
@@ -1486,6 +1492,8 @@ function hubStep.onStepIn(creature, item, position, fromPosition)
 		hubMove(player, hubLobby, hubLobbyMessage())
 	elseif action.thais and templePosition then
 		hubMove(player, templePosition)
+	elseif action.outfits and OtsOutfitHall then
+		OtsOutfitHall(player)
 	end
 	return true
 end
@@ -1512,6 +1520,8 @@ function hubLook.playerOnLook(player, inspectedThing, inspectedPosition, lookDis
 		text = "Skrzydlo: " .. hubWings[action.wing].label
 	elseif action.lobby then
 		text = "Powrot do lobby hubu"
+	elseif action.outfits then
+		text = "Questy na stroje"
 	else
 		text = "Powrot do swiatyni w Thais"
 	end

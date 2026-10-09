@@ -42,6 +42,8 @@ for x in range(X0, X0 + lobby_w + 1):
 lobby_arrival = [X0 + lobby_w // 2, Y0, Z]
 pad(X0 + lobby_w // 2, Y0 + 2, dict(kind='thais'))
 board(X0 + lobby_w // 2, Y0 + 3, 'Thais\nPowrot do swiatyni', SIGN_B)
+pad(X0 + lobby_w // 2 - 4, Y0 + 2, dict(kind='outfits'))
+board(X0 + lobby_w // 2 - 4, Y0 + 3, 'Stroje\nQuesty na stroje z dodatkami', SIGN_B)
 
 wings = []
 for t, (g, (_, label)) in enumerate(zip(groups, tiers)):
