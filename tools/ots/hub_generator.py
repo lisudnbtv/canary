@@ -6,6 +6,8 @@ X0, Y0, Z = 30000, 30000, 7
 GROUND = 410          # black marble floor
 TELEPORT = 1949       # magic forcefield
 PAD_AID = 64992
+BOARD_NS = 2597      # blackboard na scianie polnoc/poludnie
+BOARD_WE = 2602      # blackboard na scianie wschod/zachod
 PITCH = 3
 WING_GAP = 40
 PZ = 1
@@ -25,8 +27,12 @@ def floor(x, y, pz=True):
     tiles.setdefault((x, y, Z), dict(pz=pz, items=[]))
 def pad(x, y, action):
     floor(x, y)
-    tiles[(x, y, Z)]['items'].append((TELEPORT, PAD_AID))
+    tiles[(x, y, Z)]['items'].append((TELEPORT, PAD_AID, None))
     pads['%d:%d:%d' % (x, y, Z)] = action
+
+def board(x, y, text, item=BOARD_NS):
+    floor(x, y)
+    tiles[(x, y, Z)]['items'].append((item, 0, text))
 
 # Lobby: platforma z rzedem padow do skrzydel (polnoc) i padem do Thais (poludnie)
 lobby_w = 2 + PITCH * len(tiers)
@@ -35,6 +41,7 @@ for x in range(X0, X0 + lobby_w + 1):
         floor(x, y)
 lobby_arrival = [X0 + lobby_w // 2, Y0, Z]
 pad(X0 + lobby_w // 2, Y0 + 2, dict(kind='thais'))
+board(X0 + lobby_w // 2, Y0 + 3, 'Thais\nPowrot do swiatyni')
 
 wings = []
 for t, (g, (_, label)) in enumerate(zip(groups, tiers)):
@@ -47,6 +54,8 @@ for t, (g, (_, label)) in enumerate(zip(groups, tiers)):
     # pady powrotne do lobby na obu koncach korytarza
     pad(X0, yc, dict(kind='lobby'))
     pad(x_end, yc, dict(kind='lobby'))
+    board(X0 - 1, yc, 'Lobby\nPowrot do wyboru skrzydla', BOARD_WE)
+    board(x_end + 1, yc, 'Lobby\nPowrot do wyboru skrzydla', BOARD_WE)
     arrival = [X0 + 1 + (x_end - X0) // 2, yc, Z]
     for i, h in enumerate(g):
         s, side = divmod(i, 2)
@@ -57,6 +66,7 @@ for t, (g, (_, label)) in enumerate(zip(groups, tiers)):
         spawns.append((h['name'], x, yc + 4 * sign))
     wings.append(dict(label=label, arrival=arrival, count=len(g)))
     pad(X0 + 2 + PITCH * t, Y0 - 2, dict(kind='wing', wing=t))
+    board(X0 + 2 + PITCH * t, Y0 - 3, '%s\n%d potworow' % (label, len(g)))
 
 # ---- zapis OTBM
 def esc(b):
@@ -84,8 +94,13 @@ for (bx, by, z), ts in sorted(areas.items()):
         if t['pz']:
             body += esc(b'\x03' + struct.pack('<I', PZ))
         body += esc(b'\x09' + struct.pack('<H', GROUND))
-        for iid, aid in t['items']:
-            body += b'\xfe\x06' + esc(struct.pack('<H', iid) + b'\x04' + struct.pack('<H', aid)) + b'\xff'
+        for iid, aid, text in t['items']:
+            data = struct.pack('<H', iid)
+            if aid:
+                data += b'\x04' + struct.pack('<H', aid)
+            if text:
+                data += b'\x06' + s16(text)
+            body += b'\xfe\x06' + esc(data) + b'\xff'
         body += b'\xff'
     body += b'\xff'
 body += b'\xfe\x0c\xff'      # towns (puste)
