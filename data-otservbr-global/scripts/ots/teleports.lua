@@ -705,8 +705,10 @@ local function openList(player, title, list, back)
 		back(target)
 	end)
 	window:setPriority(true) -- okno przejmuje klawiature: strzalki, Enter, Esc
-	window:setDefaultEnterButton(1)
-	window:setDefaultEscapeButton(2)
+	-- Klient 15.x czyta te dwa pola w odwrotnej kolejnosci niz wysyla je serwer,
+	-- dlatego wartosci sa zamienione: Enter = przycisk 1, Esc = przycisk 2.
+	window:setDefaultEnterButton(2)
+	window:setDefaultEscapeButton(1)
 	window:sendToPlayer(player)
 end
 
@@ -723,8 +725,10 @@ local function openHunts(player)
 		openMain(target)
 	end)
 	window:setPriority(true) -- okno przejmuje klawiature: strzalki, Enter, Esc
-	window:setDefaultEnterButton(1)
-	window:setDefaultEscapeButton(2)
+	-- Klient 15.x czyta te dwa pola w odwrotnej kolejnosci niz wysyla je serwer,
+	-- dlatego wartosci sa zamienione: Enter = przycisk 1, Esc = przycisk 2.
+	window:setDefaultEnterButton(2)
+	window:setDefaultEscapeButton(1)
 	window:sendToPlayer(player)
 end
 
@@ -764,8 +768,10 @@ openMain = function(player)
 	window:addButton("Wybierz")
 	window:addButton("Zamknij", function() end)
 	window:setPriority(true) -- okno przejmuje klawiature: strzalki, Enter, Esc
-	window:setDefaultEnterButton(1)
-	window:setDefaultEscapeButton(2)
+	-- Klient 15.x czyta te dwa pola w odwrotnej kolejnosci niz wysyla je serwer,
+	-- dlatego wartosci sa zamienione: Enter = przycisk 1, Esc = przycisk 2.
+	window:setDefaultEnterButton(2)
+	window:setDefaultEscapeButton(1)
 	window:sendToPlayer(player)
 end
 
