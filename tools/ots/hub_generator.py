@@ -6,8 +6,8 @@ X0, Y0, Z = 30000, 30000, 7
 GROUND = 410          # black marble floor
 TELEPORT = 1949       # magic forcefield
 PAD_AID = 64992
-BOARD_NS = 2597      # blackboard na scianie polnoc/poludnie
-BOARD_WE = 2602      # blackboard na scianie wschod/zachod
+SIGN_A = 2016        # stojaca tabliczka (polnoc/zachod)
+SIGN_B = 2014        # stojaca tabliczka (poludnie/wschod)
 PITCH = 3
 WING_GAP = 40
 PZ = 1
@@ -30,7 +30,7 @@ def pad(x, y, action):
     tiles[(x, y, Z)]['items'].append((TELEPORT, PAD_AID, None))
     pads['%d:%d:%d' % (x, y, Z)] = action
 
-def board(x, y, text, item=BOARD_NS):
+def board(x, y, text, item=SIGN_A):
     floor(x, y)
     tiles[(x, y, Z)]['items'].append((item, 0, text))
 
@@ -41,7 +41,7 @@ for x in range(X0, X0 + lobby_w + 1):
         floor(x, y)
 lobby_arrival = [X0 + lobby_w // 2, Y0, Z]
 pad(X0 + lobby_w // 2, Y0 + 2, dict(kind='thais'))
-board(X0 + lobby_w // 2, Y0 + 3, 'Thais\nPowrot do swiatyni')
+board(X0 + lobby_w // 2, Y0 + 3, 'Thais\nPowrot do swiatyni', SIGN_B)
 
 wings = []
 for t, (g, (_, label)) in enumerate(zip(groups, tiers)):
@@ -54,14 +54,15 @@ for t, (g, (_, label)) in enumerate(zip(groups, tiers)):
     # pady powrotne do lobby na obu koncach korytarza
     pad(X0, yc, dict(kind='lobby'))
     pad(x_end, yc, dict(kind='lobby'))
-    board(X0 - 1, yc, 'Lobby\nPowrot do wyboru skrzydla', BOARD_WE)
-    board(x_end + 1, yc, 'Lobby\nPowrot do wyboru skrzydla', BOARD_WE)
+    board(X0 - 1, yc, 'Lobby\nPowrot do wyboru skrzydla', SIGN_A)
+    board(x_end + 1, yc, 'Lobby\nPowrot do wyboru skrzydla', SIGN_B)
     arrival = [X0 + 1 + (x_end - X0) // 2, yc, Z]
     for i, h in enumerate(g):
         s, side = divmod(i, 2)
         x = X0 + 3 + PITCH * s
         sign = -1 if side == 0 else 1
         pad(x, yc + 2 * sign, dict(kind='hunt', tier=t, index=g.index(h)))
+        board(x, yc + 3 * sign, '%s\n%d exp, %d potworow w okolicy' % (h['name'], h['exp'], h['n']), SIGN_A if sign < 0 else SIGN_B)
         floor(x, yc + 4 * sign, pz=False)       # wysepka potwora, poza PZ
         spawns.append((h['name'], x, yc + 4 * sign))
     wings.append(dict(label=label, arrival=arrival, count=len(g)))
