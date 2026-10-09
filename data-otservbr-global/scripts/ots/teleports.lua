@@ -651,7 +651,9 @@ local hubWings = {
 	{ label = "Exp 6000-12000 (58 potworow)", x = 30045, y = 30280, z = 7 },
 	{ label = "Exp 12000+ (21 potworow)", x = 30018, y = 30320, z = 7 },
 }
+local hubQuestHall = Position(30025, 29960, 7)
 local hubPads = {
+	["30000:29960:7"] = { lobby = true },
 	["30000:30040:7"] = { lobby = true },
 	["30000:30080:7"] = { lobby = true },
 	["30000:30120:7"] = { lobby = true },
@@ -677,6 +679,8 @@ local hubPads = {
 	["30003:30282:7"] = { hunt = hunts[7].list[2] },
 	["30003:30318:7"] = { hunt = hunts[8].list[1] },
 	["30003:30322:7"] = { hunt = hunts[8].list[2] },
+	["30004:29958:7"] = { quest = quests[1] },
+	["30004:29962:7"] = { quest = quests[2] },
 	["30005:29998:7"] = { wing = 2 },
 	["30006:30038:7"] = { hunt = hunts[1].list[3] },
 	["30006:30042:7"] = { hunt = hunts[1].list[4] },
@@ -695,6 +699,8 @@ local hubPads = {
 	["30006:30318:7"] = { hunt = hunts[8].list[3] },
 	["30006:30322:7"] = { hunt = hunts[8].list[4] },
 	["30008:29998:7"] = { wing = 3 },
+	["30009:29958:7"] = { quest = quests[3] },
+	["30009:29962:7"] = { quest = quests[4] },
 	["30009:30002:7"] = { outfits = true },
 	["30009:30038:7"] = { hunt = hunts[1].list[5] },
 	["30009:30042:7"] = { hunt = hunts[1].list[6] },
@@ -730,6 +736,8 @@ local hubPads = {
 	["30012:30318:7"] = { hunt = hunts[8].list[7] },
 	["30012:30322:7"] = { hunt = hunts[8].list[8] },
 	["30013:30002:7"] = { thais = true },
+	["30014:29958:7"] = { quest = quests[5] },
+	["30014:29962:7"] = { quest = quests[6] },
 	["30014:29998:7"] = { wing = 5 },
 	["30015:30038:7"] = { hunt = hunts[1].list[9] },
 	["30015:30042:7"] = { hunt = hunts[1].list[10] },
@@ -748,6 +756,7 @@ local hubPads = {
 	["30015:30318:7"] = { hunt = hunts[8].list[9] },
 	["30015:30322:7"] = { hunt = hunts[8].list[10] },
 	["30017:29998:7"] = { wing = 6 },
+	["30017:30002:7"] = { questhall = true },
 	["30018:30038:7"] = { hunt = hunts[1].list[11] },
 	["30018:30042:7"] = { hunt = hunts[1].list[12] },
 	["30018:30078:7"] = { hunt = hunts[2].list[11] },
@@ -764,6 +773,8 @@ local hubPads = {
 	["30018:30282:7"] = { hunt = hunts[7].list[12] },
 	["30018:30318:7"] = { hunt = hunts[8].list[11] },
 	["30018:30322:7"] = { hunt = hunts[8].list[12] },
+	["30019:29958:7"] = { quest = quests[7] },
+	["30019:29962:7"] = { quest = quests[8] },
 	["30020:29998:7"] = { wing = 7 },
 	["30021:30038:7"] = { hunt = hunts[1].list[13] },
 	["30021:30042:7"] = { hunt = hunts[1].list[14] },
@@ -782,6 +793,8 @@ local hubPads = {
 	["30021:30318:7"] = { hunt = hunts[8].list[13] },
 	["30021:30322:7"] = { hunt = hunts[8].list[14] },
 	["30023:29998:7"] = { wing = 8 },
+	["30024:29958:7"] = { quest = quests[9] },
+	["30024:29962:7"] = { quest = quests[10] },
 	["30024:30038:7"] = { hunt = hunts[1].list[15] },
 	["30024:30042:7"] = { hunt = hunts[1].list[16] },
 	["30024:30078:7"] = { hunt = hunts[2].list[15] },
@@ -814,6 +827,8 @@ local hubPads = {
 	["30027:30282:7"] = { hunt = hunts[7].list[18] },
 	["30027:30318:7"] = { hunt = hunts[8].list[17] },
 	["30027:30322:7"] = { hunt = hunts[8].list[18] },
+	["30029:29958:7"] = { quest = quests[11] },
+	["30029:29962:7"] = { quest = quests[12] },
 	["30030:30038:7"] = { hunt = hunts[1].list[19] },
 	["30030:30042:7"] = { hunt = hunts[1].list[20] },
 	["30030:30078:7"] = { hunt = hunts[2].list[19] },
@@ -845,6 +860,8 @@ local hubPads = {
 	["30033:30278:7"] = { hunt = hunts[7].list[21] },
 	["30033:30282:7"] = { hunt = hunts[7].list[22] },
 	["30033:30318:7"] = { hunt = hunts[8].list[21] },
+	["30034:29958:7"] = { quest = quests[13] },
+	["30034:29962:7"] = { quest = quests[14] },
 	["30035:30320:7"] = { lobby = true },
 	["30036:30038:7"] = { hunt = hunts[1].list[23] },
 	["30036:30042:7"] = { hunt = hunts[1].list[24] },
@@ -860,6 +877,8 @@ local hubPads = {
 	["30036:30242:7"] = { hunt = hunts[6].list[24] },
 	["30036:30278:7"] = { hunt = hunts[7].list[23] },
 	["30036:30282:7"] = { hunt = hunts[7].list[24] },
+	["30039:29958:7"] = { quest = quests[15] },
+	["30039:29962:7"] = { quest = quests[16] },
 	["30039:30038:7"] = { hunt = hunts[1].list[25] },
 	["30039:30042:7"] = { hunt = hunts[1].list[26] },
 	["30039:30078:7"] = { hunt = hunts[2].list[25] },
@@ -888,6 +907,8 @@ local hubPads = {
 	["30042:30242:7"] = { hunt = hunts[6].list[28] },
 	["30042:30278:7"] = { hunt = hunts[7].list[27] },
 	["30042:30282:7"] = { hunt = hunts[7].list[28] },
+	["30044:29958:7"] = { quest = quests[17] },
+	["30044:29962:7"] = { quest = quests[18] },
 	["30045:30038:7"] = { hunt = hunts[1].list[29] },
 	["30045:30042:7"] = { hunt = hunts[1].list[30] },
 	["30045:30078:7"] = { hunt = hunts[2].list[29] },
@@ -902,6 +923,7 @@ local hubPads = {
 	["30045:30242:7"] = { hunt = hunts[6].list[30] },
 	["30045:30278:7"] = { hunt = hunts[7].list[29] },
 	["30045:30282:7"] = { hunt = hunts[7].list[30] },
+	["30048:29960:7"] = { lobby = true },
 	["30048:30038:7"] = { hunt = hunts[1].list[31] },
 	["30048:30042:7"] = { hunt = hunts[1].list[32] },
 	["30048:30078:7"] = { hunt = hunts[2].list[31] },
@@ -1298,22 +1320,26 @@ end
 
 local openMain
 
+-- Uruchamia cel z listy: zwykly teleport albo quest z wlasnym skryptem.
+local function startEntry(player, entry)
+	if not entry.func then
+		travel(player, entry)
+		return
+	end
+	local start = _G[entry.func]
+	if not start then
+		player:sendCancelMessage("Ten quest nie jest jeszcze dostepny.")
+	elseif not inFight(player) then
+		start(player)
+	end
+end
+
 local function openList(player, title, list, back)
 	local window = ModalWindow({ title = title, message = "Wybierz cel i kliknij Wybierz." })
 	for i = 1, math.min(#list, 250) do
 		local entry = list[i]
 		window:addChoice(entry[1], function(target)
-			if not entry.func then
-				travel(target, entry)
-				return
-			end
-			-- Quest z wlasnym skryptem: menu wywoluje jego funkcje startowa.
-			local start = _G[entry.func]
-			if not start then
-				target:sendCancelMessage("Ten quest nie jest jeszcze dostepny.")
-			elseif not inFight(target) then
-				start(target)
-			end
+			startEntry(target, entry)
 		end)
 	end
 	window:addButton("Wybierz")
@@ -1467,7 +1493,7 @@ hubLobbyMessage = function()
 	for i = 1, #hubWings do
 		names[i] = hubWings[i].label
 	end
-	return "Hub expowisk. Pady na polnocy, od zachodu: " .. table.concat(names, ", ") .. ". Pady na poludniu: questy na stroje i Thais."
+	return "Hub expowisk. Pady na polnocy, od zachodu: " .. table.concat(names, ", ") .. ". Pady na poludniu: questy na stroje, Thais i hala questow."
 end
 
 local hubStep = MoveEvent()
@@ -1494,6 +1520,10 @@ function hubStep.onStepIn(creature, item, position, fromPosition)
 		hubMove(player, templePosition)
 	elseif action.outfits and OtsOutfitHall then
 		OtsOutfitHall(player)
+	elseif action.questhall then
+		hubMove(player, hubQuestHall, "Hala questow: kazdy pad to jeden quest, za padem leza nagrody do zdobycia. Pady na koncach wracaja do lobby.")
+	elseif action.quest then
+		startEntry(player, action.quest)
 	end
 	return true
 end
@@ -1522,6 +1552,10 @@ function hubLook.playerOnLook(player, inspectedThing, inspectedPosition, lookDis
 		text = "Powrot do lobby hubu"
 	elseif action.outfits then
 		text = "Questy na stroje"
+	elseif action.questhall then
+		text = "Hala questow"
+	elseif action.quest then
+		text = "Quest: " .. action.quest[1]
 	else
 		text = "Powrot do swiatyni w Thais"
 	end

@@ -43,6 +43,8 @@ lobby_arrival = [X0 + lobby_w // 2, Y0, Z]
 pad(X0 + lobby_w // 2, Y0 + 2, dict(kind='thais'))
 board(X0 + lobby_w // 2, Y0 + 3, 'Thais\nPowrot do swiatyni', SIGN_B)
 pad(X0 + lobby_w // 2 - 4, Y0 + 2, dict(kind='outfits'))
+pad(X0 + lobby_w // 2 + 4, Y0 + 2, dict(kind='questhall'))
+board(X0 + lobby_w // 2 + 4, Y0 + 3, 'Questy\nHala questow z nagrodami', SIGN_B)
 board(X0 + lobby_w // 2 - 4, Y0 + 3, 'Stroje\nQuesty na stroje z dodatkami', SIGN_B)
 
 wings = []
@@ -70,6 +72,30 @@ for t, (g, (_, label)) in enumerate(zip(groups, tiers)):
     wings.append(dict(label=label, arrival=arrival, count=len(g)))
     pad(X0 + 2 + PITCH * t, Y0 - 2, dict(kind='wing', wing=t))
     board(X0 + 2 + PITCH * t, Y0 - 3, '%s\n%d potworow' % (label, len(g)))
+
+# Hala questow: korytarz na polnoc od lobby, pad na quest, za padem tabliczka i nagrody
+QM = json.load(open('quests_menu.json'))
+QP = 5
+yq = Y0 - 40
+qslots = (len(QM) + 1) // 2
+q_end = X0 + 3 + QP * qslots
+for x in range(X0 + 1, q_end):
+    for y in range(yq - 1, yq + 2):
+        floor(x, y)
+pad(X0, yq, dict(kind='lobby')); board(X0 - 1, yq, 'Lobby\nPowrot do hubu', SIGN_A)
+pad(q_end, yq, dict(kind='lobby')); board(q_end + 1, yq, 'Lobby\nPowrot do hubu', SIGN_B)
+questhall = [X0 + 1 + (q_end - X0) // 2, yq, Z]
+for i, qm in enumerate(QM):
+    s, side = divmod(i, 2)
+    x = X0 + 4 + QP * s
+    sign = -1 if side == 0 else 1
+    pad(x, yq + 2 * sign, dict(kind='quest', index=i))
+    board(x, yq + 3 * sign, qm['name'] + '\nNagrody leza za tabliczka', SIGN_A if sign < 0 else SIGN_B)
+    for j, iid in enumerate(qm['items'][:6]):
+        ix = x - 1 + j % 3
+        iy = yq + (4 + j // 3) * sign
+        floor(ix, iy)
+        tiles[(ix, iy, Z)]['items'].append((iid, 0, None))
 
 # ---- zapis OTBM
 def esc(b):
@@ -121,7 +147,7 @@ with open('hub/ots-hub-monster.xml', 'w') as f:
 open('hub/ots-hub-house.xml', 'w').write('<?xml version="1.0"?>\n<houses />\n')
 open('hub/ots-hub-npc.xml', 'w').write('<?xml version="1.0"?>\n<npcs />\n')
 open('hub/ots-hub-zones.xml', 'w').write('<?xml version="1.0"?>\n<zones />\n')
-json.dump(dict(pads=pads, wings=wings, lobby=lobby_arrival), open('hub.json', 'w'))
+json.dump(dict(pads=pads, wings=wings, lobby=lobby_arrival, questhall=questhall), open('hub.json', 'w'))
 xs = [k[0] for k in tiles]; ys = [k[1] for k in tiles]
 print('tiles', len(tiles), 'pads', len(pads), 'spawns', len(spawns), 'bbox', min(xs), min(ys), max(xs), max(ys), 'bytes', len(out))
 for w in wings: print(w)
