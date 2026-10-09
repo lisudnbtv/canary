@@ -658,7 +658,9 @@ local function prepareSpot(center)
 end
 
 local function travel(player, entry)
-	if player:getCondition(CONDITION_INFIGHT, CONDITIONID_DEFAULT) and not isSafe(player) and not player:getGroup():getAccess() then
+	local here = Tile(player:getPosition())
+	local protected = isSafe(player) or (here and here:hasFlag(TILESTATE_PROTECTIONZONE))
+	if player:getCondition(CONDITION_INFIGHT, CONDITIONID_DEFAULT) and not protected and not player:getGroup():getAccess() then
 		player:sendCancelMessage("Nie mozesz sie teleportowac w trakcie walki.")
 		return
 	end
@@ -800,6 +802,7 @@ function returnStep.onStepIn(creature, item, position, fromPosition)
 		return true
 	end
 	player:teleportTo(templePosition)
+	player:removeCondition(CONDITION_INFIGHT, CONDITIONID_DEFAULT)
 	position:sendMagicEffect(CONST_ME_POFF)
 	templePosition:sendMagicEffect(CONST_ME_TELEPORT)
 	return true
@@ -813,13 +816,14 @@ returnStep:register()
 local safeTarget = EventCallback("OtsSafeZoneTargetCombat")
 
 function safeTarget.creatureOnTargetCombat(attacker, target)
+	-- Silnik odczytuje wynik jako true/false: false blokuje atak.
 	if isSafe(target) and target:isPlayer() then
-		return RETURNVALUE_ACTIONNOTPERMITTEDINPROTECTIONZONE
+		return false
 	end
 	if attacker and attacker:isPlayer() and isSafe(attacker) then
-		return RETURNVALUE_ACTIONNOTPERMITTEDINPROTECTIONZONE
+		return false
 	end
-	return RETURNVALUE_NOERROR
+	return true
 end
 
 safeTarget:register()
@@ -828,9 +832,9 @@ local safeArea = EventCallback("OtsSafeZoneAreaCombat")
 
 function safeArea.creatureOnAreaCombat(creature, tile, isAggressive)
 	if isAggressive and tile and safeTiles[key(tile:getPosition())] then
-		return RETURNVALUE_ACTIONNOTPERMITTEDINPROTECTIONZONE
+		return false
 	end
-	return RETURNVALUE_NOERROR
+	return true
 end
 
 safeArea:register()
