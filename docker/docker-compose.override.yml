@@ -1,0 +1,6 @@
+---
+# Lokalne dodatki OTS: wlasne skrypty Lua montowane do gotowego obrazu serwera.
+services:
+  server:
+    volumes:
+      - '../data-otservbr-global/scripts/ots:/canary/data-otservbr-global/scripts/ots:ro'
