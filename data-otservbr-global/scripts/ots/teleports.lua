@@ -1,4 +1,4 @@
--- OTS: menu teleportow (expowiska, bossy, miasta).
+-- OTS: menu teleportow (expowiska, bossy, questy, miasta).
 -- Plik generowany z danych serwera (spawny potworow i dzwignie bossow).
 -- Wejscie: teleport przy swiatyni w Thais albo komenda !tp.
 
@@ -618,6 +618,94 @@ local bosses = {
 	{ "The Primal Menace (lvl 500+)", 33548, 32752, 14 },
 }
 
+local quests = {
+	{ "Bananafree: banana", 32126, 32183, 7, hint = "Skrzynia z nagroda: ok. 45 krokow, kierunek wschod. Przy skrzyni jest strefa PZ." },
+	{ "Barbarianaxe: barbarian axe, scimitar", 33164, 31920, 11, hint = "Skrzynia z nagroda: ok. 45 krokow, kierunek poludniowy wschod. Przy skrzyni jest strefa PZ." },
+	{ "Berserker Treasure: gold coin, white pearl", 33159, 31935, 11, hint = "Skrzynia z nagroda: ok. 44 krokow, kierunek wschod. Przy skrzyni jest strefa PZ." },
+	{ "Blackknight: crown armor, crown shield", 32870, 31943, 11, hint = "Skrzynia z nagroda: ok. 11 krokow, kierunek poludnie. Przy skrzyni jest strefa PZ." },
+	{ "Bloodherb: blood herb", 32770, 31979, 7, hint = "Skrzynia z nagroda: ok. 10 krokow, kierunek polnoc. Przy skrzyni jest strefa PZ." },
+	{ "Children Of The Revolution: Tome of Knowledge", 33292, 31093, 7, hint = "Skrzynia z nagroda: ok. 39 krokow, kierunek poludniowy zachod. Przy skrzyni jest strefa PZ." },
+	{ "Circleroom: war hammer, dwarven axe", 32496, 31946, 14, hint = "Skrzynia z nagroda: ok. 45 krokow, kierunek poludnie. Przy skrzyni jest strefa PZ." },
+	{ "Combatknife: combat knife", 32077, 32227, 8, hint = "Skrzynia z nagroda: ok. 45 krokow, kierunek wschod. Przy skrzyni jest strefa PZ." },
+	{ "Crusaderhelmet: crusader helmet", 32456, 31938, 14, hint = "Skrzynia z nagroda: ok. 45 krokow, kierunek zachod. Przy skrzyni jest strefa PZ." },
+	{ "Crystalwand: crystal wand, silver rune emblem", 32479, 31652, 15, hint = "Skrzynia z nagroda: ok. 40 krokow, kierunek polnoc. Przy skrzyni jest strefa PZ." },
+	{ "Dawnport: torn log book", 32044, 31842, 10, hint = "Skrzynia z nagroda: ok. 48 krokow, kierunek polnoc. Przy skrzyni jest strefa PZ." },
+	{ "Deadarcher: bow, poison arrow, mana potion, health po...", 32481, 32286, 10, hint = "Skrzynia z nagroda: ok. 45 krokow, kierunek poludniowy wschod. Przy skrzyni jest strefa PZ." },
+	{ "Deeperfibula: tower shield, warrior helmet", 32279, 32469, 10, hint = "Skrzynia z nagroda: ok. 45 krokow, kierunek zachod. Przy skrzyni jest strefa PZ." },
+	{ "Deeperfibula: dwarven ring, elven amulet, knight axe", 32270, 32461, 10, hint = "Skrzynia z nagroda: ok. 46 krokow, kierunek poludniowy zachod. Przy skrzyni jest strefa PZ." },
+	{ "Demonaring: stealth ring, energy ring", 32503, 31578, 14, hint = "Skrzynia z nagroda: ok. 17 krokow, kierunek poludnie. Przy skrzyni jest strefa PZ." },
+	{ "Doublehero: red gem, club ring", 33134, 31666, 13, hint = "Skrzynia z nagroda: ok. 45 krokow, kierunek poludniowy zachod. Przy skrzyni jest strefa PZ." },
+	{ "Edrongoblin: silver amulet, steel shield", 33092, 31823, 10, hint = "Skrzynia z nagroda: ok. 26 krokow, kierunek polnoc. Przy skrzyni jest strefa PZ." },
+	{ "Elephant Tusk: tusk", 32923, 32801, 7, hint = "Skrzynia z nagroda: ok. 45 krokow, kierunek polnoc. Przy skrzyni jest strefa PZ." },
+	{ "Explorer Society: talon, hammer of mighty cheating, gold co...", 32771, 32233, 8, hint = "Skrzynia z nagroda: ok. 17 krokow, kierunek poludnie. Przy skrzyni jest strefa PZ." },
+	{ "Fanfare: fanfare", 32390, 31809, 9, hint = "Skrzynia z nagroda: ok. 44 krokow, kierunek polnoc. Przy skrzyni jest strefa PZ." },
+	{ "Ferumbras Ascension: bones", 33420, 32343, 11, hint = "Skrzynia z nagroda: ok. 45 krokow, kierunek poludniowy zachod. Przy skrzyni jest strefa PZ." },
+	{ "Ferumbras Ascension: vampire teeth", 33380, 32377, 11, hint = "Skrzynia z nagroda: ok. 45 krokow, kierunek poludniowy wschod. Przy skrzyni jest strefa PZ." },
+	{ "Fireaxe: ring of healing, dragon necklace, small d...", 33088, 31644, 11, hint = "Skrzynia z nagroda: ok. 11 krokow, kierunek poludniowy zachod. Przy skrzyni jest strefa PZ." },
+	{ "Fishing Box: platinum coin, rainbow trout, green perch", 32018, 31363, 7, hint = "Skrzynia z nagroda: ok. 45 krokow, kierunek poludnie. Przy skrzyni jest strefa PZ." },
+	{ "Geomancer: small sapphire, small diamond, dwarven ring", 32441, 32006, 13, hint = "Skrzynia z nagroda: ok. 14 krokow, kierunek wschod. Przy skrzyni jest strefa PZ." },
+	{ "Griffinshield: griffin shield, obsidian lance, dwarven axe", 32487, 31721, 15, hint = "Skrzynia z nagroda: ok. 10 krokow, kierunek wschod. Przy skrzyni jest strefa PZ." },
+	{ "Halls Of Hope: heavy old tome", 32366, 32229, 9, hint = "Skrzynia z nagroda: ok. 45 krokow, kierunek polnocny zachod. Przy skrzyni jest strefa PZ." },
+	{ "Halls Of Hope: heavy old tome", 32360, 32388, 9, hint = "Skrzynia z nagroda: ok. 45 krokow, kierunek polnocny wschod. Przy skrzyni jest strefa PZ." },
+	{ "Halls Of Hope: heavy old tome", 32264, 32163, 7, hint = "Skrzynia z nagroda: ok. 45 krokow, kierunek polnocny wschod. Przy skrzyni jest strefa PZ." },
+	{ "Heavenblossom: heaven blossom", 33060, 32161, 8, hint = "Skrzynia z nagroda: ok. 45 krokow, kierunek wschod. Przy skrzyni jest strefa PZ." },
+	{ "Hidden Threats: metal file", 33035, 31975, 13, hint = "Skrzynia z nagroda: ok. 45 krokow, kierunek wschod. Przy skrzyni jest strefa PZ." },
+	{ "Hidden Threats: rusted key fragment", 33041, 32003, 13, hint = "Skrzynia z nagroda: ok. 45 krokow, kierunek wschod. Przy skrzyni jest strefa PZ." },
+	{ "Hidden Threats: rusted key fragment", 33054, 32039, 13, hint = "Skrzynia z nagroda: ok. 45 krokow, kierunek zachod. Przy skrzyni jest strefa PZ." },
+	{ "Ironhamer: iron hammer", 32467, 31944, 8, hint = "Skrzynia z nagroda: ok. 45 krokow, kierunek zachod. Przy skrzyni jest strefa PZ." },
+	{ "Ironhelmet: worn leather boots, sudden death rune, le...", 32723, 32196, 7, hint = "Skrzynia z nagroda: ok. 45 krokow, kierunek poludniowy wschod. Przy skrzyni jest strefa PZ." },
+	{ "Ironore: iron ore", 32517, 31835, 8, hint = "Skrzynia z nagroda: ok. 45 krokow, kierunek poludnie. Przy skrzyni jest strefa PZ." },
+	{ "Koshei The Deathless: piece of a broken amulet", 33179, 32427, 7, hint = "Skrzynia z nagroda: ok. 45 krokow, kierunek poludnie. Przy skrzyni jest strefa PZ." },
+	{ "Koshei The Deathless: piece of a broken amulet", 33301, 32291, 10, hint = "Skrzynia z nagroda: ok. 13 krokow, kierunek polnoc. Przy skrzyni jest strefa PZ." },
+	{ "Koshei The Deathless: piece of a broken amulet", 33166, 32569, 7, hint = "Skrzynia z nagroda: ok. 45 krokow, kierunek poludniowy wschod. Przy skrzyni jest strefa PZ." },
+	{ "Longsword: longsword, wedding ring, blank rune, wood...", 32626, 32000, 9, hint = "Skrzynia z nagroda: ok. 45 krokow, kierunek polnocny wschod. Przy skrzyni jest strefa PZ." },
+	{ "Minohell: fishing rod, arrow, poison arrow, carlin...", 32112, 32050, 12, hint = "Skrzynia z nagroda: ok. 15 krokow, kierunek poludniowy wschod. Przy skrzyni jest strefa PZ." },
+	{ "Minotaurleatherquest: minotaur leather", 32269, 32377, 7, hint = "Skrzynia z nagroda: ok. 45 krokow, kierunek poludniowy wschod. Przy skrzyni jest strefa PZ." },
+	{ "Mintwallincyclops: small diamond", 32602, 32084, 14, hint = "Skrzynia z nagroda: ok. 21 krokow, kierunek poludniowy zachod. Przy skrzyni jest strefa PZ." },
+	{ "Nightmare Teddy Quest: nightmare teddy", 33447, 32617, 11, hint = "Skrzynia z nagroda: ok. 11 krokow, kierunek polnoc. Przy skrzyni jest strefa PZ." },
+	{ "Orcfortress: knight axe, knight armor, fire sword", 32981, 31757, 9, hint = "Skrzynia z nagroda: ok. 29 krokow, kierunek polnoc. Przy skrzyni jest strefa PZ." },
+	{ "Orcshaman: magic light wand, axe ring, blank rune", 33074, 32019, 9, hint = "Skrzynia z nagroda: ok. 14 krokow, kierunek poludniowy wschod. Przy skrzyni jest strefa PZ." },
+	{ "Painting Of AGirl Quest: painting of a girl", 32850, 31672, 10, hint = "Skrzynia z nagroda: ok. 45 krokow, kierunek wschod. Przy skrzyni jest strefa PZ." },
+	{ "Petrified Scream Quest: petrified scream", 32717, 31444, 8, hint = "Skrzynia z nagroda: ok. 45 krokow, kierunek polnocny wschod. Przy skrzyni jest strefa PZ." },
+	{ "Poisondaggers: poison arrow, poison dagger", 33187, 31866, 11, hint = "Skrzynia z nagroda: ok. 33 krokow, kierunek zachod. Przy skrzyni jest strefa PZ." },
+	{ "Powerring: gold coin, bronze amulet", 32592, 31757, 9, hint = "Skrzynia z nagroda: ok. 20 krokow, kierunek poludnie. Przy skrzyni jest strefa PZ." },
+	{ "Present Box: jug, present, cup, plate", 32126, 32118, 11, hint = "Skrzynia z nagroda: ok. 38 krokow, kierunek polnocny wschod. Przy skrzyni jest strefa PZ." },
+	{ "Purpletome: map, purple tome", 32433, 31635, 15, hint = "Skrzynia z nagroda: ok. 45 krokow, kierunek polnoc. Przy skrzyni jest strefa PZ." },
+	{ "Shamantreasure: blank rune", 33165, 31901, 9, hint = "Skrzynia z nagroda: ok. 45 krokow, kierunek zachod. Przy skrzyni jest strefa PZ." },
+	{ "Shardsof Ancient Winters: skeleton decoration, gold coin, shard", 32385, 31235, 8, hint = "Skrzynia z nagroda: ok. 45 krokow, kierunek wschod. Przy skrzyni jest strefa PZ." },
+	{ "Shardsof Ancient Winters: bullseye potion, platinum coin, shard", 32157, 31447, 8, hint = "Skrzynia z nagroda: ok. 16 krokow, kierunek polnocny zachod. Przy skrzyni jest strefa PZ." },
+	{ "Shardsof Ancient Winters: berserk potion, gold coin, demonic essenc...", 32461, 31149, 10, hint = "Skrzynia z nagroda: ok. 45 krokow, kierunek poludniowy wschod. Przy skrzyni jest strefa PZ." },
+	{ "Shardsof Ancient Winters: lion trophy, platinum coin, shard", 32112, 31100, 9, hint = "Skrzynia z nagroda: ok. 45 krokow, kierunek wschod. Przy skrzyni jest strefa PZ." },
+	{ "Shortswordbook: book", 32130, 32195, 7, hint = "Skrzynia z nagroda: ok. 45 krokow, kierunek wschod. Przy skrzyni jest strefa PZ." },
+	{ "Spikesword: spike sword", 32580, 32103, 12, hint = "Skrzynia z nagroda: ok. 21 krokow, kierunek polnocny zachod. Przy skrzyni jest strefa PZ." },
+	{ "The Hidden City Of Beregar: gold ingot", 32647, 31387, 14, hint = "Skrzynia z nagroda: ok. 45 krokow, kierunek zachod. Przy skrzyni jest strefa PZ." },
+	{ "The Hidden City Of Beregar: small topaz", 32554, 31393, 14, hint = "Skrzynia z nagroda: ok. 45 krokow, kierunek wschod. Przy skrzyni jest strefa PZ." },
+	{ "The Hidden City Of Beregar: rusted armor", 32687, 31487, 15, hint = "Skrzynia z nagroda: ok. 45 krokow, kierunek polnocny zachod. Przy skrzyni jest strefa PZ." },
+	{ "The Hidden City Of Beregar: platinum coin, rope, shovel, mana potion...", 32537, 31476, 11, hint = "Skrzynia z nagroda: ok. 45 krokow, kierunek poludnie. Przy skrzyni jest strefa PZ." },
+	{ "The Ice Islands: power bolt, crossbow, bullseye potion, go...", 32093, 31088, 12, hint = "Skrzynia z nagroda: ok. 45 krokow, kierunek poludniowy wschod. Przy skrzyni jest strefa PZ." },
+	{ "The Ice Islands: sheet of paper", 32027, 31150, 11, hint = "Skrzynia z nagroda: ok. 45 krokow, kierunek polnoc. Przy skrzyni jest strefa PZ." },
+	{ "The Inquisition Quest: witches' grimoire", 32668, 31930, 1, hint = "Skrzynia z nagroda: ok. 18 krokow, kierunek zachod. Przy skrzyni jest strefa PZ." },
+	{ "The Medusa Quest: medusa shield, blue robe, skull staff", 33031, 32396, 10, hint = "Skrzynia z nagroda: ok. 17 krokow, kierunek wschod. Przy skrzyni jest strefa PZ." },
+	{ "The New Frontier: Tome of Knowledge", 33156, 31274, 10, hint = "Skrzynia z nagroda: ok. 45 krokow, kierunek polnoc. Przy skrzyni jest strefa PZ." },
+	{ "The Pits Of Inferno: book", 32855, 32341, 11, hint = "Skrzynia z nagroda: ok. 15 krokow, kierunek polnoc. Przy skrzyni jest strefa PZ." },
+	{ "The Queen Of The Banshees: stone skin amulet", 32219, 31911, 15, hint = "Skrzynia z nagroda: ok. 14 krokow, kierunek polnoc. Przy skrzyni jest strefa PZ." },
+	{ "The Queen Of The Banshees: stealth ring", 32219, 31911, 15, hint = "Skrzynia z nagroda: ok. 14 krokow, kierunek polnoc. Przy skrzyni jest strefa PZ." },
+	{ "The Queen Of The Banshees: tower shield, boots of haste, platinum co...", 32213, 31897, 15, hint = "Skrzynia z nagroda: ok. 12 krokow, kierunek poludnie. Przy skrzyni jest strefa PZ." },
+	{ "The Secret Library: sample of monster blood", 33253, 32016, 8, hint = "Skrzynia z nagroda: ok. 45 krokow, kierunek zachod. Przy skrzyni jest strefa PZ." },
+	{ "The Secret Library: bony rod", 33221, 32108, 9, hint = "Skrzynia z nagroda: ok. 45 krokow, kierunek polnoc. Przy skrzyni jest strefa PZ." },
+	{ "The Secret Library: peacock ballad", 32810, 32753, 11, hint = "Skrzynia z nagroda: ok. 45 krokow, kierunek wschod. Przy skrzyni jest strefa PZ." },
+	{ "The Thieves Guild Quest: bag", 33109, 32622, 7, hint = "Skrzynia z nagroda: ok. 45 krokow, kierunek poludniowy wschod. Przy skrzyni jest strefa PZ." },
+	{ "Threatened Dreams: book with old legends", 32776, 31946, 11, hint = "Skrzynia z nagroda: ok. 45 krokow, kierunek poludnie. Przy skrzyni jest strefa PZ." },
+	{ "Threatened Dreams: dark moon mirror", 33617, 32188, 9, hint = "Skrzynia z nagroda: ok. 45 krokow, kierunek poludniowy zachod. Przy skrzyni jest strefa PZ." },
+	{ "Tomes Of Knowledge: Tome of Knowledge", 33039, 31279, 8, hint = "Skrzynia z nagroda: ok. 45 krokow, kierunek polnocny zachod. Przy skrzyni jest strefa PZ." },
+	{ "Tomes Of Knowledge: Tome of Knowledge", 33286, 31122, 9, hint = "Skrzynia z nagroda: ok. 45 krokow, kierunek wschod. Przy skrzyni jest strefa PZ." },
+	{ "Tomes Of Knowledge: Tome of Knowledge", 33147, 31183, 15, hint = "Skrzynia z nagroda: ok. 45 krokow, kierunek poludnie. Przy skrzyni jest strefa PZ." },
+	{ "Trollcave: garlic necklace, brass legs", 33125, 31723, 10, hint = "Skrzynia z nagroda: ok. 17 krokow, kierunek wschod. Przy skrzyni jest strefa PZ." },
+	{ "Vampire Hunter Quest: blood skull", 32936, 31463, 10, hint = "Skrzynia z nagroda: ok. 35 krokow, kierunek wschod. Przy skrzyni jest strefa PZ." },
+	{ "Vampireshield: dragon lance, vampire shield, strange sym...", 33190, 31659, 14, hint = "Skrzynia z nagroda: ok. 22 krokow, kierunek poludnie. Przy skrzyni jest strefa PZ." },
+	{ "Witch House Quest: black pearl, crystal necklace, gold coin", 32877, 31887, 8, hint = "Skrzynia z nagroda: ok. 45 krokow, kierunek poludnie. Przy skrzyni jest strefa PZ." },
+}
+
 
 local templePosition = nil -- swiatynia w Thais, ustawiana przy starcie serwera
 local safeTiles = {} -- pola bezpiecznych stref 3x3
@@ -687,6 +775,9 @@ local function travel(player, entry)
 		player:sendTextMessage(MESSAGE_EVENT_ADVANCE, "Teleport: " .. entry[1])
 	else
 		player:sendTextMessage(MESSAGE_EVENT_ADVANCE, "Teleport: " .. entry[1] .. ". Stoisz w bezpiecznej strefie 3x3, obok jest teleport powrotny do Thais.")
+		if entry.hint then
+			player:sendTextMessage(MESSAGE_EVENT_ADVANCE, entry.hint)
+		end
 	end
 end
 
@@ -759,6 +850,11 @@ openMain = function(player)
 	end)
 	window:addChoice("Bossy [" .. #bosses .. "]", function(target)
 		openList(target, "Bossy", bosses, function(again)
+			openMain(again)
+		end)
+	end)
+	window:addChoice("Questy [" .. #quests .. "]", function(target)
+		openList(target, "Questy", quests, function(again)
 			openMain(again)
 		end)
 	end)

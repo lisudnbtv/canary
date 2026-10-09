@@ -19,12 +19,20 @@ TILE, HOUSETILE, TILE_AREA = 5, 14, 4
 src, targets_path = sys.argv[1], sys.argv[2]
 t0 = time.time()
 targets = json.load(open(targets_path))
+# Format: lista srodkow [x, y, z] (strefa 3x3) albo {"centers": [...], "tiles": [...]},
+# gdzie "tiles" to pojedyncze pola oznaczane bez otoczenia.
+if isinstance(targets, dict):
+    centers, single = targets.get("centers", []), targets.get("tiles", [])
+else:
+    centers, single = targets, []
 want = {}
-for x, y, z in targets:
+for x, y, z in centers:
     for dx in (-1, 0, 1):
         for dy in (-1, 0, 1):
             X, Y = x + dx, y + dy
             want.setdefault((X & 0xFF00, Y & 0xFF00, z), set()).add((X & 0xFF, Y & 0xFF))
+for X, Y, z in single:
+    want.setdefault((X & 0xFF00, Y & 0xFF00, z), set()).add((X & 0xFF, Y & 0xFF))
 total_wanted = sum(len(v) for v in want.values())
 
 data = open(src, "rb").read()
