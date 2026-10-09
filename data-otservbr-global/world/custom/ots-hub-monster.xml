@@ -1,0 +1,1593 @@
+<?xml version="1.0"?>
+<monsters>
+	<monster centerx="30003" centery="30036" centerz="7" radius="1">
+		<monster name="Azure Frog" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30003" centery="30044" centerz="7" radius="1">
+		<monster name="Coral Frog" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30006" centery="30036" centerz="7" radius="1">
+		<monster name="Crimson Frog" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30006" centery="30044" centerz="7" radius="1">
+		<monster name="Hyaena" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30009" centery="30036" centerz="7" radius="1">
+		<monster name="Island Troll" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30009" centery="30044" centerz="7" radius="1">
+		<monster name="Orchid Frog" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30012" centery="30036" centerz="7" radius="1">
+		<monster name="Sandcrawler" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30012" centery="30044" centerz="7" radius="1">
+		<monster name="Spit Nettle" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30015" centery="30036" centerz="7" radius="1">
+		<monster name="Troll" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30015" centery="30044" centerz="7" radius="1">
+		<monster name="Water Buffalo" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30018" centery="30036" centerz="7" radius="1">
+		<monster name="Winter Wolf" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30018" centery="30044" centerz="7" radius="1">
+		<monster name="Cream Blob" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30021" centery="30036" centerz="7" radius="1">
+		<monster name="Poison Spider" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30021" centery="30044" centerz="7" radius="1">
+		<monster name="Bear" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30024" centery="30036" centerz="7" radius="1">
+		<monster name="Frost Troll" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30024" centery="30044" centerz="7" radius="1">
+		<monster name="Panda" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30027" centery="30036" centerz="7" radius="1">
+		<monster name="Wasp" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30027" centery="30044" centerz="7" radius="1">
+		<monster name="Goblin" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30030" centery="30036" centerz="7" radius="1">
+		<monster name="Orc" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30030" centery="30044" centerz="7" radius="1">
+		<monster name="Salamander" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30033" centery="30036" centerz="7" radius="1">
+		<monster name="Swamp Troll" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30033" centery="30044" centerz="7" radius="1">
+		<monster name="Polar Bear" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30036" centery="30036" centerz="7" radius="1">
+		<monster name="Cobra" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30036" centery="30044" centerz="7" radius="1">
+		<monster name="Crab" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30039" centery="30036" centerz="7" radius="1">
+		<monster name="Lion" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30039" centery="30044" centerz="7" radius="1">
+		<monster name="Centipede" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30042" centery="30036" centerz="7" radius="1">
+		<monster name="Crazed Beggar" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30042" centery="30044" centerz="7" radius="1">
+		<monster name="Dworc Venomsniper" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30045" centery="30036" centerz="7" radius="1">
+		<monster name="Emerald Damselfly" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30045" centery="30044" centerz="7" radius="1">
+		<monster name="Skeleton" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30048" centery="30036" centerz="7" radius="1">
+		<monster name="Goblin Scavenger" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30048" centery="30044" centerz="7" radius="1">
+		<monster name="Orc Spearman" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30051" centery="30036" centerz="7" radius="1">
+		<monster name="Chakoya Toolshaper" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30051" centery="30044" centerz="7" radius="1">
+		<monster name="Chakoya Tribewarden" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30054" centery="30036" centerz="7" radius="1">
+		<monster name="Crocodile" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30054" centery="30044" centerz="7" radius="1">
+		<monster name="Dworc Fleshhunter" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30057" centery="30036" centerz="7" radius="1">
+		<monster name="Insect Swarm" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30057" centery="30044" centerz="7" radius="1">
+		<monster name="Rotworm" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30060" centery="30036" centerz="7" radius="1">
+		<monster name="Tiger" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30060" centery="30044" centerz="7" radius="1">
+		<monster name="Troll Champion" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30063" centery="30036" centerz="7" radius="1">
+		<monster name="Elf" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30063" centery="30044" centerz="7" radius="1">
+		<monster name="Larva" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30066" centery="30036" centerz="7" radius="1">
+		<monster name="Dwarf" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30066" centery="30044" centerz="7" radius="1">
+		<monster name="Leaf Golem" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30069" centery="30036" centerz="7" radius="1">
+		<monster name="Scorpion" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30069" centery="30044" centerz="7" radius="1">
+		<monster name="Skeleton Warrior" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30072" centery="30036" centerz="7" radius="1">
+		<monster name="Swampling" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30072" centery="30044" centerz="7" radius="1">
+		<monster name="Chakoya Windcaller" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30075" centery="30036" centerz="7" radius="1">
+		<monster name="Smuggler" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30075" centery="30044" centerz="7" radius="1">
+		<monster name="Marsh Stalker" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30078" centery="30036" centerz="7" radius="1">
+		<monster name="Minotaur" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30078" centery="30044" centerz="7" radius="1">
+		<monster name="Minotaur Bruiser" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30081" centery="30036" centerz="7" radius="1">
+		<monster name="Orc Warrior" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30081" centery="30044" centerz="7" radius="1">
+		<monster name="Goblin Assassin" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30084" centery="30036" centerz="7" radius="1">
+		<monster name="Dworc Voodoomaster" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30084" centery="30044" centerz="7" radius="1">
+		<monster name="Minotaur Poacher" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30087" centery="30036" centerz="7" radius="1">
+		<monster name="War Wolf" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30087" centery="30044" centerz="7" radius="1">
+		<monster name="Amazon" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30090" centery="30036" centerz="7" radius="1">
+		<monster name="Boar" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30090" centery="30044" centerz="7" radius="1">
+		<monster name="Dwarf Miner" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30093" centery="30036" centerz="7" radius="1">
+		<monster name="Gnarlhound" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30093" centery="30044" centerz="7" radius="1">
+		<monster name="Nomad" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30096" centery="30036" centerz="7" radius="1">
+		<monster name="Toad" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30096" centery="30044" centerz="7" radius="1">
+		<monster name="Wild Warrior" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30099" centery="30036" centerz="7" radius="1">
+		<monster name="Bandit" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30099" centery="30044" centerz="7" radius="1">
+		<monster name="Ghost Wolf" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30102" centery="30036" centerz="7" radius="1">
+		<monster name="Minotaur Archer" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30102" centery="30044" centerz="7" radius="1">
+		<monster name="Carrion Worm" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30105" centery="30036" centerz="7" radius="1">
+		<monster name="Dwarf Soldier" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30105" centery="30044" centerz="7" radius="1">
+		<monster name="Gang Member" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30108" centery="30036" centerz="7" radius="1">
+		<monster name="Gloom Wolf" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30108" centery="30044" centerz="7" radius="1">
+		<monster name="Ladybug" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30111" centery="30036" centerz="7" radius="1">
+		<monster name="Slug" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30111" centery="30044" centerz="7" radius="1">
+		<monster name="Elf Scout" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30114" centery="30036" centerz="7" radius="1">
+		<monster name="Firestarter" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30114" centery="30044" centerz="7" radius="1">
+		<monster name="Barbarian Headsplitter" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30117" centery="30036" centerz="7" radius="1">
+		<monster name="Barbarian Skullhunter" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30117" centery="30044" centerz="7" radius="1">
+		<monster name="Ghoul" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30120" centery="30036" centerz="7" radius="1">
+		<monster name="Pirate Skeleton" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30120" centery="30044" centerz="7" radius="1">
+		<monster name="Valkyrie" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30123" centery="30036" centerz="7" radius="1">
+		<monster name="Barbarian Brutetamer" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30123" centery="30044" centerz="7" radius="1">
+		<monster name="Gazer" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30126" centery="30036" centerz="7" radius="1">
+		<monster name="Gladiator" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30126" centery="30044" centerz="7" radius="1">
+		<monster name="Stalker" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30129" centery="30036" centerz="7" radius="1">
+		<monster name="Tortoise" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30129" centery="30044" centerz="7" radius="1">
+		<monster name="Damaged Worker Golem" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30132" centery="30036" centerz="7" radius="1">
+		<monster name="Dark Apprentice" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30132" centery="30044" centerz="7" radius="1">
+		<monster name="Novice of the Cult" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30135" centery="30036" centerz="7" radius="1">
+		<monster name="Quara Mantassin Scout" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30003" centery="30076" centerz="7" radius="1">
+		<monster name="Assassin" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30003" centery="30084" centerz="7" radius="1">
+		<monster name="Rorc" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30006" centery="30076" centerz="7" radius="1">
+		<monster name="Sibang" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30006" centery="30084" centerz="7" radius="1">
+		<monster name="Lizard Sentinel" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30009" centery="30076" centerz="7" radius="1">
+		<monster name="Orc Rider" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30009" centery="30084" centerz="7" radius="1">
+		<monster name="Orc Shaman" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30012" centery="30076" centerz="7" radius="1">
+		<monster name="Kongra" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30012" centery="30084" centerz="7" radius="1">
+		<monster name="Ghost" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30015" centery="30076" centerz="7" radius="1">
+		<monster name="Scarab" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30015" centery="30084" centerz="7" radius="1">
+		<monster name="Tarantula" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30018" centery="30076" centerz="7" radius="1">
+		<monster name="Tarnished Spirit" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30018" centery="30084" centerz="7" radius="1">
+		<monster name="White Shade" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30021" centery="30076" centerz="7" radius="1">
+		<monster name="Witch" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30021" centery="30084" centerz="7" radius="1">
+		<monster name="Manta Ray" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30024" centery="30076" centerz="7" radius="1">
+		<monster name="Pirate Marauder" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30024" centery="30084" centerz="7" radius="1">
+		<monster name="Deepling Worker" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30027" centery="30076" centerz="7" radius="1">
+		<monster name="Troll Legionnaire" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30027" centery="30084" centerz="7" radius="1">
+		<monster name="Dark Monk" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30030" centery="30076" centerz="7" radius="1">
+		<monster name="Fire Devil" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30030" centery="30084" centerz="7" radius="1">
+		<monster name="Merlkin" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30033" centery="30076" centerz="7" radius="1">
+		<monster name="Carniphila" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30033" centery="30084" centerz="7" radius="1">
+		<monster name="Corym Charlatan" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30036" centery="30076" centerz="7" radius="1">
+		<monster name="Cyclops" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30036" centery="30084" centerz="7" radius="1">
+		<monster name="Frost Giant" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30039" centery="30076" centerz="7" radius="1">
+		<monster name="Frost Giantess" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30039" centery="30084" centerz="7" radius="1">
+		<monster name="Gargoyle" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30042" centery="30076" centerz="7" radius="1">
+		<monster name="Minotaur Mage" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30042" centery="30084" centerz="7" radius="1">
+		<monster name="Mummy" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30045" centery="30076" centerz="7" radius="1">
+		<monster name="Mutated Human" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30045" centery="30084" centerz="7" radius="1">
+		<monster name="Terror Bird" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30048" centery="30076" centerz="7" radius="1">
+		<monster name="Thornback Tortoise" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30048" centery="30084" centerz="7" radius="1">
+		<monster name="Lizard Templar" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30051" centery="30076" centerz="7" radius="1">
+		<monster name="Blood Crab" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30051" centery="30084" centerz="7" radius="1">
+		<monster name="Deepling Scout" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30054" centery="30076" centerz="7" radius="1">
+		<monster name="Elephant" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30054" centery="30084" centerz="7" radius="1">
+		<monster name="Mammoth" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30057" centery="30076" centerz="7" radius="1">
+		<monster name="Minotaur Guard" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30057" centery="30084" centerz="7" radius="1">
+		<monster name="Slime" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30060" centery="30076" centerz="7" radius="1">
+		<monster name="Stone Golem" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30060" centery="30084" centerz="7" radius="1">
+		<monster name="Terramite" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30063" centery="30076" centerz="7" radius="1">
+		<monster name="Dwarf Guard" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30063" centery="30084" centerz="7" radius="1">
+		<monster name="Vampire Pig" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30066" centery="30076" centerz="7" radius="1">
+		<monster name="Bonelord" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30066" centery="30084" centerz="7" radius="1">
+		<monster name="Elf Arcanist" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30069" centery="30076" centerz="7" radius="1">
+		<monster name="Pirate Cutthroat" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30069" centery="30084" centerz="7" radius="1">
+		<monster name="Gozzler" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30072" centery="30076" centerz="7" radius="1">
+		<monster name="Mercury Blob" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30072" centery="30084" centerz="7" radius="1">
+		<monster name="Dark Magician" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30075" centery="30076" centerz="7" radius="1">
+		<monster name="Dragon Hatchling" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30075" centery="30084" centerz="7" radius="1">
+		<monster name="Furious Troll" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30078" centery="30076" centerz="7" radius="1">
+		<monster name="Dryad" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30078" centery="30084" centerz="7" radius="1">
+		<monster name="Barbarian Bloodwalker" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30081" centery="30076" centerz="7" radius="1">
+		<monster name="Crypt Shambler" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30081" centery="30084" centerz="7" radius="1">
+		<monster name="Ghoulish Hyaena" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30084" centery="30076" centerz="7" radius="1">
+		<monster name="Orc Berserker" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30084" centery="30084" centerz="7" radius="1">
+		<monster name="Cyclops Drone" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30087" centery="30076" centerz="7" radius="1">
+		<monster name="Monk" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30087" centery="30084" centerz="7" radius="1">
+		<monster name="Quara Constrictor Scout" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30090" centery="30076" centerz="7" radius="1">
+		<monster name="Mad Scientist" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30090" centery="30084" centerz="7" radius="1">
+		<monster name="Orc Marauder" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30093" centery="30076" centerz="7" radius="1">
+		<monster name="Iron Servant" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30093" centery="30084" centerz="7" radius="1">
+		<monster name="Lizard Snakecharmer" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30096" centery="30076" centerz="7" radius="1">
+		<monster name="Green Djinn" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30096" centery="30084" centerz="7" radius="1">
+		<monster name="Tomb Servant" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30099" centery="30076" centerz="7" radius="1">
+		<monster name="Fire Elemental" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30099" centery="30084" centerz="7" radius="1">
+		<monster name="Wilting Leaf Golem" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30102" centery="30076" centerz="7" radius="1">
+		<monster name="Demon Skeleton" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30102" centery="30084" centerz="7" radius="1">
+		<monster name="Acid Blob" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30105" centery="30076" centerz="7" radius="1">
+		<monster name="Pirate Buccaneer" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30105" centery="30084" centerz="7" radius="1">
+		<monster name="Cyclops Smith" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30108" centery="30076" centerz="7" radius="1">
+		<monster name="Corym Skirmisher" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30108" centery="30084" centerz="7" radius="1">
+		<monster name="Dwarf Geomancer" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30111" centery="30076" centerz="7" radius="1">
+		<monster name="Orc Leader" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30111" centery="30084" centerz="7" radius="1">
+		<monster name="Lancer Beetle" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30114" centery="30076" centerz="7" radius="1">
+		<monster name="Elder Bonelord" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30114" centery="30084" centerz="7" radius="1">
+		<monster name="Zombie" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30117" centery="30076" centerz="7" radius="1">
+		<monster name="Ice Golem" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30117" centery="30084" centerz="7" radius="1">
+		<monster name="Acolyte of the Cult" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30120" centery="30076" centerz="7" radius="1">
+		<monster name="Death Blob" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30003" centery="30116" centerz="7" radius="1">
+		<monster name="Vampire" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30003" centery="30124" centerz="7" radius="1">
+		<monster name="Haunted Treeling" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30006" centery="30116" centerz="7" radius="1">
+		<monster name="Forest Fury" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30006" centery="30124" centerz="7" radius="1">
+		<monster name="Sacred Spider" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30009" centery="30116" centerz="7" radius="1">
+		<monster name="Swarmer" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30009" centery="30124" centerz="7" radius="1">
+		<monster name="Quara Constrictor" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30012" centery="30116" centerz="7" radius="1">
+		<monster name="Adept of the Cult" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30012" centery="30124" centerz="7" radius="1">
+		<monster name="Bane Bringer" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30015" centery="30116" centerz="7" radius="1">
+		<monster name="Clay Guardian" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30015" centery="30124" centerz="7" radius="1">
+		<monster name="Quara Predator Scout" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30018" centery="30116" centerz="7" radius="1">
+		<monster name="Shadow Pupil" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30018" centery="30124" centerz="7" radius="1">
+		<monster name="Priestess" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30021" centery="30116" centerz="7" radius="1">
+		<monster name="Mutated Rat" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30021" centery="30124" centerz="7" radius="1">
+		<monster name="Wailing Widow" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30024" centery="30116" centerz="7" radius="1">
+		<monster name="Clomp" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30024" centery="30124" centerz="7" radius="1">
+		<monster name="Grave Guard" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30027" centery="30116" centerz="7" radius="1">
+		<monster name="Corym Vanguard" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30027" centery="30124" centerz="7" radius="1">
+		<monster name="Crystalcrusher" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30030" centery="30116" centerz="7" radius="1">
+		<monster name="Enlightened of the Cult" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30030" centery="30124" centerz="7" radius="1">
+		<monster name="Nightstalker" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30033" centery="30116" centerz="7" radius="1">
+		<monster name="Pooka" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30033" centery="30124" centerz="7" radius="1">
+		<monster name="Stonerefiner" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30036" centery="30116" centerz="7" radius="1">
+		<monster name="Wyvern" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30036" centery="30124" centerz="7" radius="1">
+		<monster name="Earth Elemental" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30039" centery="30116" centerz="7" radius="1">
+		<monster name="Energy Elemental" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30039" centery="30124" centerz="7" radius="1">
+		<monster name="Enraged Crystal Golem" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30042" centery="30116" centerz="7" radius="1">
+		<monster name="Elder Mummy" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30042" centery="30124" centerz="7" radius="1">
+		<monster name="Bonebeast" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30045" centery="30116" centerz="7" radius="1">
+		<monster name="Ice Witch" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30045" centery="30124" centerz="7" radius="1">
+		<monster name="Necromancer" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30048" centery="30116" centerz="7" radius="1">
+		<monster name="Quara Mantassin" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30048" centery="30124" centerz="7" radius="1">
+		<monster name="Quara Pincher Scout" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30051" centery="30116" centerz="7" radius="1">
+		<monster name="Twisted Pooka" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30051" centery="30124" centerz="7" radius="1">
+		<monster name="Ogre Shaman" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30054" centery="30116" centerz="7" radius="1">
+		<monster name="Dragon Lord Hatchling" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30054" centery="30124" centerz="7" radius="1">
+		<monster name="Insectoid Worker" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30057" centery="30116" centerz="7" radius="1">
+		<monster name="Water Elemental" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30057" centery="30124" centerz="7" radius="1">
+		<monster name="Sandstone Scorpion" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30060" centery="30116" centerz="7" radius="1">
+		<monster name="Dragon" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30060" centery="30124" centerz="7" radius="1">
+		<monster name="Glooth Blob" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30063" centery="30116" centerz="7" radius="1">
+		<monster name="Pixie" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30063" centery="30124" centerz="7" radius="1">
+		<monster name="Shark" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30066" centery="30116" centerz="7" radius="1">
+		<monster name="Swan Maiden" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30003" centery="30156" centerz="7" radius="1">
+		<monster name="Ancient Scarab" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30003" centery="30164" centerz="7" radius="1">
+		<monster name="Frost Dragon Hatchling" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30006" centery="30156" centerz="7" radius="1">
+		<monster name="Blood Hand" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30006" centery="30164" centerz="7" radius="1">
+		<monster name="Death Priest" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30009" centery="30156" centerz="7" radius="1">
+		<monster name="Mutated Bat" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30009" centery="30164" centerz="7" radius="1">
+		<monster name="Mutated Tiger" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30012" centery="30156" centerz="7" radius="1">
+		<monster name="Rot Elemental" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30012" centery="30164" centerz="7" radius="1">
+		<monster name="Stampor" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30015" centery="30156" centerz="7" radius="1">
+		<monster name="Bog Raider" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30015" centery="30164" centerz="7" radius="1">
+		<monster name="Faun" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30018" centery="30156" centerz="7" radius="1">
+		<monster name="Ogre Brute" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30018" centery="30164" centerz="7" radius="1">
+		<monster name="Quara Hydromancer Scout" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30021" centery="30156" centerz="7" radius="1">
+		<monster name="Roaring Lion" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30021" centery="30164" centerz="7" radius="1">
+		<monster name="Undead Gladiator" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30024" centery="30156" centerz="7" radius="1">
+		<monster name="Vampire Viscount" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30024" centery="30164" centerz="7" radius="1">
+		<monster name="Waspoid" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30027" centery="30156" centerz="7" radius="1">
+		<monster name="Nymph" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30027" centery="30164" centerz="7" radius="1">
+		<monster name="Askarak Demon" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30030" centery="30156" centerz="7" radius="1">
+		<monster name="Banshee" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30030" centery="30164" centerz="7" radius="1">
+		<monster name="Blood Priest" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30033" centery="30156" centerz="7" radius="1">
+		<monster name="Brimstone Bug" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30033" centery="30164" centerz="7" radius="1">
+		<monster name="Crystal Spider" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30036" centery="30156" centerz="7" radius="1">
+		<monster name="Dark Faun" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30036" centery="30164" centerz="7" radius="1">
+		<monster name="Giant Spider" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30039" centery="30156" centerz="7" radius="1">
+		<monster name="Killer Caiman" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30039" centery="30164" centerz="7" radius="1">
+		<monster name="Lich" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30042" centery="30156" centerz="7" radius="1">
+		<monster name="Mooh'Tah Warrior" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30042" centery="30164" centerz="7" radius="1">
+		<monster name="Putrid Mummy" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30045" centery="30156" centerz="7" radius="1">
+		<monster name="Shaburak Demon" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30045" centery="30164" centerz="7" radius="1">
+		<monster name="Vicious Squire" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30048" centery="30156" centerz="7" radius="1">
+		<monster name="Wiggler" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30048" centery="30164" centerz="7" radius="1">
+		<monster name="Boogy" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30051" centery="30156" centerz="7" radius="1">
+		<monster name="Gravedigger" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30051" centery="30164" centerz="7" radius="1">
+		<monster name="Massive Energy Elemental" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30054" centery="30156" centerz="7" radius="1">
+		<monster name="Minotaur Cult Follower" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30054" centery="30164" centerz="7" radius="1">
+		<monster name="Ogre Savage" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30057" centery="30156" centerz="7" radius="1">
+		<monster name="Quara Hydromancer" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30057" centery="30164" centerz="7" radius="1">
+		<monster name="Iks Pututu" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30060" centery="30156" centerz="7" radius="1">
+		<monster name="Braindeath" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30060" centery="30164" centerz="7" radius="1">
+		<monster name="Blood Beast" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30063" centery="30156" centerz="7" radius="1">
+		<monster name="Crawler" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30063" centery="30164" centerz="7" radius="1">
+		<monster name="Deepling Spellsinger" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30066" centery="30156" centerz="7" radius="1">
+		<monster name="Weakened Frazzlemaw" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30066" centery="30164" centerz="7" radius="1">
+		<monster name="Young Sea Serpent" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30069" centery="30156" centerz="7" radius="1">
+		<monster name="Iks Chuka" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30069" centery="30164" centerz="7" radius="1">
+		<monster name="Vampire Bride" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30072" centery="30156" centerz="7" radius="1">
+		<monster name="Enfeebled Silencer" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30072" centery="30164" centerz="7" radius="1">
+		<monster name="Instable Breach Brood" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30075" centery="30156" centerz="7" radius="1">
+		<monster name="Lizard Legionnaire" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30075" centery="30164" centerz="7" radius="1">
+		<monster name="Lost Husher" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30078" centery="30156" centerz="7" radius="1">
+		<monster name="Massive Earth Elemental" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30078" centery="30164" centerz="7" radius="1">
+		<monster name="Massive Water Elemental" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30081" centery="30156" centerz="7" radius="1">
+		<monster name="Minotaur Cult Prophet" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30081" centery="30164" centerz="7" radius="1">
+		<monster name="Orclops Ravager" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30084" centery="30156" centerz="7" radius="1">
+		<monster name="Parder" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30084" centery="30164" centerz="7" radius="1">
+		<monster name="Spitter" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30087" centery="30156" centerz="7" radius="1">
+		<monster name="Vulcongra" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30087" centery="30164" centerz="7" radius="1">
+		<monster name="Iks Aucar" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30090" centery="30156" centerz="7" radius="1">
+		<monster name="Drillworm" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30090" centery="30164" centerz="7" radius="1">
+		<monster name="Exotic Bat" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30093" centery="30156" centerz="7" radius="1">
+		<monster name="Hero" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30093" centery="30164" centerz="7" radius="1">
+		<monster name="Infected Weeper" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30096" centery="30156" centerz="7" radius="1">
+		<monster name="Jungle Moa" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30096" centery="30164" centerz="7" radius="1">
+		<monster name="Renegade Knight" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30099" centery="30156" centerz="7" radius="1">
+		<monster name="Vicious Manbat" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30099" centery="30164" centerz="7" radius="1">
+		<monster name="Golden Servant Replica" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30102" centery="30156" centerz="7" radius="1">
+		<monster name="Worker Golem" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30102" centery="30164" centerz="7" radius="1">
+		<monster name="Yielothax" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30105" centery="30156" centerz="7" radius="1">
+		<monster name="Metal Gargoyle" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30105" centery="30164" centerz="7" radius="1">
+		<monster name="Souleater" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30108" centery="30156" centerz="7" radius="1">
+		<monster name="Lizard Dragon Priest" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30108" centery="30164" centerz="7" radius="1">
+		<monster name="Instable Sparkion" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30111" centery="30156" centerz="7" radius="1">
+		<monster name="Minotaur Cult Zealot" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30111" centery="30164" centerz="7" radius="1">
+		<monster name="Nightmare Scion" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30114" centery="30156" centerz="7" radius="1">
+		<monster name="Diamond Servant Replica" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30114" centery="30164" centerz="7" radius="1">
+		<monster name="Exotic Cave Spider" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30117" centery="30156" centerz="7" radius="1">
+		<monster name="Massive Fire Elemental" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30117" centery="30164" centerz="7" radius="1">
+		<monster name="Lizard High Guard" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30120" centery="30156" centerz="7" radius="1">
+		<monster name="Orclops Doomhauler" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30120" centery="30164" centerz="7" radius="1">
+		<monster name="Lumbering Carnivor" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30123" centery="30156" centerz="7" radius="1">
+		<monster name="Deepling Warrior" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30123" centery="30164" centerz="7" radius="1">
+		<monster name="Lost Thrower" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30126" centery="30156" centerz="7" radius="1">
+		<monster name="Quara Pincher" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30126" centery="30164" centerz="7" radius="1">
+		<monster name="Vile Grandmaster" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30129" centery="30156" centerz="7" radius="1">
+		<monster name="Worm Priestess" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30003" centery="30196" centerz="7" radius="1">
+		<monster name="Sparkion" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30003" centery="30204" centerz="7" radius="1">
+		<monster name="Wyrm" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30006" centery="30196" centerz="7" radius="1">
+		<monster name="Minotaur Invader" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30006" centery="30204" centerz="7" radius="1">
+		<monster name="Pirat Scoundrel" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30009" centery="30196" centerz="7" radius="1">
+		<monster name="Werebadger" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30009" centery="30204" centerz="7" radius="1">
+		<monster name="Werefox" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30012" centery="30196" centerz="7" radius="1">
+		<monster name="Glooth Golem" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30012" centery="30204" centerz="7" radius="1">
+		<monster name="Shaper Matriarch" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30015" centery="30196" centerz="7" radius="1">
+		<monster name="Spiky Carnivor" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30015" centery="30204" centerz="7" radius="1">
+		<monster name="Lizard Zaogun" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30018" centery="30196" centerz="7" radius="1">
+		<monster name="Minotaur Hunter" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30018" centery="30204" centerz="7" radius="1">
+		<monster name="Pirat Bombardier" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30021" centery="30196" centerz="7" radius="1">
+		<monster name="Devourer" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30021" centery="30204" centerz="7" radius="1">
+		<monster name="Glooth Anemone" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30024" centery="30196" centerz="7" radius="1">
+		<monster name="Breach Brood" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30024" centery="30204" centerz="7" radius="1">
+		<monster name="Broken Shaper" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30027" centery="30196" centerz="7" radius="1">
+		<monster name="Eternal Guardian" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30027" centery="30204" centerz="7" radius="1">
+		<monster name="Lost Exile" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30030" centery="30196" centerz="7" radius="1">
+		<monster name="Nightmare" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30030" centery="30204" centerz="7" radius="1">
+		<monster name="Pirat Cutthroat" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30033" centery="30196" centerz="7" radius="1">
+		<monster name="Stone Rhino" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30033" centery="30204" centerz="7" radius="1">
+		<monster name="Quara Predator" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30036" centery="30196" centerz="7" radius="1">
+		<monster name="Cursed Ape" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30036" centery="30204" centerz="7" radius="1">
+		<monster name="Glooth Brigand" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30039" centery="30196" centerz="7" radius="1">
+		<monster name="Stabilizing Dread Intruder" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30039" centery="30204" centerz="7" radius="1">
+		<monster name="Werewolf" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30042" centery="30196" centerz="7" radius="1">
+		<monster name="Stabilizing Reality Reaver" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30042" centery="30204" centerz="7" radius="1">
+		<monster name="Glooth Bandit" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30045" centery="30196" centerz="7" radius="1">
+		<monster name="Lizard Noble" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30045" centery="30204" centerz="7" radius="1">
+		<monster name="Wereboar" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30048" centery="30196" centerz="7" radius="1">
+		<monster name="Twisted Shaper" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30048" centery="30204" centerz="7" radius="1">
+		<monster name="Deepling Guard" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30051" centery="30196" centerz="7" radius="1">
+		<monster name="Dragon Lord" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30051" centery="30204" centerz="7" radius="1">
+		<monster name="Frost Dragon" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30054" centery="30196" centerz="7" radius="1">
+		<monster name="Hydra" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30054" centery="30204" centerz="7" radius="1">
+		<monster name="Rustheap Golem" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30057" centery="30196" centerz="7" radius="1">
+		<monster name="Spectre" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30057" centery="30204" centerz="7" radius="1">
+		<monster name="Werebear" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30060" centery="30196" centerz="7" radius="1">
+		<monster name="Menacing Carnivor" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30060" centery="30204" centerz="7" radius="1">
+		<monster name="Lizard Chosen" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30063" centery="30196" centerz="7" radius="1">
+		<monster name="Minotaur Amazon" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30063" centery="30204" centerz="7" radius="1">
+		<monster name="Walker" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30066" centery="30196" centerz="7" radius="1">
+		<monster name="Werehyaena" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30066" centery="30204" centerz="7" radius="1">
+		<monster name="Werehyaena Shaman" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30069" centery="30196" centerz="7" radius="1">
+		<monster name="Werelion" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30069" centery="30204" centerz="7" radius="1">
+		<monster name="Lost Basher" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30072" centery="30196" centerz="7" radius="1">
+		<monster name="Sea Serpent" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30072" centery="30204" centerz="7" radius="1">
+		<monster name="Shock Head" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30075" centery="30196" centerz="7" radius="1">
+		<monster name="Werelioness" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30075" centery="30204" centerz="7" radius="1">
+		<monster name="White Lion" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30078" centery="30196" centerz="7" radius="1">
+		<monster name="War Golem" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30078" centery="30204" centerz="7" radius="1">
+		<monster name="Draken Warmaster" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30081" centery="30196" centerz="7" radius="1">
+		<monster name="Dread Intruder" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30081" centery="30204" centerz="7" radius="1">
+		<monster name="Execowtioner" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30084" centery="30196" centerz="7" radius="1">
+		<monster name="Kollos" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30084" centery="30204" centerz="7" radius="1">
+		<monster name="Pirat Mate" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30087" centery="30196" centerz="7" radius="1">
+		<monster name="Reality Reaver" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30087" centery="30204" centerz="7" radius="1">
+		<monster name="Behemoth" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30090" centery="30196" centerz="7" radius="1">
+		<monster name="Destroyer" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30090" centery="30204" centerz="7" radius="1">
+		<monster name="Elder Wyrm" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30093" centery="30196" centerz="7" radius="1">
+		<monster name="Deepworm" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30093" centery="30204" centerz="7" radius="1">
+		<monster name="Hellspawn" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30096" centery="30196" centerz="7" radius="1">
+		<monster name="Moohtant" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30096" centery="30204" centerz="7" radius="1">
+		<monster name="Spidris" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30099" centery="30196" centerz="7" radius="1">
+		<monster name="Enslaved Dwarf" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30099" centery="30204" centerz="7" radius="1">
+		<monster name="Goggle Cake" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30102" centery="30196" centerz="7" radius="1">
+		<monster name="Nibblemaw" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30102" centery="30204" centerz="7" radius="1">
+		<monster name="Diremaw" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30105" centery="30196" centerz="7" radius="1">
+		<monster name="Diabolic Imp" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30105" centery="30204" centerz="7" radius="1">
+		<monster name="Humongous Fungus" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30108" centery="30196" centerz="7" radius="1">
+		<monster name="Stone Devourer" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30108" centery="30204" centerz="7" radius="1">
+		<monster name="Two-Headed Turtle" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30111" centery="30196" centerz="7" radius="1">
+		<monster name="Candy Horror" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30003" centery="30236" centerz="7" radius="1">
+		<monster name="Serpent Spawn" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30003" centery="30244" centerz="7" radius="1">
+		<monster name="Draken Spellweaver" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30006" centery="30236" centerz="7" radius="1">
+		<monster name="Foam Stalker" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30006" centery="30244" centerz="7" radius="1">
+		<monster name="Armadile" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30009" centery="30236" centerz="7" radius="1">
+		<monster name="Cave Devourer" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30009" centery="30244" centerz="7" radius="1">
+		<monster name="Betrayed Wraith" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30012" centery="30236" centerz="7" radius="1">
+		<monster name="Ripper Spectre" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30012" centery="30244" centerz="7" radius="1">
+		<monster name="Chasm Spawn" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30015" centery="30236" centerz="7" radius="1">
+		<monster name="Fury" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30015" centery="30244" centerz="7" radius="1">
+		<monster name="Defiler" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30018" centery="30236" centerz="7" radius="1">
+		<monster name="Hideous Fungus" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30018" centery="30244" centerz="7" radius="1">
+		<monster name="Frazzlemaw" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30021" centery="30236" centerz="7" radius="1">
+		<monster name="Hellfire Fighter" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30021" centery="30244" centerz="7" radius="1">
+		<monster name="Plaguesmith" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30024" centery="30236" centerz="7" radius="1">
+		<monster name="Candy Floss Elemental" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30024" centery="30244" centerz="7" radius="1">
+		<monster name="Magma Crawler" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30027" centery="30236" centerz="7" radius="1">
+		<monster name="Infernalist" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30027" centery="30244" centerz="7" radius="1">
+		<monster name="Lava Lurker" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30030" centery="30236" centerz="7" radius="1">
+		<monster name="Lost Soul" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30030" centery="30244" centerz="7" radius="1">
+		<monster name="Ravenous Lava Lurker" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30033" centery="30236" centerz="7" radius="1">
+		<monster name="Spidris Elite" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30033" centery="30244" centerz="7" radius="1">
+		<monster name="Warlock" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30036" centery="30236" centerz="7" radius="1">
+		<monster name="Medusa" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30036" centery="30244" centerz="7" radius="1">
+		<monster name="Dawnfire Asura" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30039" centery="30236" centerz="7" radius="1">
+		<monster name="Midnight Asura" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30039" centery="30244" centerz="7" radius="1">
+		<monster name="Retching Horror" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30042" centery="30236" centerz="7" radius="1">
+		<monster name="Frost Flower Asura" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30042" centery="30244" centerz="7" radius="1">
+		<monster name="Gazer Spectre" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30045" centery="30236" centerz="7" radius="1">
+		<monster name="Ogre Rowdy" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30045" centery="30244" centerz="7" radius="1">
+		<monster name="Dark Carnisylvan" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30048" centery="30236" centerz="7" radius="1">
+		<monster name="Phantasm" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30048" centery="30244" centerz="7" radius="1">
+		<monster name="Poisonous Carnisylvan" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30051" centery="30236" centerz="7" radius="1">
+		<monster name="Tunnel Tyrant" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30051" centery="30244" centerz="7" radius="1">
+		<monster name="Draken Abomination" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30054" centery="30236" centerz="7" radius="1">
+		<monster name="Flimsy Lost Soul" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30054" centery="30244" centerz="7" radius="1">
+		<monster name="Juvenile Bashmu" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30057" centery="30236" centerz="7" radius="1">
+		<monster name="Ghastly Dragon" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30057" centery="30244" centerz="7" radius="1">
+		<monster name="Dark Torturer" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30060" centery="30236" centerz="7" radius="1">
+		<monster name="Arachnophobica" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30060" centery="30244" centerz="7" radius="1">
+		<monster name="Choking Fear" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30063" centery="30236" centerz="7" radius="1">
+		<monster name="Crazed Summer Rearguard" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30063" centery="30244" centerz="7" radius="1">
+		<monster name="Crazed Winter Rearguard" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30066" centery="30236" centerz="7" radius="1">
+		<monster name="Hulking Carnisylvan" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30066" centery="30244" centerz="7" radius="1">
+		<monster name="Draken Elite" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30069" centery="30236" centerz="7" radius="1">
+		<monster name="Lost Berserker" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30069" centery="30244" centerz="7" radius="1">
+		<monster name="Skeleton Elite Warrior" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30072" centery="30236" centerz="7" radius="1">
+		<monster name="Bashmu" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30072" centery="30244" centerz="7" radius="1">
+		<monster name="Crazed Summer Vanguard" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30075" centery="30236" centerz="7" radius="1">
+		<monster name="Hand of Cursed Fate" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30075" centery="30244" centerz="7" radius="1">
+		<monster name="Ogre Ruffian" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30078" centery="30236" centerz="7" radius="1">
+		<monster name="Crape Man" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30078" centery="30244" centerz="7" radius="1">
+		<monster name="Dragolisk" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30081" centery="30236" centerz="7" radius="1">
+		<monster name="Feversleep" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30081" centery="30244" centerz="7" radius="1">
+		<monster name="Undead Elite Gladiator" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30084" centery="30236" centerz="7" radius="1">
+		<monster name="Manticore" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30084" centery="30244" centerz="7" radius="1">
+		<monster name="Silencer" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30087" centery="30236" centerz="7" radius="1">
+		<monster name="Naga Archer" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30087" centery="30244" centerz="7" radius="1">
+		<monster name="Cursed Prospector" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30090" centery="30236" centerz="7" radius="1">
+		<monster name="Blemished Spawn" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30090" centery="30244" centerz="7" radius="1">
+		<monster name="Venerable Girtablilu" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30093" centery="30236" centerz="7" radius="1">
+		<monster name="Crazed Winter Vanguard" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30093" centery="30244" centerz="7" radius="1">
+		<monster name="Ironblight" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30096" centery="30236" centerz="7" radius="1">
+		<monster name="Hellhound" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30096" centery="30244" centerz="7" radius="1">
+		<monster name="Grim Reaper" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30099" centery="30236" centerz="7" radius="1">
+		<monster name="Ogre Sage" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30099" centery="30244" centerz="7" radius="1">
+		<monster name="Mean Lost Soul" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30102" centery="30236" centerz="7" radius="1">
+		<monster name="Rhindeer" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30102" centery="30244" centerz="7" radius="1">
+		<monster name="Afflicted Strider" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30105" centery="30236" centerz="7" radius="1">
+		<monster name="Harpy" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30105" centery="30244" centerz="7" radius="1">
+		<monster name="Makara" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30108" centery="30236" centerz="7" radius="1">
+		<monster name="Girtablilu Warrior" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30108" centery="30244" centerz="7" radius="1">
+		<monster name="Soul-Broken Harbinger" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30111" centery="30236" centerz="7" radius="1">
+		<monster name="Weeper" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30111" centery="30244" centerz="7" radius="1">
+		<monster name="Wardragon" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30114" centery="30236" centerz="7" radius="1">
+		<monster name="Naga Warrior" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30114" centery="30244" centerz="7" radius="1">
+		<monster name="Orewalker" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30117" centery="30236" centerz="7" radius="1">
+		<monster name="Son of Verminor" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30117" centery="30244" centerz="7" radius="1">
+		<monster name="Varnished Diremaw" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30120" centery="30236" centerz="7" radius="1">
+		<monster name="Burster Spectre" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30120" centery="30244" centerz="7" radius="1">
+		<monster name="Demon" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30123" centery="30236" centerz="7" radius="1">
+		<monster name="Eyeless Devourer" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30123" centery="30244" centerz="7" radius="1">
+		<monster name="Insane Siren" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30003" centery="30276" centerz="7" radius="1">
+		<monster name="Crypt Warrior" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30003" centery="30284" centerz="7" radius="1">
+		<monster name="Guzzlemaw" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30006" centery="30276" centerz="7" radius="1">
+		<monster name="Tremendous Tyrant" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30006" centery="30284" centerz="7" radius="1">
+		<monster name="Young Goanna" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30009" centery="30276" centerz="7" radius="1">
+		<monster name="Demon Outcast" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30009" centery="30284" centerz="7" radius="1">
+		<monster name="Lavafungus" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30012" centery="30276" centerz="7" radius="1">
+		<monster name="Vexclaw" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30012" centery="30284" centerz="7" radius="1">
+		<monster name="Deathling Scout" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30015" centery="30276" centerz="7" radius="1">
+		<monster name="Falcon Knight" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30015" centery="30284" centerz="7" radius="1">
+		<monster name="Streaked Devourer" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30018" centery="30276" centerz="7" radius="1">
+		<monster name="Thanatursus" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30018" centery="30284" centerz="7" radius="1">
+		<monster name="Blightwalker" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30021" centery="30276" centerz="7" radius="1">
+		<monster name="Deathling Spellsinger" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30021" centery="30284" centerz="7" radius="1">
+		<monster name="Priestess of the Wild Sun" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30024" centery="30276" centerz="7" radius="1">
+		<monster name="Lavaworm" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30024" centery="30284" centerz="7" radius="1">
+		<monster name="Adult Goanna" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30027" centery="30276" centerz="7" radius="1">
+		<monster name="Sineater Inferniarch" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30027" centery="30284" centerz="7" radius="1">
+		<monster name="Cave Chimera" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30030" centery="30276" centerz="7" radius="1">
+		<monster name="Liodile" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30030" centery="30284" centerz="7" radius="1">
+		<monster name="Falcon Paladin" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30033" centery="30276" centerz="7" radius="1">
+		<monster name="Terrorsleep" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30033" centery="30284" centerz="7" radius="1">
+		<monster name="Usurper Knight" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30036" centery="30276" centerz="7" radius="1">
+		<monster name="Cobra Assassin" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30036" centery="30284" centerz="7" radius="1">
+		<monster name="Usurper Warlock" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30039" centery="30276" centerz="7" radius="1">
+		<monster name="Freakish Lost Soul" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30039" centery="30284" centerz="7" radius="1">
+		<monster name="True Frost Flower Asura" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30042" centery="30276" centerz="7" radius="1">
+		<monster name="Cliff Strider" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30042" centery="30284" centerz="7" radius="1">
+		<monster name="Gorger Inferniarch" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30045" centery="30276" centerz="7" radius="1">
+		<monster name="Black Sphinx Acolyte" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30045" centery="30284" centerz="7" radius="1">
+		<monster name="Grimeleech" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30048" centery="30276" centerz="7" radius="1">
+		<monster name="Carnivostrich" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30048" centery="30284" centerz="7" radius="1">
+		<monster name="Cobra Scout" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30051" centery="30276" centerz="7" radius="1">
+		<monster name="True Midnight Asura" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30051" centery="30284" centerz="7" radius="1">
+		<monster name="Burning Gladiator" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30054" centery="30276" centerz="7" radius="1">
+		<monster name="Broodrider Inferniarch" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30054" centery="30284" centerz="7" radius="1">
+		<monster name="True Dawnfire Asura" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30057" centery="30276" centerz="7" radius="1">
+		<monster name="Sphinx" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30057" centery="30284" centerz="7" radius="1">
+		<monster name="Undead Dragon" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30060" centery="30276" centerz="7" radius="1">
+		<monster name="Cobra Vizier" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30060" centery="30284" centerz="7" radius="1">
+		<monster name="Boar Man" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30063" centery="30276" centerz="7" radius="1">
+		<monster name="Mega Dragon" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30063" centery="30284" centerz="7" radius="1">
+		<monster name="Lava Golem" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30066" centery="30276" centerz="7" radius="1">
+		<monster name="Floating Savant" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30066" centery="30284" centerz="7" radius="1">
+		<monster name="Hellhunter Inferniarch" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30069" centery="30276" centerz="7" radius="1">
+		<monster name="Spellreaper Inferniarch" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30069" centery="30284" centerz="7" radius="1">
+		<monster name="Crypt Warden" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30072" centery="30276" centerz="7" radius="1">
+		<monster name="Feral Sphinx" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30072" centery="30284" centerz="7" radius="1">
+		<monster name="Evil Prospector" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30075" centery="30276" centerz="7" radius="1">
+		<monster name="Lamassu" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30075" centery="30284" centerz="7" radius="1">
+		<monster name="Animated Feather" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30078" centery="30276" centerz="7" radius="1">
+		<monster name="Guardian of Tales" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30078" centery="30284" centerz="7" radius="1">
+		<monster name="Knowledge Elemental" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30081" centery="30276" centerz="7" radius="1">
+		<monster name="Juggernaut" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30081" centery="30284" centerz="7" radius="1">
+		<monster name="Sulphur Spouter" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30084" centery="30276" centerz="7" radius="1">
+		<monster name="Mantosaurus" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30084" centery="30284" centerz="7" radius="1">
+		<monster name="Stalking Stalk" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30087" centery="30276" centerz="7" radius="1">
+		<monster name="Hellflayer" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30087" centery="30284" centerz="7" radius="1">
+		<monster name="Sabretooth" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30003" centery="30316" centerz="7" radius="1">
+		<monster name="Headpecker" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30003" centery="30324" centerz="7" radius="1">
+		<monster name="Energetic Book" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30006" centery="30316" centerz="7" radius="1">
+		<monster name="Mercurial Menace" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30006" centery="30324" centerz="7" radius="1">
+		<monster name="Emerald Tortoise" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30009" centery="30316" centerz="7" radius="1">
+		<monster name="Gore Horn" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30009" centery="30324" centerz="7" radius="1">
+		<monster name="Nighthunter" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30012" centery="30316" centerz="7" radius="1">
+		<monster name="Hulking Prehemoth" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30012" centery="30324" centerz="7" radius="1">
+		<monster name="Icecold Book" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30015" centery="30316" centerz="7" radius="1">
+		<monster name="Gorerilla" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30015" centery="30324" centerz="7" radius="1">
+		<monster name="Noxious Ripptor" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30018" centery="30316" centerz="7" radius="1">
+		<monster name="Burning Book" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30018" centery="30324" centerz="7" radius="1">
+		<monster name="Sulphider" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30021" centery="30316" centerz="7" radius="1">
+		<monster name="Cursed Book" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30021" centery="30324" centerz="7" radius="1">
+		<monster name="Undertaker" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30024" centery="30316" centerz="7" radius="1">
+		<monster name="Shrieking Cry-Stal" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30024" centery="30324" centerz="7" radius="1">
+		<monster name="Squid Warden" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30027" centery="30316" centerz="7" radius="1">
+		<monster name="Rage Squid" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30027" centery="30324" centerz="7" radius="1">
+		<monster name="Sight of Surrender" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30030" centery="30316" centerz="7" radius="1">
+		<monster name="Brain Squid" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30030" centery="30324" centerz="7" radius="1">
+		<monster name="Brinebrute Inferniarch" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+	<monster centerx="30033" centery="30316" centerz="7" radius="1">
+		<monster name="Hazardous Phantom" x="0" y="0" z="7" spawntime="60" />
+	</monster>
+</monsters>

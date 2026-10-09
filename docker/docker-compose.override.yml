@@ -12,3 +12,8 @@ services:
       - '../data-otservbr-global/scripts/quests/the_annihilator/lever.lua:/canary/data-otservbr-global/scripts/quests/the_annihilator/lever.lua:ro'
       - '../data-otservbr-global/scripts/quests/in_service_of_yalahar/actions_reward.lua:/canary/data-otservbr-global/scripts/quests/in_service_of_yalahar/actions_reward.lua:ro'
       - '../data-otservbr-global/scripts/quests/soul_war/action-reward_soul_war.lua:/canary/data-otservbr-global/scripts/quests/soul_war/action-reward_soul_war.lua:ro'
+      - '../data-otservbr-global/world/custom/ots-hub.otbm:/canary/data-otservbr-global/world/custom/ots-hub.otbm:ro'
+      - '../data-otservbr-global/world/custom/ots-hub-monster.xml:/canary/data-otservbr-global/world/custom/ots-hub-monster.xml:ro'
+      - '../data-otservbr-global/world/custom/ots-hub-house.xml:/canary/data-otservbr-global/world/custom/ots-hub-house.xml:ro'
+      - '../data-otservbr-global/world/custom/ots-hub-npc.xml:/canary/data-otservbr-global/world/custom/ots-hub-npc.xml:ro'
+      - '../data-otservbr-global/world/custom/ots-hub-zones.xml:/canary/data-otservbr-global/world/custom/ots-hub-zones.xml:ro'
