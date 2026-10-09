@@ -28,9 +28,15 @@ lua='''-- OTS: bonusy za stroje (outfity).
 -- Kazdy stroj daje jeden bonus; kazdy zalozony dodatek (addon) go zwieksza:
 -- bez dodatkow x1, jeden dodatek x2, oba dodatki x3.
 -- Bonus dziala, dopoki stroj jest zalozony, i wraca po zalogowaniu.
+-- Do tego kazdy stroj daje life leech i mana leech, tez rosnace z dodatkami.
 -- Komenda !outfit pokazuje aktualny bonus.
 
 local SUBID = 64990
+local LEECH_SUBID = 64991
+
+-- Leech na poziom, w setnych procenta (300 = 3%% zadanych obrazen).
+local LIFE_LEECH_PER_LEVEL = 300
+local MANA_LEECH_PER_LEVEL = 200
 
 -- Wartosc bonusu na jeden poziom (poziom = 1 + liczba dodatkow).
 local kinds = {
@@ -64,13 +70,14 @@ local function describe(lookType, addons)
 	end
 	local kind = kinds[outfit.kind]
 	local level = levelOf(addons)
-	return string.format("%%s: " .. kind.text .. " (poziom %%d/3)", outfit.name, kind.perLevel * level, level)
+	return string.format("%%s: " .. kind.text .. ", life leech %%d%%%%, mana leech %%d%%%% (poziom %%d/3)", outfit.name, kind.perLevel * level, LIFE_LEECH_PER_LEVEL * level / 100, MANA_LEECH_PER_LEVEL * level / 100, level)
 end
 
 local function clear(player)
 	player:removeCondition(CONDITION_ATTRIBUTES, CONDITIONID_DEFAULT, SUBID)
 	player:removeCondition(CONDITION_REGENERATION, CONDITIONID_DEFAULT, SUBID)
 	player:removeCondition(CONDITION_HASTE, CONDITIONID_DEFAULT, SUBID)
+	player:removeCondition(CONDITION_ATTRIBUTES, CONDITIONID_DEFAULT, LEECH_SUBID)
 end
 
 local function apply(player, lookType, addons)
@@ -81,7 +88,8 @@ local function apply(player, lookType, addons)
 		return false
 	end
 
-	local value = kinds[outfit.kind].perLevel * levelOf(addons)
+	local level = levelOf(addons)
+	local value = kinds[outfit.kind].perLevel * level
 	local condition
 	if outfit.kind == "health" then
 		condition = Condition(CONDITION_REGENERATION, CONDITIONID_DEFAULT)
@@ -110,6 +118,16 @@ local function apply(player, lookType, addons)
 	condition:setParameter(CONDITION_PARAM_SUBID, SUBID)
 	condition:setParameter(CONDITION_PARAM_TICKS, -1)
 	player:addCondition(condition)
+
+	-- Leech dla kazdego stroju, w osobnym warunku, zeby nie kolidowal z bonusem glownym.
+	local leech = Condition(CONDITION_ATTRIBUTES, CONDITIONID_DEFAULT)
+	leech:setParameter(CONDITION_PARAM_SUBID, LEECH_SUBID)
+	leech:setParameter(CONDITION_PARAM_TICKS, -1)
+	leech:setParameter(CONDITION_PARAM_SKILL_LIFE_LEECH_CHANCE, 100)
+	leech:setParameter(CONDITION_PARAM_SKILL_LIFE_LEECH_AMOUNT, LIFE_LEECH_PER_LEVEL * level)
+	leech:setParameter(CONDITION_PARAM_SKILL_MANA_LEECH_CHANCE, 100)
+	leech:setParameter(CONDITION_PARAM_SKILL_MANA_LEECH_AMOUNT, MANA_LEECH_PER_LEVEL * level)
+	player:addCondition(leech)
 	return true
 end
 
