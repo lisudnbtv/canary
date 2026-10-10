@@ -1,10 +1,10 @@
--- OTS: Thais Teleport Crystal - przedmiot ze sklepu (red teleport crystal). Uzycie przenosi
+-- OTS: Thais Teleport Compass - przedmiot ze sklepu (charged compass). Uzycie przenosi
 -- do swiatyni w Thais. Bez limitu uzyc, dziala wszedzie, takze poza PZ i w trakcie walki.
-local ITEM_ID = 16242 -- red teleport crystal
+local ITEM_ID = 29292 -- charged compass (niebieski); nieuzywany przez inne skrypty
 
-local crystal = Action()
+local compass = Action()
 
-function crystal.onUse(player, item, fromPosition, target, toPosition, isHotkey)
+function compass.onUse(player, item, fromPosition, target, toPosition, isHotkey)
 	local town = Town("Thais")
 	local temple = town and town:getTemplePosition()
 	if not temple then
@@ -19,5 +19,5 @@ function crystal.onUse(player, item, fromPosition, target, toPosition, isHotkey)
 	return true
 end
 
-crystal:id(ITEM_ID)
-crystal:register()
+compass:id(ITEM_ID)
+compass:register()
