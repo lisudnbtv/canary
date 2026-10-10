@@ -53,6 +53,12 @@ board(X0 + lobby_w // 2 + 8, Y0 + 3, 'Bossy\nHala bossow', SIGN_B)
 board(X0 + lobby_w // 2 + 4, Y0 + 3, 'Questy\nHala questow z nagrodami', SIGN_B)
 board(X0 + lobby_w // 2 - 4, Y0 + 3, 'Outfity\nQuesty na stroje z dodatkami', SIGN_B)
 
+# Losowy Boss: pad w lobby (postac obok tworzy skrypt teleportow - zmienia wyglad co chwile)
+pad(X0 + lobby_w // 2 - 8, Y0 + 2, dict(kind='randomboss'))
+board(X0 + lobby_w // 2 - 8, Y0 + 3, 'Losowy Boss\nMocny boss z dobrym lootem, nowy co 10 minut po zabiciu', SIGN_B)
+floor(X0 + lobby_w // 2 - 7, Y0 + 2)
+raid_npc = [X0 + lobby_w // 2 - 7, Y0 + 2, Z]
+
 wings = []
 npcs = []
 # postacie przy padach po poludniowej stronie lobby
@@ -172,6 +178,12 @@ for x in range(arena_center[0] - ARENA_R, arena_center[0] + ARENA_R + 1):
     for y in range(arena_center[1] - ARENA_R, arena_center[1] + ARENA_R + 1):
         floor(x, y, pz=False)
 arena_landing = [arena_center[0], arena_center[1] + ARENA_R - 1, Z]
+# Salka losowego bossa: osobna sala, zeby nie mieszac sie z arena bossow na zadanie
+raid_center = [X0 + 60, Y0 - 140, Z]
+for x in range(raid_center[0] - ARENA_R, raid_center[0] + ARENA_R + 1):
+    for y in range(raid_center[1] - ARENA_R, raid_center[1] + ARENA_R + 1):
+        floor(x, y, pz=False)
+raid_landing = [raid_center[0], raid_center[1] + ARENA_R - 1, Z]
 
 # ---- wystroj: szachownica z marmuru, drewno pod padami, trawa pod potworami i na arenie,
 # zywoplot z krzakow dookola (blokuje przejscie) i pas trawy z kwiatami i drzewami dalej.
@@ -261,7 +273,7 @@ with open('hub/ots-hub-monster.xml', 'w') as f:
 open('hub/ots-hub-house.xml', 'w').write('<?xml version="1.0"?>\n<houses />\n')
 open('hub/ots-hub-npc.xml', 'w').write('<?xml version="1.0"?>\n<npcs />\n')
 open('hub/ots-hub-zones.xml', 'w').write('<?xml version="1.0"?>\n<zones />\n')
-json.dump(dict(pads=pads, wings=wings, lobby=lobby_arrival, questhall=questhall, bosshall=bosshall, bossDisplays=boss_displays, npcs=npcs, bossFloors=boss_floors, arena=dict(center=arena_center, landing=arena_landing, radius=ARENA_R)), open('hub.json', 'w'))
+json.dump(dict(pads=pads, wings=wings, lobby=lobby_arrival, questhall=questhall, bosshall=bosshall, bossDisplays=boss_displays, npcs=npcs, bossFloors=boss_floors, raid=dict(center=raid_center, landing=raid_landing, npc=raid_npc), arena=dict(center=arena_center, landing=arena_landing, radius=ARENA_R)), open('hub.json', 'w'))
 xs = [k[0] for k in tiles]; ys = [k[1] for k in tiles]
 print('tiles', len(tiles), 'pads', len(pads), 'spawns', len(spawns), 'bbox', min(xs), min(ys), max(xs), max(ys), 'bytes', len(out))
 for w in wings: print(w)

@@ -20,7 +20,7 @@ for dp,_,fs in os.walk(R):
         else: of.pop('lookTypeEx',None)
         _h=re.search(r'monster\.(?:maxHealth|health)\s*=\s*(\d+)',s); hp=int(_h.group(1)) if _h else 0
         have.add(nm.group(1).lower())
-        extra.append(dict(name=nm.group(1),lvl=0,pos=None,hp=hp,outfit=of))
+        extra.append(dict(name=nm.group(1),lvl=0,pos=None,hp=hp,outfit=of,events='monster.events' in s,reward='rewardBoss = true' in s))
 extra.sort(key=lambda b:(b['hp'],b['name']))
 out+=extra
 json.dump(out,open('bosses_all.json','w'))

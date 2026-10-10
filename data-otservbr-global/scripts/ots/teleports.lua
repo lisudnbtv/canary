@@ -841,6 +841,45 @@ local hubBossHall = Position(29998, 29915, 7)
 local arenaCenter = Position(30060, 29900, 7)
 local arenaLanding = Position(30060, 29909, 7)
 local ARENA_RADIUS = 10
+local raidCenter = Position(30060, 29860, 7)
+local raidLanding = Position(30060, 29869, 7)
+local raidNpcPosition = Position(30006, 30002, 7)
+local raidBosses = {
+	{ name = "The Imperor", outfit = { lookType = 237, lookHead = 0, lookBody = 0, lookLegs = 0, lookFeet = 0, lookAddons = 0, lookMount = 0 } },
+	{ name = "Zushuka", outfit = { lookType = 149, lookHead = 0, lookBody = 10, lookLegs = 0, lookFeet = 4, lookAddons = 0, lookMount = 0 } },
+	{ name = "Chizzoron the Distorter", outfit = { lookType = 340, lookHead = 0, lookBody = 0, lookLegs = 0, lookFeet = 0, lookAddons = 0, lookMount = 0 } },
+	{ name = "Dracola", outfit = { lookType = 231, lookHead = 0, lookBody = 0, lookLegs = 0, lookFeet = 0, lookAddons = 0, lookMount = 0 } },
+	{ name = "The Handmaiden", outfit = { lookType = 230, lookHead = 0, lookBody = 0, lookLegs = 0, lookFeet = 0, lookAddons = 0, lookMount = 0 } },
+	{ name = "Chikhaton", outfit = { lookType = 361, lookHead = 0, lookBody = 0, lookLegs = 0, lookFeet = 0, lookAddons = 0, lookMount = 0 } },
+	{ name = "Mr. Punish", outfit = { lookType = 234, lookHead = 0, lookBody = 0, lookLegs = 0, lookFeet = 0, lookAddons = 0, lookMount = 0 } },
+	{ name = "Orshabaal", outfit = { lookType = 201, lookHead = 0, lookBody = 0, lookLegs = 0, lookFeet = 0, lookAddons = 0, lookMount = 0 } },
+	{ name = "Irgix The Flimsy", outfit = { lookType = 1268, lookHead = 0, lookBody = 0, lookLegs = 0, lookFeet = 94, lookAddons = 0, lookMount = 0 } },
+	{ name = "Furyosa", outfit = { lookType = 149, lookHead = 94, lookBody = 79, lookLegs = 77, lookFeet = 3, lookAddons = 3, lookMount = 0 } },
+	{ name = "Thawing Dragon Lord", outfit = { lookType = 1077, lookHead = 0, lookBody = 0, lookLegs = 0, lookFeet = 0, lookAddons = 0, lookMount = 0 } },
+	{ name = "The Welter", outfit = { lookType = 563, lookHead = 0, lookBody = 0, lookLegs = 0, lookFeet = 0, lookAddons = 0, lookMount = 0 } },
+	{ name = "Amenef the Burning", outfit = { lookType = 541, lookHead = 113, lookBody = 114, lookLegs = 113, lookFeet = 113, lookAddons = 1, lookMount = 0 } },
+	{ name = "Unaz the Mean", outfit = { lookType = 1268, lookHead = 0, lookBody = 95, lookLegs = 0, lookFeet = 0, lookAddons = 0, lookMount = 0 } },
+	{ name = "Massacre", outfit = { lookType = 244, lookHead = 0, lookBody = 0, lookLegs = 0, lookFeet = 0, lookAddons = 0, lookMount = 0 } },
+	{ name = "Vok the Freakish", outfit = { lookType = 1268, lookHead = 0, lookBody = 98, lookLegs = 0, lookFeet = 94, lookAddons = 0, lookMount = 0 } },
+	{ name = "Mawhawk", outfit = { lookType = 595, lookHead = 0, lookBody = 0, lookLegs = 0, lookFeet = 0, lookAddons = 0, lookMount = 0 } },
+	{ name = "Zulazza the Corruptor", outfit = { lookType = 334, lookHead = 0, lookBody = 0, lookLegs = 0, lookFeet = 0, lookAddons = 0, lookMount = 0 } },
+	{ name = "The Pale Count", outfit = { lookType = 557, lookHead = 0, lookBody = 0, lookLegs = 0, lookFeet = 0, lookAddons = 0, lookMount = 0 } },
+	{ name = "Lisa", outfit = { lookType = 604, lookHead = 0, lookBody = 0, lookLegs = 0, lookFeet = 0, lookAddons = 0, lookMount = 0 } },
+	{ name = "Morgaroth", outfit = { lookType = 12, lookHead = 2, lookBody = 94, lookLegs = 78, lookFeet = 79, lookAddons = 0, lookMount = 0 } },
+	{ name = "Glooth Fairy", outfit = { lookType = 600, lookHead = 0, lookBody = 0, lookLegs = 0, lookFeet = 0, lookAddons = 0, lookMount = 0 } },
+	{ name = "The Armored Voidborn", outfit = { lookType = 987, lookHead = 0, lookBody = 0, lookLegs = 0, lookFeet = 0, lookAddons = 0, lookMount = 0 } },
+	{ name = "Bullwark", outfit = { lookType = 607, lookHead = 0, lookBody = 0, lookLegs = 0, lookFeet = 0, lookAddons = 0, lookMount = 0 } },
+	{ name = "Ghazbaran", outfit = { lookType = 12, lookHead = 0, lookBody = 85, lookLegs = 78, lookFeet = 94, lookAddons = 0, lookMount = 0 } },
+	{ name = "Drume", outfit = { lookType = 1317, lookHead = 38, lookBody = 76, lookLegs = 57, lookFeet = 114, lookAddons = 2, lookMount = 0 } },
+	{ name = "Ferumbras", outfit = { lookType = 229, lookHead = 0, lookBody = 0, lookLegs = 0, lookFeet = 0, lookAddons = 0, lookMount = 0 } },
+	{ name = "Urmahlullu the Weakened", outfit = { lookType = 1197, lookHead = 0, lookBody = 0, lookLegs = 0, lookFeet = 0, lookAddons = 0, lookMount = 0 } },
+	{ name = "Omrafir", outfit = { lookType = 12, lookHead = 78, lookBody = 3, lookLegs = 79, lookFeet = 79, lookAddons = 0, lookMount = 0 } },
+	{ name = "The Rootkraken", outfit = { lookType = 1765 } },
+	{ name = "The Monster", outfit = { lookType = 1600 } },
+	{ name = "The Abomination", outfit = { lookType = 1393, lookHead = 0, lookBody = 0, lookLegs = 0, lookFeet = 0, lookAddons = 0, lookMount = 0 } },
+	{ name = "Ancient Spawn of Morgathla", outfit = { lookType = 1055, lookHead = 0, lookBody = 0, lookLegs = 0, lookFeet = 0, lookAddons = 0, lookMount = 0 } },
+	{ name = "Morshabaal", outfit = { lookType = 1468, lookHead = 0, lookBody = 0, lookLegs = 0, lookFeet = 0, lookAddons = 0, lookMount = 0 } },
+}
 local hubPads = {
 	["29996:29653:7"] = { goto = { 29998, 29681, 7 }, label = "Bossy 10/11 (arena, HP 110000-350000)" },
 	["29996:29655:7"] = { lobby = true },
@@ -970,6 +1009,7 @@ local hubPads = {
 	["30004:29958:7"] = { quest = quests[1] },
 	["30004:29962:7"] = { quest = quests[2] },
 	["30004:29998:7"] = { wing = 1 },
+	["30005:30002:7"] = { randomboss = true },
 	["30006:29648:7"] = { boss = bosses[243] },
 	["30006:29652:7"] = { boss = bosses[244] },
 	["30006:29674:7"] = { boss = bosses[219] },
@@ -1961,6 +2001,87 @@ local function arenaStart(player, entry)
 	addEvent(arenaCheck, 2000, player:getId(), token, entry[1], entry.chest, entry.hint)
 end
 
+-- Losowy Boss: w osobnej salce stoi jeden wylosowany mocny boss. Po zabiciu nastepny
+-- pojawia sie po 10 minutach. Postac przy padzie w lobby zmienia wyglad miedzy bossami z puli.
+-- Stan trzyma tylko identyfikatory, a kazdy tik sprawdza je od nowa.
+local RAID_RESPAWN_SECONDS = 10 * 60
+local RAID_NPC_NAME = "Losowy Boss"
+local raidState = { bossId = nil, bossName = nil, nextAt = 0, npcId = nil, look = 0 }
+
+local function raidSpawn()
+	if #raidBosses == 0 then
+		return
+	end
+	local pick = raidBosses[math.random(#raidBosses)]
+	local monster = Game.createMonster(pick.name, raidCenter, true, true)
+	if monster then
+		raidState.bossId = monster:getId()
+		raidState.bossName = pick.name
+		Game.broadcastMessage("Losowy Boss: " .. pick.name .. " czeka w salce (pad w lobby hubu albo !tp).", MESSAGE_EVENT_ADVANCE)
+	else
+		raidState.nextAt = os.time() + 30
+	end
+end
+
+local function raidEnter(player)
+	if inFight(player) then
+		return
+	end
+	travel(player, { RAID_NPC_NAME, raidLanding.x, raidLanding.y, raidLanding.z })
+	if raidState.bossId and Creature(raidState.bossId) then
+		player:sendTextMessage(MESSAGE_EVENT_ADVANCE, "W salce czeka: " .. raidState.bossName .. ".")
+	else
+		local left = math.max(0, raidState.nextAt - os.time())
+		player:sendTextMessage(MESSAGE_EVENT_ADVANCE, string.format("Boss pokonany. Nastepny pojawi sie za %d min %d s.", math.floor(left / 60), left % 60))
+	end
+end
+
+local raidNpcType = Game.createNpcType(RAID_NPC_NAME)
+raidNpcType:register({
+	name = RAID_NPC_NAME,
+	description = RAID_NPC_NAME,
+	health = 100,
+	maxHealth = 100,
+	walkInterval = 0,
+	walkRadius = 0,
+	outfit = raidBosses[1] and raidBosses[1].outfit or { lookType = 35 },
+	flags = { floorchange = false },
+})
+
+local raidTick = GlobalEvent("OtsRandomBossTick")
+
+function raidTick.onThink(interval)
+	-- boss: wykrycie smierci i odliczanie do nastepnego
+	if raidState.bossId then
+		if not Creature(raidState.bossId) then
+			Game.broadcastMessage("Losowy Boss pokonany: " .. (raidState.bossName or "?") .. ". Nastepny za 10 minut.", MESSAGE_EVENT_ADVANCE)
+			raidState.bossId = nil
+			raidState.nextAt = os.time() + RAID_RESPAWN_SECONDS
+		end
+	elseif os.time() >= raidState.nextAt then
+		raidSpawn()
+	end
+
+	-- postac w lobby: tworzona przy pierwszym tiku, potem zmienia wyglad
+	local npc = raidState.npcId and Creature(raidState.npcId)
+	if not npc then
+		npc = Game.createNpc(RAID_NPC_NAME, raidNpcPosition, false, true)
+		if npc then
+			npc:setMasterPos(raidNpcPosition)
+			npc:setDirection(DIRECTION_NORTH)
+			raidState.npcId = npc:getId()
+		end
+	end
+	if npc and #raidBosses > 0 then
+		raidState.look = raidState.look % #raidBosses + 1
+		npc:setOutfit(raidBosses[raidState.look].outfit)
+	end
+	return true
+end
+
+raidTick:interval(2000)
+raidTick:register()
+
 local openMain
 
 -- Uruchamia cel z listy: zwykly teleport albo quest z wlasnym skryptem.
@@ -2050,6 +2171,9 @@ openMain = function(player)
 		openList(target, "Bossy", bosses, function(again)
 			openMain(again)
 		end)
+	end)
+	window:addChoice("Losowy Boss (nowy co 10 min po zabiciu)", function(target)
+		raidEnter(target)
 	end)
 	window:addChoice("Questy [" .. #quests .. "]", function(target)
 		openList(target, "Questy", quests, function(again)
@@ -2170,6 +2294,8 @@ function hubStep.onStepIn(creature, item, position, fromPosition)
 		hubMove(player, hubLobby, "Hub: lobby")
 	elseif action.thais and templePosition then
 		hubMove(player, templePosition)
+	elseif action.randomboss then
+		raidEnter(player)
 	elseif action.outfits and OtsOutfitHall then
 		OtsOutfitHall(player)
 	elseif action.questhall then
@@ -2208,6 +2334,8 @@ function hubLook.playerOnLook(player, inspectedThing, inspectedPosition, lookDis
 		text = "Przejscie: " .. action.label
 	elseif action.lobby then
 		text = "Powrot do lobby hubu"
+	elseif action.randomboss then
+		text = "Losowy Boss"
 	elseif action.outfits then
 		text = "Questy na stroje"
 	elseif action.questhall then
