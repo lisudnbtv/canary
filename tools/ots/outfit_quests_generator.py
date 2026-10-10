@@ -124,7 +124,7 @@ open('outq/ots-outfits.otbm', 'wb').write(out)
 with open('outq/ots-outfits-monster.xml', 'w') as f:
     f.write('<?xml version="1.0"?>\n<monsters>\n')
     for name, x, y in spawns:
-        f.write('\t<monster centerx="%d" centery="%d" centerz="%d" radius="3">\n\t\t<monster name=%s x="0" y="0" z="%d" spawntime="20" />\n\t</monster>\n' % (x, y, Z, quoteattr(name), Z))
+        f.write('\t<monster centerx="%d" centery="%d" centerz="%d" radius="3">\n\t\t<monster name=%s x="0" y="0" z="%d" spawntime="300" />\n\t</monster>\n' % (x, y, Z, quoteattr(name), Z))
     f.write('</monsters>\n')
 for nm, tag in (('house', 'houses'), ('npc', 'npcs'), ('zones', 'zones')):
     open('outq/ots-outfits-%s.xml' % nm, 'w').write('<?xml version="1.0"?>\n<%s />\n' % tag)
