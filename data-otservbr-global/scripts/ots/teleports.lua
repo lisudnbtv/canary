@@ -608,6 +608,199 @@ local bosses = {
 	{ "Soul of Dragonking Zyrtarch (lvl 250+)", 33391, 31178, 10 },
 	{ "Magma Bubble (lvl 500+)", 33669, 32926, 15 },
 	{ "The Primal Menace (lvl 500+)", 33548, 32752, 14 },
+	{ "The Frog Prince (arena, HP 55)", 0, 0, 0, arena = { { "The Frog Prince", 1 } } },
+	{ "Jailer (arena, HP 65)", 0, 0, 0, arena = { { "Jailer", 1 } } },
+	{ "Rotworm Queen (arena, HP 105)", 0, 0, 0, arena = { { "Rotworm Queen", 1 } } },
+	{ "Big Boss Trolliver (arena, HP 150)", 0, 0, 0, arena = { { "Big Boss Trolliver", 1 } } },
+	{ "Robby the Reckless (arena, HP 155)", 0, 0, 0, arena = { { "Robby the Reckless", 1 } } },
+	{ "Mornenion (arena, HP 190)", 0, 0, 0, arena = { { "Mornenion", 1 } } },
+	{ "Xenia (arena, HP 200)", 0, 0, 0, arena = { { "Xenia", 1 } } },
+	{ "Elvira Hammerthrust (arena, HP 245)", 0, 0, 0, arena = { { "Elvira Hammerthrust", 1 } } },
+	{ "Willi Wasp (arena, HP 250)", 0, 0, 0, arena = { { "Willi Wasp", 1 } } },
+	{ "Fleabringer (arena, HP 265)", 0, 0, 0, arena = { { "Fleabringer", 1 } } },
+	{ "Jesse the Wicked (arena, HP 280)", 0, 0, 0, arena = { { "Jesse the Wicked", 1 } } },
+	{ "Smuggler Baron Silvertoe (arena, HP 280)", 0, 0, 0, arena = { { "Smuggler Baron Silvertoe", 1 } } },
+	{ "Zomba (arena, HP 300)", 0, 0, 0, arena = { { "Zomba", 1 } } },
+	{ "Barbaria (arena, HP 345)", 0, 0, 0, arena = { { "Barbaria", 1 } } },
+	{ "Dharalion (arena, HP 380)", 0, 0, 0, arena = { { "Dharalion", 1 } } },
+	{ "Rukor Zad (arena, HP 380)", 0, 0, 0, arena = { { "Rukor Zad", 1 } } },
+	{ "Groam (arena, HP 400)", 0, 0, 0, arena = { { "Groam", 1 } } },
+	{ "The Blightfather (arena, HP 400)", 0, 0, 0, arena = { { "The Blightfather", 1 } } },
+	{ "Mephiles (arena, HP 415)", 0, 0, 0, arena = { { "Mephiles", 1 } } },
+	{ "Doctor Perhaps (arena, HP 475)", 0, 0, 0, arena = { { "Doctor Perhaps", 1 } } },
+	{ "Man In the Cave (arena, HP 485)", 0, 0, 0, arena = { { "Man in the Cave", 1 } } },
+	{ "Ekatrix (arena, HP 500)", 0, 0, 0, arena = { { "Ekatrix", 1 } } },
+	{ "White Pale (arena, HP 500)", 0, 0, 0, arena = { { "White Pale", 1 } } },
+	{ "General Murius (arena, HP 550)", 0, 0, 0, arena = { { "General Murius", 1 } } },
+	{ "Captain Jones (arena, HP 555)", 0, 0, 0, arena = { { "Captain Jones", 1 } } },
+	{ "Foreman Kneebiter (arena, HP 570)", 0, 0, 0, arena = { { "Foreman Kneebiter", 1 } } },
+	{ "Hairman the Huge (arena, HP 600)", 0, 0, 0, arena = { { "Hairman the Huge", 1 } } },
+	{ "Yaga the Crone (arena, HP 620)", 0, 0, 0, arena = { { "Yaga the Crone", 1 } } },
+	{ "Dirtbeard (arena, HP 630)", 0, 0, 0, arena = { { "Dirtbeard", 1 } } },
+	{ "Ocyakao (arena, HP 700)", 0, 0, 0, arena = { { "Ocyakao", 1 } } },
+	{ "Diseased Dan (arena, HP 800)", 0, 0, 0, arena = { { "Diseased Dan", 1 } } },
+	{ "Heoni (arena, HP 900)", 0, 0, 0, arena = { { "Heoni", 1 } } },
+	{ "Boogey (arena, HP 930)", 0, 0, 0, arena = { { "Boogey", 1 } } },
+	{ "Monstor (arena, HP 960)", 0, 0, 0, arena = { { "Monstor", 1 } } },
+	{ "Diseased Bill (arena, HP 1000)", 0, 0, 0, arena = { { "Diseased Bill", 1 } } },
+	{ "Glitterscale (arena, HP 1000)", 0, 0, 0, arena = { { "Glitterscale", 1 } } },
+	{ "Diseased Fred (arena, HP 1100)", 0, 0, 0, arena = { { "Diseased Fred", 1 } } },
+	{ "Raxias (arena, HP 1100)", 0, 0, 0, arena = { { "Raxias", 1 } } },
+	{ "Bibby Bloodbath (arena, HP 1200)", 0, 0, 0, arena = { { "Bibby Bloodbath", 1 } } },
+	{ "The Evil Eye (arena, HP 1200)", 0, 0, 0, arena = { { "The Evil Eye", 1 } } },
+	{ "Evil Mastermind (arena, HP 1295)", 0, 0, 0, arena = { { "Evil Mastermind", 1 } } },
+	{ "Zevelon Duskbringer (arena, HP 1400)", 0, 0, 0, arena = { { "Zevelon Duskbringer", 1 } } },
+	{ "Diblis the Fair (arena, HP 1500)", 0, 0, 0, arena = { { "Diblis the Fair", 1 } } },
+	{ "Hirintror (arena, HP 1500)", 0, 0, 0, arena = { { "Hirintror", 1 } } },
+	{ "Warlord Ruzad (arena, HP 1500)", 0, 0, 0, arena = { { "Warlord Ruzad", 1 } } },
+	{ "Arachir the Ancient One (arena, HP 1600)", 0, 0, 0, arena = { { "Arachir the Ancient One", 1 } } },
+	{ "Sir Valorcrest (arena, HP 1600)", 0, 0, 0, arena = { { "Sir Valorcrest", 1 } } },
+	{ "Black Knight (arena, HP 1800)", 0, 0, 0, arena = { { "Black Knight", 1 } } },
+	{ "Grandfather Tridian (arena, HP 1800)", 0, 0, 0, arena = { { "Grandfather Tridian", 1 } } },
+	{ "Grand Mother Foulscale (arena, HP 1850)", 0, 0, 0, arena = { { "Grand Mother Foulscale", 1 } } },
+	{ "Dreadmaw (arena, HP 2000)", 0, 0, 0, arena = { { "Dreadmaw", 1 } } },
+	{ "The Percht Queen (arena, HP 2300)", 0, 0, 0, arena = { { "The Percht Queen", 1 } } },
+	{ "Mad Mage (arena, HP 2500)", 0, 0, 0, arena = { { "Mad Mage", 1 } } },
+	{ "Grorlam (arena, HP 3000)", 0, 0, 0, arena = { { "Grorlam", 1 } } },
+	{ "Kroazur (arena, HP 3000)", 0, 0, 0, arena = { { "Kroazur", 1 } } },
+	{ "Gravelord Oshuran (arena, HP 3100)", 0, 0, 0, arena = { { "Gravelord Oshuran", 1 } } },
+	{ "Black Vixen (arena, HP 3200)", 0, 0, 0, arena = { { "Black Vixen", 1 } } },
+	{ "Sharpclaw (arena, HP 3300)", 0, 0, 0, arena = { { "Sharpclaw", 1 } } },
+	{ "Raging Mage (arena, HP 3500)", 0, 0, 0, arena = { { "Raging mage", 1 } } },
+	{ "Rahemos (arena, HP 3700)", 0, 0, 0, arena = { { "Rahemos", 1 } } },
+	{ "Mahrdis (arena, HP 3900)", 0, 0, 0, arena = { { "Mahrdis", 1 } } },
+	{ "Battlemaster Zunzu (arena, HP 4000)", 0, 0, 0, arena = { { "Battlemaster Zunzu", 1 } } },
+	{ "Vashresamun (arena, HP 4000)", 0, 0, 0, arena = { { "Vashresamun", 1 } } },
+	{ "Thalas (arena, HP 4100)", 0, 0, 0, arena = { { "Thalas", 1 } } },
+	{ "Dipthrah (arena, HP 4200)", 0, 0, 0, arena = { { "Dipthrah", 1 } } },
+	{ "Omruc (arena, HP 4300)", 0, 0, 0, arena = { { "Omruc", 1 } } },
+	{ "Darkfang (arena, HP 4800)", 0, 0, 0, arena = { { "Darkfang", 1 } } },
+	{ "Morguthis (arena, HP 4800)", 0, 0, 0, arena = { { "Morguthis", 1 } } },
+	{ "Ashmunrah (arena, HP 5000)", 0, 0, 0, arena = { { "Ashmunrah", 1 } } },
+	{ "Zarabustor (arena, HP 5100)", 0, 0, 0, arena = { { "Zarabustor", 1 } } },
+	{ "Bloodback (arena, HP 5200)", 0, 0, 0, arena = { { "Bloodback", 1 } } },
+	{ "The Voice of Ruin (arena, HP 5500)", 0, 0, 0, arena = { { "The Voice of Ruin", 1 } } },
+	{ "Fleshslicer (arena, HP 5700)", 0, 0, 0, arena = { { "Fleshslicer", 1 } } },
+	{ "Yakchal (arena, HP 5750)", 0, 0, 0, arena = { { "Yakchal", 1 } } },
+	{ "Horestis (arena, HP 6000)", 0, 0, 0, arena = { { "Horestis", 1 } } },
+	{ "Shadowpelt (arena, HP 6000)", 0, 0, 0, arena = { { "Shadowpelt", 1 } } },
+	{ "Sugar Mommy (arena, HP 6000)", 0, 0, 0, arena = { { "Sugar Mommy", 1 } } },
+	{ "Srezz Yellow Eyes (arena, HP 6200)", 0, 0, 0, arena = { { "Srezz Yellow Eyes", 1 } } },
+	{ "Katex Blood Tongue (arena, HP 6300)", 0, 0, 0, arena = { { "Katex Blood Tongue", 1 } } },
+	{ "Yirkas Blue Scales (arena, HP 6300)", 0, 0, 0, arena = { { "Yirkas Blue Scales", 1 } } },
+	{ "Utua Stone Sting (arena, HP 6400)", 0, 0, 0, arena = { { "Utua Stone Sting", 1 } } },
+	{ "Countess Sorrow (arena, HP 6500)", 0, 0, 0, arena = { { "Countess Sorrow", 1 } } },
+	{ "The Plasmother (arena, HP 7500)", 0, 0, 0, arena = { { "The Plasmother", 1 } } },
+	{ "Lord of the Elements (arena, HP 8000)", 0, 0, 0, arena = { { "Lord of the Elements", 1 } } },
+	{ "Sugar Daddy (arena, HP 9500)", 0, 0, 0, arena = { { "Sugar Daddy", 1 } } },
+	{ "Dazed Leaf Golem (arena, HP 10000)", 0, 0, 0, arena = { { "Dazed Leaf Golem", 1 } } },
+	{ "Gelidrazah the Frozen (arena, HP 10000)", 0, 0, 0, arena = { { "Gelidrazah the Frozen", 1 } } },
+	{ "Kalyassa (arena, HP 10000)", 0, 0, 0, arena = { { "Kalyassa", 1 } } },
+	{ "Tazhadur (arena, HP 10000)", 0, 0, 0, arena = { { "Tazhadur", 1 } } },
+	{ "The Blazing Rose (arena, HP 10000)", 0, 0, 0, arena = { { "The Blazing Rose", 1 } } },
+	{ "Zorvorax (arena, HP 10000)", 0, 0, 0, arena = { { "Zorvorax", 1 } } },
+	{ "Tyrn (arena, HP 12000)", 0, 0, 0, arena = { { "Tyrn", 1 } } },
+	{ "Dreadful Disruptor (arena, HP 14000)", 0, 0, 0, arena = { { "Dreadful Disruptor", 1 } } },
+	{ "Grand Canon Dominus (arena, HP 15000)", 0, 0, 0, arena = { { "Grand Canon Dominus", 1 } } },
+	{ "The Imperor (arena, HP 15000)", 0, 0, 0, arena = { { "The Imperor", 1 } } },
+	{ "Zushuka (arena, HP 15000)", 0, 0, 0, arena = { { "Zushuka", 1 } } },
+	{ "Chizzoron the Distorter (arena, HP 16000)", 0, 0, 0, arena = { { "Chizzoron the Distorter", 1 } } },
+	{ "Preceptor Lazare (arena, HP 16000)", 0, 0, 0, arena = { { "Preceptor Lazare", 1 } } },
+	{ "Dracola (arena, HP 16200)", 0, 0, 0, arena = { { "Dracola", 1 } } },
+	{ "Grand Commander Soeren (arena, HP 17000)", 0, 0, 0, arena = { { "Grand Commander Soeren", 1 } } },
+	{ "Grand Chaplain Gaunder (arena, HP 18000)", 0, 0, 0, arena = { { "Grand Chaplain Gaunder", 1 } } },
+	{ "The Lily of Night (arena, HP 19000)", 0, 0, 0, arena = { { "The Lily of Night", 1 } } },
+	{ "The Handmaiden (arena, HP 19500)", 0, 0, 0, arena = { { "The Handmaiden", 1 } } },
+	{ "Chikhaton (arena, HP 20000)", 0, 0, 0, arena = { { "Chikhaton", 1 } } },
+	{ "The Diamond Blossom (arena, HP 20000)", 0, 0, 0, arena = { { "The Diamond Blossom", 1 } } },
+	{ "Mr. Punish (arena, HP 22000)", 0, 0, 0, arena = { { "Mr. Punish", 1 } } },
+	{ "Orshabaal (arena, HP 22500)", 0, 0, 0, arena = { { "Orshabaal", 1 } } },
+	{ "Irgix The Flimsy (arena, HP 24000)", 0, 0, 0, arena = { { "Irgix The Flimsy", 1 } } },
+	{ "Furyosa (arena, HP 25000)", 0, 0, 0, arena = { { "Furyosa", 1 } } },
+	{ "Latrivan (arena, HP 25000)", 0, 0, 0, arena = { { "Latrivan", 1 } } },
+	{ "Sister Hetai (arena, HP 25000)", 0, 0, 0, arena = { { "Sister Hetai", 1 } } },
+	{ "Thawing Dragon Lord (arena, HP 25000)", 0, 0, 0, arena = { { "Thawing Dragon Lord", 1 } } },
+	{ "The Welter (arena, HP 25000)", 0, 0, 0, arena = { { "The Welter", 1 } } },
+	{ "World Devourer (arena, HP 25000)", 0, 0, 0, arena = { { "World Devourer", 1 } } },
+	{ "Hellgorak (arena, HP 25850)", 0, 0, 0, arena = { { "Hellgorak", 1 } } },
+	{ "Amenef the Burning (arena, HP 26000)", 0, 0, 0, arena = { { "Amenef the Burning", 1 } } },
+	{ "Mozradek (arena, HP 28000)", 0, 0, 0, arena = { { "Mozradek", 1 } } },
+	{ "Neferi the Spy (arena, HP 28000)", 0, 0, 0, arena = { { "Neferi the Spy", 1 } } },
+	{ "Unaz the Mean (arena, HP 28000)", 0, 0, 0, arena = { { "Unaz the Mean", 1 } } },
+	{ "Xogixath (arena, HP 28000)", 0, 0, 0, arena = { { "Xogixath", 1 } } },
+	{ "Tanjis (arena, HP 30000)", 0, 0, 0, arena = { { "Tanjis", 1 } } },
+	{ "Ushuriel (arena, HP 31500)", 0, 0, 0, arena = { { "Ushuriel", 1 } } },
+	{ "Massacre (arena, HP 32000)", 0, 0, 0, arena = { { "Massacre", 1 } } },
+	{ "Vok the Freakish (arena, HP 32000)", 0, 0, 0, arena = { { "Vok the Freakish", 1 } } },
+	{ "Obujos (arena, HP 35000)", 0, 0, 0, arena = { { "Obujos", 1 } } },
+	{ "Bragrumol (arena, HP 38000)", 0, 0, 0, arena = { { "Bragrumol", 1 } } },
+	{ "Golgordan (arena, HP 40000)", 0, 0, 0, arena = { { "Golgordan", 1 } } },
+	{ "Mawhawk (arena, HP 45000)", 0, 0, 0, arena = { { "Mawhawk", 1 } } },
+	{ "Annihilon (arena, HP 46500)", 0, 0, 0, arena = { { "Annihilon", 1 } } },
+	{ "Zulazza the Corruptor (arena, HP 46500)", 0, 0, 0, arena = { { "Zulazza the Corruptor", 1 } } },
+	{ "Custodian (arena, HP 47000)", 0, 0, 0, arena = { { "Custodian", 1 } } },
+	{ "Gaffir (arena, HP 48500)", 0, 0, 0, arena = { { "Gaffir", 1 } } },
+	{ "The First Dragon (arena, HP 50000)", 0, 0, 0, arena = { { "The First Dragon", 1 } } },
+	{ "The Pale Count (arena, HP 50000)", 0, 0, 0, arena = { { "The Pale Count", 1 } } },
+	{ "The Sandking (arena, HP 50000)", 0, 0, 0, arena = { { "The Sandking", 1 } } },
+	{ "The Ravager (arena, HP 53500)", 0, 0, 0, arena = { { "The Ravager", 1 } } },
+	{ "Guard Captain Quaid (arena, HP 55000)", 0, 0, 0, arena = { { "Guard Captain Quaid", 1 } } },
+	{ "Lisa (arena, HP 55000)", 0, 0, 0, arena = { { "Lisa", 1 } } },
+	{ "Morgaroth (arena, HP 55000)", 0, 0, 0, arena = { { "Morgaroth", 1 } } },
+	{ "Glooth Fairy (arena, HP 59000)", 0, 0, 0, arena = { { "Glooth Fairy", 1 } } },
+	{ "The Armored Voidborn (arena, HP 60000)", 0, 0, 0, arena = { { "The Armored Voidborn", 1 } } },
+	{ "Death Priest Shargon (arena, HP 65000)", 0, 0, 0, arena = { { "Death Priest Shargon", 1 } } },
+	{ "Melting Frozen Horror (arena, HP 70000)", 0, 0, 0, arena = { { "Melting Frozen Horror", 1 } } },
+	{ "Bullwark (arena, HP 72000)", 0, 0, 0, arena = { { "Bullwark", 1 } } },
+	{ "Brain Head (arena, HP 75000)", 0, 0, 0, arena = { { "Brain Head", 1 } } },
+	{ "Madareth (arena, HP 75000)", 0, 0, 0, arena = { { "Madareth", 1 } } },
+	{ "Sir Baeloc (arena, HP 75000)", 0, 0, 0, arena = { { "Sir Baeloc", 1 } } },
+	{ "Ghazbaran (arena, HP 77000)", 0, 0, 0, arena = { { "Ghazbaran", 1 } } },
+	{ "Drume (arena, HP 80000)", 0, 0, 0, arena = { { "Drume", 1 } } },
+	{ "Ferumbras (arena, HP 90000)", 0, 0, 0, arena = { { "Ferumbras", 1 } } },
+	{ "Jaul (arena, HP 90000)", 0, 0, 0, arena = { { "Jaul", 1 } } },
+	{ "Professor Maxxen (arena, HP 90000)", 0, 0, 0, arena = { { "Professor Maxxen", 1 } } },
+	{ "Zugurosh (arena, HP 90500)", 0, 0, 0, arena = { { "Zugurosh", 1 } } },
+	{ "Deep Terror (arena, HP 100000)", 0, 0, 0, arena = { { "Deep Terror", 1 } } },
+	{ "Feroxa (arena, HP 100000)", 0, 0, 0, arena = { { "Feroxa", 1 } } },
+	{ "Ravenous Hunger (arena, HP 100000)", 0, 0, 0, arena = { { "Ravenous Hunger", 1 } } },
+	{ "Urmahlullu the Weakened (arena, HP 100000)", 0, 0, 0, arena = { { "Urmahlullu the Weakened", 1 } } },
+	{ "Realityquake (arena, HP 110000)", 0, 0, 0, arena = { { "Realityquake", 1 } } },
+	{ "Deathstrike (arena, HP 200000)", 0, 0, 0, arena = { { "Deathstrike", 1 } } },
+	{ "Wisdom of Urmahlullu (arena, HP 200000)", 0, 0, 0, arena = { { "Wisdom of Urmahlullu", 1 } } },
+	{ "Essence of Malice (arena, HP 250000)", 0, 0, 0, arena = { { "Essence of Malice", 1 } } },
+	{ "Gnomevil (arena, HP 250000)", 0, 0, 0, arena = { { "Gnomevil", 1 } } },
+	{ "The Unarmored Voidborn (arena, HP 250000)", 0, 0, 0, arena = { { "The Unarmored Voidborn", 1 } } },
+	{ "Eradicator2 (arena, HP 290000)", 0, 0, 0, arena = { { "Eradicator2", 1 } } },
+	{ "The Souldespoiler (arena, HP 290000)", 0, 0, 0, arena = { { "The Souldespoiler", 1 } } },
+	{ "Goshnar's Cruelty (arena, HP 300000)", 0, 0, 0, arena = { { "Goshnar's Cruelty", 1 } } },
+	{ "Goshnar's Greed (arena, HP 300000)", 0, 0, 0, arena = { { "Goshnar's Greed", 1 } } },
+	{ "Goshnar's Hatred (arena, HP 300000)", 0, 0, 0, arena = { { "Goshnar's Hatred", 1 } } },
+	{ "Goshnar's Malice (arena, HP 300000)", 0, 0, 0, arena = { { "Goshnar's Malice", 1 } } },
+	{ "Goshnar's Spite (arena, HP 300000)", 0, 0, 0, arena = { { "Goshnar's Spite", 1 } } },
+	{ "The False God (arena, HP 300000)", 0, 0, 0, arena = { { "The False God", 1 } } },
+	{ "Urmahlullu the Tamed (arena, HP 300000)", 0, 0, 0, arena = { { "Urmahlullu the Tamed", 1 } } },
+	{ "Alptramun (arena, HP 320000)", 0, 0, 0, arena = { { "Alptramun", 1 } } },
+	{ "Izcandar the Banished (arena, HP 320000)", 0, 0, 0, arena = { { "Izcandar the Banished", 1 } } },
+	{ "Malofur Mangrinder (arena, HP 320000)", 0, 0, 0, arena = { { "Malofur Mangrinder", 1 } } },
+	{ "Maxxenius (arena, HP 320000)", 0, 0, 0, arena = { { "Maxxenius", 1 } } },
+	{ "Plagueroot (arena, HP 320000)", 0, 0, 0, arena = { { "Plagueroot", 1 } } },
+	{ "Omrafir (arena, HP 322000)", 0, 0, 0, arena = { { "Omrafir", 1 } } },
+	{ "Abyssador (arena, HP 340000)", 0, 0, 0, arena = { { "Abyssador", 1 } } },
+	{ "Gaz'Haragoth (arena, HP 350000)", 0, 0, 0, arena = { { "Gaz'Haragoth", 1 } } },
+	{ "The Baron From Below (arena, HP 350000)", 0, 0, 0, arena = { { "The Baron from Below", 1 } } },
+	{ "The Count of the Core (arena, HP 350000)", 0, 0, 0, arena = { { "The Count of the Core", 1 } } },
+	{ "The Duke of the Depths (arena, HP 350000)", 0, 0, 0, arena = { { "The Duke of the Depths", 1 } } },
+	{ "The Rootkraken (arena, HP 360000)", 0, 0, 0, arena = { { "The Rootkraken", 1 } } },
+	{ "Wildness of Urmahlullu (arena, HP 400000)", 0, 0, 0, arena = { { "Wildness of Urmahlullu", 1 } } },
+	{ "The Monster (arena, HP 450000)", 0, 0, 0, arena = { { "The Monster", 1 } } },
+	{ "The Source of Corruption (arena, HP 500000)", 0, 0, 0, arena = { { "The Source of Corruption", 1 } } },
+	{ "Goshnar's Megalomania Blue (arena, HP 620000)", 0, 0, 0, arena = { { "Goshnar's Megalomania Blue", 1 } } },
+	{ "Goshnar's Megalomania Green (arena, HP 620000)", 0, 0, 0, arena = { { "Goshnar's Megalomania Green", 1 } } },
+	{ "The Abomination (arena, HP 750000)", 0, 0, 0, arena = { { "The Abomination", 1 } } },
+	{ "Ancient Spawn of Morgathla (arena, HP 900000)", 0, 0, 0, arena = { { "Ancient Spawn of Morgathla", 1 } } },
+	{ "Dragon Hoard (arena, HP 999999)", 0, 0, 0, arena = { { "Dragon Hoard", 1 } } },
+	{ "Morshabaal (arena, HP 1000000)", 0, 0, 0, arena = { { "Morshabaal", 1 } } },
 }
 
 local quests = {
@@ -617,6 +810,10 @@ local quests = {
 	{ "Soul War: komplet przedmiotow Soul War dla Twojej profesji", func = "OtsSoulWarStart" },
 	{ "Demon Helmet: steel boots, demon helmet, demon shield", 33324, 31575, 15, hint = "Pokonaj potwory w sali, pociagnij dzwignie po wschodniej stronie. Skrzynie sa na zachodzie, za kamieniem (pole PZ)." },
 	{ "The Annihilator: demon armor, magic sword, stonecutter axe", 33224, 31671, 13, plain = true, hint = "Stan na jednym z czterech pol przy dzwigni i pociagnij ja. Wymagany poziom 100. Skrzynie sa na wschod od sali walki (pola PZ)." },
+	{ "Wrath of the Emperor: royal scale robe, royal draken mail, elite draken helmet", 0, 0, 0, arena = { { "Draken Elite", 4 }, { "Draken Abomination", 4 }, { "Draken Warmaster", 4 }, { "Draken Spellweaver", 4 }, { "Draken Elite", 2 } }, chest = { 33073, 31170, 8 }, hint = "Skrzynia z nagroda jest tuz obok. Skrzynie stoja obok siebie; zbroje sa w kolejnych skrzyniach." },
+	{ "The Thieves Guild: modified crossbow, assassin dagger, spellbook of warding", 0, 0, 0, arena = { { "Assassin", 6 }, { "Stalker", 4 }, { "Bandit", 4 }, { "Smuggler", 4 }, { "Assassin", 4 } }, chest = { 32310, 32209, 8 }, hint = "Skrzynia z nagroda jest tuz obok. Trzy skrzynie, mozna wziac jedna nagrode." },
+	{ "The Hidden City of Beregar: firewalker boots", 0, 0, 0, arena = { { "Dwarf Guard", 6 }, { "Dwarf Geomancer", 4 }, { "Worker Golem", 4 }, { "War Golem", 5 } }, chest = { 32580, 31404, 15 }, hint = "Skrzynia z nagroda jest tuz obok." },
+	{ "Koshei the Deathless: blue legs", 0, 0, 0, arena = { { "Lich", 4 }, { "Bonebeast", 5 }, { "Vampire", 5 }, { "Mummy", 5 }, { "Koshei the Deathless", 1 } }, chest = { 33261, 32445, 12 }, hint = "Skrzynia z nagroda jest tuz obok." },
 	{ "Behemoth Quest: guardian halberd, demon shield, golden armor", 33294, 31670, 13, hint = "Skrzynia z nagroda: ok. 11 krokow, kierunek polnoc. Przy skrzyni jest strefa PZ." },
 	{ "Black Knight: crown armor, crown shield", 32870, 31943, 11, hint = "Skrzynia z nagroda: ok. 11 krokow, kierunek poludnie. Przy skrzyni jest strefa PZ." },
 	{ "Circle Room: war hammer", 32496, 31946, 14, hint = "Skrzynia z nagroda: ok. 45 krokow, kierunek poludnie. Przy skrzyni jest strefa PZ." },
@@ -639,15 +836,26 @@ local hubWings = {
 	{ label = "Hard (exp 1500-6000) (155 potworow)", x = 29998, y = 30120, z = 7 },
 	{ label = "Very Hard (exp 6000+) (79 potworow)", x = 29998, y = 30160, z = 7 },
 }
-local hubQuestHall = Position(30025, 29960, 7)
-local hubBossHall = Position(30047, 29920, 7)
+local hubQuestHall = Position(30030, 29960, 7)
+local hubBossHall = Position(29998, 29920, 7)
+local arenaCenter = Position(30013, 29830, 7)
+local arenaLanding = Position(30013, 29839, 7)
+local ARENA_RADIUS = 10
 local hubPads = {
+	["29998:29922:7"] = { lobby = true },
 	["29998:30038:7"] = { lobby = true },
 	["29998:30078:7"] = { lobby = true },
 	["29998:30118:7"] = { lobby = true },
 	["29998:30158:7"] = { lobby = true },
-	["30000:29920:7"] = { lobby = true },
 	["30000:29960:7"] = { lobby = true },
+	["30003:29878:7"] = { boss = bosses[241] },
+	["30003:29882:7"] = { boss = bosses[242] },
+	["30003:29888:7"] = { boss = bosses[181] },
+	["30003:29892:7"] = { boss = bosses[182] },
+	["30003:29898:7"] = { boss = bosses[121] },
+	["30003:29902:7"] = { boss = bosses[122] },
+	["30003:29908:7"] = { boss = bosses[61] },
+	["30003:29912:7"] = { boss = bosses[62] },
 	["30003:29918:7"] = { boss = bosses[1] },
 	["30003:29922:7"] = { boss = bosses[2] },
 	["30003:30038:7"] = { hunt = hunts[1].list[1] },
@@ -675,6 +883,14 @@ local hubPads = {
 	["30004:29958:7"] = { quest = quests[1] },
 	["30004:29962:7"] = { quest = quests[2] },
 	["30004:29998:7"] = { wing = 1 },
+	["30006:29878:7"] = { boss = bosses[243] },
+	["30006:29882:7"] = { boss = bosses[244] },
+	["30006:29888:7"] = { boss = bosses[183] },
+	["30006:29892:7"] = { boss = bosses[184] },
+	["30006:29898:7"] = { boss = bosses[123] },
+	["30006:29902:7"] = { boss = bosses[124] },
+	["30006:29908:7"] = { boss = bosses[63] },
+	["30006:29912:7"] = { boss = bosses[64] },
 	["30006:29918:7"] = { boss = bosses[3] },
 	["30006:29922:7"] = { boss = bosses[4] },
 	["30006:30038:7"] = { hunt = hunts[1].list[3] },
@@ -699,6 +915,14 @@ local hubPads = {
 	["30006:30162:7"] = { hunt = hunts[4].list[4] },
 	["30006:30168:7"] = { hunt = hunts[4].list[63] },
 	["30006:30172:7"] = { hunt = hunts[4].list[64] },
+	["30009:29878:7"] = { boss = bosses[245] },
+	["30009:29882:7"] = { boss = bosses[246] },
+	["30009:29888:7"] = { boss = bosses[185] },
+	["30009:29892:7"] = { boss = bosses[186] },
+	["30009:29898:7"] = { boss = bosses[125] },
+	["30009:29902:7"] = { boss = bosses[126] },
+	["30009:29908:7"] = { boss = bosses[65] },
+	["30009:29912:7"] = { boss = bosses[66] },
 	["30009:29918:7"] = { boss = bosses[5] },
 	["30009:29922:7"] = { boss = bosses[6] },
 	["30009:29958:7"] = { quest = quests[3] },
@@ -727,6 +951,14 @@ local hubPads = {
 	["30009:30168:7"] = { hunt = hunts[4].list[65] },
 	["30009:30172:7"] = { hunt = hunts[4].list[66] },
 	["30010:29998:7"] = { wing = 2 },
+	["30012:29878:7"] = { boss = bosses[247] },
+	["30012:29882:7"] = { boss = bosses[248] },
+	["30012:29888:7"] = { boss = bosses[187] },
+	["30012:29892:7"] = { boss = bosses[188] },
+	["30012:29898:7"] = { boss = bosses[127] },
+	["30012:29902:7"] = { boss = bosses[128] },
+	["30012:29908:7"] = { boss = bosses[67] },
+	["30012:29912:7"] = { boss = bosses[68] },
 	["30012:29918:7"] = { boss = bosses[7] },
 	["30012:29922:7"] = { boss = bosses[8] },
 	["30012:30038:7"] = { hunt = hunts[1].list[7] },
@@ -755,6 +987,14 @@ local hubPads = {
 	["30014:29958:7"] = { quest = quests[5] },
 	["30014:29962:7"] = { quest = quests[6] },
 	["30014:30100:7"] = { lobby = true },
+	["30015:29878:7"] = { boss = bosses[249] },
+	["30015:29882:7"] = { boss = bosses[250] },
+	["30015:29888:7"] = { boss = bosses[189] },
+	["30015:29892:7"] = { boss = bosses[190] },
+	["30015:29898:7"] = { boss = bosses[129] },
+	["30015:29902:7"] = { boss = bosses[130] },
+	["30015:29908:7"] = { boss = bosses[69] },
+	["30015:29912:7"] = { boss = bosses[70] },
 	["30015:29918:7"] = { boss = bosses[9] },
 	["30015:29922:7"] = { boss = bosses[10] },
 	["30015:30038:7"] = { hunt = hunts[1].list[9] },
@@ -779,6 +1019,14 @@ local hubPads = {
 	["30015:30172:7"] = { hunt = hunts[4].list[70] },
 	["30016:29998:7"] = { wing = 3 },
 	["30017:30002:7"] = { questhall = true },
+	["30018:29878:7"] = { boss = bosses[251] },
+	["30018:29882:7"] = { boss = bosses[252] },
+	["30018:29888:7"] = { boss = bosses[191] },
+	["30018:29892:7"] = { boss = bosses[192] },
+	["30018:29898:7"] = { boss = bosses[131] },
+	["30018:29902:7"] = { boss = bosses[132] },
+	["30018:29908:7"] = { boss = bosses[71] },
+	["30018:29912:7"] = { boss = bosses[72] },
 	["30018:29918:7"] = { boss = bosses[11] },
 	["30018:29922:7"] = { boss = bosses[12] },
 	["30018:30038:7"] = { hunt = hunts[1].list[11] },
@@ -803,6 +1051,13 @@ local hubPads = {
 	["30018:30172:7"] = { hunt = hunts[4].list[72] },
 	["30019:29958:7"] = { quest = quests[7] },
 	["30019:29962:7"] = { quest = quests[8] },
+	["30020:29880:7"] = { lobby = true },
+	["30021:29888:7"] = { boss = bosses[193] },
+	["30021:29892:7"] = { boss = bosses[194] },
+	["30021:29898:7"] = { boss = bosses[133] },
+	["30021:29902:7"] = { boss = bosses[134] },
+	["30021:29908:7"] = { boss = bosses[73] },
+	["30021:29912:7"] = { boss = bosses[74] },
 	["30021:29918:7"] = { boss = bosses[13] },
 	["30021:29922:7"] = { boss = bosses[14] },
 	["30021:30002:7"] = { bosshall = true },
@@ -827,6 +1082,12 @@ local hubPads = {
 	["30021:30168:7"] = { hunt = hunts[4].list[73] },
 	["30021:30172:7"] = { hunt = hunts[4].list[74] },
 	["30022:29998:7"] = { wing = 4 },
+	["30024:29888:7"] = { boss = bosses[195] },
+	["30024:29892:7"] = { boss = bosses[196] },
+	["30024:29898:7"] = { boss = bosses[135] },
+	["30024:29902:7"] = { boss = bosses[136] },
+	["30024:29908:7"] = { boss = bosses[75] },
+	["30024:29912:7"] = { boss = bosses[76] },
 	["30024:29918:7"] = { boss = bosses[15] },
 	["30024:29922:7"] = { boss = bosses[16] },
 	["30024:29958:7"] = { quest = quests[9] },
@@ -851,6 +1112,12 @@ local hubPads = {
 	["30024:30162:7"] = { hunt = hunts[4].list[16] },
 	["30024:30168:7"] = { hunt = hunts[4].list[75] },
 	["30024:30172:7"] = { hunt = hunts[4].list[76] },
+	["30027:29888:7"] = { boss = bosses[197] },
+	["30027:29892:7"] = { boss = bosses[198] },
+	["30027:29898:7"] = { boss = bosses[137] },
+	["30027:29902:7"] = { boss = bosses[138] },
+	["30027:29908:7"] = { boss = bosses[77] },
+	["30027:29912:7"] = { boss = bosses[78] },
 	["30027:29918:7"] = { boss = bosses[17] },
 	["30027:29922:7"] = { boss = bosses[18] },
 	["30027:30038:7"] = { hunt = hunts[1].list[17] },
@@ -875,6 +1142,12 @@ local hubPads = {
 	["30027:30172:7"] = { hunt = hunts[4].list[78] },
 	["30029:29958:7"] = { quest = quests[11] },
 	["30029:29962:7"] = { quest = quests[12] },
+	["30030:29888:7"] = { boss = bosses[199] },
+	["30030:29892:7"] = { boss = bosses[200] },
+	["30030:29898:7"] = { boss = bosses[139] },
+	["30030:29902:7"] = { boss = bosses[140] },
+	["30030:29908:7"] = { boss = bosses[79] },
+	["30030:29912:7"] = { boss = bosses[80] },
 	["30030:29918:7"] = { boss = bosses[19] },
 	["30030:29922:7"] = { boss = bosses[20] },
 	["30030:30038:7"] = { hunt = hunts[1].list[19] },
@@ -897,6 +1170,12 @@ local hubPads = {
 	["30030:30162:7"] = { hunt = hunts[4].list[20] },
 	["30030:30168:7"] = { hunt = hunts[4].list[79] },
 	["30032:30170:7"] = { lobby = true },
+	["30033:29888:7"] = { boss = bosses[201] },
+	["30033:29892:7"] = { boss = bosses[202] },
+	["30033:29898:7"] = { boss = bosses[141] },
+	["30033:29902:7"] = { boss = bosses[142] },
+	["30033:29908:7"] = { boss = bosses[81] },
+	["30033:29912:7"] = { boss = bosses[82] },
 	["30033:29918:7"] = { boss = bosses[21] },
 	["30033:29922:7"] = { boss = bosses[22] },
 	["30033:30038:7"] = { hunt = hunts[1].list[21] },
@@ -919,6 +1198,12 @@ local hubPads = {
 	["30033:30162:7"] = { hunt = hunts[4].list[22] },
 	["30034:29958:7"] = { quest = quests[13] },
 	["30034:29962:7"] = { quest = quests[14] },
+	["30036:29888:7"] = { boss = bosses[203] },
+	["30036:29892:7"] = { boss = bosses[204] },
+	["30036:29898:7"] = { boss = bosses[143] },
+	["30036:29902:7"] = { boss = bosses[144] },
+	["30036:29908:7"] = { boss = bosses[83] },
+	["30036:29912:7"] = { boss = bosses[84] },
 	["30036:29918:7"] = { boss = bosses[23] },
 	["30036:29922:7"] = { boss = bosses[24] },
 	["30036:30038:7"] = { hunt = hunts[1].list[23] },
@@ -939,6 +1224,12 @@ local hubPads = {
 	["30036:30142:7"] = { hunt = hunts[3].list[144] },
 	["30036:30158:7"] = { hunt = hunts[4].list[23] },
 	["30036:30162:7"] = { hunt = hunts[4].list[24] },
+	["30039:29888:7"] = { boss = bosses[205] },
+	["30039:29892:7"] = { boss = bosses[206] },
+	["30039:29898:7"] = { boss = bosses[145] },
+	["30039:29902:7"] = { boss = bosses[146] },
+	["30039:29908:7"] = { boss = bosses[85] },
+	["30039:29912:7"] = { boss = bosses[86] },
 	["30039:29918:7"] = { boss = bosses[25] },
 	["30039:29922:7"] = { boss = bosses[26] },
 	["30039:29958:7"] = { quest = quests[15] },
@@ -961,6 +1252,12 @@ local hubPads = {
 	["30039:30142:7"] = { hunt = hunts[3].list[146] },
 	["30039:30158:7"] = { hunt = hunts[4].list[25] },
 	["30039:30162:7"] = { hunt = hunts[4].list[26] },
+	["30042:29888:7"] = { boss = bosses[207] },
+	["30042:29892:7"] = { boss = bosses[208] },
+	["30042:29898:7"] = { boss = bosses[147] },
+	["30042:29902:7"] = { boss = bosses[148] },
+	["30042:29908:7"] = { boss = bosses[87] },
+	["30042:29912:7"] = { boss = bosses[88] },
 	["30042:29918:7"] = { boss = bosses[27] },
 	["30042:29922:7"] = { boss = bosses[28] },
 	["30042:30038:7"] = { hunt = hunts[1].list[27] },
@@ -983,6 +1280,12 @@ local hubPads = {
 	["30042:30162:7"] = { hunt = hunts[4].list[28] },
 	["30044:29958:7"] = { quest = quests[17] },
 	["30044:29962:7"] = { quest = quests[18] },
+	["30045:29888:7"] = { boss = bosses[209] },
+	["30045:29892:7"] = { boss = bosses[210] },
+	["30045:29898:7"] = { boss = bosses[149] },
+	["30045:29902:7"] = { boss = bosses[150] },
+	["30045:29908:7"] = { boss = bosses[89] },
+	["30045:29912:7"] = { boss = bosses[90] },
 	["30045:29918:7"] = { boss = bosses[29] },
 	["30045:29922:7"] = { boss = bosses[30] },
 	["30045:30038:7"] = { hunt = hunts[1].list[29] },
@@ -1003,9 +1306,14 @@ local hubPads = {
 	["30045:30142:7"] = { hunt = hunts[3].list[150] },
 	["30045:30158:7"] = { hunt = hunts[4].list[29] },
 	["30045:30162:7"] = { hunt = hunts[4].list[30] },
+	["30048:29888:7"] = { boss = bosses[211] },
+	["30048:29892:7"] = { boss = bosses[212] },
+	["30048:29898:7"] = { boss = bosses[151] },
+	["30048:29902:7"] = { boss = bosses[152] },
+	["30048:29908:7"] = { boss = bosses[91] },
+	["30048:29912:7"] = { boss = bosses[92] },
 	["30048:29918:7"] = { boss = bosses[31] },
 	["30048:29922:7"] = { boss = bosses[32] },
-	["30048:29960:7"] = { lobby = true },
 	["30048:30038:7"] = { hunt = hunts[1].list[31] },
 	["30048:30042:7"] = { hunt = hunts[1].list[32] },
 	["30048:30048:7"] = { hunt = hunts[1].list[91] },
@@ -1024,6 +1332,14 @@ local hubPads = {
 	["30048:30142:7"] = { hunt = hunts[3].list[152] },
 	["30048:30158:7"] = { hunt = hunts[4].list[31] },
 	["30048:30162:7"] = { hunt = hunts[4].list[32] },
+	["30049:29958:7"] = { quest = quests[19] },
+	["30049:29962:7"] = { quest = quests[20] },
+	["30051:29888:7"] = { boss = bosses[213] },
+	["30051:29892:7"] = { boss = bosses[214] },
+	["30051:29898:7"] = { boss = bosses[153] },
+	["30051:29902:7"] = { boss = bosses[154] },
+	["30051:29908:7"] = { boss = bosses[93] },
+	["30051:29912:7"] = { boss = bosses[94] },
 	["30051:29918:7"] = { boss = bosses[33] },
 	["30051:29922:7"] = { boss = bosses[34] },
 	["30051:30038:7"] = { hunt = hunts[1].list[33] },
@@ -1044,8 +1360,16 @@ local hubPads = {
 	["30051:30142:7"] = { hunt = hunts[3].list[154] },
 	["30051:30158:7"] = { hunt = hunts[4].list[33] },
 	["30051:30162:7"] = { hunt = hunts[4].list[34] },
+	["30054:29888:7"] = { boss = bosses[215] },
+	["30054:29892:7"] = { boss = bosses[216] },
+	["30054:29898:7"] = { boss = bosses[155] },
+	["30054:29902:7"] = { boss = bosses[156] },
+	["30054:29908:7"] = { boss = bosses[95] },
+	["30054:29912:7"] = { boss = bosses[96] },
 	["30054:29918:7"] = { boss = bosses[35] },
 	["30054:29922:7"] = { boss = bosses[36] },
+	["30054:29958:7"] = { quest = quests[21] },
+	["30054:29962:7"] = { quest = quests[22] },
 	["30054:30038:7"] = { hunt = hunts[1].list[35] },
 	["30054:30042:7"] = { hunt = hunts[1].list[36] },
 	["30054:30048:7"] = { hunt = hunts[1].list[95] },
@@ -1064,6 +1388,12 @@ local hubPads = {
 	["30054:30158:7"] = { hunt = hunts[4].list[35] },
 	["30054:30162:7"] = { hunt = hunts[4].list[36] },
 	["30056:30140:7"] = { lobby = true },
+	["30057:29888:7"] = { boss = bosses[217] },
+	["30057:29892:7"] = { boss = bosses[218] },
+	["30057:29898:7"] = { boss = bosses[157] },
+	["30057:29902:7"] = { boss = bosses[158] },
+	["30057:29908:7"] = { boss = bosses[97] },
+	["30057:29912:7"] = { boss = bosses[98] },
 	["30057:29918:7"] = { boss = bosses[37] },
 	["30057:29922:7"] = { boss = bosses[38] },
 	["30057:30038:7"] = { hunt = hunts[1].list[37] },
@@ -1082,6 +1412,13 @@ local hubPads = {
 	["30057:30132:7"] = { hunt = hunts[3].list[98] },
 	["30057:30158:7"] = { hunt = hunts[4].list[37] },
 	["30057:30162:7"] = { hunt = hunts[4].list[38] },
+	["30058:29960:7"] = { lobby = true },
+	["30060:29888:7"] = { boss = bosses[219] },
+	["30060:29892:7"] = { boss = bosses[220] },
+	["30060:29898:7"] = { boss = bosses[159] },
+	["30060:29902:7"] = { boss = bosses[160] },
+	["30060:29908:7"] = { boss = bosses[99] },
+	["30060:29912:7"] = { boss = bosses[100] },
 	["30060:29918:7"] = { boss = bosses[39] },
 	["30060:29922:7"] = { boss = bosses[40] },
 	["30060:30038:7"] = { hunt = hunts[1].list[39] },
@@ -1100,6 +1437,12 @@ local hubPads = {
 	["30060:30132:7"] = { hunt = hunts[3].list[100] },
 	["30060:30158:7"] = { hunt = hunts[4].list[39] },
 	["30060:30162:7"] = { hunt = hunts[4].list[40] },
+	["30063:29888:7"] = { boss = bosses[221] },
+	["30063:29892:7"] = { boss = bosses[222] },
+	["30063:29898:7"] = { boss = bosses[161] },
+	["30063:29902:7"] = { boss = bosses[162] },
+	["30063:29908:7"] = { boss = bosses[101] },
+	["30063:29912:7"] = { boss = bosses[102] },
 	["30063:29918:7"] = { boss = bosses[41] },
 	["30063:29922:7"] = { boss = bosses[42] },
 	["30063:30038:7"] = { hunt = hunts[1].list[41] },
@@ -1118,6 +1461,12 @@ local hubPads = {
 	["30063:30132:7"] = { hunt = hunts[3].list[102] },
 	["30063:30158:7"] = { hunt = hunts[4].list[41] },
 	["30063:30162:7"] = { hunt = hunts[4].list[42] },
+	["30066:29888:7"] = { boss = bosses[223] },
+	["30066:29892:7"] = { boss = bosses[224] },
+	["30066:29898:7"] = { boss = bosses[163] },
+	["30066:29902:7"] = { boss = bosses[164] },
+	["30066:29908:7"] = { boss = bosses[103] },
+	["30066:29912:7"] = { boss = bosses[104] },
 	["30066:29918:7"] = { boss = bosses[43] },
 	["30066:29922:7"] = { boss = bosses[44] },
 	["30066:30038:7"] = { hunt = hunts[1].list[43] },
@@ -1136,6 +1485,12 @@ local hubPads = {
 	["30066:30132:7"] = { hunt = hunts[3].list[104] },
 	["30066:30158:7"] = { hunt = hunts[4].list[43] },
 	["30066:30162:7"] = { hunt = hunts[4].list[44] },
+	["30069:29888:7"] = { boss = bosses[225] },
+	["30069:29892:7"] = { boss = bosses[226] },
+	["30069:29898:7"] = { boss = bosses[165] },
+	["30069:29902:7"] = { boss = bosses[166] },
+	["30069:29908:7"] = { boss = bosses[105] },
+	["30069:29912:7"] = { boss = bosses[106] },
 	["30069:29918:7"] = { boss = bosses[45] },
 	["30069:29922:7"] = { boss = bosses[46] },
 	["30069:30038:7"] = { hunt = hunts[1].list[45] },
@@ -1154,6 +1509,12 @@ local hubPads = {
 	["30069:30132:7"] = { hunt = hunts[3].list[106] },
 	["30069:30158:7"] = { hunt = hunts[4].list[45] },
 	["30069:30162:7"] = { hunt = hunts[4].list[46] },
+	["30072:29888:7"] = { boss = bosses[227] },
+	["30072:29892:7"] = { boss = bosses[228] },
+	["30072:29898:7"] = { boss = bosses[167] },
+	["30072:29902:7"] = { boss = bosses[168] },
+	["30072:29908:7"] = { boss = bosses[107] },
+	["30072:29912:7"] = { boss = bosses[108] },
 	["30072:29918:7"] = { boss = bosses[47] },
 	["30072:29922:7"] = { boss = bosses[48] },
 	["30072:30038:7"] = { hunt = hunts[1].list[47] },
@@ -1173,6 +1534,12 @@ local hubPads = {
 	["30072:30158:7"] = { hunt = hunts[4].list[47] },
 	["30072:30162:7"] = { hunt = hunts[4].list[48] },
 	["30074:30060:7"] = { lobby = true },
+	["30075:29888:7"] = { boss = bosses[229] },
+	["30075:29892:7"] = { boss = bosses[230] },
+	["30075:29898:7"] = { boss = bosses[169] },
+	["30075:29902:7"] = { boss = bosses[170] },
+	["30075:29908:7"] = { boss = bosses[109] },
+	["30075:29912:7"] = { boss = bosses[110] },
 	["30075:29918:7"] = { boss = bosses[49] },
 	["30075:29922:7"] = { boss = bosses[50] },
 	["30075:30038:7"] = { hunt = hunts[1].list[49] },
@@ -1189,6 +1556,12 @@ local hubPads = {
 	["30075:30132:7"] = { hunt = hunts[3].list[110] },
 	["30075:30158:7"] = { hunt = hunts[4].list[49] },
 	["30075:30162:7"] = { hunt = hunts[4].list[50] },
+	["30078:29888:7"] = { boss = bosses[231] },
+	["30078:29892:7"] = { boss = bosses[232] },
+	["30078:29898:7"] = { boss = bosses[171] },
+	["30078:29902:7"] = { boss = bosses[172] },
+	["30078:29908:7"] = { boss = bosses[111] },
+	["30078:29912:7"] = { boss = bosses[112] },
 	["30078:29918:7"] = { boss = bosses[51] },
 	["30078:29922:7"] = { boss = bosses[52] },
 	["30078:30038:7"] = { hunt = hunts[1].list[51] },
@@ -1205,6 +1578,12 @@ local hubPads = {
 	["30078:30132:7"] = { hunt = hunts[3].list[112] },
 	["30078:30158:7"] = { hunt = hunts[4].list[51] },
 	["30078:30162:7"] = { hunt = hunts[4].list[52] },
+	["30081:29888:7"] = { boss = bosses[233] },
+	["30081:29892:7"] = { boss = bosses[234] },
+	["30081:29898:7"] = { boss = bosses[173] },
+	["30081:29902:7"] = { boss = bosses[174] },
+	["30081:29908:7"] = { boss = bosses[113] },
+	["30081:29912:7"] = { boss = bosses[114] },
 	["30081:29918:7"] = { boss = bosses[53] },
 	["30081:29922:7"] = { boss = bosses[54] },
 	["30081:30038:7"] = { hunt = hunts[1].list[53] },
@@ -1221,6 +1600,12 @@ local hubPads = {
 	["30081:30132:7"] = { hunt = hunts[3].list[114] },
 	["30081:30158:7"] = { hunt = hunts[4].list[53] },
 	["30081:30162:7"] = { hunt = hunts[4].list[54] },
+	["30084:29888:7"] = { boss = bosses[235] },
+	["30084:29892:7"] = { boss = bosses[236] },
+	["30084:29898:7"] = { boss = bosses[175] },
+	["30084:29902:7"] = { boss = bosses[176] },
+	["30084:29908:7"] = { boss = bosses[115] },
+	["30084:29912:7"] = { boss = bosses[116] },
 	["30084:29918:7"] = { boss = bosses[55] },
 	["30084:29922:7"] = { boss = bosses[56] },
 	["30084:30038:7"] = { hunt = hunts[1].list[55] },
@@ -1237,6 +1622,12 @@ local hubPads = {
 	["30084:30132:7"] = { hunt = hunts[3].list[116] },
 	["30084:30158:7"] = { hunt = hunts[4].list[55] },
 	["30084:30162:7"] = { hunt = hunts[4].list[56] },
+	["30087:29888:7"] = { boss = bosses[237] },
+	["30087:29892:7"] = { boss = bosses[238] },
+	["30087:29898:7"] = { boss = bosses[177] },
+	["30087:29902:7"] = { boss = bosses[178] },
+	["30087:29908:7"] = { boss = bosses[117] },
+	["30087:29912:7"] = { boss = bosses[118] },
 	["30087:29918:7"] = { boss = bosses[57] },
 	["30087:29922:7"] = { boss = bosses[58] },
 	["30087:30038:7"] = { hunt = hunts[1].list[57] },
@@ -1253,7 +1644,14 @@ local hubPads = {
 	["30087:30132:7"] = { hunt = hunts[3].list[118] },
 	["30087:30158:7"] = { hunt = hunts[4].list[57] },
 	["30087:30162:7"] = { hunt = hunts[4].list[58] },
+	["30090:29888:7"] = { boss = bosses[239] },
+	["30090:29892:7"] = { boss = bosses[240] },
+	["30090:29898:7"] = { boss = bosses[179] },
+	["30090:29902:7"] = { boss = bosses[180] },
+	["30090:29908:7"] = { boss = bosses[119] },
+	["30090:29912:7"] = { boss = bosses[120] },
 	["30090:29918:7"] = { boss = bosses[59] },
+	["30090:29922:7"] = { boss = bosses[60] },
 	["30090:30038:7"] = { hunt = hunts[1].list[59] },
 	["30090:30042:7"] = { hunt = hunts[1].list[60] },
 	["30090:30048:7"] = { hunt = hunts[1].list[119] },
@@ -1268,6 +1666,9 @@ local hubPads = {
 	["30090:30132:7"] = { hunt = hunts[3].list[120] },
 	["30090:30158:7"] = { hunt = hunts[4].list[59] },
 	["30090:30162:7"] = { hunt = hunts[4].list[60] },
+	["30092:29890:7"] = { lobby = true },
+	["30092:29900:7"] = { lobby = true },
+	["30092:29910:7"] = { lobby = true },
 	["30092:29920:7"] = { lobby = true },
 	["30092:30040:7"] = { lobby = true },
 	["30092:30050:7"] = { lobby = true },
@@ -1400,10 +1801,90 @@ local function travel(player, entry)
 	end
 end
 
+-- Arena: wspolna sala walk. Bossy bez dzwigni pojawiaja sie tu na zadanie, a questy
+-- bez wlasnej walki maja tu fale potworow; po wybiciu fali gracz trafia pod skrzynie.
+-- Odroczone sprawdzenia trzymaja tylko identyfikatory i numer walki (token),
+-- wiec po nowej walce albo zniknieciu gracza stare sprawdzenie nic nie robi.
+local arenaState = { token = 0, ids = {} }
+
+local function arenaClear()
+	for _, id in ipairs(arenaState.ids) do
+		local creature = Creature(id)
+		if creature then
+			creature:remove()
+		end
+	end
+	arenaState.ids = {}
+end
+
+local function inArena(player)
+	local pos = player:getPosition()
+	return pos.z == arenaCenter.z and math.abs(pos.x - arenaCenter.x) <= ARENA_RADIUS + 1 and math.abs(pos.y - arenaCenter.y) <= ARENA_RADIUS + 1
+end
+
+local function arenaCheck(playerId, token, label, chest, hint)
+	if token ~= arenaState.token then
+		return
+	end
+	local player = Player(playerId)
+	if not player or not inArena(player) then
+		arenaClear()
+		return
+	end
+	for _, id in ipairs(arenaState.ids) do
+		if Creature(id) then
+			addEvent(arenaCheck, 2000, playerId, token, label, chest, hint)
+			return
+		end
+	end
+	arenaState.ids = {}
+	if chest then
+		player:removeCondition(CONDITION_INFIGHT, CONDITIONID_DEFAULT)
+		travel(player, { label .. " - nagroda", chest[1], chest[2], chest[3], hint = hint })
+	else
+		player:sendTextMessage(MESSAGE_EVENT_ADVANCE, "Pokonano: " .. label .. ". Loot jest w zwlokach albo w skrzyni nagrod w swiatyni. Teleport powrotny stoi przy wejsciu na arene.")
+	end
+end
+
+local function arenaStart(player, entry)
+	if inFight(player) then
+		return
+	end
+	arenaClear()
+	arenaState.token = arenaState.token + 1
+	local token = arenaState.token
+	travel(player, { entry[1], arenaLanding.x, arenaLanding.y, arenaLanding.z })
+	if not inArena(player) then
+		return
+	end
+	local missing = 0
+	for _, wave in ipairs(entry.arena) do
+		for _ = 1, wave[2] do
+			local pos = Position(arenaCenter.x + math.random(-ARENA_RADIUS + 1, ARENA_RADIUS - 1), arenaCenter.y + math.random(-ARENA_RADIUS + 1, 2), arenaCenter.z)
+			local monster = Game.createMonster(wave[1], pos, true, true)
+			if monster then
+				arenaState.ids[#arenaState.ids + 1] = monster:getId()
+			else
+				missing = missing + 1
+			end
+		end
+	end
+	if #arenaState.ids == 0 then
+		player:sendCancelMessage("Nie udalo sie przywolac przeciwnika: " .. entry[1])
+		return
+	end
+	player:sendTextMessage(MESSAGE_EVENT_ADVANCE, "Arena: przeciwnikow " .. #arenaState.ids .. (missing > 0 and (" (nie pojawilo sie: " .. missing .. ")") or "") .. ". " .. (entry.chest and "Po wybiciu wszystkich trafisz pod skrzynie z nagroda." or "Walka zaczyna sie, gdy wyjdziesz ze strefy."))
+	addEvent(arenaCheck, 2000, player:getId(), token, entry[1], entry.chest, entry.hint)
+end
+
 local openMain
 
 -- Uruchamia cel z listy: zwykly teleport albo quest z wlasnym skryptem.
 local function startEntry(player, entry)
+	if entry.arena then
+		arenaStart(player, entry)
+		return
+	end
 	if not entry.func then
 		travel(player, entry)
 		return
@@ -1418,7 +1899,7 @@ end
 
 local function openList(player, title, list, back)
 	local window = ModalWindow({ title = title, message = "Wybierz cel i kliknij Wybierz." })
-	for i = 1, math.min(#list, 250) do
+	for i = 1, math.min(#list, 255) do
 		local entry = list[i]
 		window:addChoice(entry[1], function(target)
 			startEntry(target, entry)
@@ -1607,9 +2088,9 @@ function hubStep.onStepIn(creature, item, position, fromPosition)
 	elseif action.quest then
 		startEntry(player, action.quest)
 	elseif action.bosshall then
-		hubMove(player, hubBossHall, "Hala bossow: kazdy pad prowadzi pod dzwignie jednego bossa, za padem stoi jego podobizna. Pady na koncach wracaja do lobby.")
+		hubMove(player, hubBossHall, "Hala bossow: kazdy pad to jeden boss, za padem stoi jego podobizna. Najpierw bossy z dzwignia (teleport pod dzwignie), dalej bossy przywolywane na arenie, rosnaco wedlug HP. Kolejne rzedy sa na polnoc; pady na koncach rzedow i na poludniu wracaja do lobby.")
 	elseif action.boss then
-		travel(player, action.boss)
+		startEntry(player, action.boss)
 	end
 	return true
 end

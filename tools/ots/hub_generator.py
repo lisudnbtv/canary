@@ -120,27 +120,46 @@ for i, qm in enumerate(QM):
         floor(ix, iy)
         tiles[(ix, iy, Z)]['items'].append((iid, 0, None))
 
-# Hala bossow: korytarz dalej na polnoc, pad na bossa, za padem tabliczka i postac z wygladem bossa
-BL = json.load(open('boss_looks.json'))
+# Hala bossow: rzedy po 60 bossow (jak skrzydla expowisk), kregoslup po zachodniej stronie
+BL = json.load(open('bosses_all.json'))
 yb = Y0 - 80
-bslots = (len(BL) + 1) // 2
-b_end = X0 + 2 + PITCH * bslots
-for x in range(X0 + 1, b_end):
-    for y in range(yb - 1, yb + 2):
+brows = [BL[i:i + ROWCAP] for i in range(0, len(BL), ROWCAP)]
+yb_last = yb - ROW_GAP * (len(brows) - 1)
+for x in range(X0 - 3, X0):
+    for y in range(yb_last - 1, yb + 2):
         floor(x, y)
-pad(X0, yb, dict(kind='lobby')); board(X0 - 1, yb, 'Lobby\nPowrot do hubu', SIGN_A)
-pad(b_end, yb, dict(kind='lobby')); board(b_end + 1, yb, 'Lobby\nPowrot do hubu', SIGN_B)
-bosshall = [X0 + 1 + (b_end - X0) // 2, yb, Z]
+pad(X0 - 2, yb + 2, dict(kind='lobby')); board(X0 - 2, yb + 3, 'Lobby\nPowrot do hubu', SIGN_B)
+bosshall = [X0 - 2, yb, Z]
 boss_displays = []
-for i, b in enumerate(BL):
-    s, side = divmod(i, 2)
-    x = X0 + 3 + PITCH * s
-    sign = -1 if side == 0 else 1
-    nice = ' '.join(w[:1].upper() + w[1:] for w in b['name'].split(' '))
-    pad(x, yb + 2 * sign, dict(kind='boss', index=i))
-    board(x, yb + 3 * sign, nice + ('\nWymagany poziom: %d' % b['lvl'] if b['lvl'] else '\nBez wymaganego poziomu'), SIGN_A if sign < 0 else SIGN_B)
-    floor(x, yb + 4 * sign)
-    boss_displays.append(dict(name=nice, outfit=b['outfit'], pos=[x, yb + 4 * sign, Z], south=sign < 0))
+for r, row in enumerate(brows):
+    yc = yb - ROW_GAP * r
+    b_end = X0 + 2 + PITCH * ((len(row) + 1) // 2)
+    for x in range(X0, b_end):
+        for y in range(yc - 1, yc + 2):
+            floor(x, y)
+    pad(b_end, yc, dict(kind='lobby')); board(b_end + 1, yc, 'Lobby\nPowrot do hubu', SIGN_B)
+    for j, b in enumerate(row):
+        i = r * ROWCAP + j
+        s_, side = divmod(j, 2)
+        x = X0 + 3 + PITCH * s_
+        sign = -1 if side == 0 else 1
+        nice = ' '.join(w[:1].upper() + w[1:] for w in b['name'].split(' '))
+        pad(x, yc + 2 * sign, dict(kind='boss', index=i))
+        if b['pos']:
+            info = 'Dzwignia bossa. Wymagany poziom: %d' % b['lvl'] if b['lvl'] else 'Dzwignia bossa. Bez wymaganego poziomu'
+        else:
+            info = 'Arena. HP bossa: %d' % b['hp']
+        board(x, yc + 3 * sign, nice + '\n' + info, SIGN_A if sign < 0 else SIGN_B)
+        floor(x, yc + 4 * sign)
+        boss_displays.append(dict(name=nice, outfit=b['outfit'], pos=[x, yc + 4 * sign, Z], south=sign < 0))
+
+# Arena: wspolna sala walk dla bossow bez dzwigni i dla questow z walka. Poza PZ.
+ARENA_R = 10
+arena_center = [X0 + 13, Y0 - 170, Z]
+for x in range(arena_center[0] - ARENA_R, arena_center[0] + ARENA_R + 1):
+    for y in range(arena_center[1] - ARENA_R, arena_center[1] + ARENA_R + 1):
+        floor(x, y, pz=False)
+arena_landing = [arena_center[0], arena_center[1] + ARENA_R - 1, Z]
 
 # ---- zapis OTBM
 def esc(b):
@@ -192,7 +211,7 @@ with open('hub/ots-hub-monster.xml', 'w') as f:
 open('hub/ots-hub-house.xml', 'w').write('<?xml version="1.0"?>\n<houses />\n')
 open('hub/ots-hub-npc.xml', 'w').write('<?xml version="1.0"?>\n<npcs />\n')
 open('hub/ots-hub-zones.xml', 'w').write('<?xml version="1.0"?>\n<zones />\n')
-json.dump(dict(pads=pads, wings=wings, lobby=lobby_arrival, questhall=questhall, bosshall=bosshall, bossDisplays=boss_displays, npcs=npcs), open('hub.json', 'w'))
+json.dump(dict(pads=pads, wings=wings, lobby=lobby_arrival, questhall=questhall, bosshall=bosshall, bossDisplays=boss_displays, npcs=npcs, arena=dict(center=arena_center, landing=arena_landing, radius=ARENA_R)), open('hub.json', 'w'))
 xs = [k[0] for k in tiles]; ys = [k[1] for k in tiles]
 print('tiles', len(tiles), 'pads', len(pads), 'spawns', len(spawns), 'bbox', min(xs), min(ys), max(xs), max(ys), 'bytes', len(out))
 for w in wings: print(w)
