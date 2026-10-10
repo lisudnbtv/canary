@@ -161,6 +161,44 @@ for x in range(arena_center[0] - ARENA_R, arena_center[0] + ARENA_R + 1):
         floor(x, y, pz=False)
 arena_landing = [arena_center[0], arena_center[1] + ARENA_R - 1, Z]
 
+# ---- wystroj: szachownica z marmuru, drewno pod padami, trawa pod potworami i na arenie,
+# zywoplot z krzakow dookola (blokuje przejscie) i pas trawy z kwiatami i drzewami dalej.
+MARBLE_A, MARBLE_B, WOOD, GRASS = 409, 410, 408, 4515
+BUSHES = [3681, 3682, 3699]
+FLOWERS = [3654, 3655, 3656, 3657, 3658, 3659]
+TREES = [3614, 3615, 3617, 3618, 3620, 3621]
+def _h(x, y, salt=0):
+    v = (x * 73856093) ^ (y * 19349663) ^ (salt * 83492791)
+    return (v ^ (v >> 13)) & 0xFFFF
+for (x, y, z), t in tiles.items():
+    if not t['pz']:
+        t['ground'] = GRASS
+    elif any(i[0] == TELEPORT for i in t['items']):
+        t['ground'] = WOOD
+    else:
+        t['ground'] = MARBLE_A if (x + y) % 2 else MARBLE_B
+RIM = 4
+dist = {}
+for (x, y, z) in list(tiles):
+    for dx in range(-RIM, RIM + 1):
+        for dy in range(-RIM, RIM + 1):
+            k = (x + dx, y + dy, z)
+            if k in tiles:
+                continue
+            d = max(abs(dx), abs(dy))
+            if d < dist.get(k, 99):
+                dist[k] = d
+for (x, y, z), d in dist.items():
+    items = []
+    r = _h(x, y)
+    if d == 1:
+        items.append((BUSHES[r % len(BUSHES)], 0, None))
+    elif r % 100 < 22:
+        items.append((FLOWERS[_h(x, y, 1) % len(FLOWERS)], 0, None))
+    elif d >= 3 and r % 100 < 34:
+        items.append((TREES[_h(x, y, 2) % len(TREES)], 0, None))
+    tiles[(x, y, z)] = dict(pz=False, items=items, ground=GRASS)
+
 # ---- zapis OTBM
 def esc(b):
     out = bytearray()
@@ -186,7 +224,7 @@ for (bx, by, z), ts in sorted(areas.items()):
         body += b'\xfe\x05' + esc(bytes([ox, oy]))
         if t['pz']:
             body += esc(b'\x03' + struct.pack('<I', PZ))
-        body += esc(b'\x09' + struct.pack('<H', GROUND))
+        body += esc(b'\x09' + struct.pack('<H', t.get('ground', GROUND)))
         for iid, aid, text in t['items']:
             data = struct.pack('<H', iid)
             if aid:
