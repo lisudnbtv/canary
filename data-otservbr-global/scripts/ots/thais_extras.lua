@@ -70,7 +70,7 @@ local function redirectExits()
 	return changed
 end
 
-local function hasItemlocal function hasItem(pos, id)
+local function hasItem(pos, id)
 	local tile = Tile(pos)
 	return tile and tile:getItemById(id) ~= nil
 end
