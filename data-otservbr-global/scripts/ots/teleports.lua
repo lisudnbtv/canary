@@ -2086,6 +2086,7 @@ command:groupType("normal")
 command:register()
 
 -- Funkcje hubu sa zdefiniowane nizej, ale uzywa ich juz teleport w swiatyni.
+local HUB_MESSAGES = false
 local hubMove, hubLobbyMessage
 
 -- Teleport przy swiatyni w Thais
@@ -2130,7 +2131,9 @@ hubMove = function(player, destination, message)
 	player:teleportTo(destination)
 	from:sendMagicEffect(CONST_ME_POFF)
 	destination:sendMagicEffect(CONST_ME_TELEPORT)
-	if message then
+	-- Opisy przy przejsciach w hubie sa wylaczone (postacie i tabliczki mowia to samo).
+	-- Zmien HUB_MESSAGES na true, zeby wrocily.
+	if HUB_MESSAGES and message then
 		player:sendTextMessage(MESSAGE_EVENT_ADVANCE, message)
 	end
 end
