@@ -23,7 +23,6 @@ npcConfig.shop = {
 	{ itemName = "lasting exercise rod", clientId = 35289, buy = 500 },
 	{ itemName = "lasting exercise wand", clientId = 35290, buy = 500 },
 	{ itemName = "lasting exercise shield", clientId = 44067, buy = 500 },
-	{ itemName = "stamina extension", clientId = 36725, buy = 100 },
 	{ itemName = "exalted core", clientId = 37110, buy = 150 },
 	{ itemName = "sliver", clientId = 37109, buy = 15 },
 	{ itemName = "gold token", clientId = 22721, buy = 50 },

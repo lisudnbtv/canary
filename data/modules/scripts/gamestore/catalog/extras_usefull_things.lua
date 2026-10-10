@@ -68,6 +68,17 @@ return {
 			type = GameStore.OfferTypes.OFFER_TYPE_ITEM_UNIQUE,
 		},
 		{
+			-- OTS: pelna stamina (skrypt: data-otservbr-global/scripts/ots/stamina_refill.lua)
+			icons = { "Stamina_Extension.png" },
+			name = "Full Stamina Refill",
+			price = 500,
+			itemtype = 36725,
+			count = 1,
+			movable = true,
+			description = "<i>Restores your stamina to the full 42 hours.</i>\n\n{character}\n{storeinbox}\n{useicon} use it to refill your stamina completely\n{info} single use",
+			type = GameStore.OfferTypes.OFFER_TYPE_ITEM,
+		},
+		{
 			-- OTS: wieczne jedzenie (skrypt: data-otservbr-global/scripts/ots/infinite_food.lua)
 			icons = { "Party_Cake.png" },
 			name = "Infinite Food",
