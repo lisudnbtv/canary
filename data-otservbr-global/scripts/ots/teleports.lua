@@ -2321,7 +2321,7 @@ local function survivalNext(playerId, token)
 	survival.wave = survival.wave + 1
 	local wave = survival.wave
 	local name = survivalMonsters[math.min(#survivalMonsters, 6 + wave * 10)]
-	local amount = math.min(5 + math.floor(wave / 2), 16)
+	local amount = math.min(10 + wave, 32)
 	for _ = 1, amount do
 		local pos = Position(survivalCenter.x + math.random(-ARENA_RADIUS + 1, ARENA_RADIUS - 1), survivalCenter.y + math.random(-ARENA_RADIUS + 1, 2), survivalCenter.z)
 		local monster = name and Game.createMonster(name, pos, true, true)
@@ -2330,7 +2330,7 @@ local function survivalNext(playerId, token)
 		end
 	end
 	player:sendTextMessage(MESSAGE_EVENT_ADVANCE, string.format("Fala %d: %d x %s.", wave, #survival.ids, name or "?"))
-	addEvent(survivalCheck, 2000, playerId, token)
+	addEvent(survivalCheck, 1000, playerId, token)
 end
 
 survivalCheck = function(playerId, token)
@@ -2344,7 +2344,7 @@ survivalCheck = function(playerId, token)
 	end
 	for _, id in ipairs(survival.ids) do
 		if Creature(id) then
-			addEvent(survivalCheck, 2000, playerId, token)
+			addEvent(survivalCheck, 1000, playerId, token)
 			return
 		end
 	end
@@ -2362,8 +2362,8 @@ survivalCheck = function(playerId, token)
 		store:set("best", wave)
 		text = text .. " Nowy rekord!"
 	end
-	player:sendTextMessage(MESSAGE_EVENT_ADVANCE, text .. " Nastepna fala za 5 s.")
-	addEvent(survivalNext, 5000, playerId, token)
+	player:sendTextMessage(MESSAGE_EVENT_ADVANCE, text)
+	addEvent(survivalNext, 2500, playerId, token)
 end
 
 local function survivalEnter(player)
@@ -2378,8 +2378,8 @@ local function survivalEnter(player)
 		return
 	end
 	local best = tonumber(player:kv():scoped("ots-survival"):get("best")) or 0
-	player:sendTextMessage(MESSAGE_EVENT_ADVANCE, string.format("Fale: pierwsza fala za 5 s. Twoj rekord: fala %d. Wyjscie teleportem konczy bieg.", best))
-	addEvent(survivalNext, 5000, player:getId(), survival.token)
+	player:sendTextMessage(MESSAGE_EVENT_ADVANCE, string.format("Fale: pierwsza fala za chwile. Twoj rekord: fala %d. Wyjscie teleportem konczy bieg.", best))
+	addEvent(survivalNext, 2500, player:getId(), survival.token)
 end
 
 local openMain
