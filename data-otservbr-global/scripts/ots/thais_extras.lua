@@ -16,6 +16,35 @@ local objects = {
 	{ id = ITEM_REWARD_CHEST, pos = Position(32345, 32218, 7) },
 }
 
+-- Przejscie na wprost miedzy depo a swiatynia przez drewniany dom: sciany znikaja, zostaje podloga.
+local WOODEN_FLOOR = 408
+local passage = {
+	Position(32355, 32229, 7),
+	Position(32356, 32229, 7),
+	Position(32361, 32229, 7),
+}
+
+local function openPassage()
+	local opened = 0
+	for _, pos in ipairs(passage) do
+		local tile = Tile(pos)
+		if tile then
+			local items = tile:getItems() or {}
+			for index = #items, 1, -1 do
+				items[index]:remove()
+			end
+			local ground = tile:getGround()
+			if ground and ground:getId() ~= WOODEN_FLOOR then
+				ground:transform(WOODEN_FLOOR)
+			elseif not ground then
+				Game.createItem(WOODEN_FLOOR, 1, pos)
+			end
+			opened = opened + 1
+		end
+	end
+	return opened
+end
+
 local function hasItem(pos, id)
 	local tile = Tile(pos)
 	return tile and tile:getItemById(id) ~= nil
@@ -38,6 +67,7 @@ function place.onStartup()
 			placed = placed + 1
 		end
 	end
+	logger.info("[OTS Thais] Przejscie depo-swiatynia, otwarte pola: {}/{}", openPassage(), #passage)
 	logger.info("[OTS Thais] Imbu, skrzynie nagrod i przejscia swiatynia-depo: {}/{}", placed, #objects + #shortcuts)
 	return true
 end
