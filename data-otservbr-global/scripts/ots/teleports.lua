@@ -1291,29 +1291,65 @@ local function isSafe(creature)
 	return creature and safeTiles[key(creature:getPosition())] == true
 end
 
+local function placeReturn(pos)
+	local item = Game.createItem(ENTRY_ITEM_ID, 1, pos)
+	if item then
+		item:setActionId(RETURN_ACTION_ID)
+		return true
+	end
+	return false
+end
+
+-- Strefa 3x3 (raz) i teleport powrotny obok miejsca ladowania.
+-- Teleport: najpierw puste pole, a gdy takiego nie ma (wszedzie leza ozdoby,
+-- trawa itp.), dowolne pole, po ktorym da sie chodzic. Ponawiane przy kazdym
+-- teleporcie, dopoki sie nie uda.
 local function prepareSpot(center)
 	local id = key(center)
-	if preparedSpots[id] then
+	local spot = preparedSpots[id]
+	if not spot then
+		spot = { teleport = false }
+		preparedSpots[id] = spot
+		for dx = -1, 1 do
+			for dy = -1, 1 do
+				safeTiles[key(Position(center.x + dx, center.y + dy, center.z))] = true
+			end
+		end
+	end
+
+	if spot.teleport or not templePosition then
 		return
 	end
-	preparedSpots[id] = true
 
-	local returnPlaced = false
+	local fallback = nil
 	for dx = -1, 1 do
 		for dy = -1, 1 do
-			local pos = Position(center.x + dx, center.y + dy, center.z)
-			safeTiles[key(pos)] = true
-			if not returnPlaced and templePosition and not (dx == 0 and dy == 0) then
+			if not (dx == 0 and dy == 0) then
+				local pos = Position(center.x + dx, center.y + dy, center.z)
 				local tile = Tile(pos)
-				if tile and tile:isWalkable(false, false, true, true, false) and tile:getItemCount() == 0 then
-					local item = Game.createItem(ENTRY_ITEM_ID, 1, pos)
-					if item then
-						item:setActionId(RETURN_ACTION_ID)
-						returnPlaced = true
+				if tile then
+					local existing = tile:getItemById(ENTRY_ITEM_ID)
+					if existing and existing:getActionId() == RETURN_ACTION_ID then
+						spot.teleport = true
+						return
+					end
+					if tile:isWalkable(false, false, true, true, false) then
+						if tile:getItemCount() == 0 then
+							if placeReturn(pos) then
+								spot.teleport = true
+								return
+							end
+						elseif not fallback then
+							fallback = pos
+						end
 					end
 				end
 			end
 		end
+	end
+
+	if fallback and placeReturn(fallback) then
+		spot.teleport = true
 	end
 end
 
