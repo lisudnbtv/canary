@@ -185,6 +185,13 @@ for x in range(raid_center[0] - ARENA_R, raid_center[0] + ARENA_R + 1):
         floor(x, y, pz=False)
 raid_landing = [raid_center[0], raid_center[1] + ARENA_R - 1, Z]
 
+# Prawdziwe PZ 3x3 w miejscu ladowania na arenie i w salce losowego bossa:
+# potwor nie wejdzie i nie zaatakuje, dopoki gracz sam nie wyjdzie.
+for lx, ly, lz in (arena_landing, raid_landing):
+    for dx in (-1, 0, 1):
+        for dy in (-1, 0, 1):
+            tiles[(lx + dx, ly + dy, lz)]['pz'] = True
+
 # ---- wystroj: szachownica z marmuru, drewno pod padami, trawa pod potworami i na arenie,
 # zywoplot z krzakow dookola (blokuje przejscie) i pas trawy z kwiatami i drzewami dalej.
 MARBLE_A, MARBLE_B, WOOD, GRASS = 409, 410, 408, 4515
