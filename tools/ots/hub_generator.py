@@ -13,7 +13,11 @@ WING_GAP = 40
 PZ = 1
 
 d = json.load(open('data2.json'))
-tiers = [(100,'Exp do 100'),(300,'Exp 100-300'),(700,'Exp 300-700'),(1500,'Exp 700-1500'),(3000,'Exp 1500-3000'),(6000,'Exp 3000-6000'),(12000,'Exp 6000-12000'),(10**9,'Exp 12000+')]
+tiers = [(300, 'Low'), (1500, 'Medium'), (6000, 'Hard'), (10**9, 'Very Hard')]
+RANGES = ['exp do 300', 'exp 300-1500', 'exp 1500-6000', 'exp 6000+']
+TIER_LOOKS = [128, 131, 335, 541]   # Citizen, Knight, Warmaster, Demon
+ROWCAP = 60          # potworow w jednym rzedzie skrzydla
+ROW_GAP = 10
 lim = [t[0] for t in tiers]
 groups = [[] for _ in tiers]
 for i, h in enumerate(d['hunts']):
@@ -35,7 +39,7 @@ def board(x, y, text, item=SIGN_A):
     tiles[(x, y, Z)]['items'].append((item, 0, text))
 
 # Lobby: platforma z rzedem padow do skrzydel (polnoc) i padem do Thais (poludnie)
-lobby_w = 2 + PITCH * len(tiers)
+lobby_w = 26
 for x in range(X0, X0 + lobby_w + 1):
     for y in range(Y0 - 1, Y0 + 2):
         floor(x, y)
@@ -50,30 +54,42 @@ board(X0 + lobby_w // 2 + 4, Y0 + 3, 'Questy\nHala questow z nagrodami', SIGN_B)
 board(X0 + lobby_w // 2 - 4, Y0 + 3, 'Stroje\nQuesty na stroje z dodatkami', SIGN_B)
 
 wings = []
+npcs = []
 for t, (g, (_, label)) in enumerate(zip(groups, tiers)):
-    yc = Y0 + WING_GAP * (t + 1)
-    slots = (len(g) + 1) // 2
-    x_end = X0 + 2 + PITCH * slots
-    for x in range(X0 + 1, x_end):
-        for y in range(yc - 1, yc + 2):
+    yc0 = Y0 + WING_GAP * (t + 1)
+    rows = [g[i:i + ROWCAP] for i in range(0, len(g), ROWCAP)]
+    # kregoslup po zachodniej stronie laczy rzedy skrzydla
+    y_last = yc0 + ROW_GAP * (len(rows) - 1)
+    for x in range(X0 - 3, X0):
+        for y in range(yc0 - 1, y_last + 2):
             floor(x, y)
-    # pady powrotne do lobby na obu koncach korytarza
-    pad(X0, yc, dict(kind='lobby'))
-    pad(x_end, yc, dict(kind='lobby'))
-    board(X0 - 1, yc, 'Lobby\nPowrot do wyboru skrzydla', SIGN_A)
-    board(x_end + 1, yc, 'Lobby\nPowrot do wyboru skrzydla', SIGN_B)
-    arrival = [X0 + 1 + (x_end - X0) // 2, yc, Z]
-    for i, h in enumerate(g):
-        s, side = divmod(i, 2)
-        x = X0 + 3 + PITCH * s
-        sign = -1 if side == 0 else 1
-        pad(x, yc + 2 * sign, dict(kind='hunt', tier=t, index=g.index(h)))
-        board(x, yc + 3 * sign, '%s\n%d exp, %d potworow w okolicy' % (h['name'], h['exp'], h['n']), SIGN_A if sign < 0 else SIGN_B)
-        floor(x, yc + 4 * sign, pz=False)       # wysepka potwora, poza PZ
-        spawns.append((h['name'], x, yc + 4 * sign))
-    wings.append(dict(label=label, arrival=arrival, count=len(g)))
-    pad(X0 + 2 + PITCH * t, Y0 - 2, dict(kind='wing', wing=t))
-    board(X0 + 2 + PITCH * t, Y0 - 3, '%s\n%d potworow' % (label, len(g)))
+    pad(X0 - 2, yc0 - 2, dict(kind='lobby'))
+    board(X0 - 2, yc0 - 3, 'Lobby\nPowrot do wyboru poziomu', SIGN_A)
+    arrival = [X0 - 2, yc0, Z]
+    for r, row in enumerate(rows):
+        yc = yc0 + ROW_GAP * r
+        slots = (len(row) + 1) // 2
+        x_end = X0 + 2 + PITCH * slots
+        for x in range(X0, x_end):
+            for y in range(yc - 1, yc + 2):
+                floor(x, y)
+        pad(x_end, yc, dict(kind='lobby'))
+        board(x_end + 1, yc, 'Lobby\nPowrot do wyboru poziomu', SIGN_B)
+        for i, h in enumerate(row):
+            s, side = divmod(i, 2)
+            x = X0 + 3 + PITCH * s
+            sign = -1 if side == 0 else 1
+            pad(x, yc + 2 * sign, dict(kind='hunt', tier=t, index=g.index(h)))
+            board(x, yc + 3 * sign, '%s\n%d exp, %d potworow w okolicy' % (h['name'], h['exp'], h['n']), SIGN_A if sign < 0 else SIGN_B)
+            floor(x, yc + 4 * sign, pz=False)       # wysepka potwora, poza PZ
+            spawns.append((h['name'], x, yc + 4 * sign))
+    wings.append(dict(label='%s (%s)' % (label, RANGES[t]), arrival=arrival, count=len(g)))
+    # lobby: pad poziomu, za nim tabliczka, obok postac z nazwa poziomu
+    lx = X0 + 4 + 6 * t
+    pad(lx, Y0 - 2, dict(kind='wing', wing=t))
+    board(lx, Y0 - 3, '%s\n%s\n%d potworow' % (label, RANGES[t], len(g)))
+    floor(lx + 1, Y0 - 2)
+    npcs.append(dict(name=label, outfit={'lookType': TIER_LOOKS[t], 'lookHead': 78, 'lookBody': 69, 'lookLegs': 58, 'lookFeet': 76, 'lookAddons': 3}, pos=[lx + 1, Y0 - 2, Z], south=True))
 
 # Hala questow: korytarz na polnoc od lobby, pad na quest, za padem tabliczka i nagrody
 QM = json.load(open('quests_menu.json'))
@@ -171,7 +187,7 @@ with open('hub/ots-hub-monster.xml', 'w') as f:
 open('hub/ots-hub-house.xml', 'w').write('<?xml version="1.0"?>\n<houses />\n')
 open('hub/ots-hub-npc.xml', 'w').write('<?xml version="1.0"?>\n<npcs />\n')
 open('hub/ots-hub-zones.xml', 'w').write('<?xml version="1.0"?>\n<zones />\n')
-json.dump(dict(pads=pads, wings=wings, lobby=lobby_arrival, questhall=questhall, bosshall=bosshall, bossDisplays=boss_displays), open('hub.json', 'w'))
+json.dump(dict(pads=pads, wings=wings, lobby=lobby_arrival, questhall=questhall, bosshall=bosshall, bossDisplays=boss_displays, npcs=npcs), open('hub.json', 'w'))
 xs = [k[0] for k in tiles]; ys = [k[1] for k in tiles]
 print('tiles', len(tiles), 'pads', len(pads), 'spawns', len(spawns), 'bbox', min(xs), min(ys), max(xs), max(ys), 'bytes', len(out))
 for w in wings: print(w)

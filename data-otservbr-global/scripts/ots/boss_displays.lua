@@ -2,6 +2,10 @@
 -- Kazda to NPC z wygladem bossa; stoi za padem prowadzacym pod jego dzwignie.
 
 local displays = {
+	{ name = "Low", outfit = { lookType = 128, lookHead = 78, lookBody = 69, lookLegs = 58, lookFeet = 76, lookAddons = 3 }, position = Position(30005, 29998, 7), faceSouth = true },
+	{ name = "Medium", outfit = { lookType = 131, lookHead = 78, lookBody = 69, lookLegs = 58, lookFeet = 76, lookAddons = 3 }, position = Position(30011, 29998, 7), faceSouth = true },
+	{ name = "Hard", outfit = { lookType = 335, lookHead = 78, lookBody = 69, lookLegs = 58, lookFeet = 76, lookAddons = 3 }, position = Position(30017, 29998, 7), faceSouth = true },
+	{ name = "Very Hard", outfit = { lookType = 541, lookHead = 78, lookBody = 69, lookLegs = 58, lookFeet = 76, lookAddons = 3 }, position = Position(30023, 29998, 7), faceSouth = true },
 	{ name = "Boss Ahau", outfit = { lookType = 1591, lookHead = 0, lookBody = 0, lookLegs = 0, lookFeet = 0, lookAddons = 0, lookMount = 0 }, position = Position(30003, 29916, 7), faceSouth = true },
 	{ name = "Boss Anomaly", outfit = { lookType = 876, lookHead = 38, lookBody = 79, lookLegs = 76, lookFeet = 79, lookAddons = 1, lookMount = 0 }, position = Position(30003, 29924, 7), faceSouth = false },
 	{ name = "Boss Ascending Ferumbras", outfit = { lookType = 844, lookHead = 0, lookBody = 0, lookLegs = 0, lookFeet = 0, lookAddons = 0, lookMount = 0 }, position = Position(30006, 29916, 7), faceSouth = true },
@@ -91,7 +95,7 @@ function place.onStartup()
 			placed = placed + 1
 		end
 	end
-	logger.info("[OTS bossy] Podobizny bossow: {}/{}", placed, #displays)
+	logger.info("[OTS hub] Postacie w hubie (poziomy i bossy): {}/{}", placed, #displays)
 	return true
 end
 
