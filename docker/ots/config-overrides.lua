@@ -35,3 +35,6 @@ toggleGoldPouchAllowAnything = true
 -- Autoloot (!autoloot all/on/off) i zloto z potworow od razu na konto w banku
 autoLoot = true
 autoBank = true
+
+-- Maszyna do imbu dziala bez questa Forgotten Knowledge
+toggleImbuementShrineStorage = false
