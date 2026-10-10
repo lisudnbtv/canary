@@ -26,3 +26,4 @@ services:
       - '../data-otservbr-global/world/custom/ots-outfits-npc.xml:/canary/data-otservbr-global/world/custom/ots-outfits-npc.xml:ro'
       - '../data-otservbr-global/world/custom/ots-outfits-zones.xml:/canary/data-otservbr-global/world/custom/ots-outfits-zones.xml:ro'
       - '../data/XML/imbuements.xml:/canary/data/XML/imbuements.xml:ro'
+      - '../data/items/items.xml:/canary/data/items/items.xml:ro'
