@@ -39,9 +39,9 @@ autoBank = true
 -- Maszyna do imbu dziala bez questa Forgotten Knowledge
 toggleImbuementShrineStorage = false
 
--- Exhaust czarow: wszystkie cooldowny dzielone przez 4 (2 s -> 0,5 s). Wyzsza wartosc nie ma sensu:
+-- Exhaust czarow: wszystkie cooldowny dzielone przez 2 (2 s -> 1 s). Wyzsza wartosc nie ma sensu:
 -- ten sam mnoznik przyspiesza tiki buffow regeneracji i przy bardzo duzej wartosci spadlyby do zera.
-rateSpellCooldown = 4.0
+rateSpellCooldown = 2.0
 
 -- Komenda !emote on/off (czary jako emote zamiast tekstu)
 emoteSpells = true
