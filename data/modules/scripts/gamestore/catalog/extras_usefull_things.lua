@@ -57,6 +57,17 @@ return {
 			type = GameStore.OfferTypes.OFFER_TYPE_CHARGES,
 		},
 		{
+			-- OTS: teleport do swiatyni w Thais (skrypt: data-otservbr-global/scripts/ots/temple_crystal.lua)
+			icons = { "Temple_Teleport.png" },
+			name = "Thais Teleport Crystal",
+			price = 1500,
+			itemtype = 16242,
+			count = 1,
+			movable = true,
+			description = "<i>Teleports you instantly to the temple of Thais.</i>\n\n{character}\n{storeinbox}\n{once}\n{useicon} use it to teleport to the temple of Thais\n{info} unlimited uses, works anywhere, also outside protection zones and during a fight",
+			type = GameStore.OfferTypes.OFFER_TYPE_ITEM_UNIQUE,
+		},
+		{
 			-- OTS: wieczne jedzenie (skrypt: data-otservbr-global/scripts/ots/infinite_food.lua)
 			icons = { "Party_Cake.png" },
 			name = "Infinite Food",
