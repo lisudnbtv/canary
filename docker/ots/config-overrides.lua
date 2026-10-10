@@ -7,8 +7,8 @@ removeChargesFromPotions = false
 removeWeaponAmmunition = false
 removeWeaponCharges = false
 
--- Szybki atak: 2.0 = dwa razy szybciej niz standard (atak co 1 s zamiast co 2 s)
-rateAttackSpeed = 2.0
+-- Szybki atak: 4.0 = cztery razy szybciej niz standard (atak co 0,5 s zamiast co 2 s)
+rateAttackSpeed = 4.0
 classicAttackSpeed = true
 
 -- Darmowe konto premium dla wszystkich
