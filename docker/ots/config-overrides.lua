@@ -14,8 +14,9 @@ classicAttackSpeed = true
 -- Darmowe konto premium dla wszystkich
 freePremium = true
 
--- Mnozniki (stale, bez progow poziomowych z data/stages.lua)
-rateUseStages = false
+-- Mnozniki. Exp idzie progami z pliku scripts/ots/stages.lua (tam tez skille x100 i magic x90);
+-- rateSkill i rateMagic ponizej sa tylko wartoscia zapasowa.
+rateUseStages = true
 rateLoot = 10
 rateSpawn = 15
 rateSkill = 100
