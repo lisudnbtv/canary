@@ -43,7 +43,34 @@ local function openPassage()
 	return opened
 end
 
-local function hasItem(pos, id)
+-- Ruprecht (wymiana christmas tokenow) dodatkowo na pierwszym pietrze depo w Thais.
+local RUPRECHT_POSITION = Position(32350, 32222, 6)
+
+-- Teleporty wyjsciowe z questow, ktore maja prowadzic prosto do swiatyni w Thais.
+local templeExits = {
+	Position(32219, 31913, 15), -- Queen of the Banshees, miedzy skrzyniami z nagroda
+}
+
+local function redirectExits()
+	local town = Town("Thais")
+	local temple = town and town:getTemplePosition()
+	local changed = 0
+	if not temple then
+		return changed
+	end
+	for _, pos in ipairs(templeExits) do
+		local tile = Tile(pos)
+		local item = tile and tile:getItemById(MAGIC_FORCEFIELD)
+		-- przedmiot z mapy bedacy teleportem ma od razu metody teleportu
+		if item and item.setDestination then
+			item:setDestination(temple)
+			changed = changed + 1
+		end
+	end
+	return changed
+end
+
+local function hasItemlocal function hasItem(pos, id)
 	local tile = Tile(pos)
 	return tile and tile:getItemById(id) ~= nil
 end
@@ -66,6 +93,11 @@ function place.onStartup()
 		end
 	end
 	logger.info("[OTS Thais] Przejscie depo-swiatynia, otwarte pola: {}/{}", openPassage(), #passage)
+	local ruprecht = Game.createNpc("Ruprecht", RUPRECHT_POSITION, false, true)
+	if ruprecht then
+		ruprecht:setMasterPos(RUPRECHT_POSITION)
+	end
+	logger.info("[OTS Thais] Ruprecht w depo: {}, teleporty questow do swiatyni: {}/{}", ruprecht and "tak" or "nie", redirectExits(), #templeExits)
 	logger.info("[OTS Thais] Imbu, skrzynie nagrod i przejscia swiatynia-depo: {}/{}", placed, #objects + #shortcuts)
 	return true
 end
