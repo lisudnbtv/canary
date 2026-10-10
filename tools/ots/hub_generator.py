@@ -59,11 +59,15 @@ board(X0 + lobby_w // 2 - 8, Y0 + 3, 'Losowy Boss\nMocny boss z dobrym lootem, n
 floor(X0 + lobby_w // 2 - 7, Y0 + 2)
 raid_npc = [X0 + lobby_w // 2 - 7, Y0 + 2, Z]
 
+# Mounty: pad w lobby do hali wierzchowcow (osobna mapa)
+pad(X0 + lobby_w // 2 + 12, Y0 + 2, dict(kind='mounts'))
+board(X0 + lobby_w // 2 + 12, Y0 + 3, 'Mounty\nWierzchowce do oswojenia', SIGN_B)
+
 wings = []
 npcs = []
 # postacie przy padach po poludniowej stronie lobby
 _mid = X0 + lobby_w // 2
-for dx, name, look in ((-4, 'Outfity', 273), (0, 'Thais', 128), (4, 'Questy', 367), (8, 'Bossy', 289)):
+for dx, name, look in ((-4, 'Outfity', 273), (0, 'Thais', 128), (4, 'Questy', 367), (8, 'Bossy', 289), (12, 'Mounty', 145)):
     floor(_mid + dx + 1, Y0 + 2)
     npcs.append(dict(name=name, outfit={'lookType': look, 'lookHead': 78, 'lookBody': 69, 'lookLegs': 58, 'lookFeet': 76, 'lookAddons': 3}, pos=[_mid + dx + 1, Y0 + 2, Z], south=False))
 FLOOR_N = 24         # pozycji na jednym pietrze (2 rzedy po 12)

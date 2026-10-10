@@ -1,0 +1,528 @@
+<?xml version="1.0"?>
+<monsters>
+	<monster centerx="29502" centery="31062" centerz="7" radius="2">
+		<monster name="Bear" x="0" y="0" z="7" spawntime="900" />
+	</monster>
+	<monster centerx="29506" centery="31062" centerz="7" radius="2">
+		<monster name="Bear" x="0" y="0" z="7" spawntime="900" />
+	</monster>
+	<monster centerx="29504" centery="31064" centerz="7" radius="2">
+		<monster name="Bear" x="0" y="0" z="7" spawntime="900" />
+	</monster>
+	<monster centerx="29502" centery="31066" centerz="7" radius="2">
+		<monster name="Bear" x="0" y="0" z="7" spawntime="900" />
+	</monster>
+	<monster centerx="29506" centery="31066" centerz="7" radius="2">
+		<monster name="Bear" x="0" y="0" z="7" spawntime="900" />
+	</monster>
+	<monster centerx="29526" centery="31062" centerz="7" radius="2">
+		<monster name="Black Sheep" x="0" y="0" z="7" spawntime="900" />
+	</monster>
+	<monster centerx="29530" centery="31062" centerz="7" radius="2">
+		<monster name="Black Sheep" x="0" y="0" z="7" spawntime="900" />
+	</monster>
+	<monster centerx="29528" centery="31064" centerz="7" radius="2">
+		<monster name="Black Sheep" x="0" y="0" z="7" spawntime="900" />
+	</monster>
+	<monster centerx="29526" centery="31066" centerz="7" radius="2">
+		<monster name="Black Sheep" x="0" y="0" z="7" spawntime="900" />
+	</monster>
+	<monster centerx="29530" centery="31066" centerz="7" radius="2">
+		<monster name="Black Sheep" x="0" y="0" z="7" spawntime="900" />
+	</monster>
+	<monster centerx="29550" centery="31062" centerz="7" radius="2">
+		<monster name="Boar" x="0" y="0" z="7" spawntime="900" />
+	</monster>
+	<monster centerx="29554" centery="31062" centerz="7" radius="2">
+		<monster name="Boar" x="0" y="0" z="7" spawntime="900" />
+	</monster>
+	<monster centerx="29552" centery="31064" centerz="7" radius="2">
+		<monster name="Boar" x="0" y="0" z="7" spawntime="900" />
+	</monster>
+	<monster centerx="29550" centery="31066" centerz="7" radius="2">
+		<monster name="Boar" x="0" y="0" z="7" spawntime="900" />
+	</monster>
+	<monster centerx="29554" centery="31066" centerz="7" radius="2">
+		<monster name="Boar" x="0" y="0" z="7" spawntime="900" />
+	</monster>
+	<monster centerx="29574" centery="31062" centerz="7" radius="2">
+		<monster name="Crustacea Gigantica" x="0" y="0" z="7" spawntime="900" />
+	</monster>
+	<monster centerx="29578" centery="31062" centerz="7" radius="2">
+		<monster name="Crustacea Gigantica" x="0" y="0" z="7" spawntime="900" />
+	</monster>
+	<monster centerx="29576" centery="31064" centerz="7" radius="2">
+		<monster name="Crustacea Gigantica" x="0" y="0" z="7" spawntime="900" />
+	</monster>
+	<monster centerx="29574" centery="31066" centerz="7" radius="2">
+		<monster name="Crustacea Gigantica" x="0" y="0" z="7" spawntime="900" />
+	</monster>
+	<monster centerx="29578" centery="31066" centerz="7" radius="2">
+		<monster name="Crustacea Gigantica" x="0" y="0" z="7" spawntime="900" />
+	</monster>
+	<monster centerx="29598" centery="31062" centerz="7" radius="2">
+		<monster name="Crystal Wolf" x="0" y="0" z="7" spawntime="900" />
+	</monster>
+	<monster centerx="29602" centery="31062" centerz="7" radius="2">
+		<monster name="Crystal Wolf" x="0" y="0" z="7" spawntime="900" />
+	</monster>
+	<monster centerx="29600" centery="31064" centerz="7" radius="2">
+		<monster name="Crystal Wolf" x="0" y="0" z="7" spawntime="900" />
+	</monster>
+	<monster centerx="29598" centery="31066" centerz="7" radius="2">
+		<monster name="Crystal Wolf" x="0" y="0" z="7" spawntime="900" />
+	</monster>
+	<monster centerx="29602" centery="31066" centerz="7" radius="2">
+		<monster name="Crystal Wolf" x="0" y="0" z="7" spawntime="900" />
+	</monster>
+	<monster centerx="29622" centery="31062" centerz="7" radius="2">
+		<monster name="Donkey" x="0" y="0" z="7" spawntime="900" />
+	</monster>
+	<monster centerx="29626" centery="31062" centerz="7" radius="2">
+		<monster name="Donkey" x="0" y="0" z="7" spawntime="900" />
+	</monster>
+	<monster centerx="29624" centery="31064" centerz="7" radius="2">
+		<monster name="Donkey" x="0" y="0" z="7" spawntime="900" />
+	</monster>
+	<monster centerx="29622" centery="31066" centerz="7" radius="2">
+		<monster name="Donkey" x="0" y="0" z="7" spawntime="900" />
+	</monster>
+	<monster centerx="29626" centery="31066" centerz="7" radius="2">
+		<monster name="Donkey" x="0" y="0" z="7" spawntime="900" />
+	</monster>
+	<monster centerx="29646" centery="31062" centerz="7" radius="2">
+		<monster name="Dragonling" x="0" y="0" z="7" spawntime="900" />
+	</monster>
+	<monster centerx="29650" centery="31062" centerz="7" radius="2">
+		<monster name="Dragonling" x="0" y="0" z="7" spawntime="900" />
+	</monster>
+	<monster centerx="29648" centery="31064" centerz="7" radius="2">
+		<monster name="Dragonling" x="0" y="0" z="7" spawntime="900" />
+	</monster>
+	<monster centerx="29646" centery="31066" centerz="7" radius="2">
+		<monster name="Dragonling" x="0" y="0" z="7" spawntime="900" />
+	</monster>
+	<monster centerx="29650" centery="31066" centerz="7" radius="2">
+		<monster name="Dragonling" x="0" y="0" z="7" spawntime="900" />
+	</monster>
+	<monster centerx="29670" centery="31062" centerz="7" radius="2">
+		<monster name="Draptor" x="0" y="0" z="7" spawntime="900" />
+	</monster>
+	<monster centerx="29674" centery="31062" centerz="7" radius="2">
+		<monster name="Draptor" x="0" y="0" z="7" spawntime="900" />
+	</monster>
+	<monster centerx="29672" centery="31064" centerz="7" radius="2">
+		<monster name="Draptor" x="0" y="0" z="7" spawntime="900" />
+	</monster>
+	<monster centerx="29670" centery="31066" centerz="7" radius="2">
+		<monster name="Draptor" x="0" y="0" z="7" spawntime="900" />
+	</monster>
+	<monster centerx="29674" centery="31066" centerz="7" radius="2">
+		<monster name="Draptor" x="0" y="0" z="7" spawntime="900" />
+	</monster>
+	<monster centerx="29694" centery="31062" centerz="7" radius="2">
+		<monster name="Dromedary" x="0" y="0" z="7" spawntime="900" />
+	</monster>
+	<monster centerx="29698" centery="31062" centerz="7" radius="2">
+		<monster name="Dromedary" x="0" y="0" z="7" spawntime="900" />
+	</monster>
+	<monster centerx="29696" centery="31064" centerz="7" radius="2">
+		<monster name="Dromedary" x="0" y="0" z="7" spawntime="900" />
+	</monster>
+	<monster centerx="29694" centery="31066" centerz="7" radius="2">
+		<monster name="Dromedary" x="0" y="0" z="7" spawntime="900" />
+	</monster>
+	<monster centerx="29698" centery="31066" centerz="7" radius="2">
+		<monster name="Dromedary" x="0" y="0" z="7" spawntime="900" />
+	</monster>
+	<monster centerx="29718" centery="31062" centerz="7" radius="2">
+		<monster name="Enraged White Deer" x="0" y="0" z="7" spawntime="900" />
+	</monster>
+	<monster centerx="29722" centery="31062" centerz="7" radius="2">
+		<monster name="Enraged White Deer" x="0" y="0" z="7" spawntime="900" />
+	</monster>
+	<monster centerx="29720" centery="31064" centerz="7" radius="2">
+		<monster name="Enraged White Deer" x="0" y="0" z="7" spawntime="900" />
+	</monster>
+	<monster centerx="29718" centery="31066" centerz="7" radius="2">
+		<monster name="Enraged White Deer" x="0" y="0" z="7" spawntime="900" />
+	</monster>
+	<monster centerx="29722" centery="31066" centerz="7" radius="2">
+		<monster name="Enraged White Deer" x="0" y="0" z="7" spawntime="900" />
+	</monster>
+	<monster centerx="29502" centery="31086" centerz="7" radius="2">
+		<monster name="Flying Book" x="0" y="0" z="7" spawntime="900" />
+	</monster>
+	<monster centerx="29506" centery="31086" centerz="7" radius="2">
+		<monster name="Flying Book" x="0" y="0" z="7" spawntime="900" />
+	</monster>
+	<monster centerx="29504" centery="31088" centerz="7" radius="2">
+		<monster name="Flying Book" x="0" y="0" z="7" spawntime="900" />
+	</monster>
+	<monster centerx="29502" centery="31090" centerz="7" radius="2">
+		<monster name="Flying Book" x="0" y="0" z="7" spawntime="900" />
+	</monster>
+	<monster centerx="29506" centery="31090" centerz="7" radius="2">
+		<monster name="Flying Book" x="0" y="0" z="7" spawntime="900" />
+	</monster>
+	<monster centerx="29526" centery="31086" centerz="7" radius="2">
+		<monster name="Gravedigger" x="0" y="0" z="7" spawntime="900" />
+	</monster>
+	<monster centerx="29530" centery="31086" centerz="7" radius="2">
+		<monster name="Gravedigger" x="0" y="0" z="7" spawntime="900" />
+	</monster>
+	<monster centerx="29528" centery="31088" centerz="7" radius="2">
+		<monster name="Gravedigger" x="0" y="0" z="7" spawntime="900" />
+	</monster>
+	<monster centerx="29526" centery="31090" centerz="7" radius="2">
+		<monster name="Gravedigger" x="0" y="0" z="7" spawntime="900" />
+	</monster>
+	<monster centerx="29530" centery="31090" centerz="7" radius="2">
+		<monster name="Gravedigger" x="0" y="0" z="7" spawntime="900" />
+	</monster>
+	<monster centerx="29550" centery="31086" centerz="7" radius="2">
+		<monster name="Gryphon" x="0" y="0" z="7" spawntime="900" />
+	</monster>
+	<monster centerx="29554" centery="31086" centerz="7" radius="2">
+		<monster name="Gryphon" x="0" y="0" z="7" spawntime="900" />
+	</monster>
+	<monster centerx="29552" centery="31088" centerz="7" radius="2">
+		<monster name="Gryphon" x="0" y="0" z="7" spawntime="900" />
+	</monster>
+	<monster centerx="29550" centery="31090" centerz="7" radius="2">
+		<monster name="Gryphon" x="0" y="0" z="7" spawntime="900" />
+	</monster>
+	<monster centerx="29554" centery="31090" centerz="7" radius="2">
+		<monster name="Gryphon" x="0" y="0" z="7" spawntime="900" />
+	</monster>
+	<monster centerx="29574" centery="31086" centerz="7" radius="2">
+		<monster name="Hibernal Moth" x="0" y="0" z="7" spawntime="900" />
+	</monster>
+	<monster centerx="29578" centery="31086" centerz="7" radius="2">
+		<monster name="Hibernal Moth" x="0" y="0" z="7" spawntime="900" />
+	</monster>
+	<monster centerx="29576" centery="31088" centerz="7" radius="2">
+		<monster name="Hibernal Moth" x="0" y="0" z="7" spawntime="900" />
+	</monster>
+	<monster centerx="29574" centery="31090" centerz="7" radius="2">
+		<monster name="Hibernal Moth" x="0" y="0" z="7" spawntime="900" />
+	</monster>
+	<monster centerx="29578" centery="31090" centerz="7" radius="2">
+		<monster name="Hibernal Moth" x="0" y="0" z="7" spawntime="900" />
+	</monster>
+	<monster centerx="29598" centery="31086" centerz="7" radius="2">
+		<monster name="Ironblight" x="0" y="0" z="7" spawntime="900" />
+	</monster>
+	<monster centerx="29602" centery="31086" centerz="7" radius="2">
+		<monster name="Ironblight" x="0" y="0" z="7" spawntime="900" />
+	</monster>
+	<monster centerx="29600" centery="31088" centerz="7" radius="2">
+		<monster name="Ironblight" x="0" y="0" z="7" spawntime="900" />
+	</monster>
+	<monster centerx="29598" centery="31090" centerz="7" radius="2">
+		<monster name="Ironblight" x="0" y="0" z="7" spawntime="900" />
+	</monster>
+	<monster centerx="29602" centery="31090" centerz="7" radius="2">
+		<monster name="Ironblight" x="0" y="0" z="7" spawntime="900" />
+	</monster>
+	<monster centerx="29622" centery="31086" centerz="7" radius="2">
+		<monster name="Lacewing Moth" x="0" y="0" z="7" spawntime="900" />
+	</monster>
+	<monster centerx="29626" centery="31086" centerz="7" radius="2">
+		<monster name="Lacewing Moth" x="0" y="0" z="7" spawntime="900" />
+	</monster>
+	<monster centerx="29624" centery="31088" centerz="7" radius="2">
+		<monster name="Lacewing Moth" x="0" y="0" z="7" spawntime="900" />
+	</monster>
+	<monster centerx="29622" centery="31090" centerz="7" radius="2">
+		<monster name="Lacewing Moth" x="0" y="0" z="7" spawntime="900" />
+	</monster>
+	<monster centerx="29626" centery="31090" centerz="7" radius="2">
+		<monster name="Lacewing Moth" x="0" y="0" z="7" spawntime="900" />
+	</monster>
+	<monster centerx="29646" centery="31086" centerz="7" radius="2">
+		<monster name="Ladybug" x="0" y="0" z="7" spawntime="900" />
+	</monster>
+	<monster centerx="29650" centery="31086" centerz="7" radius="2">
+		<monster name="Ladybug" x="0" y="0" z="7" spawntime="900" />
+	</monster>
+	<monster centerx="29648" centery="31088" centerz="7" radius="2">
+		<monster name="Ladybug" x="0" y="0" z="7" spawntime="900" />
+	</monster>
+	<monster centerx="29646" centery="31090" centerz="7" radius="2">
+		<monster name="Ladybug" x="0" y="0" z="7" spawntime="900" />
+	</monster>
+	<monster centerx="29650" centery="31090" centerz="7" radius="2">
+		<monster name="Ladybug" x="0" y="0" z="7" spawntime="900" />
+	</monster>
+	<monster centerx="29670" centery="31086" centerz="7" radius="2">
+		<monster name="Magma Crawler" x="0" y="0" z="7" spawntime="900" />
+	</monster>
+	<monster centerx="29674" centery="31086" centerz="7" radius="2">
+		<monster name="Magma Crawler" x="0" y="0" z="7" spawntime="900" />
+	</monster>
+	<monster centerx="29672" centery="31088" centerz="7" radius="2">
+		<monster name="Magma Crawler" x="0" y="0" z="7" spawntime="900" />
+	</monster>
+	<monster centerx="29670" centery="31090" centerz="7" radius="2">
+		<monster name="Magma Crawler" x="0" y="0" z="7" spawntime="900" />
+	</monster>
+	<monster centerx="29674" centery="31090" centerz="7" radius="2">
+		<monster name="Magma Crawler" x="0" y="0" z="7" spawntime="900" />
+	</monster>
+	<monster centerx="29694" centery="31086" centerz="7" radius="2">
+		<monster name="Manta Ray" x="0" y="0" z="7" spawntime="900" />
+	</monster>
+	<monster centerx="29698" centery="31086" centerz="7" radius="2">
+		<monster name="Manta Ray" x="0" y="0" z="7" spawntime="900" />
+	</monster>
+	<monster centerx="29696" centery="31088" centerz="7" radius="2">
+		<monster name="Manta Ray" x="0" y="0" z="7" spawntime="900" />
+	</monster>
+	<monster centerx="29694" centery="31090" centerz="7" radius="2">
+		<monster name="Manta Ray" x="0" y="0" z="7" spawntime="900" />
+	</monster>
+	<monster centerx="29698" centery="31090" centerz="7" radius="2">
+		<monster name="Manta Ray" x="0" y="0" z="7" spawntime="900" />
+	</monster>
+	<monster centerx="29718" centery="31086" centerz="7" radius="2">
+		<monster name="Midnight Panther" x="0" y="0" z="7" spawntime="900" />
+	</monster>
+	<monster centerx="29722" centery="31086" centerz="7" radius="2">
+		<monster name="Midnight Panther" x="0" y="0" z="7" spawntime="900" />
+	</monster>
+	<monster centerx="29720" centery="31088" centerz="7" radius="2">
+		<monster name="Midnight Panther" x="0" y="0" z="7" spawntime="900" />
+	</monster>
+	<monster centerx="29718" centery="31090" centerz="7" radius="2">
+		<monster name="Midnight Panther" x="0" y="0" z="7" spawntime="900" />
+	</monster>
+	<monster centerx="29722" centery="31090" centerz="7" radius="2">
+		<monster name="Midnight Panther" x="0" y="0" z="7" spawntime="900" />
+	</monster>
+	<monster centerx="29502" centery="31110" centerz="7" radius="2">
+		<monster name="Modified Gnarlhound" x="0" y="0" z="7" spawntime="900" />
+	</monster>
+	<monster centerx="29506" centery="31110" centerz="7" radius="2">
+		<monster name="Modified Gnarlhound" x="0" y="0" z="7" spawntime="900" />
+	</monster>
+	<monster centerx="29504" centery="31112" centerz="7" radius="2">
+		<monster name="Modified Gnarlhound" x="0" y="0" z="7" spawntime="900" />
+	</monster>
+	<monster centerx="29502" centery="31114" centerz="7" radius="2">
+		<monster name="Modified Gnarlhound" x="0" y="0" z="7" spawntime="900" />
+	</monster>
+	<monster centerx="29506" centery="31114" centerz="7" radius="2">
+		<monster name="Modified Gnarlhound" x="0" y="0" z="7" spawntime="900" />
+	</monster>
+	<monster centerx="29526" centery="31110" centerz="7" radius="2">
+		<monster name="Mole" x="0" y="0" z="7" spawntime="900" />
+	</monster>
+	<monster centerx="29530" centery="31110" centerz="7" radius="2">
+		<monster name="Mole" x="0" y="0" z="7" spawntime="900" />
+	</monster>
+	<monster centerx="29528" centery="31112" centerz="7" radius="2">
+		<monster name="Mole" x="0" y="0" z="7" spawntime="900" />
+	</monster>
+	<monster centerx="29526" centery="31114" centerz="7" radius="2">
+		<monster name="Mole" x="0" y="0" z="7" spawntime="900" />
+	</monster>
+	<monster centerx="29530" centery="31114" centerz="7" radius="2">
+		<monster name="Mole" x="0" y="0" z="7" spawntime="900" />
+	</monster>
+	<monster centerx="29550" centery="31110" centerz="7" radius="2">
+		<monster name="Noble Lion" x="0" y="0" z="7" spawntime="900" />
+	</monster>
+	<monster centerx="29554" centery="31110" centerz="7" radius="2">
+		<monster name="Noble Lion" x="0" y="0" z="7" spawntime="900" />
+	</monster>
+	<monster centerx="29552" centery="31112" centerz="7" radius="2">
+		<monster name="Noble Lion" x="0" y="0" z="7" spawntime="900" />
+	</monster>
+	<monster centerx="29550" centery="31114" centerz="7" radius="2">
+		<monster name="Noble Lion" x="0" y="0" z="7" spawntime="900" />
+	</monster>
+	<monster centerx="29554" centery="31114" centerz="7" radius="2">
+		<monster name="Noble Lion" x="0" y="0" z="7" spawntime="900" />
+	</monster>
+	<monster centerx="29574" centery="31110" centerz="7" radius="2">
+		<monster name="Panda" x="0" y="0" z="7" spawntime="900" />
+	</monster>
+	<monster centerx="29578" centery="31110" centerz="7" radius="2">
+		<monster name="Panda" x="0" y="0" z="7" spawntime="900" />
+	</monster>
+	<monster centerx="29576" centery="31112" centerz="7" radius="2">
+		<monster name="Panda" x="0" y="0" z="7" spawntime="900" />
+	</monster>
+	<monster centerx="29574" centery="31114" centerz="7" radius="2">
+		<monster name="Panda" x="0" y="0" z="7" spawntime="900" />
+	</monster>
+	<monster centerx="29578" centery="31114" centerz="7" radius="2">
+		<monster name="Panda" x="0" y="0" z="7" spawntime="900" />
+	</monster>
+	<monster centerx="29598" centery="31110" centerz="7" radius="2">
+		<monster name="Sandstone Scorpion" x="0" y="0" z="7" spawntime="900" />
+	</monster>
+	<monster centerx="29602" centery="31110" centerz="7" radius="2">
+		<monster name="Sandstone Scorpion" x="0" y="0" z="7" spawntime="900" />
+	</monster>
+	<monster centerx="29600" centery="31112" centerz="7" radius="2">
+		<monster name="Sandstone Scorpion" x="0" y="0" z="7" spawntime="900" />
+	</monster>
+	<monster centerx="29598" centery="31114" centerz="7" radius="2">
+		<monster name="Sandstone Scorpion" x="0" y="0" z="7" spawntime="900" />
+	</monster>
+	<monster centerx="29602" centery="31114" centerz="7" radius="2">
+		<monster name="Sandstone Scorpion" x="0" y="0" z="7" spawntime="900" />
+	</monster>
+	<monster centerx="29622" centery="31110" centerz="7" radius="2">
+		<monster name="Shock Head" x="0" y="0" z="7" spawntime="900" />
+	</monster>
+	<monster centerx="29626" centery="31110" centerz="7" radius="2">
+		<monster name="Shock Head" x="0" y="0" z="7" spawntime="900" />
+	</monster>
+	<monster centerx="29624" centery="31112" centerz="7" radius="2">
+		<monster name="Shock Head" x="0" y="0" z="7" spawntime="900" />
+	</monster>
+	<monster centerx="29622" centery="31114" centerz="7" radius="2">
+		<monster name="Shock Head" x="0" y="0" z="7" spawntime="900" />
+	</monster>
+	<monster centerx="29626" centery="31114" centerz="7" radius="2">
+		<monster name="Shock Head" x="0" y="0" z="7" spawntime="900" />
+	</monster>
+	<monster centerx="29646" centery="31110" centerz="7" radius="2">
+		<monster name="Slug" x="0" y="0" z="7" spawntime="900" />
+	</monster>
+	<monster centerx="29650" centery="31110" centerz="7" radius="2">
+		<monster name="Slug" x="0" y="0" z="7" spawntime="900" />
+	</monster>
+	<monster centerx="29648" centery="31112" centerz="7" radius="2">
+		<monster name="Slug" x="0" y="0" z="7" spawntime="900" />
+	</monster>
+	<monster centerx="29646" centery="31114" centerz="7" radius="2">
+		<monster name="Slug" x="0" y="0" z="7" spawntime="900" />
+	</monster>
+	<monster centerx="29650" centery="31114" centerz="7" radius="2">
+		<monster name="Slug" x="0" y="0" z="7" spawntime="900" />
+	</monster>
+	<monster centerx="29670" centery="31110" centerz="7" radius="2">
+		<monster name="Stone Rhino" x="0" y="0" z="7" spawntime="900" />
+	</monster>
+	<monster centerx="29674" centery="31110" centerz="7" radius="2">
+		<monster name="Stone Rhino" x="0" y="0" z="7" spawntime="900" />
+	</monster>
+	<monster centerx="29672" centery="31112" centerz="7" radius="2">
+		<monster name="Stone Rhino" x="0" y="0" z="7" spawntime="900" />
+	</monster>
+	<monster centerx="29670" centery="31114" centerz="7" radius="2">
+		<monster name="Stone Rhino" x="0" y="0" z="7" spawntime="900" />
+	</monster>
+	<monster centerx="29674" centery="31114" centerz="7" radius="2">
+		<monster name="Stone Rhino" x="0" y="0" z="7" spawntime="900" />
+	</monster>
+	<monster centerx="29694" centery="31110" centerz="7" radius="2">
+		<monster name="Terror Bird" x="0" y="0" z="7" spawntime="900" />
+	</monster>
+	<monster centerx="29698" centery="31110" centerz="7" radius="2">
+		<monster name="Terror Bird" x="0" y="0" z="7" spawntime="900" />
+	</monster>
+	<monster centerx="29696" centery="31112" centerz="7" radius="2">
+		<monster name="Terror Bird" x="0" y="0" z="7" spawntime="900" />
+	</monster>
+	<monster centerx="29694" centery="31114" centerz="7" radius="2">
+		<monster name="Terror Bird" x="0" y="0" z="7" spawntime="900" />
+	</monster>
+	<monster centerx="29698" centery="31114" centerz="7" radius="2">
+		<monster name="Terror Bird" x="0" y="0" z="7" spawntime="900" />
+	</monster>
+	<monster centerx="29718" centery="31110" centerz="7" radius="2">
+		<monster name="Undead Cavebear" x="0" y="0" z="7" spawntime="900" />
+	</monster>
+	<monster centerx="29722" centery="31110" centerz="7" radius="2">
+		<monster name="Undead Cavebear" x="0" y="0" z="7" spawntime="900" />
+	</monster>
+	<monster centerx="29720" centery="31112" centerz="7" radius="2">
+		<monster name="Undead Cavebear" x="0" y="0" z="7" spawntime="900" />
+	</monster>
+	<monster centerx="29718" centery="31114" centerz="7" radius="2">
+		<monster name="Undead Cavebear" x="0" y="0" z="7" spawntime="900" />
+	</monster>
+	<monster centerx="29722" centery="31114" centerz="7" radius="2">
+		<monster name="Undead Cavebear" x="0" y="0" z="7" spawntime="900" />
+	</monster>
+	<monster centerx="29502" centery="31134" centerz="7" radius="2">
+		<monster name="Wailing Widow" x="0" y="0" z="7" spawntime="900" />
+	</monster>
+	<monster centerx="29506" centery="31134" centerz="7" radius="2">
+		<monster name="Wailing Widow" x="0" y="0" z="7" spawntime="900" />
+	</monster>
+	<monster centerx="29504" centery="31136" centerz="7" radius="2">
+		<monster name="Wailing Widow" x="0" y="0" z="7" spawntime="900" />
+	</monster>
+	<monster centerx="29502" centery="31138" centerz="7" radius="2">
+		<monster name="Wailing Widow" x="0" y="0" z="7" spawntime="900" />
+	</monster>
+	<monster centerx="29506" centery="31138" centerz="7" radius="2">
+		<monster name="Wailing Widow" x="0" y="0" z="7" spawntime="900" />
+	</monster>
+	<monster centerx="29526" centery="31134" centerz="7" radius="2">
+		<monster name="Walker" x="0" y="0" z="7" spawntime="900" />
+	</monster>
+	<monster centerx="29530" centery="31134" centerz="7" radius="2">
+		<monster name="Walker" x="0" y="0" z="7" spawntime="900" />
+	</monster>
+	<monster centerx="29528" centery="31136" centerz="7" radius="2">
+		<monster name="Walker" x="0" y="0" z="7" spawntime="900" />
+	</monster>
+	<monster centerx="29526" centery="31138" centerz="7" radius="2">
+		<monster name="Walker" x="0" y="0" z="7" spawntime="900" />
+	</monster>
+	<monster centerx="29530" centery="31138" centerz="7" radius="2">
+		<monster name="Walker" x="0" y="0" z="7" spawntime="900" />
+	</monster>
+	<monster centerx="29550" centery="31134" centerz="7" radius="2">
+		<monster name="Water Buffalo" x="0" y="0" z="7" spawntime="900" />
+	</monster>
+	<monster centerx="29554" centery="31134" centerz="7" radius="2">
+		<monster name="Water Buffalo" x="0" y="0" z="7" spawntime="900" />
+	</monster>
+	<monster centerx="29552" centery="31136" centerz="7" radius="2">
+		<monster name="Water Buffalo" x="0" y="0" z="7" spawntime="900" />
+	</monster>
+	<monster centerx="29550" centery="31138" centerz="7" radius="2">
+		<monster name="Water Buffalo" x="0" y="0" z="7" spawntime="900" />
+	</monster>
+	<monster centerx="29554" centery="31138" centerz="7" radius="2">
+		<monster name="Water Buffalo" x="0" y="0" z="7" spawntime="900" />
+	</monster>
+	<monster centerx="29574" centery="31134" centerz="7" radius="2">
+		<monster name="White Lion" x="0" y="0" z="7" spawntime="900" />
+	</monster>
+	<monster centerx="29578" centery="31134" centerz="7" radius="2">
+		<monster name="White Lion" x="0" y="0" z="7" spawntime="900" />
+	</monster>
+	<monster centerx="29576" centery="31136" centerz="7" radius="2">
+		<monster name="White Lion" x="0" y="0" z="7" spawntime="900" />
+	</monster>
+	<monster centerx="29574" centery="31138" centerz="7" radius="2">
+		<monster name="White Lion" x="0" y="0" z="7" spawntime="900" />
+	</monster>
+	<monster centerx="29578" centery="31138" centerz="7" radius="2">
+		<monster name="White Lion" x="0" y="0" z="7" spawntime="900" />
+	</monster>
+	<monster centerx="29598" centery="31134" centerz="7" radius="2">
+		<monster name="Wild Horse" x="0" y="0" z="7" spawntime="900" />
+	</monster>
+	<monster centerx="29602" centery="31134" centerz="7" radius="2">
+		<monster name="Wild Horse" x="0" y="0" z="7" spawntime="900" />
+	</monster>
+	<monster centerx="29600" centery="31136" centerz="7" radius="2">
+		<monster name="Wild Horse" x="0" y="0" z="7" spawntime="900" />
+	</monster>
+	<monster centerx="29598" centery="31138" centerz="7" radius="2">
+		<monster name="Wild Horse" x="0" y="0" z="7" spawntime="900" />
+	</monster>
+	<monster centerx="29602" centery="31138" centerz="7" radius="2">
+		<monster name="Wild Horse" x="0" y="0" z="7" spawntime="900" />
+	</monster>
+</monsters>

@@ -6,6 +6,7 @@ local displays = {
 	{ name = "Thais", outfit = { lookType = 128, lookHead = 78, lookBody = 69, lookLegs = 58, lookFeet = 76, lookAddons = 3 }, position = Position(30014, 30002, 7), faceSouth = false },
 	{ name = "Questy", outfit = { lookType = 367, lookHead = 78, lookBody = 69, lookLegs = 58, lookFeet = 76, lookAddons = 3 }, position = Position(30018, 30002, 7), faceSouth = false },
 	{ name = "Bossy", outfit = { lookType = 289, lookHead = 78, lookBody = 69, lookLegs = 58, lookFeet = 76, lookAddons = 3 }, position = Position(30022, 30002, 7), faceSouth = false },
+	{ name = "Mounty", outfit = { lookType = 145, lookHead = 78, lookBody = 69, lookLegs = 58, lookFeet = 76, lookAddons = 3 }, position = Position(30026, 30002, 7), faceSouth = false },
 	{ name = "Poprzednie pomieszczenie", outfit = { lookType = 129, lookHead = 78, lookBody = 69, lookLegs = 58, lookFeet = 76, lookAddons = 3 }, position = Position(29995, 30043, 7), faceSouth = false, direction = DIRECTION_EAST },
 	{ name = "Nastepne pomieszczenie", outfit = { lookType = 130, lookHead = 78, lookBody = 69, lookLegs = 58, lookFeet = 76, lookAddons = 3 }, position = Position(29995, 30047, 7), faceSouth = false, direction = DIRECTION_EAST },
 	{ name = "Lobby", outfit = { lookType = 128, lookHead = 78, lookBody = 69, lookLegs = 58, lookFeet = 76, lookAddons = 3 }, position = Position(29995, 30045, 7), faceSouth = false, direction = DIRECTION_EAST },

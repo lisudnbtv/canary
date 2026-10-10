@@ -1375,6 +1375,7 @@ local hubPads = {
 	["30022:29998:7"] = { wing = 4 },
 	["30024:29958:7"] = { quest = quests[9] },
 	["30024:29962:7"] = { quest = quests[10] },
+	["30025:30002:7"] = { mounts = true },
 	["30029:29958:7"] = { quest = quests[11] },
 	["30029:29962:7"] = { quest = quests[12] },
 	["30034:29958:7"] = { quest = quests[13] },
@@ -2188,6 +2189,11 @@ openMain = function(player)
 			openMain(again)
 		end)
 	end)
+	window:addChoice("Wierzchowce do oswojenia", function(target)
+		if OtsMountHall and not inFight(target) then
+			OtsMountHall(target)
+		end
+	end)
 	window:addChoice("Losowy Boss (nowy co 10 min po zabiciu)", function(target)
 		raidEnter(target)
 	end)
@@ -2312,6 +2318,8 @@ function hubStep.onStepIn(creature, item, position, fromPosition)
 		hubMove(player, templePosition)
 	elseif action.randomboss then
 		raidEnter(player)
+	elseif action.mounts and OtsMountHall then
+		OtsMountHall(player)
 	elseif action.outfits and OtsOutfitHall then
 		OtsOutfitHall(player)
 	elseif action.questhall then
@@ -2352,6 +2360,8 @@ function hubLook.playerOnLook(player, inspectedThing, inspectedPosition, lookDis
 		text = "Powrot do lobby hubu"
 	elseif action.randomboss then
 		text = "Losowy Boss"
+	elseif action.mounts then
+		text = "Wierzchowce do oswojenia"
 	elseif action.outfits then
 		text = "Questy na stroje"
 	elseif action.questhall then
