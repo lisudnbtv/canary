@@ -1,13 +1,16 @@
--- Drops custom loot for all monsters
-local allLootConfig = {
-	{ id = 6526, chance = 100000, minCount = 1, maxCount = 10 }, -- Example of loot (100% chance)
-}
+-- OTS: christmas tokeny leca tylko ze swiatecznych potworow (wczesniej z kazdego).
+-- Lista "dla wszystkich" jest pusta.
+local allLootConfig = {}
 
 -- Custom loot for specific monsters (this has the same usage options as normal monster loot)
 local customLootConfig = {
-	["Dragon"] = { items = {
-		{ name = "platinum coin", chance = 1000, maxCount = 1 },
-	} },
+	["Animated Snowman"] = { items = { { id = 6526, chance = 100000, minCount = 1, maxCount = 3 } } },
+	["Percht"] = { items = { { id = 6526, chance = 100000, minCount = 1, maxCount = 3 } } },
+	["Schiach"] = { items = { { id = 6526, chance = 100000, minCount = 1, maxCount = 3 } } },
+	["Baleful Bunny"] = { items = { { id = 6526, chance = 100000, minCount = 1, maxCount = 3 } } },
+	["The Percht Queen"] = { items = { { id = 6526, chance = 100000, minCount = 1, maxCount = 3 } } },
+	["Percht Minion"] = { items = { { id = 6526, chance = 100000, minCount = 1, maxCount = 3 } } },
+	["Grynch Clan Goblin"] = { items = { { id = 6526, chance = 100000, minCount = 1, maxCount = 3 } } },
 }
 
 local customMonsterLoot = GlobalEvent("CreateCustomMonsterLoot")
