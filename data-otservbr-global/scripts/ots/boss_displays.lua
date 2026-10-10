@@ -6,10 +6,115 @@ local displays = {
 	{ name = "Thais", outfit = { lookType = 128, lookHead = 78, lookBody = 69, lookLegs = 58, lookFeet = 76, lookAddons = 3 }, position = Position(30014, 30002, 7), faceSouth = false },
 	{ name = "Questy", outfit = { lookType = 367, lookHead = 78, lookBody = 69, lookLegs = 58, lookFeet = 76, lookAddons = 3 }, position = Position(30018, 30002, 7), faceSouth = false },
 	{ name = "Bossy", outfit = { lookType = 289, lookHead = 78, lookBody = 69, lookLegs = 58, lookFeet = 76, lookAddons = 3 }, position = Position(30022, 30002, 7), faceSouth = false },
-	{ name = "Low", outfit = { lookType = 128, lookHead = 78, lookBody = 69, lookLegs = 58, lookFeet = 76, lookAddons = 3 }, position = Position(30005, 29998, 7), faceSouth = true },
-	{ name = "Medium", outfit = { lookType = 131, lookHead = 78, lookBody = 69, lookLegs = 58, lookFeet = 76, lookAddons = 3 }, position = Position(30011, 29998, 7), faceSouth = true },
-	{ name = "Hard", outfit = { lookType = 335, lookHead = 78, lookBody = 69, lookLegs = 58, lookFeet = 76, lookAddons = 3 }, position = Position(30017, 29998, 7), faceSouth = true },
-	{ name = "Very Hard", outfit = { lookType = 541, lookHead = 78, lookBody = 69, lookLegs = 58, lookFeet = 76, lookAddons = 3 }, position = Position(30023, 29998, 7), faceSouth = true },
+	{ name = "Poprzednie pomieszczenie", outfit = { lookType = 129, lookHead = 78, lookBody = 69, lookLegs = 58, lookFeet = 76, lookAddons = 3 }, position = Position(29995, 30043, 7), faceSouth = false, direction = DIRECTION_EAST },
+	{ name = "Nastepne pomieszczenie", outfit = { lookType = 130, lookHead = 78, lookBody = 69, lookLegs = 58, lookFeet = 76, lookAddons = 3 }, position = Position(29995, 30047, 7), faceSouth = false, direction = DIRECTION_EAST },
+	{ name = "Lobby", outfit = { lookType = 128, lookHead = 78, lookBody = 69, lookLegs = 58, lookFeet = 76, lookAddons = 3 }, position = Position(29995, 30045, 7), faceSouth = false, direction = DIRECTION_EAST },
+	{ name = "Poprzednie pomieszczenie", outfit = { lookType = 129, lookHead = 78, lookBody = 69, lookLegs = 58, lookFeet = 76, lookAddons = 3 }, position = Position(29995, 30069, 7), faceSouth = false, direction = DIRECTION_EAST },
+	{ name = "Nastepne pomieszczenie", outfit = { lookType = 130, lookHead = 78, lookBody = 69, lookLegs = 58, lookFeet = 76, lookAddons = 3 }, position = Position(29995, 30073, 7), faceSouth = false, direction = DIRECTION_EAST },
+	{ name = "Lobby", outfit = { lookType = 128, lookHead = 78, lookBody = 69, lookLegs = 58, lookFeet = 76, lookAddons = 3 }, position = Position(29995, 30071, 7), faceSouth = false, direction = DIRECTION_EAST },
+	{ name = "Poprzednie pomieszczenie", outfit = { lookType = 129, lookHead = 78, lookBody = 69, lookLegs = 58, lookFeet = 76, lookAddons = 3 }, position = Position(29995, 30095, 7), faceSouth = false, direction = DIRECTION_EAST },
+	{ name = "Nastepne pomieszczenie", outfit = { lookType = 130, lookHead = 78, lookBody = 69, lookLegs = 58, lookFeet = 76, lookAddons = 3 }, position = Position(29995, 30099, 7), faceSouth = false, direction = DIRECTION_EAST },
+	{ name = "Lobby", outfit = { lookType = 128, lookHead = 78, lookBody = 69, lookLegs = 58, lookFeet = 76, lookAddons = 3 }, position = Position(29995, 30097, 7), faceSouth = false, direction = DIRECTION_EAST },
+	{ name = "Poprzednie pomieszczenie", outfit = { lookType = 129, lookHead = 78, lookBody = 69, lookLegs = 58, lookFeet = 76, lookAddons = 3 }, position = Position(29995, 30121, 7), faceSouth = false, direction = DIRECTION_EAST },
+	{ name = "Nastepne pomieszczenie", outfit = { lookType = 130, lookHead = 78, lookBody = 69, lookLegs = 58, lookFeet = 76, lookAddons = 3 }, position = Position(29995, 30125, 7), faceSouth = false, direction = DIRECTION_EAST },
+	{ name = "Lobby", outfit = { lookType = 128, lookHead = 78, lookBody = 69, lookLegs = 58, lookFeet = 76, lookAddons = 3 }, position = Position(29995, 30123, 7), faceSouth = false, direction = DIRECTION_EAST },
+	{ name = "Poprzednie pomieszczenie", outfit = { lookType = 129, lookHead = 78, lookBody = 69, lookLegs = 58, lookFeet = 76, lookAddons = 3 }, position = Position(29995, 30147, 7), faceSouth = false, direction = DIRECTION_EAST },
+	{ name = "Nastepne pomieszczenie", outfit = { lookType = 130, lookHead = 78, lookBody = 69, lookLegs = 58, lookFeet = 76, lookAddons = 3 }, position = Position(29995, 30151, 7), faceSouth = false, direction = DIRECTION_EAST },
+	{ name = "Lobby", outfit = { lookType = 128, lookHead = 78, lookBody = 69, lookLegs = 58, lookFeet = 76, lookAddons = 3 }, position = Position(29995, 30149, 7), faceSouth = false, direction = DIRECTION_EAST },
+	{ name = "Poprzednie pomieszczenie", outfit = { lookType = 129, lookHead = 78, lookBody = 69, lookLegs = 58, lookFeet = 76, lookAddons = 3 }, position = Position(29995, 30173, 7), faceSouth = false, direction = DIRECTION_EAST },
+	{ name = "Nastepne pomieszczenie", outfit = { lookType = 130, lookHead = 78, lookBody = 69, lookLegs = 58, lookFeet = 76, lookAddons = 3 }, position = Position(29995, 30177, 7), faceSouth = false, direction = DIRECTION_EAST },
+	{ name = "Lobby", outfit = { lookType = 128, lookHead = 78, lookBody = 69, lookLegs = 58, lookFeet = 76, lookAddons = 3 }, position = Position(29995, 30175, 7), faceSouth = false, direction = DIRECTION_EAST },
+	{ name = "Poprzednie pomieszczenie", outfit = { lookType = 129, lookHead = 78, lookBody = 69, lookLegs = 58, lookFeet = 76, lookAddons = 3 }, position = Position(29995, 30199, 7), faceSouth = false, direction = DIRECTION_EAST },
+	{ name = "Nastepne pomieszczenie", outfit = { lookType = 130, lookHead = 78, lookBody = 69, lookLegs = 58, lookFeet = 76, lookAddons = 3 }, position = Position(29995, 30203, 7), faceSouth = false, direction = DIRECTION_EAST },
+	{ name = "Lobby", outfit = { lookType = 128, lookHead = 78, lookBody = 69, lookLegs = 58, lookFeet = 76, lookAddons = 3 }, position = Position(29995, 30201, 7), faceSouth = false, direction = DIRECTION_EAST },
+	{ name = "EXP Low", outfit = { lookType = 128, lookHead = 78, lookBody = 69, lookLegs = 58, lookFeet = 76, lookAddons = 3 }, position = Position(30005, 29998, 7), faceSouth = true },
+	{ name = "Poprzednie pomieszczenie", outfit = { lookType = 129, lookHead = 78, lookBody = 69, lookLegs = 58, lookFeet = 76, lookAddons = 3 }, position = Position(30040, 30043, 7), faceSouth = false, direction = DIRECTION_EAST },
+	{ name = "Nastepne pomieszczenie", outfit = { lookType = 130, lookHead = 78, lookBody = 69, lookLegs = 58, lookFeet = 76, lookAddons = 3 }, position = Position(30040, 30047, 7), faceSouth = false, direction = DIRECTION_EAST },
+	{ name = "Lobby", outfit = { lookType = 128, lookHead = 78, lookBody = 69, lookLegs = 58, lookFeet = 76, lookAddons = 3 }, position = Position(30040, 30045, 7), faceSouth = false, direction = DIRECTION_EAST },
+	{ name = "Poprzednie pomieszczenie", outfit = { lookType = 129, lookHead = 78, lookBody = 69, lookLegs = 58, lookFeet = 76, lookAddons = 3 }, position = Position(30040, 30069, 7), faceSouth = false, direction = DIRECTION_EAST },
+	{ name = "Nastepne pomieszczenie", outfit = { lookType = 130, lookHead = 78, lookBody = 69, lookLegs = 58, lookFeet = 76, lookAddons = 3 }, position = Position(30040, 30073, 7), faceSouth = false, direction = DIRECTION_EAST },
+	{ name = "Lobby", outfit = { lookType = 128, lookHead = 78, lookBody = 69, lookLegs = 58, lookFeet = 76, lookAddons = 3 }, position = Position(30040, 30071, 7), faceSouth = false, direction = DIRECTION_EAST },
+	{ name = "Poprzednie pomieszczenie", outfit = { lookType = 129, lookHead = 78, lookBody = 69, lookLegs = 58, lookFeet = 76, lookAddons = 3 }, position = Position(30040, 30095, 7), faceSouth = false, direction = DIRECTION_EAST },
+	{ name = "Nastepne pomieszczenie", outfit = { lookType = 130, lookHead = 78, lookBody = 69, lookLegs = 58, lookFeet = 76, lookAddons = 3 }, position = Position(30040, 30099, 7), faceSouth = false, direction = DIRECTION_EAST },
+	{ name = "Lobby", outfit = { lookType = 128, lookHead = 78, lookBody = 69, lookLegs = 58, lookFeet = 76, lookAddons = 3 }, position = Position(30040, 30097, 7), faceSouth = false, direction = DIRECTION_EAST },
+	{ name = "Poprzednie pomieszczenie", outfit = { lookType = 129, lookHead = 78, lookBody = 69, lookLegs = 58, lookFeet = 76, lookAddons = 3 }, position = Position(30040, 30121, 7), faceSouth = false, direction = DIRECTION_EAST },
+	{ name = "Nastepne pomieszczenie", outfit = { lookType = 130, lookHead = 78, lookBody = 69, lookLegs = 58, lookFeet = 76, lookAddons = 3 }, position = Position(30040, 30125, 7), faceSouth = false, direction = DIRECTION_EAST },
+	{ name = "Lobby", outfit = { lookType = 128, lookHead = 78, lookBody = 69, lookLegs = 58, lookFeet = 76, lookAddons = 3 }, position = Position(30040, 30123, 7), faceSouth = false, direction = DIRECTION_EAST },
+	{ name = "Poprzednie pomieszczenie", outfit = { lookType = 129, lookHead = 78, lookBody = 69, lookLegs = 58, lookFeet = 76, lookAddons = 3 }, position = Position(30040, 30147, 7), faceSouth = false, direction = DIRECTION_EAST },
+	{ name = "Nastepne pomieszczenie", outfit = { lookType = 130, lookHead = 78, lookBody = 69, lookLegs = 58, lookFeet = 76, lookAddons = 3 }, position = Position(30040, 30151, 7), faceSouth = false, direction = DIRECTION_EAST },
+	{ name = "Lobby", outfit = { lookType = 128, lookHead = 78, lookBody = 69, lookLegs = 58, lookFeet = 76, lookAddons = 3 }, position = Position(30040, 30149, 7), faceSouth = false, direction = DIRECTION_EAST },
+	{ name = "Poprzednie pomieszczenie", outfit = { lookType = 129, lookHead = 78, lookBody = 69, lookLegs = 58, lookFeet = 76, lookAddons = 3 }, position = Position(30040, 30173, 7), faceSouth = false, direction = DIRECTION_EAST },
+	{ name = "Nastepne pomieszczenie", outfit = { lookType = 130, lookHead = 78, lookBody = 69, lookLegs = 58, lookFeet = 76, lookAddons = 3 }, position = Position(30040, 30177, 7), faceSouth = false, direction = DIRECTION_EAST },
+	{ name = "Lobby", outfit = { lookType = 128, lookHead = 78, lookBody = 69, lookLegs = 58, lookFeet = 76, lookAddons = 3 }, position = Position(30040, 30175, 7), faceSouth = false, direction = DIRECTION_EAST },
+	{ name = "EXP Medium", outfit = { lookType = 131, lookHead = 78, lookBody = 69, lookLegs = 58, lookFeet = 76, lookAddons = 3 }, position = Position(30011, 29998, 7), faceSouth = true },
+	{ name = "Poprzednie pomieszczenie", outfit = { lookType = 129, lookHead = 78, lookBody = 69, lookLegs = 58, lookFeet = 76, lookAddons = 3 }, position = Position(30085, 30043, 7), faceSouth = false, direction = DIRECTION_EAST },
+	{ name = "Nastepne pomieszczenie", outfit = { lookType = 130, lookHead = 78, lookBody = 69, lookLegs = 58, lookFeet = 76, lookAddons = 3 }, position = Position(30085, 30047, 7), faceSouth = false, direction = DIRECTION_EAST },
+	{ name = "Lobby", outfit = { lookType = 128, lookHead = 78, lookBody = 69, lookLegs = 58, lookFeet = 76, lookAddons = 3 }, position = Position(30085, 30045, 7), faceSouth = false, direction = DIRECTION_EAST },
+	{ name = "Poprzednie pomieszczenie", outfit = { lookType = 129, lookHead = 78, lookBody = 69, lookLegs = 58, lookFeet = 76, lookAddons = 3 }, position = Position(30085, 30069, 7), faceSouth = false, direction = DIRECTION_EAST },
+	{ name = "Nastepne pomieszczenie", outfit = { lookType = 130, lookHead = 78, lookBody = 69, lookLegs = 58, lookFeet = 76, lookAddons = 3 }, position = Position(30085, 30073, 7), faceSouth = false, direction = DIRECTION_EAST },
+	{ name = "Lobby", outfit = { lookType = 128, lookHead = 78, lookBody = 69, lookLegs = 58, lookFeet = 76, lookAddons = 3 }, position = Position(30085, 30071, 7), faceSouth = false, direction = DIRECTION_EAST },
+	{ name = "Poprzednie pomieszczenie", outfit = { lookType = 129, lookHead = 78, lookBody = 69, lookLegs = 58, lookFeet = 76, lookAddons = 3 }, position = Position(30085, 30095, 7), faceSouth = false, direction = DIRECTION_EAST },
+	{ name = "Nastepne pomieszczenie", outfit = { lookType = 130, lookHead = 78, lookBody = 69, lookLegs = 58, lookFeet = 76, lookAddons = 3 }, position = Position(30085, 30099, 7), faceSouth = false, direction = DIRECTION_EAST },
+	{ name = "Lobby", outfit = { lookType = 128, lookHead = 78, lookBody = 69, lookLegs = 58, lookFeet = 76, lookAddons = 3 }, position = Position(30085, 30097, 7), faceSouth = false, direction = DIRECTION_EAST },
+	{ name = "Poprzednie pomieszczenie", outfit = { lookType = 129, lookHead = 78, lookBody = 69, lookLegs = 58, lookFeet = 76, lookAddons = 3 }, position = Position(30085, 30121, 7), faceSouth = false, direction = DIRECTION_EAST },
+	{ name = "Nastepne pomieszczenie", outfit = { lookType = 130, lookHead = 78, lookBody = 69, lookLegs = 58, lookFeet = 76, lookAddons = 3 }, position = Position(30085, 30125, 7), faceSouth = false, direction = DIRECTION_EAST },
+	{ name = "Lobby", outfit = { lookType = 128, lookHead = 78, lookBody = 69, lookLegs = 58, lookFeet = 76, lookAddons = 3 }, position = Position(30085, 30123, 7), faceSouth = false, direction = DIRECTION_EAST },
+	{ name = "Poprzednie pomieszczenie", outfit = { lookType = 129, lookHead = 78, lookBody = 69, lookLegs = 58, lookFeet = 76, lookAddons = 3 }, position = Position(30085, 30147, 7), faceSouth = false, direction = DIRECTION_EAST },
+	{ name = "Nastepne pomieszczenie", outfit = { lookType = 130, lookHead = 78, lookBody = 69, lookLegs = 58, lookFeet = 76, lookAddons = 3 }, position = Position(30085, 30151, 7), faceSouth = false, direction = DIRECTION_EAST },
+	{ name = "Lobby", outfit = { lookType = 128, lookHead = 78, lookBody = 69, lookLegs = 58, lookFeet = 76, lookAddons = 3 }, position = Position(30085, 30149, 7), faceSouth = false, direction = DIRECTION_EAST },
+	{ name = "Poprzednie pomieszczenie", outfit = { lookType = 129, lookHead = 78, lookBody = 69, lookLegs = 58, lookFeet = 76, lookAddons = 3 }, position = Position(30085, 30173, 7), faceSouth = false, direction = DIRECTION_EAST },
+	{ name = "Nastepne pomieszczenie", outfit = { lookType = 130, lookHead = 78, lookBody = 69, lookLegs = 58, lookFeet = 76, lookAddons = 3 }, position = Position(30085, 30177, 7), faceSouth = false, direction = DIRECTION_EAST },
+	{ name = "Lobby", outfit = { lookType = 128, lookHead = 78, lookBody = 69, lookLegs = 58, lookFeet = 76, lookAddons = 3 }, position = Position(30085, 30175, 7), faceSouth = false, direction = DIRECTION_EAST },
+	{ name = "Poprzednie pomieszczenie", outfit = { lookType = 129, lookHead = 78, lookBody = 69, lookLegs = 58, lookFeet = 76, lookAddons = 3 }, position = Position(30085, 30199, 7), faceSouth = false, direction = DIRECTION_EAST },
+	{ name = "Nastepne pomieszczenie", outfit = { lookType = 130, lookHead = 78, lookBody = 69, lookLegs = 58, lookFeet = 76, lookAddons = 3 }, position = Position(30085, 30203, 7), faceSouth = false, direction = DIRECTION_EAST },
+	{ name = "Lobby", outfit = { lookType = 128, lookHead = 78, lookBody = 69, lookLegs = 58, lookFeet = 76, lookAddons = 3 }, position = Position(30085, 30201, 7), faceSouth = false, direction = DIRECTION_EAST },
+	{ name = "EXP Hard", outfit = { lookType = 335, lookHead = 78, lookBody = 69, lookLegs = 58, lookFeet = 76, lookAddons = 3 }, position = Position(30017, 29998, 7), faceSouth = true },
+	{ name = "Poprzednie pomieszczenie", outfit = { lookType = 129, lookHead = 78, lookBody = 69, lookLegs = 58, lookFeet = 76, lookAddons = 3 }, position = Position(30130, 30043, 7), faceSouth = false, direction = DIRECTION_EAST },
+	{ name = "Nastepne pomieszczenie", outfit = { lookType = 130, lookHead = 78, lookBody = 69, lookLegs = 58, lookFeet = 76, lookAddons = 3 }, position = Position(30130, 30047, 7), faceSouth = false, direction = DIRECTION_EAST },
+	{ name = "Lobby", outfit = { lookType = 128, lookHead = 78, lookBody = 69, lookLegs = 58, lookFeet = 76, lookAddons = 3 }, position = Position(30130, 30045, 7), faceSouth = false, direction = DIRECTION_EAST },
+	{ name = "Poprzednie pomieszczenie", outfit = { lookType = 129, lookHead = 78, lookBody = 69, lookLegs = 58, lookFeet = 76, lookAddons = 3 }, position = Position(30130, 30069, 7), faceSouth = false, direction = DIRECTION_EAST },
+	{ name = "Nastepne pomieszczenie", outfit = { lookType = 130, lookHead = 78, lookBody = 69, lookLegs = 58, lookFeet = 76, lookAddons = 3 }, position = Position(30130, 30073, 7), faceSouth = false, direction = DIRECTION_EAST },
+	{ name = "Lobby", outfit = { lookType = 128, lookHead = 78, lookBody = 69, lookLegs = 58, lookFeet = 76, lookAddons = 3 }, position = Position(30130, 30071, 7), faceSouth = false, direction = DIRECTION_EAST },
+	{ name = "Poprzednie pomieszczenie", outfit = { lookType = 129, lookHead = 78, lookBody = 69, lookLegs = 58, lookFeet = 76, lookAddons = 3 }, position = Position(30130, 30095, 7), faceSouth = false, direction = DIRECTION_EAST },
+	{ name = "Nastepne pomieszczenie", outfit = { lookType = 130, lookHead = 78, lookBody = 69, lookLegs = 58, lookFeet = 76, lookAddons = 3 }, position = Position(30130, 30099, 7), faceSouth = false, direction = DIRECTION_EAST },
+	{ name = "Lobby", outfit = { lookType = 128, lookHead = 78, lookBody = 69, lookLegs = 58, lookFeet = 76, lookAddons = 3 }, position = Position(30130, 30097, 7), faceSouth = false, direction = DIRECTION_EAST },
+	{ name = "Poprzednie pomieszczenie", outfit = { lookType = 129, lookHead = 78, lookBody = 69, lookLegs = 58, lookFeet = 76, lookAddons = 3 }, position = Position(30130, 30121, 7), faceSouth = false, direction = DIRECTION_EAST },
+	{ name = "Nastepne pomieszczenie", outfit = { lookType = 130, lookHead = 78, lookBody = 69, lookLegs = 58, lookFeet = 76, lookAddons = 3 }, position = Position(30130, 30125, 7), faceSouth = false, direction = DIRECTION_EAST },
+	{ name = "Lobby", outfit = { lookType = 128, lookHead = 78, lookBody = 69, lookLegs = 58, lookFeet = 76, lookAddons = 3 }, position = Position(30130, 30123, 7), faceSouth = false, direction = DIRECTION_EAST },
+	{ name = "EXP Very Hard", outfit = { lookType = 541, lookHead = 78, lookBody = 69, lookLegs = 58, lookFeet = 76, lookAddons = 3 }, position = Position(30023, 29998, 7), faceSouth = true },
+	{ name = "Poprzednie pomieszczenie", outfit = { lookType = 129, lookHead = 78, lookBody = 69, lookLegs = 58, lookFeet = 76, lookAddons = 3 }, position = Position(29995, 29913, 7), faceSouth = false, direction = DIRECTION_EAST },
+	{ name = "Nastepne pomieszczenie", outfit = { lookType = 130, lookHead = 78, lookBody = 69, lookLegs = 58, lookFeet = 76, lookAddons = 3 }, position = Position(29995, 29917, 7), faceSouth = false, direction = DIRECTION_EAST },
+	{ name = "Lobby", outfit = { lookType = 128, lookHead = 78, lookBody = 69, lookLegs = 58, lookFeet = 76, lookAddons = 3 }, position = Position(29995, 29915, 7), faceSouth = false, direction = DIRECTION_EAST },
+	{ name = "Poprzednie pomieszczenie", outfit = { lookType = 129, lookHead = 78, lookBody = 69, lookLegs = 58, lookFeet = 76, lookAddons = 3 }, position = Position(29995, 29887, 7), faceSouth = false, direction = DIRECTION_EAST },
+	{ name = "Nastepne pomieszczenie", outfit = { lookType = 130, lookHead = 78, lookBody = 69, lookLegs = 58, lookFeet = 76, lookAddons = 3 }, position = Position(29995, 29891, 7), faceSouth = false, direction = DIRECTION_EAST },
+	{ name = "Lobby", outfit = { lookType = 128, lookHead = 78, lookBody = 69, lookLegs = 58, lookFeet = 76, lookAddons = 3 }, position = Position(29995, 29889, 7), faceSouth = false, direction = DIRECTION_EAST },
+	{ name = "Poprzednie pomieszczenie", outfit = { lookType = 129, lookHead = 78, lookBody = 69, lookLegs = 58, lookFeet = 76, lookAddons = 3 }, position = Position(29995, 29861, 7), faceSouth = false, direction = DIRECTION_EAST },
+	{ name = "Nastepne pomieszczenie", outfit = { lookType = 130, lookHead = 78, lookBody = 69, lookLegs = 58, lookFeet = 76, lookAddons = 3 }, position = Position(29995, 29865, 7), faceSouth = false, direction = DIRECTION_EAST },
+	{ name = "Lobby", outfit = { lookType = 128, lookHead = 78, lookBody = 69, lookLegs = 58, lookFeet = 76, lookAddons = 3 }, position = Position(29995, 29863, 7), faceSouth = false, direction = DIRECTION_EAST },
+	{ name = "Poprzednie pomieszczenie", outfit = { lookType = 129, lookHead = 78, lookBody = 69, lookLegs = 58, lookFeet = 76, lookAddons = 3 }, position = Position(29995, 29835, 7), faceSouth = false, direction = DIRECTION_EAST },
+	{ name = "Nastepne pomieszczenie", outfit = { lookType = 130, lookHead = 78, lookBody = 69, lookLegs = 58, lookFeet = 76, lookAddons = 3 }, position = Position(29995, 29839, 7), faceSouth = false, direction = DIRECTION_EAST },
+	{ name = "Lobby", outfit = { lookType = 128, lookHead = 78, lookBody = 69, lookLegs = 58, lookFeet = 76, lookAddons = 3 }, position = Position(29995, 29837, 7), faceSouth = false, direction = DIRECTION_EAST },
+	{ name = "Poprzednie pomieszczenie", outfit = { lookType = 129, lookHead = 78, lookBody = 69, lookLegs = 58, lookFeet = 76, lookAddons = 3 }, position = Position(29995, 29809, 7), faceSouth = false, direction = DIRECTION_EAST },
+	{ name = "Nastepne pomieszczenie", outfit = { lookType = 130, lookHead = 78, lookBody = 69, lookLegs = 58, lookFeet = 76, lookAddons = 3 }, position = Position(29995, 29813, 7), faceSouth = false, direction = DIRECTION_EAST },
+	{ name = "Lobby", outfit = { lookType = 128, lookHead = 78, lookBody = 69, lookLegs = 58, lookFeet = 76, lookAddons = 3 }, position = Position(29995, 29811, 7), faceSouth = false, direction = DIRECTION_EAST },
+	{ name = "Poprzednie pomieszczenie", outfit = { lookType = 129, lookHead = 78, lookBody = 69, lookLegs = 58, lookFeet = 76, lookAddons = 3 }, position = Position(29995, 29783, 7), faceSouth = false, direction = DIRECTION_EAST },
+	{ name = "Nastepne pomieszczenie", outfit = { lookType = 130, lookHead = 78, lookBody = 69, lookLegs = 58, lookFeet = 76, lookAddons = 3 }, position = Position(29995, 29787, 7), faceSouth = false, direction = DIRECTION_EAST },
+	{ name = "Lobby", outfit = { lookType = 128, lookHead = 78, lookBody = 69, lookLegs = 58, lookFeet = 76, lookAddons = 3 }, position = Position(29995, 29785, 7), faceSouth = false, direction = DIRECTION_EAST },
+	{ name = "Poprzednie pomieszczenie", outfit = { lookType = 129, lookHead = 78, lookBody = 69, lookLegs = 58, lookFeet = 76, lookAddons = 3 }, position = Position(29995, 29757, 7), faceSouth = false, direction = DIRECTION_EAST },
+	{ name = "Nastepne pomieszczenie", outfit = { lookType = 130, lookHead = 78, lookBody = 69, lookLegs = 58, lookFeet = 76, lookAddons = 3 }, position = Position(29995, 29761, 7), faceSouth = false, direction = DIRECTION_EAST },
+	{ name = "Lobby", outfit = { lookType = 128, lookHead = 78, lookBody = 69, lookLegs = 58, lookFeet = 76, lookAddons = 3 }, position = Position(29995, 29759, 7), faceSouth = false, direction = DIRECTION_EAST },
+	{ name = "Poprzednie pomieszczenie", outfit = { lookType = 129, lookHead = 78, lookBody = 69, lookLegs = 58, lookFeet = 76, lookAddons = 3 }, position = Position(29995, 29731, 7), faceSouth = false, direction = DIRECTION_EAST },
+	{ name = "Nastepne pomieszczenie", outfit = { lookType = 130, lookHead = 78, lookBody = 69, lookLegs = 58, lookFeet = 76, lookAddons = 3 }, position = Position(29995, 29735, 7), faceSouth = false, direction = DIRECTION_EAST },
+	{ name = "Lobby", outfit = { lookType = 128, lookHead = 78, lookBody = 69, lookLegs = 58, lookFeet = 76, lookAddons = 3 }, position = Position(29995, 29733, 7), faceSouth = false, direction = DIRECTION_EAST },
+	{ name = "Poprzednie pomieszczenie", outfit = { lookType = 129, lookHead = 78, lookBody = 69, lookLegs = 58, lookFeet = 76, lookAddons = 3 }, position = Position(29995, 29705, 7), faceSouth = false, direction = DIRECTION_EAST },
+	{ name = "Nastepne pomieszczenie", outfit = { lookType = 130, lookHead = 78, lookBody = 69, lookLegs = 58, lookFeet = 76, lookAddons = 3 }, position = Position(29995, 29709, 7), faceSouth = false, direction = DIRECTION_EAST },
+	{ name = "Lobby", outfit = { lookType = 128, lookHead = 78, lookBody = 69, lookLegs = 58, lookFeet = 76, lookAddons = 3 }, position = Position(29995, 29707, 7), faceSouth = false, direction = DIRECTION_EAST },
+	{ name = "Poprzednie pomieszczenie", outfit = { lookType = 129, lookHead = 78, lookBody = 69, lookLegs = 58, lookFeet = 76, lookAddons = 3 }, position = Position(29995, 29679, 7), faceSouth = false, direction = DIRECTION_EAST },
+	{ name = "Nastepne pomieszczenie", outfit = { lookType = 130, lookHead = 78, lookBody = 69, lookLegs = 58, lookFeet = 76, lookAddons = 3 }, position = Position(29995, 29683, 7), faceSouth = false, direction = DIRECTION_EAST },
+	{ name = "Lobby", outfit = { lookType = 128, lookHead = 78, lookBody = 69, lookLegs = 58, lookFeet = 76, lookAddons = 3 }, position = Position(29995, 29681, 7), faceSouth = false, direction = DIRECTION_EAST },
+	{ name = "Poprzednie pomieszczenie", outfit = { lookType = 129, lookHead = 78, lookBody = 69, lookLegs = 58, lookFeet = 76, lookAddons = 3 }, position = Position(29995, 29653, 7), faceSouth = false, direction = DIRECTION_EAST },
+	{ name = "Nastepne pomieszczenie", outfit = { lookType = 130, lookHead = 78, lookBody = 69, lookLegs = 58, lookFeet = 76, lookAddons = 3 }, position = Position(29995, 29657, 7), faceSouth = false, direction = DIRECTION_EAST },
+	{ name = "Lobby", outfit = { lookType = 128, lookHead = 78, lookBody = 69, lookLegs = 58, lookFeet = 76, lookAddons = 3 }, position = Position(29995, 29655, 7), faceSouth = false, direction = DIRECTION_EAST },
 	{ name = "Boss Ahau", outfit = { lookType = 1591, lookHead = 0, lookBody = 0, lookLegs = 0, lookFeet = 0, lookAddons = 0, lookMount = 0 }, position = Position(30003, 29906, 7), faceSouth = true },
 	{ name = "Boss Anomaly", outfit = { lookType = 876, lookHead = 38, lookBody = 79, lookLegs = 76, lookFeet = 79, lookAddons = 1, lookMount = 0 }, position = Position(30003, 29914, 7), faceSouth = false },
 	{ name = "Boss Ascending Ferumbras", outfit = { lookType = 844, lookHead = 0, lookBody = 0, lookLegs = 0, lookFeet = 0, lookAddons = 0, lookMount = 0 }, position = Position(30006, 29906, 7), faceSouth = true },
@@ -264,20 +369,24 @@ local displays = {
 	{ name = "Boss Morshabaal", outfit = { lookType = 1468, lookHead = 0, lookBody = 0, lookLegs = 0, lookFeet = 0, lookAddons = 0, lookMount = 0 }, position = Position(30018, 29654, 7), faceSouth = false },
 }
 
+local registered = {} -- ta sama nazwa (np. Lobby) stoi w wielu miejscach: typ rejestrujemy raz
 for _, display in ipairs(displays) do
-	local npcType = Game.createNpcType(display.name)
-	local npcConfig = {}
-	npcConfig.name = display.name
-	npcConfig.description = display.name
-	npcConfig.health = 100
-	npcConfig.maxHealth = 100
-	npcConfig.walkInterval = 0
-	npcConfig.walkRadius = 0
-	npcConfig.outfit = display.outfit
-	npcConfig.flags = {
-		floorchange = false,
-	}
-	npcType:register(npcConfig)
+	if not registered[display.name] then
+		registered[display.name] = true
+		local npcType = Game.createNpcType(display.name)
+		local npcConfig = {}
+		npcConfig.name = display.name
+		npcConfig.description = display.name
+		npcConfig.health = 100
+		npcConfig.maxHealth = 100
+		npcConfig.walkInterval = 0
+		npcConfig.walkRadius = 0
+		npcConfig.outfit = display.outfit
+		npcConfig.flags = {
+			floorchange = false,
+		}
+		npcType:register(npcConfig)
+	end
 end
 
 local place = GlobalEvent("OtsBossDisplays")
@@ -288,7 +397,7 @@ function place.onStartup()
 		local npc = Game.createNpc(display.name, display.position, false, true)
 		if npc then
 			npc:setMasterPos(display.position)
-			npc:setDirection(display.faceSouth and DIRECTION_SOUTH or DIRECTION_NORTH)
+			npc:setDirection(display.direction or (display.faceSouth and DIRECTION_SOUTH or DIRECTION_NORTH))
 			placed = placed + 1
 		end
 	end

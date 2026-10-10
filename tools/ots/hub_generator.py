@@ -92,17 +92,19 @@ def build_floors(entries, x0, y_first, step, title, pad_action, sign_text, behin
             pad(x, yr + 2 * sign, pad_action(k * FLOOR_N + j, e))
             board(x, yr + 3 * sign, sign_text(e), SIGN_A if sign < 0 else SIGN_B)
             behind(e, x, yr + 4 * sign, sign < 0)
-        def nav(y, target, text):
+        def nav(y, target, text, who, look):
             if target is None:
                 pad(x0 - 4, y, dict(kind='lobby'))
             else:
                 tk = target % n
                 pad(x0 - 4, y, dict(kind='goto', pos=arrivals[tk], label='%s %d/%d (%s)' % (title, tk + 1, n, range_text(chunks[tk]))))
-            board(x0 - 5, y, text, SIGN_A)
+            board(x0 - 6, y, text, SIGN_A)
+            floor(x0 - 5, y)
+            npcs.append(dict(name=who, outfit={'lookType': look, 'lookHead': 78, 'lookBody': 69, 'lookLegs': 58, 'lookFeet': 76, 'lookAddons': 3}, pos=[x0 - 5, y, Z], south=False, dir='DIRECTION_EAST'))
         if n > 1:
-            nav(yc + 3, k - 1, 'Poprzednie pietro\n%s %d/%d' % (title, (k - 1) % n + 1, n))
-            nav(yc + 7, k + 1, 'Nastepne pietro\n%s %d/%d' % (title, (k + 1) % n + 1, n))
-        nav(yc + 5, None, 'Lobby\nTu jestes: %s\n%s' % (name, range_text(chunk)))
+            nav(yc + 3, k - 1, 'Poprzednie pietro\n%s %d/%d' % (title, (k - 1) % n + 1, n), 'Poprzednie pomieszczenie', 129)
+            nav(yc + 7, k + 1, 'Nastepne pietro\n%s %d/%d' % (title, (k + 1) % n + 1, n), 'Nastepne pomieszczenie', 130)
+        nav(yc + 5, None, 'Lobby\nTu jestes: %s\n%s' % (name, range_text(chunk)), 'Lobby', 128)
     return arrivals
 
 for t, (g, (_, label)) in enumerate(zip(groups, tiers)):
@@ -120,7 +122,7 @@ for t, (g, (_, label)) in enumerate(zip(groups, tiers)):
     pad(lx, Y0 - 2, dict(kind='wing', wing=t))
     board(lx, Y0 - 3, '%s\n%s\n%d potworow, %d pieter' % (label, RANGES[t], len(g), len(arr)))
     floor(lx + 1, Y0 - 2)
-    npcs.append(dict(name=label, outfit={'lookType': TIER_LOOKS[t], 'lookHead': 78, 'lookBody': 69, 'lookLegs': 58, 'lookFeet': 76, 'lookAddons': 3}, pos=[lx + 1, Y0 - 2, Z], south=True))
+    npcs.append(dict(name='EXP ' + label, outfit={'lookType': TIER_LOOKS[t], 'lookHead': 78, 'lookBody': 69, 'lookLegs': 58, 'lookFeet': 76, 'lookAddons': 3}, pos=[lx + 1, Y0 - 2, Z], south=True))
 
 # Hala questow: korytarz na polnoc od lobby, pad na quest, za padem tabliczka i nagrody
 QM = json.load(open('quests_menu.json'))
