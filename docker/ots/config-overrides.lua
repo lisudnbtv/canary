@@ -39,9 +39,8 @@ autoBank = true
 -- Maszyna do imbu dziala bez questa Forgotten Knowledge
 toggleImbuementShrineStorage = false
 
--- Exhaust czarow: wszystkie cooldowny dzielone przez 2 (2 s -> 1 s). Wyzsza wartosc nie ma sensu:
--- ten sam mnoznik przyspiesza tiki buffow regeneracji i przy bardzo duzej wartosci spadlyby do zera.
-rateSpellCooldown = 2.0
+-- Exhaust czarow ustawia skrypt scripts/ots/spell_cooldown.lua (kazdy czar najwyzej 1 s); mnoznik zostaje 1.
+rateSpellCooldown = 1.0
 
 -- Komenda !emote on/off (czary jako emote zamiast tekstu)
 emoteSpells = true

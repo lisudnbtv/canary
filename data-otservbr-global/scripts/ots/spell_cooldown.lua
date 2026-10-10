@@ -1,0 +1,170 @@
+-- OTS: exhaust czarow. Kazdy czar gracza (atak, leczenie, wsparcie) ma cooldown najwyzej 1 s,
+-- takze cooldown grupy. Lista nazw jest generowana z data/scripts/spells.
+local MAX_COOLDOWN_MS = 1000
+
+local spells = {
+	"Annihilation",
+	"Apprentice's Strike",
+	"Berserk",
+	"Brutal Strike",
+	"Buzz",
+	"Chained Penance",
+	"Chill Out",
+	"Curse",
+	"Death Strike",
+	"Devastating Knockout",
+	"Divine Caldera",
+	"Divine Grenade",
+	"Divine Missile",
+	"Double Jab",
+	"Electrify",
+	"Energy Beam",
+	"Energy Strike",
+	"Energy Wave",
+	"Envenom",
+	"Eternal Winter",
+	"Ethereal Spear",
+	"Executioner's Throw",
+	"Fierce Berserk",
+	"Fire Wave",
+	"Flame Strike",
+	"Flurry of Blows",
+	"Forceful Uppercut",
+	"Front Sweep",
+	"Great Death Beam",
+	"Great Energy Beam",
+	"Great Fire Wave",
+	"Greater Flurry of Blows",
+	"Greater Tiger Clash",
+	"Groundshaker",
+	"Hell's Core",
+	"Holy Flash",
+	"Ice Burst",
+	"Ice Strike",
+	"Ice Wave",
+	"Ignite",
+	"Inflict Wound",
+	"Lesser Ethereal Spear",
+	"Lesser Front Sweep",
+	"Lightning",
+	"Mud Attack",
+	"Mystic Repulse",
+	"Physical Strike",
+	"Practise Fire Wave",
+	"Rage of the Skies",
+	"Scorch",
+	"Spiritual Outburst",
+	"Strong Energy Strike",
+	"Strong Ethereal Spear",
+	"Strong Flame Strike",
+	"Strong Ice Strike",
+	"Strong Ice Wave",
+	"Strong Terra Strike",
+	"Sweeping Takedown",
+	"Swift Jab",
+	"Terra Burst",
+	"Terra Strike",
+	"Terra Wave",
+	"Tiger Clash",
+	"Ultimate Energy Strike",
+	"Ultimate Flame Strike",
+	"Ultimate Ice Strike",
+	"Ultimate Terra Strike",
+	"Whirlwind Throw",
+	"Wrath of Nature",
+	"Bruise Bane",
+	"Cure Bleeding",
+	"Cure Burning",
+	"Cure Curse",
+	"Cure Electrification",
+	"Cure Poison",
+	"Divine Healing",
+	"Fair Wound Cleansing",
+	"Heal Friend",
+	"Heal Malice",
+	"Heal Monster",
+	"Heal Monster 9x9",
+	"Intense Healing",
+	"Intense Recovery",
+	"Intense Wound Cleansing",
+	"Light Healing",
+	"Magic Patch",
+	"Mass Healing",
+	"Mass Spirit Mend",
+	"Nature's Embrace",
+	"Practise Healing",
+	"Recovery",
+	"Restoration",
+	"Restore Balance",
+	"Salvation",
+	"Spirit Mend",
+	"Ultimate Healing",
+	"Wound Cleansing",
+	"Avatar of Balance",
+	"Avatar of Light",
+	"Avatar of Nature",
+	"Avatar of Steel",
+	"Avatar of Storm",
+	"Balanced Brawl",
+	"Blood Rage",
+	"Cancel Invisibility",
+	"Cancel Magic Shield",
+	"Challenge",
+	"Charge",
+	"Chivalrous Challenge",
+	"Creature Illusion",
+	"Divine Dazzle",
+	"Divine Empowerment",
+	"Expose Weakness",
+	"Find Fiend",
+	"Find Person",
+	"Focus Harmony",
+	"Focus Serenity",
+	"Food",
+	"Great Light",
+	"Haste",
+	"Invisibility",
+	"Levitate",
+	"Light",
+	"Magic Rope",
+	"Magic Shield",
+	"Mentor Other",
+	"Protector",
+	"Sap Strength",
+	"Sharpshooter",
+	"Strong Haste",
+	"Summon Creature",
+	"Swift Foot",
+	"Ultimate Light",
+	"Virtue of Harmony",
+	"Virtue of Justice",
+	"Virtue of Sustain",
+}
+
+local limit = GlobalEvent("OtsSpellCooldownLimit")
+
+function limit.onStartup()
+	local changed, missing = 0, 0
+	for _, entry in ipairs(spells) do
+		local spell = Spell(entry)
+		if spell then
+			local own = spell:cooldown()
+			local group, secondary = spell:groupCooldown()
+			if own and own > MAX_COOLDOWN_MS then
+				spell:cooldown(MAX_COOLDOWN_MS)
+				changed = changed + 1
+			end
+			if secondary and secondary > MAX_COOLDOWN_MS then
+				spell:groupCooldown(math.min(group or 0, MAX_COOLDOWN_MS), MAX_COOLDOWN_MS)
+			elseif group and group > MAX_COOLDOWN_MS then
+				spell:groupCooldown(MAX_COOLDOWN_MS)
+			end
+		else
+			missing = missing + 1
+		end
+	end
+	logger.info("[OTS czary] Cooldown skrocony do {} ms: {} czarow (nie znaleziono: {})", MAX_COOLDOWN_MS, changed, missing)
+	return true
+end
+
+limit:register()
