@@ -31,3 +31,7 @@ toggleLearnSpells = false
 -- Loot pouch (Gold Pouch ze sklepu): miesci 20000 przedmiotow i przyjmuje dowolne rzeczy
 lootPouchMaxLimit = 20000
 toggleGoldPouchAllowAnything = true
+
+-- Autoloot (!autoloot all/on/off) i zloto z potworow od razu na konto w banku
+autoLoot = true
+autoBank = true
