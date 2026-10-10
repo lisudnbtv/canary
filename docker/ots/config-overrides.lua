@@ -23,3 +23,6 @@ rateMagic = 90
 
 -- Wheel of Destiny: punkty za kazdy poziom
 wheelPointsPerLevel = 100
+
+-- Czary bez nauki: wszystkie dostepne od swojego normalnego poziomu
+toggleLearnSpells = false
