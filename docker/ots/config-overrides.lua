@@ -27,3 +27,7 @@ wheelPointsPerLevel = 100
 
 -- Czary bez nauki: wszystkie dostepne od swojego normalnego poziomu
 toggleLearnSpells = false
+
+-- Loot pouch (Gold Pouch ze sklepu): miesci 20000 przedmiotow i przyjmuje dowolne rzeczy
+lootPouchMaxLimit = 20000
+toggleGoldPouchAllowAnything = true
