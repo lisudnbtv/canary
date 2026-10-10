@@ -2082,6 +2082,22 @@ end
 raidTick:interval(2000)
 raidTick:register()
 
+-- !boss: co stoi w salce losowego bossa albo ile zostalo do nastepnego
+local raidInfo = TalkAction("!boss")
+
+function raidInfo.onSay(player, words, param)
+	if raidState.bossId and Creature(raidState.bossId) then
+		player:sendTextMessage(MESSAGE_EVENT_ADVANCE, "Losowy Boss: w salce czeka " .. raidState.bossName .. ".")
+	else
+		local left = math.max(0, raidState.nextAt - os.time())
+		player:sendTextMessage(MESSAGE_EVENT_ADVANCE, string.format("Losowy Boss: nastepny za %d min %d s.", math.floor(left / 60), left % 60))
+	end
+	return true
+end
+
+raidInfo:groupType("normal")
+raidInfo:register()
+
 local openMain
 
 -- Uruchamia cel z listy: zwykly teleport albo quest z wlasnym skryptem.
