@@ -652,7 +652,9 @@ local hubWings = {
 	{ label = "Exp 12000+ (21 potworow)", x = 30018, y = 30320, z = 7 },
 }
 local hubQuestHall = Position(30025, 29960, 7)
+local hubBossHall = Position(30047, 29920, 7)
 local hubPads = {
+	["30000:29920:7"] = { lobby = true },
 	["30000:29960:7"] = { lobby = true },
 	["30000:30040:7"] = { lobby = true },
 	["30000:30080:7"] = { lobby = true },
@@ -663,6 +665,8 @@ local hubPads = {
 	["30000:30280:7"] = { lobby = true },
 	["30000:30320:7"] = { lobby = true },
 	["30002:29998:7"] = { wing = 1 },
+	["30003:29918:7"] = { boss = bosses[1] },
+	["30003:29922:7"] = { boss = bosses[2] },
 	["30003:30038:7"] = { hunt = hunts[1].list[1] },
 	["30003:30042:7"] = { hunt = hunts[1].list[2] },
 	["30003:30078:7"] = { hunt = hunts[2].list[1] },
@@ -682,6 +686,8 @@ local hubPads = {
 	["30004:29958:7"] = { quest = quests[1] },
 	["30004:29962:7"] = { quest = quests[2] },
 	["30005:29998:7"] = { wing = 2 },
+	["30006:29918:7"] = { boss = bosses[3] },
+	["30006:29922:7"] = { boss = bosses[4] },
 	["30006:30038:7"] = { hunt = hunts[1].list[3] },
 	["30006:30042:7"] = { hunt = hunts[1].list[4] },
 	["30006:30078:7"] = { hunt = hunts[2].list[3] },
@@ -699,6 +705,8 @@ local hubPads = {
 	["30006:30318:7"] = { hunt = hunts[8].list[3] },
 	["30006:30322:7"] = { hunt = hunts[8].list[4] },
 	["30008:29998:7"] = { wing = 3 },
+	["30009:29918:7"] = { boss = bosses[5] },
+	["30009:29922:7"] = { boss = bosses[6] },
 	["30009:29958:7"] = { quest = quests[3] },
 	["30009:29962:7"] = { quest = quests[4] },
 	["30009:30002:7"] = { outfits = true },
@@ -719,6 +727,8 @@ local hubPads = {
 	["30009:30318:7"] = { hunt = hunts[8].list[5] },
 	["30009:30322:7"] = { hunt = hunts[8].list[6] },
 	["30011:29998:7"] = { wing = 4 },
+	["30012:29918:7"] = { boss = bosses[7] },
+	["30012:29922:7"] = { boss = bosses[8] },
 	["30012:30038:7"] = { hunt = hunts[1].list[7] },
 	["30012:30042:7"] = { hunt = hunts[1].list[8] },
 	["30012:30078:7"] = { hunt = hunts[2].list[7] },
@@ -739,6 +749,8 @@ local hubPads = {
 	["30014:29958:7"] = { quest = quests[5] },
 	["30014:29962:7"] = { quest = quests[6] },
 	["30014:29998:7"] = { wing = 5 },
+	["30015:29918:7"] = { boss = bosses[9] },
+	["30015:29922:7"] = { boss = bosses[10] },
 	["30015:30038:7"] = { hunt = hunts[1].list[9] },
 	["30015:30042:7"] = { hunt = hunts[1].list[10] },
 	["30015:30078:7"] = { hunt = hunts[2].list[9] },
@@ -757,6 +769,8 @@ local hubPads = {
 	["30015:30322:7"] = { hunt = hunts[8].list[10] },
 	["30017:29998:7"] = { wing = 6 },
 	["30017:30002:7"] = { questhall = true },
+	["30018:29918:7"] = { boss = bosses[11] },
+	["30018:29922:7"] = { boss = bosses[12] },
 	["30018:30038:7"] = { hunt = hunts[1].list[11] },
 	["30018:30042:7"] = { hunt = hunts[1].list[12] },
 	["30018:30078:7"] = { hunt = hunts[2].list[11] },
@@ -776,6 +790,9 @@ local hubPads = {
 	["30019:29958:7"] = { quest = quests[7] },
 	["30019:29962:7"] = { quest = quests[8] },
 	["30020:29998:7"] = { wing = 7 },
+	["30021:29918:7"] = { boss = bosses[13] },
+	["30021:29922:7"] = { boss = bosses[14] },
+	["30021:30002:7"] = { bosshall = true },
 	["30021:30038:7"] = { hunt = hunts[1].list[13] },
 	["30021:30042:7"] = { hunt = hunts[1].list[14] },
 	["30021:30078:7"] = { hunt = hunts[2].list[13] },
@@ -793,6 +810,8 @@ local hubPads = {
 	["30021:30318:7"] = { hunt = hunts[8].list[13] },
 	["30021:30322:7"] = { hunt = hunts[8].list[14] },
 	["30023:29998:7"] = { wing = 8 },
+	["30024:29918:7"] = { boss = bosses[15] },
+	["30024:29922:7"] = { boss = bosses[16] },
 	["30024:29958:7"] = { quest = quests[9] },
 	["30024:29962:7"] = { quest = quests[10] },
 	["30024:30038:7"] = { hunt = hunts[1].list[15] },
@@ -811,6 +830,8 @@ local hubPads = {
 	["30024:30282:7"] = { hunt = hunts[7].list[16] },
 	["30024:30318:7"] = { hunt = hunts[8].list[15] },
 	["30024:30322:7"] = { hunt = hunts[8].list[16] },
+	["30027:29918:7"] = { boss = bosses[17] },
+	["30027:29922:7"] = { boss = bosses[18] },
 	["30027:30038:7"] = { hunt = hunts[1].list[17] },
 	["30027:30042:7"] = { hunt = hunts[1].list[18] },
 	["30027:30078:7"] = { hunt = hunts[2].list[17] },
@@ -829,6 +850,8 @@ local hubPads = {
 	["30027:30322:7"] = { hunt = hunts[8].list[18] },
 	["30029:29958:7"] = { quest = quests[11] },
 	["30029:29962:7"] = { quest = quests[12] },
+	["30030:29918:7"] = { boss = bosses[19] },
+	["30030:29922:7"] = { boss = bosses[20] },
 	["30030:30038:7"] = { hunt = hunts[1].list[19] },
 	["30030:30042:7"] = { hunt = hunts[1].list[20] },
 	["30030:30078:7"] = { hunt = hunts[2].list[19] },
@@ -845,6 +868,8 @@ local hubPads = {
 	["30030:30282:7"] = { hunt = hunts[7].list[20] },
 	["30030:30318:7"] = { hunt = hunts[8].list[19] },
 	["30030:30322:7"] = { hunt = hunts[8].list[20] },
+	["30033:29918:7"] = { boss = bosses[21] },
+	["30033:29922:7"] = { boss = bosses[22] },
 	["30033:30038:7"] = { hunt = hunts[1].list[21] },
 	["30033:30042:7"] = { hunt = hunts[1].list[22] },
 	["30033:30078:7"] = { hunt = hunts[2].list[21] },
@@ -863,6 +888,8 @@ local hubPads = {
 	["30034:29958:7"] = { quest = quests[13] },
 	["30034:29962:7"] = { quest = quests[14] },
 	["30035:30320:7"] = { lobby = true },
+	["30036:29918:7"] = { boss = bosses[23] },
+	["30036:29922:7"] = { boss = bosses[24] },
 	["30036:30038:7"] = { hunt = hunts[1].list[23] },
 	["30036:30042:7"] = { hunt = hunts[1].list[24] },
 	["30036:30078:7"] = { hunt = hunts[2].list[23] },
@@ -877,6 +904,8 @@ local hubPads = {
 	["30036:30242:7"] = { hunt = hunts[6].list[24] },
 	["30036:30278:7"] = { hunt = hunts[7].list[23] },
 	["30036:30282:7"] = { hunt = hunts[7].list[24] },
+	["30039:29918:7"] = { boss = bosses[25] },
+	["30039:29922:7"] = { boss = bosses[26] },
 	["30039:29958:7"] = { quest = quests[15] },
 	["30039:29962:7"] = { quest = quests[16] },
 	["30039:30038:7"] = { hunt = hunts[1].list[25] },
@@ -893,6 +922,8 @@ local hubPads = {
 	["30039:30242:7"] = { hunt = hunts[6].list[26] },
 	["30039:30278:7"] = { hunt = hunts[7].list[25] },
 	["30039:30282:7"] = { hunt = hunts[7].list[26] },
+	["30042:29918:7"] = { boss = bosses[27] },
+	["30042:29922:7"] = { boss = bosses[28] },
 	["30042:30038:7"] = { hunt = hunts[1].list[27] },
 	["30042:30042:7"] = { hunt = hunts[1].list[28] },
 	["30042:30078:7"] = { hunt = hunts[2].list[27] },
@@ -909,6 +940,8 @@ local hubPads = {
 	["30042:30282:7"] = { hunt = hunts[7].list[28] },
 	["30044:29958:7"] = { quest = quests[17] },
 	["30044:29962:7"] = { quest = quests[18] },
+	["30045:29918:7"] = { boss = bosses[29] },
+	["30045:29922:7"] = { boss = bosses[30] },
 	["30045:30038:7"] = { hunt = hunts[1].list[29] },
 	["30045:30042:7"] = { hunt = hunts[1].list[30] },
 	["30045:30078:7"] = { hunt = hunts[2].list[29] },
@@ -923,6 +956,8 @@ local hubPads = {
 	["30045:30242:7"] = { hunt = hunts[6].list[30] },
 	["30045:30278:7"] = { hunt = hunts[7].list[29] },
 	["30045:30282:7"] = { hunt = hunts[7].list[30] },
+	["30048:29918:7"] = { boss = bosses[31] },
+	["30048:29922:7"] = { boss = bosses[32] },
 	["30048:29960:7"] = { lobby = true },
 	["30048:30038:7"] = { hunt = hunts[1].list[31] },
 	["30048:30042:7"] = { hunt = hunts[1].list[32] },
@@ -938,6 +973,8 @@ local hubPads = {
 	["30048:30242:7"] = { hunt = hunts[6].list[32] },
 	["30048:30278:7"] = { hunt = hunts[7].list[31] },
 	["30048:30282:7"] = { hunt = hunts[7].list[32] },
+	["30051:29918:7"] = { boss = bosses[33] },
+	["30051:29922:7"] = { boss = bosses[34] },
 	["30051:30038:7"] = { hunt = hunts[1].list[33] },
 	["30051:30042:7"] = { hunt = hunts[1].list[34] },
 	["30051:30078:7"] = { hunt = hunts[2].list[33] },
@@ -952,6 +989,8 @@ local hubPads = {
 	["30051:30242:7"] = { hunt = hunts[6].list[34] },
 	["30051:30278:7"] = { hunt = hunts[7].list[33] },
 	["30051:30282:7"] = { hunt = hunts[7].list[34] },
+	["30054:29918:7"] = { boss = bosses[35] },
+	["30054:29922:7"] = { boss = bosses[36] },
 	["30054:30038:7"] = { hunt = hunts[1].list[35] },
 	["30054:30042:7"] = { hunt = hunts[1].list[36] },
 	["30054:30078:7"] = { hunt = hunts[2].list[35] },
@@ -966,6 +1005,8 @@ local hubPads = {
 	["30054:30242:7"] = { hunt = hunts[6].list[36] },
 	["30054:30278:7"] = { hunt = hunts[7].list[35] },
 	["30054:30282:7"] = { hunt = hunts[7].list[36] },
+	["30057:29918:7"] = { boss = bosses[37] },
+	["30057:29922:7"] = { boss = bosses[38] },
 	["30057:30038:7"] = { hunt = hunts[1].list[37] },
 	["30057:30042:7"] = { hunt = hunts[1].list[38] },
 	["30057:30078:7"] = { hunt = hunts[2].list[37] },
@@ -980,6 +1021,8 @@ local hubPads = {
 	["30057:30242:7"] = { hunt = hunts[6].list[38] },
 	["30057:30278:7"] = { hunt = hunts[7].list[37] },
 	["30057:30282:7"] = { hunt = hunts[7].list[38] },
+	["30060:29918:7"] = { boss = bosses[39] },
+	["30060:29922:7"] = { boss = bosses[40] },
 	["30060:30038:7"] = { hunt = hunts[1].list[39] },
 	["30060:30042:7"] = { hunt = hunts[1].list[40] },
 	["30060:30078:7"] = { hunt = hunts[2].list[39] },
@@ -994,6 +1037,8 @@ local hubPads = {
 	["30060:30242:7"] = { hunt = hunts[6].list[40] },
 	["30060:30278:7"] = { hunt = hunts[7].list[39] },
 	["30060:30282:7"] = { hunt = hunts[7].list[40] },
+	["30063:29918:7"] = { boss = bosses[41] },
+	["30063:29922:7"] = { boss = bosses[42] },
 	["30063:30038:7"] = { hunt = hunts[1].list[41] },
 	["30063:30042:7"] = { hunt = hunts[1].list[42] },
 	["30063:30078:7"] = { hunt = hunts[2].list[41] },
@@ -1008,6 +1053,8 @@ local hubPads = {
 	["30063:30242:7"] = { hunt = hunts[6].list[42] },
 	["30063:30278:7"] = { hunt = hunts[7].list[41] },
 	["30063:30282:7"] = { hunt = hunts[7].list[42] },
+	["30066:29918:7"] = { boss = bosses[43] },
+	["30066:29922:7"] = { boss = bosses[44] },
 	["30066:30038:7"] = { hunt = hunts[1].list[43] },
 	["30066:30042:7"] = { hunt = hunts[1].list[44] },
 	["30066:30078:7"] = { hunt = hunts[2].list[43] },
@@ -1022,6 +1069,8 @@ local hubPads = {
 	["30066:30278:7"] = { hunt = hunts[7].list[43] },
 	["30066:30282:7"] = { hunt = hunts[7].list[44] },
 	["30068:30120:7"] = { lobby = true },
+	["30069:29918:7"] = { boss = bosses[45] },
+	["30069:29922:7"] = { boss = bosses[46] },
 	["30069:30038:7"] = { hunt = hunts[1].list[45] },
 	["30069:30042:7"] = { hunt = hunts[1].list[46] },
 	["30069:30078:7"] = { hunt = hunts[2].list[45] },
@@ -1034,6 +1083,8 @@ local hubPads = {
 	["30069:30242:7"] = { hunt = hunts[6].list[46] },
 	["30069:30278:7"] = { hunt = hunts[7].list[45] },
 	["30069:30282:7"] = { hunt = hunts[7].list[46] },
+	["30072:29918:7"] = { boss = bosses[47] },
+	["30072:29922:7"] = { boss = bosses[48] },
 	["30072:30038:7"] = { hunt = hunts[1].list[47] },
 	["30072:30042:7"] = { hunt = hunts[1].list[48] },
 	["30072:30078:7"] = { hunt = hunts[2].list[47] },
@@ -1046,6 +1097,8 @@ local hubPads = {
 	["30072:30242:7"] = { hunt = hunts[6].list[48] },
 	["30072:30278:7"] = { hunt = hunts[7].list[47] },
 	["30072:30282:7"] = { hunt = hunts[7].list[48] },
+	["30075:29918:7"] = { boss = bosses[49] },
+	["30075:29922:7"] = { boss = bosses[50] },
 	["30075:30038:7"] = { hunt = hunts[1].list[49] },
 	["30075:30042:7"] = { hunt = hunts[1].list[50] },
 	["30075:30078:7"] = { hunt = hunts[2].list[49] },
@@ -1058,6 +1111,8 @@ local hubPads = {
 	["30075:30242:7"] = { hunt = hunts[6].list[50] },
 	["30075:30278:7"] = { hunt = hunts[7].list[49] },
 	["30075:30282:7"] = { hunt = hunts[7].list[50] },
+	["30078:29918:7"] = { boss = bosses[51] },
+	["30078:29922:7"] = { boss = bosses[52] },
 	["30078:30038:7"] = { hunt = hunts[1].list[51] },
 	["30078:30042:7"] = { hunt = hunts[1].list[52] },
 	["30078:30078:7"] = { hunt = hunts[2].list[51] },
@@ -1070,6 +1125,8 @@ local hubPads = {
 	["30078:30242:7"] = { hunt = hunts[6].list[52] },
 	["30078:30278:7"] = { hunt = hunts[7].list[51] },
 	["30078:30282:7"] = { hunt = hunts[7].list[52] },
+	["30081:29918:7"] = { boss = bosses[53] },
+	["30081:29922:7"] = { boss = bosses[54] },
 	["30081:30038:7"] = { hunt = hunts[1].list[53] },
 	["30081:30042:7"] = { hunt = hunts[1].list[54] },
 	["30081:30078:7"] = { hunt = hunts[2].list[53] },
@@ -1082,6 +1139,8 @@ local hubPads = {
 	["30081:30242:7"] = { hunt = hunts[6].list[54] },
 	["30081:30278:7"] = { hunt = hunts[7].list[53] },
 	["30081:30282:7"] = { hunt = hunts[7].list[54] },
+	["30084:29918:7"] = { boss = bosses[55] },
+	["30084:29922:7"] = { boss = bosses[56] },
 	["30084:30038:7"] = { hunt = hunts[1].list[55] },
 	["30084:30042:7"] = { hunt = hunts[1].list[56] },
 	["30084:30078:7"] = { hunt = hunts[2].list[55] },
@@ -1094,6 +1153,8 @@ local hubPads = {
 	["30084:30242:7"] = { hunt = hunts[6].list[56] },
 	["30084:30278:7"] = { hunt = hunts[7].list[55] },
 	["30084:30282:7"] = { hunt = hunts[7].list[56] },
+	["30087:29918:7"] = { boss = bosses[57] },
+	["30087:29922:7"] = { boss = bosses[58] },
 	["30087:30038:7"] = { hunt = hunts[1].list[57] },
 	["30087:30042:7"] = { hunt = hunts[1].list[58] },
 	["30087:30078:7"] = { hunt = hunts[2].list[57] },
@@ -1107,6 +1168,7 @@ local hubPads = {
 	["30087:30278:7"] = { hunt = hunts[7].list[57] },
 	["30087:30282:7"] = { hunt = hunts[7].list[58] },
 	["30089:30280:7"] = { lobby = true },
+	["30090:29918:7"] = { boss = bosses[59] },
 	["30090:30038:7"] = { hunt = hunts[1].list[59] },
 	["30090:30042:7"] = { hunt = hunts[1].list[60] },
 	["30090:30078:7"] = { hunt = hunts[2].list[59] },
@@ -1117,6 +1179,7 @@ local hubPads = {
 	["30090:30202:7"] = { hunt = hunts[5].list[60] },
 	["30090:30238:7"] = { hunt = hunts[6].list[59] },
 	["30090:30242:7"] = { hunt = hunts[6].list[60] },
+	["30092:29920:7"] = { lobby = true },
 	["30093:30038:7"] = { hunt = hunts[1].list[61] },
 	["30093:30042:7"] = { hunt = hunts[1].list[62] },
 	["30093:30078:7"] = { hunt = hunts[2].list[61] },
@@ -1493,7 +1556,7 @@ hubLobbyMessage = function()
 	for i = 1, #hubWings do
 		names[i] = hubWings[i].label
 	end
-	return "Hub expowisk. Pady na polnocy, od zachodu: " .. table.concat(names, ", ") .. ". Pady na poludniu: questy na stroje, Thais i hala questow."
+	return "Hub expowisk. Pady na polnocy, od zachodu: " .. table.concat(names, ", ") .. ". Pady na poludniu: questy na stroje, Thais, hala questow i hala bossow."
 end
 
 local hubStep = MoveEvent()
@@ -1524,6 +1587,10 @@ function hubStep.onStepIn(creature, item, position, fromPosition)
 		hubMove(player, hubQuestHall, "Hala questow: kazdy pad to jeden quest, za padem leza nagrody do zdobycia. Pady na koncach wracaja do lobby.")
 	elseif action.quest then
 		startEntry(player, action.quest)
+	elseif action.bosshall then
+		hubMove(player, hubBossHall, "Hala bossow: kazdy pad prowadzi pod dzwignie jednego bossa, za padem stoi jego podobizna. Pady na koncach wracaja do lobby.")
+	elseif action.boss then
+		travel(player, action.boss)
 	end
 	return true
 end
@@ -1556,6 +1623,10 @@ function hubLook.playerOnLook(player, inspectedThing, inspectedPosition, lookDis
 		text = "Hala questow"
 	elseif action.quest then
 		text = "Quest: " .. action.quest[1]
+	elseif action.bosshall then
+		text = "Hala bossow"
+	elseif action.boss then
+		text = "Boss: " .. action.boss[1]
 	else
 		text = "Powrot do swiatyni w Thais"
 	end

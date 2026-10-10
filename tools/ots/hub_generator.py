@@ -44,6 +44,8 @@ pad(X0 + lobby_w // 2, Y0 + 2, dict(kind='thais'))
 board(X0 + lobby_w // 2, Y0 + 3, 'Thais\nPowrot do swiatyni', SIGN_B)
 pad(X0 + lobby_w // 2 - 4, Y0 + 2, dict(kind='outfits'))
 pad(X0 + lobby_w // 2 + 4, Y0 + 2, dict(kind='questhall'))
+pad(X0 + lobby_w // 2 + 8, Y0 + 2, dict(kind='bosshall'))
+board(X0 + lobby_w // 2 + 8, Y0 + 3, 'Bossy\nHala bossow', SIGN_B)
 board(X0 + lobby_w // 2 + 4, Y0 + 3, 'Questy\nHala questow z nagrodami', SIGN_B)
 board(X0 + lobby_w // 2 - 4, Y0 + 3, 'Stroje\nQuesty na stroje z dodatkami', SIGN_B)
 
@@ -97,6 +99,28 @@ for i, qm in enumerate(QM):
         floor(ix, iy)
         tiles[(ix, iy, Z)]['items'].append((iid, 0, None))
 
+# Hala bossow: korytarz dalej na polnoc, pad na bossa, za padem tabliczka i postac z wygladem bossa
+BL = json.load(open('boss_looks.json'))
+yb = Y0 - 80
+bslots = (len(BL) + 1) // 2
+b_end = X0 + 2 + PITCH * bslots
+for x in range(X0 + 1, b_end):
+    for y in range(yb - 1, yb + 2):
+        floor(x, y)
+pad(X0, yb, dict(kind='lobby')); board(X0 - 1, yb, 'Lobby\nPowrot do hubu', SIGN_A)
+pad(b_end, yb, dict(kind='lobby')); board(b_end + 1, yb, 'Lobby\nPowrot do hubu', SIGN_B)
+bosshall = [X0 + 1 + (b_end - X0) // 2, yb, Z]
+boss_displays = []
+for i, b in enumerate(BL):
+    s, side = divmod(i, 2)
+    x = X0 + 3 + PITCH * s
+    sign = -1 if side == 0 else 1
+    nice = ' '.join(w[:1].upper() + w[1:] for w in b['name'].split(' '))
+    pad(x, yb + 2 * sign, dict(kind='boss', index=i))
+    board(x, yb + 3 * sign, nice + ('\nWymagany poziom: %d' % b['lvl'] if b['lvl'] else '\nBez wymaganego poziomu'), SIGN_A if sign < 0 else SIGN_B)
+    floor(x, yb + 4 * sign)
+    boss_displays.append(dict(name=nice, outfit=b['outfit'], pos=[x, yb + 4 * sign, Z], south=sign < 0))
+
 # ---- zapis OTBM
 def esc(b):
     out = bytearray()
@@ -147,7 +171,7 @@ with open('hub/ots-hub-monster.xml', 'w') as f:
 open('hub/ots-hub-house.xml', 'w').write('<?xml version="1.0"?>\n<houses />\n')
 open('hub/ots-hub-npc.xml', 'w').write('<?xml version="1.0"?>\n<npcs />\n')
 open('hub/ots-hub-zones.xml', 'w').write('<?xml version="1.0"?>\n<zones />\n')
-json.dump(dict(pads=pads, wings=wings, lobby=lobby_arrival, questhall=questhall), open('hub.json', 'w'))
+json.dump(dict(pads=pads, wings=wings, lobby=lobby_arrival, questhall=questhall, bosshall=bosshall, bossDisplays=boss_displays), open('hub.json', 'w'))
 xs = [k[0] for k in tiles]; ys = [k[1] for k in tiles]
 print('tiles', len(tiles), 'pads', len(pads), 'spawns', len(spawns), 'bbox', min(xs), min(ys), max(xs), max(ys), 'bytes', len(out))
 for w in wings: print(w)
