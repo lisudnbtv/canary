@@ -51,10 +51,15 @@ pad(X0 + lobby_w // 2 + 4, Y0 + 2, dict(kind='questhall'))
 pad(X0 + lobby_w // 2 + 8, Y0 + 2, dict(kind='bosshall'))
 board(X0 + lobby_w // 2 + 8, Y0 + 3, 'Bossy\nHala bossow', SIGN_B)
 board(X0 + lobby_w // 2 + 4, Y0 + 3, 'Questy\nHala questow z nagrodami', SIGN_B)
-board(X0 + lobby_w // 2 - 4, Y0 + 3, 'Stroje\nQuesty na stroje z dodatkami', SIGN_B)
+board(X0 + lobby_w // 2 - 4, Y0 + 3, 'Outfity\nQuesty na stroje z dodatkami', SIGN_B)
 
 wings = []
 npcs = []
+# postacie przy padach po poludniowej stronie lobby
+_mid = X0 + lobby_w // 2
+for dx, name, look in ((-4, 'Outfity', 273), (0, 'Thais', 128), (4, 'Questy', 367), (8, 'Bossy', 289)):
+    floor(_mid + dx + 1, Y0 + 2)
+    npcs.append(dict(name=name, outfit={'lookType': look, 'lookHead': 78, 'lookBody': 69, 'lookLegs': 58, 'lookFeet': 76, 'lookAddons': 3}, pos=[_mid + dx + 1, Y0 + 2, Z], south=False))
 for t, (g, (_, label)) in enumerate(zip(groups, tiers)):
     yc0 = Y0 + WING_GAP * (t + 1)
     rows = [g[i:i + ROWCAP] for i in range(0, len(g), ROWCAP)]
