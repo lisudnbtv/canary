@@ -13,3 +13,13 @@ classicAttackSpeed = true
 
 -- Darmowe konto premium dla wszystkich
 freePremium = true
+
+-- Mnozniki (stale, bez progow poziomowych z data/stages.lua)
+rateUseStages = false
+rateLoot = 10
+rateSpawn = 15
+rateSkill = 100
+rateMagic = 90
+
+-- Wheel of Destiny: punkty za kazdy poziom
+wheelPointsPerLevel = 100
