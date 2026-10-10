@@ -84,8 +84,8 @@ for k, o in enumerate(outfits):
         floor(x, ry - 1)
     item(cx, ry - 2, CHEST, CHEST_AID); chests[key(cx, ry - 2)] = k
     item(cx + 1, ry - 1, TELEPORT, PAD_AID); pads[key(cx + 1, ry - 1)] = dict(kind='hall')
-    # spawny: 10 potworow w arenie
-    pts = [(2, 2), (6, 2), (10, 2), (3, 5), (9, 5), (6, 6), (2, 8), (10, 8), (4, 10), (8, 10)]
+    # spawny: wymagana liczba zabic + 10 zapasu (30 potworow), rowna siatka w arenie
+    pts = [(dx, dy) for dy in (1, 3, 5, 7, 9) for dx in (1, 3, 5, 7, 9, 11)][:KILLS + 10]
     for i, (dx, dy) in enumerate(pts):
         spawns.append((o['monsters'][i % len(o['monsters'])], rx + dx, ry + dy))
     rooms.append(dict(x=rx, y=ry, entry=entry))
