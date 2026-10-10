@@ -12,8 +12,6 @@ local shortcuts = {
 local objects = {
 	{ id = IMBUING_SHRINE, pos = Position(32358, 32239, 7) },
 	{ id = ITEM_REWARD_CHEST, pos = Position(32378, 32239, 7) },
-	{ id = IMBUING_SHRINE, pos = Position(32344, 32218, 7) },
-	{ id = ITEM_REWARD_CHEST, pos = Position(32345, 32218, 7) },
 }
 
 -- Przejscie na wprost miedzy depo a swiatynia przez drewniany dom: sciany znikaja, zostaje podloga.
