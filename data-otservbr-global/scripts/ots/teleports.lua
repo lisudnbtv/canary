@@ -814,6 +814,7 @@ local quests = {
 	{ "The Thieves Guild: modified crossbow, assassin dagger, spellbook of warding", 0, 0, 0, arena = { { "Assassin", 6 }, { "Stalker", 4 }, { "Bandit", 4 }, { "Smuggler", 4 }, { "Assassin", 4 } }, chest = { 32310, 32209, 8 }, hint = "Skrzynia z nagroda jest tuz obok. Trzy skrzynie, mozna wziac jedna nagrode." },
 	{ "The Hidden City of Beregar: firewalker boots", 0, 0, 0, arena = { { "Dwarf Guard", 6 }, { "Dwarf Geomancer", 4 }, { "Worker Golem", 4 }, { "War Golem", 5 } }, chest = { 32580, 31404, 15 }, hint = "Skrzynia z nagroda jest tuz obok." },
 	{ "Koshei the Deathless: blue legs", 0, 0, 0, arena = { { "Lich", 4 }, { "Bonebeast", 5 }, { "Vampire", 5 }, { "Mummy", 5 }, { "Koshei the Deathless", 1 } }, chest = { 33261, 32445, 12 }, hint = "Skrzynia z nagroda jest tuz obok." },
+	{ "Swiateczna arena: christmas tokeny z potworow", 0, 0, 0, arena = { { "Grynch Clan Goblin", 8 }, { "Animated Snowman", 6 }, { "Percht", 6 }, { "Schiach", 6 }, { "Baleful Bunny", 4 }, { "The Percht Queen", 1 } } },
 	{ "Behemoth Quest: guardian halberd, demon shield, golden armor", 33294, 31670, 13, hint = "Skrzynia z nagroda: ok. 11 krokow, kierunek polnoc. Przy skrzyni jest strefa PZ." },
 	{ "Black Knight: crown armor, crown shield", 32870, 31943, 11, hint = "Skrzynia z nagroda: ok. 11 krokow, kierunek poludnie. Przy skrzyni jest strefa PZ." },
 	{ "Circle Room: war hammer", 32496, 31946, 14, hint = "Skrzynia z nagroda: ok. 45 krokow, kierunek poludnie. Przy skrzyni jest strefa PZ." },
@@ -836,7 +837,7 @@ local hubWings = {
 	{ label = "Hard (exp 1500-6000) (155 potworow)", x = 30088, y = 30045, z = 7 },
 	{ label = "Very Hard (exp 6000+) (79 potworow)", x = 30133, y = 30045, z = 7 },
 }
-local hubQuestHall = Position(30030, 29960, 7)
+local hubQuestHall = Position(30032, 29960, 7)
 local hubBossHall = Position(29998, 29915, 7)
 local arenaCenter = Position(30060, 29900, 7)
 local arenaLanding = Position(30060, 29909, 7)
@@ -1502,7 +1503,7 @@ local hubPads = {
 	["30057:30156:7"] = { hunt = hunts[2].list[116] },
 	["30057:30168:7"] = { hunt = hunts[2].list[127] },
 	["30057:30172:7"] = { hunt = hunts[2].list[128] },
-	["30058:29960:7"] = { lobby = true },
+	["30059:29958:7"] = { quest = quests[23] },
 	["30060:30038:7"] = { hunt = hunts[2].list[9] },
 	["30060:30042:7"] = { hunt = hunts[2].list[10] },
 	["30060:30048:7"] = { hunt = hunts[2].list[21] },
@@ -1523,6 +1524,7 @@ local hubPads = {
 	["30060:30146:7"] = { hunt = hunts[2].list[106] },
 	["30060:30152:7"] = { hunt = hunts[2].list[117] },
 	["30060:30156:7"] = { hunt = hunts[2].list[118] },
+	["30063:29960:7"] = { lobby = true },
 	["30063:30038:7"] = { hunt = hunts[2].list[11] },
 	["30063:30042:7"] = { hunt = hunts[2].list[12] },
 	["30063:30048:7"] = { hunt = hunts[2].list[23] },
@@ -2282,7 +2284,7 @@ end
 taskNpcPlace:register()
 
 -- Fale: sala, w ktorej po wybiciu fali wchodzi nastepna, mocniejsza. Potwory ida po kolei
--- z listy expowisk (rosnaco wedlug exp). Za kazda fale sa tokeny, co piata takze Tibia Coins.
+-- z listy expowisk (rosnaco wedlug exp). Za kazda fale jest zloto na konto, co piata takze Tibia Coins.
 -- Odroczone wywolania niosa tylko id gracza i numer biegu (token).
 local survival = { token = 0, ids = {}, wave = 0 }
 local survivalMonsters = {}
@@ -2350,9 +2352,9 @@ survivalCheck = function(playerId, token)
 	end
 	survival.ids = {}
 	local wave = survival.wave
-	local tokens = wave * 5
-	player:addItem(TASK_TOKEN_ITEM, tokens)
-	local text = string.format("Fala %d wybita: +%d tokenow.", wave, tokens)
+	local gold = wave * 10000
+	player:setBankBalance(player:getBankBalance() + gold)
+	local text = string.format("Fala %d wybita: +%d gp na konto.", wave, gold)
 	if wave % 5 == 0 then
 		player:addTibiaCoins(wave * 2)
 		text = text .. string.format(" Bonus: +%d Tibia Coins.", wave * 2)
