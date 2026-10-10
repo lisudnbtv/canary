@@ -44,26 +44,52 @@ def item(x, y, iid, aid=0, text=None, pz=True):
     tiles[(x, y, Z)]['items'].append((iid, aid, text))
 def key(x, y): return '%d:%d:%d' % (x, y, Z)
 
-# Korytarz wyboru stroju
-slots = (n + 1) // 2
-x_end = X0 + 2 + PITCH * slots
-for x in range(X0 + 1, x_end):
-    for y in range(Y0 - 1, Y0 + 2):
-        floor(x, y)
-hall = [X0 + 1 + (x_end - X0) // 2, Y0, Z]
-for xe, sx, sign in ((X0, X0 - 1, SIGN_A), (x_end, x_end + 1, SIGN_B)):
-    item(xe, Y0, TELEPORT, PAD_AID); pads[key(xe, Y0)] = dict(kind='hub')
-    item(sx, Y0, sign, 0, 'Hub\nPowrot do hubu expowisk')
+# Hala wyboru stroju: pietra po 24 stroje (2 rzedy po 12 polaczone na obu koncach w petle).
+# Na zachodzie kazdego pietra pady: poprzednie pietro, lobby hubu, nastepne pietro.
+FLOOR_N, ROW_N, FLOOR_PITCH = 24, 12, 26
+nfloors = (n + FLOOR_N - 1) // FLOOR_N
+x_end = X0 + 2 + PITCH * (ROW_N // 2)
+arrivals = [[X0 - 2, Y0 - FLOOR_PITCH * f + 5, Z] for f in range(nfloors)]
+hall = arrivals[0]
+navnpcs = []
+def frange(f):
+    ch = outfits[f * FLOOR_N:(f + 1) * FLOOR_N]
+    return '%s - %s' % (ch[0]['name'], ch[-1]['name'])
+for f in range(nfloors):
+    yc = Y0 - FLOOR_PITCH * f
+    for x in list(range(X0 - 3, X0)) + list(range(x_end, x_end + 3)):
+        for y in range(yc - 1, yc + 12):
+            floor(x, y)
+    for r in range(2):
+        for x in range(X0, x_end):
+            for y in range(yc + 10 * r - 1, yc + 10 * r + 2):
+                floor(x, y)
+    def nav(y, target, text, who):
+        if target is None:
+            item(X0 - 4, y, TELEPORT, PAD_AID); pads[key(X0 - 4, y)] = dict(kind='hub')
+        else:
+            t = target % nfloors
+            item(X0 - 4, y, TELEPORT, PAD_AID); pads[key(X0 - 4, y)] = dict(kind='goto', pos=arrivals[t], label='Stroje %d/%d' % (t + 1, nfloors))
+        floor(X0 - 5, y)
+        navnpcs.append((who, X0 - 5, y))
+        item(X0 - 6, y, SIGN_A, 0, text)
+    nav(yc + 3, f - 1, 'Poprzednie pietro\nStroje %d/%d' % ((f - 1) % nfloors + 1, nfloors), 'Poprzednie pomieszczenie')
+    nav(yc + 7, f + 1, 'Nastepne pietro\nStroje %d/%d' % ((f + 1) % nfloors + 1, nfloors), 'Nastepne pomieszczenie')
+    nav(yc + 5, None, 'Lobby hubu\nTu jestes: Stroje %d/%d\n%s' % (f + 1, nfloors, frange(f)), 'Lobby')
 
 rooms = []
 for k, o in enumerate(outfits):
-    s, side = divmod(k, 2)
+    f, j = divmod(k, FLOOR_N)
+    r, jj = divmod(j, ROW_N)
+    s, side = divmod(jj, 2)
     px = X0 + 3 + PITCH * s
+    yr = Y0 - FLOOR_PITCH * f + 10 * r
     sgn = -1 if side == 0 else 1
-    item(px, Y0 + 2 * sgn, TELEPORT, PAD_AID); pads[key(px, Y0 + 2 * sgn)] = dict(kind='room', index=k)
-    item(px, Y0 + 3 * sgn, SIGN_A if sgn < 0 else SIGN_B, 0, '%s\nPotwory: %s\nDo pokonania: %d' % (o['name'], ', '.join(o['monsters']), KILLS))
-    floor(px, Y0 + 4 * sgn)                 # wysepka z postacia pokazujaca stroj
-    o['display'] = (px, Y0 + 4 * sgn, sgn)
+    item(px, yr + 2 * sgn, TELEPORT, PAD_AID); pads[key(px, yr + 2 * sgn)] = dict(kind='room', index=k)
+    item(px, yr + 3 * sgn, SIGN_A if sgn < 0 else SIGN_B, 0, '%s\nPotwory: %s\nDo pokonania: %d' % (o['name'], ', '.join(o['monsters']), KILLS))
+    floor(px, yr + 4 * sgn)                 # wysepka z postacia pokazujaca stroj
+    o['display'] = (px, yr + 4 * sgn, sgn)
+    back = dict(kind='goto', pos=arrivals[f], label='Stroje %d/%d' % (f + 1, nfloors))
     # sala
     col, row = k % COLS, k // COLS
     rx = X0 + col * STEP
@@ -77,18 +103,47 @@ for k, o in enumerate(outfits):
         for y in range(ry + ROOM, ry + ROOM + 2):
             floor(x, y)
     entry = [cx, ry + ROOM, Z]
-    item(cx + 1, ry + ROOM + 1, TELEPORT, PAD_AID); pads[key(cx + 1, ry + ROOM + 1)] = dict(kind='hall')
+    item(cx + 1, ry + ROOM + 1, TELEPORT, PAD_AID); pads[key(cx + 1, ry + ROOM + 1)] = back
     item(cx - 1, ry + ROOM + 1, SIGN_B, 0, '%s\nPokonaj %d potworow, potem otworz skrzynie po polnocnej stronie sali.' % (o['name'], KILLS))
     # skrzynia (polnoc): wneka PZ, skrzynia za nia
     for x in range(cx - 1, cx + 2):
         floor(x, ry - 1)
     item(cx, ry - 2, CHEST, CHEST_AID); chests[key(cx, ry - 2)] = k
-    item(cx + 1, ry - 1, TELEPORT, PAD_AID); pads[key(cx + 1, ry - 1)] = dict(kind='hall')
+    item(cx + 1, ry - 1, TELEPORT, PAD_AID); pads[key(cx + 1, ry - 1)] = back
     # spawny: wymagana liczba zabic + 10 zapasu (30 potworow), rowna siatka w arenie
     pts = [(dx, dy) for dy in (1, 3, 5, 7, 9) for dx in (1, 3, 5, 7, 9, 11)][:KILLS + 10]
     for i, (dx, dy) in enumerate(pts):
         spawns.append((o['monsters'][i % len(o['monsters'])], rx + dx, ry + dy))
     rooms.append(dict(x=rx, y=ry, entry=entry))
+
+# ---- wystroj jak w hubie: marmurowa szachownica, drewno pod padami, trawa w salach, zywoplot i ogrod dookola
+MARBLE_A, MARBLE_B, WOOD, GRASS = 409, 410, 408, 4515
+BUSHES = [3681, 3682, 3699]
+FLOWERS = [3654, 3655, 3656, 3657, 3658, 3659]
+TREES = [3614, 3615, 3617, 3618, 3620, 3621]
+def _h(x, y, salt=0):
+    v = (x * 73856093) ^ (y * 19349663) ^ (salt * 83492791)
+    return (v ^ (v >> 13)) & 0xFFFF
+for (x, y, z), t in tiles.items():
+    if not t['pz']: t['ground'] = GRASS
+    elif any(i[0] == TELEPORT for i in t['items']): t['ground'] = WOOD
+    else: t['ground'] = MARBLE_A if (x + y) % 2 else MARBLE_B
+RIM = 4
+dist = {}
+for (x, y, z) in list(tiles):
+    for dx in range(-RIM, RIM + 1):
+        for dy in range(-RIM, RIM + 1):
+            kk = (x + dx, y + dy, z)
+            if kk in tiles: continue
+            d = max(abs(dx), abs(dy))
+            if d < dist.get(kk, 99): dist[kk] = d
+for (x, y, z), d in dist.items():
+    its = []
+    r = _h(x, y)
+    if d == 1: its.append((BUSHES[r % len(BUSHES)], 0, None))
+    elif r % 100 < 22: its.append((FLOWERS[_h(x, y, 1) % len(FLOWERS)], 0, None))
+    elif d >= 3 and r % 100 < 34: its.append((TREES[_h(x, y, 2) % len(TREES)], 0, None))
+    tiles[(x, y, z)] = dict(pz=False, items=its, ground=GRASS)
 
 # ---- OTBM
 def esc(b):
@@ -109,7 +164,7 @@ for (bx, by, z), ts in sorted(areas.items()):
     for ox, oy, t in sorted(ts, key=lambda v: (v[0], v[1])):
         body += b'\xfe\x05' + esc(bytes([ox, oy]))
         if t['pz']: body += esc(b'\x03' + struct.pack('<I', 1))
-        body += esc(b'\x09' + struct.pack('<H', GROUND))
+        body += esc(b'\x09' + struct.pack('<H', t.get('ground', GROUND)))
         for iid, aid, text in t['items']:
             data = struct.pack('<H', iid)
             if aid: data += b'\x04' + struct.pack('<H', aid)
@@ -148,7 +203,13 @@ for o, r in zip(outfits, rooms):
     L.append('\t{ name = %s, male = %d, female = %d, x = %d, y = %d, entry = Position(%d, %d, %d), display = Position(%d, %d, %d), faceSouth = %s },' % (q(o['name']), o['male'], o['female'], r['x'], r['y'], *r['entry'], o['display'][0], o['display'][1], Z, 'true' if o['display'][2] < 0 else 'false'))
 L.append('}\n\nlocal pads = {')
 for k, a in sorted(pads.items()):
-    L.append('\t[%s] = %s,' % (q(k), '{ room = %d }' % (a['index'] + 1) if a['kind'] == 'room' else '{ %s = true }' % a['kind']))
+    if a['kind'] == 'room': v = '{ room = %d }' % (a['index'] + 1)
+    elif a['kind'] == 'goto': v = '{ goto = Position(%d, %d, %d), label = %s }' % (*a['pos'], q(a['label']))
+    else: v = '{ %s = true }' % a['kind']
+    L.append('\t[%s] = %s,' % (q(k), v))
+L.append('}\n\nlocal navNpcs = {')
+for who, x, y in navnpcs:
+    L.append('\t{ name = %s, position = Position(%d, %d, %d) },' % (q(who), x, y, Z))
 L.append('}\n\nlocal chests = {')
 for k, i in sorted(chests.items()):
     L.append('\t[%s] = %d,' % (q(k), i + 1))
@@ -192,7 +253,7 @@ end
 
 -- Wejscie z menu !tp i z hubu.
 function OtsOutfitHall(player)
-	move(player, hall, "Questy na stroje: kazdy pad prowadzi do sali jednego stroju (tabliczka za padem mowi, co tam czeka). Trudnosc rosnie z zachodu na wschod.")
+	move(player, hall, "Questy na stroje, pietro 1")
 end
 
 local padStep = MoveEvent()
@@ -217,8 +278,8 @@ function padStep.onStepIn(creature, item, position, fromPosition)
 			text = string.format("Stroj %s: pokonane %d/%d. Skrzynia jest po polnocnej stronie sali.", quest.name, math.min(killsOf(player, pad.room), REQUIRED_KILLS), REQUIRED_KILLS)
 		end
 		move(player, quest.entry, text)
-	elseif pad.hall then
-		OtsOutfitHall(player)
+	elseif pad.goto then
+		move(player, pad.goto, pad.label)
 	elseif pad.hub then
 		move(player, hubLobby)
 	end
@@ -332,7 +393,17 @@ function displays.onStartup()
 			placed = placed + 1
 		end
 	end
-	logger.info("[OTS stroje] Postacie pokazowe: {}/{}", placed, #quests)
+	-- Postacie przy padach nawigacji (typy NPC rejestruje boss_displays.lua).
+	local guides = 0
+	for _, guide in ipairs(navNpcs) do
+		local npc = Game.createNpc(guide.name, guide.position, false, true)
+		if npc then
+			npc:setMasterPos(guide.position)
+			npc:setDirection(DIRECTION_EAST)
+			guides = guides + 1
+		end
+	end
+	logger.info("[OTS stroje] Postacie pokazowe: {}/{}, przy padach: {}/{}", placed, #quests, guides, #navNpcs)
 	return true
 end
 
