@@ -63,11 +63,26 @@ raid_npc = [X0 + lobby_w // 2 - 7, Y0 + 2, Z]
 pad(X0 + lobby_w // 2 + 12, Y0 + 2, dict(kind='mounts'))
 board(X0 + lobby_w // 2 + 12, Y0 + 3, 'Mounty\nWierzchowce do oswojenia', SIGN_B)
 
+# Fale: pad w lobby do sali fal potworow
+pad(X0 + lobby_w // 2 - 12, Y0 + 2, dict(kind='survival'))
+board(X0 + lobby_w // 2 - 12, Y0 + 3, 'Fale\nCoraz mocniejsze fale potworow, nagroda za kazda', SIGN_B)
+# Taski: postac po polnocnej stronie lobby (tworzy ja skrypt teleportow), za nia tabliczka
+task_npc = [X0 + lobby_w // 2, Y0 - 2, Z]
+floor(task_npc[0], task_npc[1])
+board(task_npc[0], Y0 - 3, 'Taski\nPowiedz hi albo wpisz !task')
+# Trenerzy: cztery exercise dummy na wschodnim koncu lobby (stoi sie w PZ, tuz obok)
+EXERCISE_DUMMY = 28558
+for y in range(Y0 - 2, Y0 + 2):
+    floor(X0 + lobby_w + 1, y)
+    floor(X0 + lobby_w + 2, y)
+    tiles[(X0 + lobby_w + 2, y, Z)]['items'].append((EXERCISE_DUMMY, 0, None))
+board(X0 + lobby_w + 1, Y0 - 3, 'Trening\nUzyj exercise weapon na manekinie')
+
 wings = []
 npcs = []
 # postacie przy padach po poludniowej stronie lobby
 _mid = X0 + lobby_w // 2
-for dx, name, look in ((-4, 'Outfity', 273), (0, 'Thais', 128), (4, 'Questy', 367), (8, 'Bossy', 289), (12, 'Mounty', 145)):
+for dx, name, look in ((-12, 'Fale', 134), (-4, 'Outfity', 273), (0, 'Thais', 128), (4, 'Questy', 367), (8, 'Bossy', 289), (12, 'Mounty', 145)):
     floor(_mid + dx + 1, Y0 + 2)
     npcs.append(dict(name=name, outfit={'lookType': look, 'lookHead': 78, 'lookBody': 69, 'lookLegs': 58, 'lookFeet': 76, 'lookAddons': 3}, pos=[_mid + dx + 1, Y0 + 2, Z], south=False))
 FLOOR_N = 24         # pozycji na jednym pietrze (2 rzedy po 12)
@@ -183,15 +198,22 @@ for x in range(arena_center[0] - ARENA_R, arena_center[0] + ARENA_R + 1):
         floor(x, y, pz=False)
 arena_landing = [arena_center[0], arena_center[1] + ARENA_R - 1, Z]
 # Salka losowego bossa: osobna sala, zeby nie mieszac sie z arena bossow na zadanie
-raid_center = [X0 + 60, Y0 - 140, Z]
-for x in range(raid_center[0] - ARENA_R, raid_center[0] + ARENA_R + 1):
-    for y in range(raid_center[1] - ARENA_R, raid_center[1] + ARENA_R + 1):
-        floor(x, y, pz=False)
-raid_landing = [raid_center[0], raid_center[1] + ARENA_R - 1, Z]
+def room(center):
+    for x in range(center[0] - ARENA_R, center[0] + ARENA_R + 1):
+        for y in range(center[1] - ARENA_R, center[1] + ARENA_R + 1):
+            floor(x, y, pz=False)
+    return [center[0], center[1] + ARENA_R - 1, Z]
+# trzy salki losowego bossa (slabszy / mocny / legendarny) i sala fal
+raid_rooms = []
+for i in range(3):
+    c = [X0 + 60 + 30 * i, Y0 - 140, Z]
+    raid_rooms.append(dict(center=c, landing=room(c)))
+surv_center = [X0 + 90, Y0 - 100, Z]
+surv_landing = room(surv_center)
 
-# Prawdziwe PZ 3x3 w miejscu ladowania na arenie i w salce losowego bossa:
+# Prawdziwe PZ 3x3 w miejscu ladowania w kazdej sali walk:
 # potwor nie wejdzie i nie zaatakuje, dopoki gracz sam nie wyjdzie.
-for lx, ly, lz in (arena_landing, raid_landing):
+for lx, ly, lz in [arena_landing, surv_landing] + [r['landing'] for r in raid_rooms]:
     for dx in (-1, 0, 1):
         for dy in (-1, 0, 1):
             tiles[(lx + dx, ly + dy, lz)]['pz'] = True
@@ -284,7 +306,7 @@ with open('hub/ots-hub-monster.xml', 'w') as f:
 open('hub/ots-hub-house.xml', 'w').write('<?xml version="1.0"?>\n<houses />\n')
 open('hub/ots-hub-npc.xml', 'w').write('<?xml version="1.0"?>\n<npcs />\n')
 open('hub/ots-hub-zones.xml', 'w').write('<?xml version="1.0"?>\n<zones />\n')
-json.dump(dict(pads=pads, wings=wings, lobby=lobby_arrival, questhall=questhall, bosshall=bosshall, bossDisplays=boss_displays, npcs=npcs, bossFloors=boss_floors, raid=dict(center=raid_center, landing=raid_landing, npc=raid_npc), arena=dict(center=arena_center, landing=arena_landing, radius=ARENA_R)), open('hub.json', 'w'))
+json.dump(dict(pads=pads, wings=wings, lobby=lobby_arrival, questhall=questhall, bosshall=bosshall, bossDisplays=boss_displays, npcs=npcs, bossFloors=boss_floors, raid=dict(rooms=raid_rooms, npc=raid_npc), survival=dict(center=surv_center, landing=surv_landing), taskNpc=task_npc, arena=dict(center=arena_center, landing=arena_landing, radius=ARENA_R)), open('hub.json', 'w'))
 xs = [k[0] for k in tiles]; ys = [k[1] for k in tiles]
 print('tiles', len(tiles), 'pads', len(pads), 'spawns', len(spawns), 'bbox', min(xs), min(ys), max(xs), max(ys), 'bytes', len(out))
 for w in wings: print(w)

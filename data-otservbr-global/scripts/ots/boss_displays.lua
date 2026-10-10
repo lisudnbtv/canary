@@ -2,6 +2,7 @@
 -- Kazda to NPC z wygladem bossa; stoi za padem prowadzacym pod jego dzwignie.
 
 local displays = {
+	{ name = "Fale", outfit = { lookType = 134, lookHead = 78, lookBody = 69, lookLegs = 58, lookFeet = 76, lookAddons = 3 }, position = Position(30002, 30002, 7), faceSouth = false },
 	{ name = "Outfity", outfit = { lookType = 273, lookHead = 78, lookBody = 69, lookLegs = 58, lookFeet = 76, lookAddons = 3 }, position = Position(30010, 30002, 7), faceSouth = false },
 	{ name = "Thais", outfit = { lookType = 128, lookHead = 78, lookBody = 69, lookLegs = 58, lookFeet = 76, lookAddons = 3 }, position = Position(30014, 30002, 7), faceSouth = false },
 	{ name = "Questy", outfit = { lookType = 367, lookHead = 78, lookBody = 69, lookLegs = 58, lookFeet = 76, lookAddons = 3 }, position = Position(30018, 30002, 7), faceSouth = false },

@@ -9,542 +9,542 @@ local RETURN_ACTION_ID = 64991 -- teleport powrotny do swiatyni
 
 local hunts = {
 	{ label = "Low (exp do 300)", list = {
-		{ "Azure Frog (20 exp, 14x)", 32372, 32910, 7 },
-		{ "Coral Frog (20 exp, 9x)", 32375, 32968, 7 },
-		{ "Crimson Frog (20 exp, 15x)", 32400, 32971, 7 },
-		{ "Hyaena (20 exp, 14x)", 33006, 32657, 11 },
-		{ "Island Troll (20 exp, 33x)", 32133, 32540, 7 },
-		{ "Orchid Frog (20 exp, 8x)", 32507, 32914, 7 },
-		{ "Sandcrawler (20 exp, 37x)", 33092, 31506, 7 },
-		{ "Spit Nettle (20 exp, 24x)", 32997, 32577, 7 },
-		{ "Troll (20 exp, 61x)", 32284, 32128, 8 },
-		{ "Water Buffalo (20 exp, 15x)", 32920, 32185, 7 },
-		{ "Winter Wolf (20 exp, 33x)", 31980, 31281, 7 },
-		{ "Cream Blob (21 exp, 9x)", 33422, 32122, 7 },
-		{ "Poison Spider (22 exp, 26x)", 32816, 32912, 8 },
-		{ "Bear (23 exp, 13x)", 32149, 32047, 10 },
-		{ "Frost Troll (23 exp, 34x)", 32093, 31053, 9 },
-		{ "Panda (23 exp, 21x)", 32627, 32852, 7 },
-		{ "Wasp (24 exp, 31x)", 32420, 32302, 9 },
-		{ "Goblin (25 exp, 42x)", 32555, 31830, 6 },
-		{ "Orc (25 exp, 34x)", 32898, 31777, 7 },
-		{ "Salamander (25 exp, 35x)", 32868, 32169, 10 },
-		{ "Swamp Troll (25 exp, 44x)", 32961, 32231, 8 },
-		{ "Polar Bear (28 exp, 18x)", 32282, 31064, 7 },
-		{ "Cobra (30 exp, 21x)", 32955, 32526, 7 },
-		{ "Crab (30 exp, 17x)", 32180, 32938, 8 },
-		{ "Lion (30 exp, 12x)", 32691, 32138, 7 },
-		{ "Centipede (34 exp, 35x)", 32235, 32774, 9 },
-		{ "Crazed Beggar (35 exp, 11x)", 32920, 31274, 7 },
-		{ "Dworc Venomsniper (35 exp, 83x)", 32669, 32918, 8 },
-		{ "Emerald Damselfly (35 exp, 26x)", 32846, 32098, 10 },
-		{ "Skeleton (35 exp, 67x)", 32392, 31982, 9 },
-		{ "Goblin Scavenger (37 exp, 20x)", 33107, 31866, 10 },
-		{ "Orc Spearman (38 exp, 46x)", 32901, 31772, 7 },
-		{ "Chakoya Toolshaper (40 exp, 72x)", 32452, 31066, 10 },
-		{ "Chakoya Tribewarden (40 exp, 44x)", 32452, 31073, 10 },
-		{ "Crocodile (40 exp, 32x)", 32611, 32677, 8 },
-		{ "Dworc Fleshhunter (40 exp, 61x)", 32761, 32869, 8 },
-		{ "Insect Swarm (40 exp, 13x)", 33208, 31386, 7 },
-		{ "Rotworm (40 exp, 81x)", 32251, 32814, 9 },
-		{ "Tiger (40 exp, 10x)", 32722, 32710, 7 },
-		{ "Troll Champion (40 exp, 17x)", 32647, 31979, 9 },
-		{ "Elf (42 exp, 21x)", 33054, 32199, 8 },
-		{ "Larva (44 exp, 130x)", 33223, 32607, 9 },
-		{ "Dwarf (45 exp, 51x)", 32551, 31878, 9 },
-		{ "Leaf Golem (45 exp, 49x)", 33266, 31993, 11 },
-		{ "Scorpion (45 exp, 29x)", 32242, 31923, 11 },
-		{ "Skeleton Warrior (45 exp, 13x)", 32973, 32441, 10 },
-		{ "Swampling (45 exp, 9x)", 33325, 31952, 8 },
-		{ "Chakoya Windcaller (48 exp, 33x)", 32449, 31068, 10 },
-		{ "Smuggler (48 exp, 26x)", 32860, 31321, 6 },
-		{ "Marsh Stalker (50 exp, 20x)", 32847, 32101, 10 },
-		{ "Minotaur (50 exp, 37x)", 32411, 32107, 15 },
-		{ "Minotaur Bruiser (50 exp, 30x)", 32039, 31846, 8 },
-		{ "Orc Warrior (50 exp, 49x)", 32936, 31705, 7 },
-		{ "Goblin Assassin (52 exp, 16x)", 33107, 31867, 10 },
-		{ "Dworc Voodoomaster (55 exp, 23x)", 32761, 32868, 8 },
-		{ "Minotaur Poacher (55 exp, 16x)", 32001, 31840, 10 },
-		{ "War Wolf (55 exp, 18x)", 33423, 31563, 11 },
-		{ "Amazon (60 exp, 30x)", 32833, 31925, 7 },
-		{ "Boar (60 exp, 17x)", 32601, 32262, 7 },
-		{ "Dwarf Miner (60 exp, 11x)", 32069, 31940, 11 },
-		{ "Gnarlhound (60 exp, 26x)", 33050, 31514, 8 },
-		{ "Nomad (60 exp, 31x)", 33231, 32514, 8 },
-		{ "Toad (60 exp, 36x)", 32368, 32963, 7 },
-		{ "Wild Warrior (60 exp, 19x)", 32658, 32360, 8 },
-		{ "Bandit (65 exp, 36x)", 32657, 32361, 8 },
-		{ "Ghost Wolf (65 exp, 11x)", 32789, 31936, 10 },
-		{ "Minotaur Archer (65 exp, 12x)", 32251, 32435, 10 },
-		{ "Carrion Worm (70 exp, 35x)", 32235, 32711, 10 },
-		{ "Dwarf Soldier (70 exp, 67x)", 32511, 31908, 11 },
-		{ "Gang Member (70 exp, 25x)", 32828, 31303, 7 },
-		{ "Gloom Wolf (70 exp, 15x)", 32788, 31936, 10 },
-		{ "Ladybug (70 exp, 35x)", 33544, 31277, 7 },
-		{ "Slug (70 exp, 15x)", 32928, 32126, 9 },
-		{ "Elf Scout (75 exp, 12x)", 32759, 31280, 7 },
-		{ "Firestarter (80 exp, 17x)", 33085, 32157, 7 },
-		{ "Barbarian Headsplitter (85 exp, 37x)", 32006, 31272, 7 },
-		{ "Barbarian Skullhunter (85 exp, 29x)", 31999, 31270, 7 },
-		{ "Ghoul (85 exp, 41x)", 33383, 31667, 11 },
-		{ "Pirate Skeleton (85 exp, 25x)", 32040, 32563, 7 },
-		{ "Valkyrie (85 exp, 18x)", 32847, 31916, 8 },
-		{ "Barbarian Brutetamer (90 exp, 16x)", 32051, 31338, 7 },
-		{ "Gazer (90 exp, 17x)", 32087, 32791, 8 },
-		{ "Gladiator (90 exp, 19x)", 32654, 31232, 6 },
-		{ "Stalker (90 exp, 70x)", 33083, 32978, 14 },
-		{ "Tortoise (90 exp, 74x)", 32465, 32939, 9 },
-		{ "Damaged Worker Golem (95 exp, 19x)", 32888, 31254, 8 },
-		{ "Dark Apprentice (100 exp, 11x)", 32921, 31084, 5 },
-		{ "Novice of the Cult (100 exp, 87x)", 32144, 31120, 9 },
-		{ "Quara Mantassin Scout (100 exp, 20x)", 31950, 32690, 9 },
-		{ "Assassin (105 exp, 26x)", 32614, 32472, 9 },
-		{ "Rorc (105 exp, 47x)", 32782, 31805, 7 },
-		{ "Sibang (105 exp, 63x)", 32780, 32540, 7 },
-		{ "Lizard Sentinel (110 exp, 62x)", 32919, 32871, 7 },
-		{ "Orc Rider (110 exp, 23x)", 33312, 31472, 7 },
-		{ "Orc Shaman (110 exp, 20x)", 32932, 31819, 7 },
-		{ "Kongra (115 exp, 52x)", 32792, 32550, 7 },
-		{ "Ghost (120 exp, 53x)", 33083, 32978, 14 },
-		{ "Scarab (120 exp, 94x)", 33163, 32528, 10 },
-		{ "Tarantula (120 exp, 41x)", 32877, 32907, 9 },
-		{ "Tarnished Spirit (120 exp, 25x)", 33042, 32422, 8 },
-		{ "White Shade (120 exp, 25x)", 32976, 32363, 11 },
-		{ "Witch (120 exp, 15x)", 32614, 32476, 9 },
-		{ "Manta Ray (125 exp, 8x)", 33552, 31293, 13 },
-		{ "Pirate Marauder (125 exp, 54x)", 31960, 32805, 6 },
-		{ "Deepling Worker (130 exp, 30x)", 33549, 31275, 14 },
-		{ "Troll Legionnaire (140 exp, 15x)", 32760, 31454, 12 },
-		{ "Dark Monk (145 exp, 33x)", 32614, 32474, 9 },
-		{ "Fire Devil (145 exp, 22x)", 32016, 32599, 8 },
-		{ "Merlkin (145 exp, 26x)", 32836, 32533, 9 },
-		{ "Carniphila (150 exp, 33x)", 32950, 32524, 7 },
-		{ "Corym Charlatan (150 exp, 30x)", 33008, 32198, 11 },
-		{ "Cyclops (150 exp, 45x)", 32485, 32058, 8 },
-		{ "Frost Giant (150 exp, 27x)", 32413, 31302, 9 },
-		{ "Frost Giantess (150 exp, 19x)", 32413, 31301, 9 },
-		{ "Gargoyle (150 exp, 45x)", 32232, 32579, 8 },
-		{ "Minotaur Mage (150 exp, 10x)", 32251, 32433, 10 },
-		{ "Mummy (150 exp, 43x)", 32205, 32672, 9 },
-		{ "Mutated Human (150 exp, 31x)", 32696, 31162, 6 },
-		{ "Terror Bird (150 exp, 13x)", 32994, 32578, 7 },
-		{ "Thornback Tortoise (150 exp, 71x)", 32373, 32961, 9 },
-		{ "Lizard Templar (155 exp, 62x)", 32920, 32871, 7 },
-		{ "Blood Crab (160 exp, 43x)", 31939, 31046, 8 },
-		{ "Deepling Scout (160 exp, 30x)", 33493, 31281, 13 },
-		{ "Elephant (160 exp, 17x)", 32951, 32750, 7 },
-		{ "Mammoth (160 exp, 38x)", 32140, 31289, 6 },
-		{ "Minotaur Guard (160 exp, 21x)", 32402, 32102, 15 },
-		{ "Slime (160 exp, 35x)", 33393, 32790, 14 },
-		{ "Stone Golem (160 exp, 24x)", 33040, 31480, 11 },
-		{ "Terramite (160 exp, 54x)", 33200, 32451, 9 },
-		{ "Dwarf Guard (165 exp, 78x)", 32528, 31925, 13 },
-		{ "Vampire Pig (165 exp, 10x)", 32751, 31483, 6 },
-		{ "Bonelord (170 exp, 43x)", 32104, 32774, 8 },
-		{ "Elf Arcanist (175 exp, 14x)", 32768, 31290, 6 },
-		{ "Pirate Cutthroat (175 exp, 26x)", 31969, 32816, 4 },
-		{ "Gozzler (180 exp, 25x)", 32849, 31055, 7 },
-		{ "Mercury Blob (180 exp, 8x)", 32696, 31168, 6 },
-		{ "Dark Magician (185 exp, 11x)", 32920, 31087, 5 },
-		{ "Dragon Hatchling (185 exp, 23x)", 33048, 31172, 7 },
-		{ "Furious Troll (185 exp, 11x)", 32752, 31470, 13 },
-		{ "Dryad (190 exp, 19x)", 33236, 31974, 10 },
-		{ "Barbarian Bloodwalker (195 exp, 18x)", 32001, 31416, 7 },
-		{ "Crypt Shambler (195 exp, 43x)", 33375, 32762, 14 },
-		{ "Ghoulish Hyaena (195 exp, 11x)", 33000, 32759, 8 },
-		{ "Orc Berserker (195 exp, 66x)", 32877, 31790, 7 },
-		{ "Cyclops Drone (200 exp, 23x)", 32602, 31417, 6 },
-		{ "Monk (200 exp, 13x)", 33373, 31347, 3 },
-		{ "Quara Constrictor Scout (200 exp, 15x)", 31949, 32672, 8 },
-		{ "Mad Scientist (205 exp, 12x)", 32892, 31097, 6 },
-		{ "Orc Marauder (205 exp, 25x)", 33242, 31515, 7 },
-		{ "Iron Servant (210 exp, 86x)", 32769, 32871, 13 },
-		{ "Lizard Snakecharmer (210 exp, 17x)", 33306, 31506, 7 },
-		{ "Green Djinn (215 exp, 19x)", 33062, 32739, 14 },
-		{ "Tomb Servant (215 exp, 19x)", 32949, 32761, 10 },
-		{ "Fire Elemental (220 exp, 38x)", 33265, 32910, 15 },
-		{ "Wilting Leaf Golem (225 exp, 28x)", 33199, 31997, 11 },
-		{ "Demon Skeleton (240 exp, 37x)", 33002, 32412, 11 },
-		{ "Acid Blob (250 exp, 11x)", 32698, 31162, 6 },
-		{ "Pirate Buccaneer (250 exp, 19x)", 32639, 31296, 6 },
-		{ "Cyclops Smith (255 exp, 15x)", 33313, 31667, 11 },
-		{ "Corym Skirmisher (260 exp, 27x)", 33006, 32196, 11 },
-		{ "Dwarf Geomancer (265 exp, 20x)", 32590, 31428, 14 },
-		{ "Orc Leader (270 exp, 13x)", 33062, 31333, 8 },
-		{ "Lancer Beetle (275 exp, 30x)", 33252, 31379, 8 },
-		{ "Elder Bonelord (280 exp, 15x)", 32113, 32804, 9 },
-		{ "Zombie (280 exp, 70x)", 32188, 32966, 10 },
-		{ "Ice Golem (295 exp, 37x)", 32216, 31065, 10 },
-		{ "Acolyte of the Cult (300 exp, 45x)", 32082, 31070, 10 },
-		{ "Death Blob (300 exp, 33x)", 33083, 31104, 9 },
+		{ "Azure Frog (20 exp, 14x)", 32372, 32910, 7, mon = "Azure Frog" },
+		{ "Coral Frog (20 exp, 9x)", 32375, 32968, 7, mon = "Coral Frog" },
+		{ "Crimson Frog (20 exp, 15x)", 32400, 32971, 7, mon = "Crimson Frog" },
+		{ "Hyaena (20 exp, 14x)", 33006, 32657, 11, mon = "Hyaena" },
+		{ "Island Troll (20 exp, 33x)", 32133, 32540, 7, mon = "Island Troll" },
+		{ "Orchid Frog (20 exp, 8x)", 32507, 32914, 7, mon = "Orchid Frog" },
+		{ "Sandcrawler (20 exp, 37x)", 33092, 31506, 7, mon = "Sandcrawler" },
+		{ "Spit Nettle (20 exp, 24x)", 32997, 32577, 7, mon = "Spit Nettle" },
+		{ "Troll (20 exp, 61x)", 32284, 32128, 8, mon = "Troll" },
+		{ "Water Buffalo (20 exp, 15x)", 32920, 32185, 7, mon = "Water Buffalo" },
+		{ "Winter Wolf (20 exp, 33x)", 31980, 31281, 7, mon = "Winter Wolf" },
+		{ "Cream Blob (21 exp, 9x)", 33422, 32122, 7, mon = "Cream Blob" },
+		{ "Poison Spider (22 exp, 26x)", 32816, 32912, 8, mon = "Poison Spider" },
+		{ "Bear (23 exp, 13x)", 32149, 32047, 10, mon = "Bear" },
+		{ "Frost Troll (23 exp, 34x)", 32093, 31053, 9, mon = "Frost Troll" },
+		{ "Panda (23 exp, 21x)", 32627, 32852, 7, mon = "Panda" },
+		{ "Wasp (24 exp, 31x)", 32420, 32302, 9, mon = "Wasp" },
+		{ "Goblin (25 exp, 42x)", 32555, 31830, 6, mon = "Goblin" },
+		{ "Orc (25 exp, 34x)", 32898, 31777, 7, mon = "Orc" },
+		{ "Salamander (25 exp, 35x)", 32868, 32169, 10, mon = "Salamander" },
+		{ "Swamp Troll (25 exp, 44x)", 32961, 32231, 8, mon = "Swamp Troll" },
+		{ "Polar Bear (28 exp, 18x)", 32282, 31064, 7, mon = "Polar Bear" },
+		{ "Cobra (30 exp, 21x)", 32955, 32526, 7, mon = "Cobra" },
+		{ "Crab (30 exp, 17x)", 32180, 32938, 8, mon = "Crab" },
+		{ "Lion (30 exp, 12x)", 32691, 32138, 7, mon = "Lion" },
+		{ "Centipede (34 exp, 35x)", 32235, 32774, 9, mon = "Centipede" },
+		{ "Crazed Beggar (35 exp, 11x)", 32920, 31274, 7, mon = "Crazed Beggar" },
+		{ "Dworc Venomsniper (35 exp, 83x)", 32669, 32918, 8, mon = "Dworc Venomsniper" },
+		{ "Emerald Damselfly (35 exp, 26x)", 32846, 32098, 10, mon = "Emerald Damselfly" },
+		{ "Skeleton (35 exp, 67x)", 32392, 31982, 9, mon = "Skeleton" },
+		{ "Goblin Scavenger (37 exp, 20x)", 33107, 31866, 10, mon = "Goblin Scavenger" },
+		{ "Orc Spearman (38 exp, 46x)", 32901, 31772, 7, mon = "Orc Spearman" },
+		{ "Chakoya Toolshaper (40 exp, 72x)", 32452, 31066, 10, mon = "Chakoya Toolshaper" },
+		{ "Chakoya Tribewarden (40 exp, 44x)", 32452, 31073, 10, mon = "Chakoya Tribewarden" },
+		{ "Crocodile (40 exp, 32x)", 32611, 32677, 8, mon = "Crocodile" },
+		{ "Dworc Fleshhunter (40 exp, 61x)", 32761, 32869, 8, mon = "Dworc Fleshhunter" },
+		{ "Insect Swarm (40 exp, 13x)", 33208, 31386, 7, mon = "Insect Swarm" },
+		{ "Rotworm (40 exp, 81x)", 32251, 32814, 9, mon = "Rotworm" },
+		{ "Tiger (40 exp, 10x)", 32722, 32710, 7, mon = "Tiger" },
+		{ "Troll Champion (40 exp, 17x)", 32647, 31979, 9, mon = "Troll Champion" },
+		{ "Elf (42 exp, 21x)", 33054, 32199, 8, mon = "Elf" },
+		{ "Larva (44 exp, 130x)", 33223, 32607, 9, mon = "Larva" },
+		{ "Dwarf (45 exp, 51x)", 32551, 31878, 9, mon = "Dwarf" },
+		{ "Leaf Golem (45 exp, 49x)", 33266, 31993, 11, mon = "Leaf Golem" },
+		{ "Scorpion (45 exp, 29x)", 32242, 31923, 11, mon = "Scorpion" },
+		{ "Skeleton Warrior (45 exp, 13x)", 32973, 32441, 10, mon = "Skeleton Warrior" },
+		{ "Swampling (45 exp, 9x)", 33325, 31952, 8, mon = "Swampling" },
+		{ "Chakoya Windcaller (48 exp, 33x)", 32449, 31068, 10, mon = "Chakoya Windcaller" },
+		{ "Smuggler (48 exp, 26x)", 32860, 31321, 6, mon = "Smuggler" },
+		{ "Marsh Stalker (50 exp, 20x)", 32847, 32101, 10, mon = "Marsh Stalker" },
+		{ "Minotaur (50 exp, 37x)", 32411, 32107, 15, mon = "Minotaur" },
+		{ "Minotaur Bruiser (50 exp, 30x)", 32039, 31846, 8, mon = "Minotaur Bruiser" },
+		{ "Orc Warrior (50 exp, 49x)", 32936, 31705, 7, mon = "Orc Warrior" },
+		{ "Goblin Assassin (52 exp, 16x)", 33107, 31867, 10, mon = "Goblin Assassin" },
+		{ "Dworc Voodoomaster (55 exp, 23x)", 32761, 32868, 8, mon = "Dworc Voodoomaster" },
+		{ "Minotaur Poacher (55 exp, 16x)", 32001, 31840, 10, mon = "Minotaur Poacher" },
+		{ "War Wolf (55 exp, 18x)", 33423, 31563, 11, mon = "War Wolf" },
+		{ "Amazon (60 exp, 30x)", 32833, 31925, 7, mon = "Amazon" },
+		{ "Boar (60 exp, 17x)", 32601, 32262, 7, mon = "Boar" },
+		{ "Dwarf Miner (60 exp, 11x)", 32069, 31940, 11, mon = "Dwarf Miner" },
+		{ "Gnarlhound (60 exp, 26x)", 33050, 31514, 8, mon = "Gnarlhound" },
+		{ "Nomad (60 exp, 31x)", 33231, 32514, 8, mon = "Nomad" },
+		{ "Toad (60 exp, 36x)", 32368, 32963, 7, mon = "Toad" },
+		{ "Wild Warrior (60 exp, 19x)", 32658, 32360, 8, mon = "Wild Warrior" },
+		{ "Bandit (65 exp, 36x)", 32657, 32361, 8, mon = "Bandit" },
+		{ "Ghost Wolf (65 exp, 11x)", 32789, 31936, 10, mon = "Ghost Wolf" },
+		{ "Minotaur Archer (65 exp, 12x)", 32251, 32435, 10, mon = "Minotaur Archer" },
+		{ "Carrion Worm (70 exp, 35x)", 32235, 32711, 10, mon = "Carrion Worm" },
+		{ "Dwarf Soldier (70 exp, 67x)", 32511, 31908, 11, mon = "Dwarf Soldier" },
+		{ "Gang Member (70 exp, 25x)", 32828, 31303, 7, mon = "Gang Member" },
+		{ "Gloom Wolf (70 exp, 15x)", 32788, 31936, 10, mon = "Gloom Wolf" },
+		{ "Ladybug (70 exp, 35x)", 33544, 31277, 7, mon = "Ladybug" },
+		{ "Slug (70 exp, 15x)", 32928, 32126, 9, mon = "Slug" },
+		{ "Elf Scout (75 exp, 12x)", 32759, 31280, 7, mon = "Elf Scout" },
+		{ "Firestarter (80 exp, 17x)", 33085, 32157, 7, mon = "Firestarter" },
+		{ "Barbarian Headsplitter (85 exp, 37x)", 32006, 31272, 7, mon = "Barbarian Headsplitter" },
+		{ "Barbarian Skullhunter (85 exp, 29x)", 31999, 31270, 7, mon = "Barbarian Skullhunter" },
+		{ "Ghoul (85 exp, 41x)", 33383, 31667, 11, mon = "Ghoul" },
+		{ "Pirate Skeleton (85 exp, 25x)", 32040, 32563, 7, mon = "Pirate Skeleton" },
+		{ "Valkyrie (85 exp, 18x)", 32847, 31916, 8, mon = "Valkyrie" },
+		{ "Barbarian Brutetamer (90 exp, 16x)", 32051, 31338, 7, mon = "Barbarian Brutetamer" },
+		{ "Gazer (90 exp, 17x)", 32087, 32791, 8, mon = "Gazer" },
+		{ "Gladiator (90 exp, 19x)", 32654, 31232, 6, mon = "Gladiator" },
+		{ "Stalker (90 exp, 70x)", 33083, 32978, 14, mon = "Stalker" },
+		{ "Tortoise (90 exp, 74x)", 32465, 32939, 9, mon = "Tortoise" },
+		{ "Damaged Worker Golem (95 exp, 19x)", 32888, 31254, 8, mon = "Damaged Worker Golem" },
+		{ "Dark Apprentice (100 exp, 11x)", 32921, 31084, 5, mon = "Dark Apprentice" },
+		{ "Novice of the Cult (100 exp, 87x)", 32144, 31120, 9, mon = "Novice of the Cult" },
+		{ "Quara Mantassin Scout (100 exp, 20x)", 31950, 32690, 9, mon = "Quara Mantassin Scout" },
+		{ "Assassin (105 exp, 26x)", 32614, 32472, 9, mon = "Assassin" },
+		{ "Rorc (105 exp, 47x)", 32782, 31805, 7, mon = "Rorc" },
+		{ "Sibang (105 exp, 63x)", 32780, 32540, 7, mon = "Sibang" },
+		{ "Lizard Sentinel (110 exp, 62x)", 32919, 32871, 7, mon = "Lizard Sentinel" },
+		{ "Orc Rider (110 exp, 23x)", 33312, 31472, 7, mon = "Orc Rider" },
+		{ "Orc Shaman (110 exp, 20x)", 32932, 31819, 7, mon = "Orc Shaman" },
+		{ "Kongra (115 exp, 52x)", 32792, 32550, 7, mon = "Kongra" },
+		{ "Ghost (120 exp, 53x)", 33083, 32978, 14, mon = "Ghost" },
+		{ "Scarab (120 exp, 94x)", 33163, 32528, 10, mon = "Scarab" },
+		{ "Tarantula (120 exp, 41x)", 32877, 32907, 9, mon = "Tarantula" },
+		{ "Tarnished Spirit (120 exp, 25x)", 33042, 32422, 8, mon = "Tarnished Spirit" },
+		{ "White Shade (120 exp, 25x)", 32976, 32363, 11, mon = "White Shade" },
+		{ "Witch (120 exp, 15x)", 32614, 32476, 9, mon = "Witch" },
+		{ "Manta Ray (125 exp, 8x)", 33552, 31293, 13, mon = "Manta Ray" },
+		{ "Pirate Marauder (125 exp, 54x)", 31960, 32805, 6, mon = "Pirate Marauder" },
+		{ "Deepling Worker (130 exp, 30x)", 33549, 31275, 14, mon = "Deepling Worker" },
+		{ "Troll Legionnaire (140 exp, 15x)", 32760, 31454, 12, mon = "Troll Legionnaire" },
+		{ "Dark Monk (145 exp, 33x)", 32614, 32474, 9, mon = "Dark Monk" },
+		{ "Fire Devil (145 exp, 22x)", 32016, 32599, 8, mon = "Fire Devil" },
+		{ "Merlkin (145 exp, 26x)", 32836, 32533, 9, mon = "Merlkin" },
+		{ "Carniphila (150 exp, 33x)", 32950, 32524, 7, mon = "Carniphila" },
+		{ "Corym Charlatan (150 exp, 30x)", 33008, 32198, 11, mon = "Corym Charlatan" },
+		{ "Cyclops (150 exp, 45x)", 32485, 32058, 8, mon = "Cyclops" },
+		{ "Frost Giant (150 exp, 27x)", 32413, 31302, 9, mon = "Frost Giant" },
+		{ "Frost Giantess (150 exp, 19x)", 32413, 31301, 9, mon = "Frost Giantess" },
+		{ "Gargoyle (150 exp, 45x)", 32232, 32579, 8, mon = "Gargoyle" },
+		{ "Minotaur Mage (150 exp, 10x)", 32251, 32433, 10, mon = "Minotaur Mage" },
+		{ "Mummy (150 exp, 43x)", 32205, 32672, 9, mon = "Mummy" },
+		{ "Mutated Human (150 exp, 31x)", 32696, 31162, 6, mon = "Mutated Human" },
+		{ "Terror Bird (150 exp, 13x)", 32994, 32578, 7, mon = "Terror Bird" },
+		{ "Thornback Tortoise (150 exp, 71x)", 32373, 32961, 9, mon = "Thornback Tortoise" },
+		{ "Lizard Templar (155 exp, 62x)", 32920, 32871, 7, mon = "Lizard Templar" },
+		{ "Blood Crab (160 exp, 43x)", 31939, 31046, 8, mon = "Blood Crab" },
+		{ "Deepling Scout (160 exp, 30x)", 33493, 31281, 13, mon = "Deepling Scout" },
+		{ "Elephant (160 exp, 17x)", 32951, 32750, 7, mon = "Elephant" },
+		{ "Mammoth (160 exp, 38x)", 32140, 31289, 6, mon = "Mammoth" },
+		{ "Minotaur Guard (160 exp, 21x)", 32402, 32102, 15, mon = "Minotaur Guard" },
+		{ "Slime (160 exp, 35x)", 33393, 32790, 14, mon = "Slime" },
+		{ "Stone Golem (160 exp, 24x)", 33040, 31480, 11, mon = "Stone Golem" },
+		{ "Terramite (160 exp, 54x)", 33200, 32451, 9, mon = "Terramite" },
+		{ "Dwarf Guard (165 exp, 78x)", 32528, 31925, 13, mon = "Dwarf Guard" },
+		{ "Vampire Pig (165 exp, 10x)", 32751, 31483, 6, mon = "Vampire Pig" },
+		{ "Bonelord (170 exp, 43x)", 32104, 32774, 8, mon = "Bonelord" },
+		{ "Elf Arcanist (175 exp, 14x)", 32768, 31290, 6, mon = "Elf Arcanist" },
+		{ "Pirate Cutthroat (175 exp, 26x)", 31969, 32816, 4, mon = "Pirate Cutthroat" },
+		{ "Gozzler (180 exp, 25x)", 32849, 31055, 7, mon = "Gozzler" },
+		{ "Mercury Blob (180 exp, 8x)", 32696, 31168, 6, mon = "Mercury Blob" },
+		{ "Dark Magician (185 exp, 11x)", 32920, 31087, 5, mon = "Dark Magician" },
+		{ "Dragon Hatchling (185 exp, 23x)", 33048, 31172, 7, mon = "Dragon Hatchling" },
+		{ "Furious Troll (185 exp, 11x)", 32752, 31470, 13, mon = "Furious Troll" },
+		{ "Dryad (190 exp, 19x)", 33236, 31974, 10, mon = "Dryad" },
+		{ "Barbarian Bloodwalker (195 exp, 18x)", 32001, 31416, 7, mon = "Barbarian Bloodwalker" },
+		{ "Crypt Shambler (195 exp, 43x)", 33375, 32762, 14, mon = "Crypt Shambler" },
+		{ "Ghoulish Hyaena (195 exp, 11x)", 33000, 32759, 8, mon = "Ghoulish Hyaena" },
+		{ "Orc Berserker (195 exp, 66x)", 32877, 31790, 7, mon = "Orc Berserker" },
+		{ "Cyclops Drone (200 exp, 23x)", 32602, 31417, 6, mon = "Cyclops Drone" },
+		{ "Monk (200 exp, 13x)", 33373, 31347, 3, mon = "Monk" },
+		{ "Quara Constrictor Scout (200 exp, 15x)", 31949, 32672, 8, mon = "Quara Constrictor Scout" },
+		{ "Mad Scientist (205 exp, 12x)", 32892, 31097, 6, mon = "Mad Scientist" },
+		{ "Orc Marauder (205 exp, 25x)", 33242, 31515, 7, mon = "Orc Marauder" },
+		{ "Iron Servant (210 exp, 86x)", 32769, 32871, 13, mon = "Iron Servant" },
+		{ "Lizard Snakecharmer (210 exp, 17x)", 33306, 31506, 7, mon = "Lizard Snakecharmer" },
+		{ "Green Djinn (215 exp, 19x)", 33062, 32739, 14, mon = "Green Djinn" },
+		{ "Tomb Servant (215 exp, 19x)", 32949, 32761, 10, mon = "Tomb Servant" },
+		{ "Fire Elemental (220 exp, 38x)", 33265, 32910, 15, mon = "Fire Elemental" },
+		{ "Wilting Leaf Golem (225 exp, 28x)", 33199, 31997, 11, mon = "Wilting Leaf Golem" },
+		{ "Demon Skeleton (240 exp, 37x)", 33002, 32412, 11, mon = "Demon Skeleton" },
+		{ "Acid Blob (250 exp, 11x)", 32698, 31162, 6, mon = "Acid Blob" },
+		{ "Pirate Buccaneer (250 exp, 19x)", 32639, 31296, 6, mon = "Pirate Buccaneer" },
+		{ "Cyclops Smith (255 exp, 15x)", 33313, 31667, 11, mon = "Cyclops Smith" },
+		{ "Corym Skirmisher (260 exp, 27x)", 33006, 32196, 11, mon = "Corym Skirmisher" },
+		{ "Dwarf Geomancer (265 exp, 20x)", 32590, 31428, 14, mon = "Dwarf Geomancer" },
+		{ "Orc Leader (270 exp, 13x)", 33062, 31333, 8, mon = "Orc Leader" },
+		{ "Lancer Beetle (275 exp, 30x)", 33252, 31379, 8, mon = "Lancer Beetle" },
+		{ "Elder Bonelord (280 exp, 15x)", 32113, 32804, 9, mon = "Elder Bonelord" },
+		{ "Zombie (280 exp, 70x)", 32188, 32966, 10, mon = "Zombie" },
+		{ "Ice Golem (295 exp, 37x)", 32216, 31065, 10, mon = "Ice Golem" },
+		{ "Acolyte of the Cult (300 exp, 45x)", 32082, 31070, 10, mon = "Acolyte of the Cult" },
+		{ "Death Blob (300 exp, 33x)", 33083, 31104, 9, mon = "Death Blob" },
 	} },
 	{ label = "Medium (exp 300-1500)", list = {
-		{ "Vampire (305 exp, 37x)", 33094, 32916, 14 },
-		{ "Haunted Treeling (310 exp, 45x)", 32926, 31507, 7 },
-		{ "Forest Fury (330 exp, 9x)", 33217, 32041, 10 },
-		{ "Sacred Spider (330 exp, 16x)", 32941, 32732, 10 },
-		{ "Swarmer (350 exp, 56x)", 33552, 31265, 7 },
-		{ "Quara Constrictor (380 exp, 34x)", 32070, 32767, 12 },
-		{ "Adept of the Cult (400 exp, 22x)", 32026, 31196, 10 },
-		{ "Bane Bringer (400 exp, 12x)", 32740, 31952, 13 },
-		{ "Clay Guardian (400 exp, 34x)", 32308, 32587, 11 },
-		{ "Quara Predator Scout (400 exp, 24x)", 31950, 32688, 9 },
-		{ "Shadow Pupil (410 exp, 13x)", 33005, 32448, 12 },
-		{ "Priestess (420 exp, 20x)", 33042, 32405, 10 },
-		{ "Mutated Rat (450 exp, 36x)", 32213, 32707, 12 },
-		{ "Wailing Widow (450 exp, 46x)", 33674, 31740, 8 },
-		{ "Clomp (475 exp, 34x)", 33594, 31672, 7 },
-		{ "Grave Guard (485 exp, 13x)", 32960, 32754, 11 },
-		{ "Corym Vanguard (490 exp, 18x)", 33071, 32154, 11 },
-		{ "Crystalcrusher (500 exp, 23x)", 32187, 32612, 12 },
-		{ "Enlightened of the Cult (500 exp, 27x)", 32150, 31231, 11 },
-		{ "Nightstalker (500 exp, 22x)", 32849, 32448, 12 },
-		{ "Pooka (500 exp, 10x)", 33421, 32233, 7 },
-		{ "Stonerefiner (500 exp, 39x)", 33059, 32005, 13 },
-		{ "Wyvern (515 exp, 18x)", 32849, 31803, 14 },
-		{ "Earth Elemental (550 exp, 52x)", 32337, 32588, 12 },
-		{ "Energy Elemental (550 exp, 38x)", 33600, 32380, 10 },
-		{ "Enraged Crystal Golem (550 exp, 23x)", 32948, 31951, 10 },
-		{ "Elder Mummy (560 exp, 14x)", 32938, 32773, 12 },
-		{ "Bonebeast (580 exp, 29x)", 33423, 32263, 11 },
-		{ "Ice Witch (580 exp, 18x)", 32278, 31033, 11 },
-		{ "Necromancer (580 exp, 43x)", 32996, 32391, 10 },
-		{ "Quara Mantassin (600 exp, 39x)", 32080, 32772, 12 },
-		{ "Quara Pincher Scout (600 exp, 25x)", 31928, 32692, 10 },
-		{ "Twisted Pooka (600 exp, 32x)", 33551, 32210, 8 },
-		{ "Ogre Shaman (625 exp, 22x)", 33592, 31674, 7 },
-		{ "Dragon Lord Hatchling (645 exp, 14x)", 32561, 31373, 15 },
-		{ "Insectoid Worker (650 exp, 59x)", 33551, 31232, 7 },
-		{ "Water Elemental (650 exp, 44x)", 32542, 32829, 9 },
-		{ "Sandstone Scorpion (680 exp, 20x)", 32944, 32773, 12 },
-		{ "Dragon (700 exp, 55x)", 33214, 31252, 7 },
-		{ "Glooth Blob (700 exp, 61x)", 33559, 31902, 7 },
-		{ "Pixie (700 exp, 39x)", 33434, 32246, 7 },
-		{ "Shark (700 exp, 22x)", 33446, 31796, 15 },
-		{ "Swan Maiden (700 exp, 11x)", 33542, 32248, 7 },
-		{ "Ancient Scarab (720 exp, 31x)", 33335, 32640, 12 },
-		{ "Frost Dragon Hatchling (745 exp, 22x)", 32197, 31450, 7 },
-		{ "Blood Hand (750 exp, 11x)", 32976, 32422, 11 },
-		{ "Death Priest (750 exp, 14x)", 32942, 32773, 12 },
-		{ "Mutated Bat (750 exp, 30x)", 32323, 32612, 12 },
-		{ "Mutated Tiger (750 exp, 18x)", 33535, 31129, 8 },
-		{ "Rot Elemental (750 exp, 36x)", 33561, 31905, 7 },
-		{ "Stampor (780 exp, 18x)", 32203, 30994, 12 },
-		{ "Bog Raider (800 exp, 26x)", 32665, 31094, 7 },
-		{ "Faun (800 exp, 22x)", 33565, 32236, 7 },
-		{ "Ogre Brute (800 exp, 36x)", 33667, 31597, 7 },
-		{ "Quara Hydromancer Scout (800 exp, 18x)", 31949, 32686, 9 },
-		{ "Roaring Lion (800 exp, 19x)", 33145, 32335, 9 },
-		{ "Undead Gladiator (800 exp, 22x)", 33599, 31603, 8 },
-		{ "Vampire Viscount (800 exp, 23x)", 32977, 31612, 11 },
-		{ "Waspoid (830 exp, 54x)", 33543, 31240, 7 },
-		{ "Nymph (850 exp, 10x)", 33421, 32227, 7 },
-		{ "Askarak Demon (900 exp, 17x)", 33292, 31934, 12 },
-		{ "Banshee (900 exp, 17x)", 32999, 32427, 14 },
-		{ "Blood Priest (900 exp, 15x)", 33297, 31581, 9 },
-		{ "Brimstone Bug (900 exp, 32x)", 33146, 31098, 7 },
-		{ "Crystal Spider (900 exp, 28x)", 32374, 31051, 9 },
-		{ "Dark Faun (900 exp, 35x)", 33571, 32185, 9 },
-		{ "Giant Spider (900 exp, 41x)", 32938, 32878, 10 },
-		{ "Killer Caiman (900 exp, 29x)", 33277, 31161, 7 },
-		{ "Lich (900 exp, 17x)", 33097, 31782, 15 },
-		{ "Mooh'Tah Warrior (900 exp, 37x)", 33711, 31927, 7 },
-		{ "Putrid Mummy (900 exp, 23x)", 33422, 32310, 12 },
-		{ "Shaburak Demon (900 exp, 25x)", 33244, 31938, 12 },
-		{ "Vicious Squire (900 exp, 32x)", 33297, 31581, 9 },
-		{ "Wiggler (900 exp, 39x)", 32920, 31892, 11 },
-		{ "Boogy (950 exp, 17x)", 33564, 32240, 7 },
-		{ "Gravedigger (950 exp, 13x)", 33003, 32413, 11 },
-		{ "Massive Energy Elemental (950 exp, 8x)", 33061, 32685, 3 },
-		{ "Minotaur Cult Follower (950 exp, 38x)", 31942, 32466, 8 },
-		{ "Ogre Savage (950 exp, 13x)", 33620, 31711, 7 },
-		{ "Quara Hydromancer (950 exp, 24x)", 32272, 32920, 10 },
-		{ "Iks Pututu (980 exp, 30x)", 34058, 31861, 9 },
-		{ "Braindeath (985 exp, 15x)", 32817, 32428, 12 },
-		{ "Blood Beast (1000 exp, 32x)", 33575, 32041, 7 },
-		{ "Crawler (1000 exp, 41x)", 33546, 31235, 7 },
-		{ "Deepling Spellsinger (1000 exp, 33x)", 33443, 31245, 11 },
-		{ "Weakened Frazzlemaw (1000 exp, 38x)", 33571, 32270, 9 },
-		{ "Young Sea Serpent (1000 exp, 16x)", 31907, 31254, 9 },
-		{ "Iks Chuka (1050 exp, 44x)", 34030, 31855, 8 },
-		{ "Vampire Bride (1050 exp, 17x)", 32939, 32420, 14 },
-		{ "Enfeebled Silencer (1100 exp, 29x)", 33572, 32271, 9 },
-		{ "Instable Breach Brood (1100 exp, 33x)", 32436, 32402, 10 },
-		{ "Lizard Legionnaire (1100 exp, 56x)", 33250, 31242, 7 },
-		{ "Lost Husher (1100 exp, 27x)", 32201, 32662, 15 },
-		{ "Massive Earth Elemental (1100 exp, 24x)", 32241, 32522, 13 },
-		{ "Massive Water Elemental (1100 exp, 19x)", 32069, 32773, 12 },
-		{ "Minotaur Cult Prophet (1100 exp, 27x)", 31951, 32484, 8 },
-		{ "Orclops Ravager (1100 exp, 21x)", 32738, 32124, 10 },
-		{ "Parder (1100 exp, 25x)", 33687, 32742, 7 },
-		{ "Spitter (1100 exp, 41x)", 33581, 31229, 5 },
-		{ "Vulcongra (1100 exp, 31x)", 32214, 32529, 15 },
-		{ "Iks Aucar (1150 exp, 31x)", 34061, 31855, 9 },
-		{ "Drillworm (1200 exp, 29x)", 32257, 32574, 13 },
-		{ "Exotic Bat (1200 exp, 60x)", 33868, 31392, 8 },
-		{ "Hero (1200 exp, 21x)", 33297, 31581, 9 },
-		{ "Infected Weeper (1200 exp, 9x)", 33022, 31971, 11 },
-		{ "Jungle Moa (1200 exp, 19x)", 33807, 32712, 7 },
-		{ "Renegade Knight (1200 exp, 39x)", 33298, 31582, 9 },
-		{ "Vicious Manbat (1200 exp, 13x)", 32943, 32424, 14 },
-		{ "Golden Servant Replica (1250 exp, 17x)", 32769, 32870, 13 },
-		{ "Worker Golem (1250 exp, 66x)", 31134, 32655, 8 },
-		{ "Yielothax (1250 exp, 33x)", 32944, 31586, 9 },
-		{ "Metal Gargoyle (1278 exp, 48x)", 33419, 32088, 10 },
-		{ "Souleater (1300 exp, 129x)", 32864, 32446, 12 },
-		{ "Lizard Dragon Priest (1320 exp, 18x)", 33096, 31163, 6 },
-		{ "Instable Sparkion (1350 exp, 24x)", 32470, 32407, 10 },
-		{ "Minotaur Cult Zealot (1350 exp, 26x)", 31959, 32430, 9 },
-		{ "Nightmare Scion (1350 exp, 25x)", 33561, 31586, 9 },
-		{ "Diamond Servant Replica (1400 exp, 16x)", 32857, 32837, 13 },
-		{ "Exotic Cave Spider (1400 exp, 24x)", 33829, 31381, 8 },
-		{ "Massive Fire Elemental (1400 exp, 18x)", 33293, 31846, 14 },
-		{ "Lizard High Guard (1450 exp, 157x)", 33048, 31171, 7 },
-		{ "Orclops Doomhauler (1450 exp, 10x)", 32732, 32122, 10 },
-		{ "Lumbering Carnivor (1452 exp, 17x)", 32747, 32629, 8 },
-		{ "Deepling Warrior (1500 exp, 22x)", 33504, 31249, 11 },
-		{ "Lost Thrower (1500 exp, 45x)", 32212, 32535, 15 },
-		{ "Quara Pincher (1500 exp, 32x)", 31940, 32754, 12 },
-		{ "Vile Grandmaster (1500 exp, 39x)", 32369, 31678, 9 },
-		{ "Worm Priestess (1500 exp, 26x)", 33557, 32005, 7 },
+		{ "Vampire (305 exp, 37x)", 33094, 32916, 14, mon = "Vampire" },
+		{ "Haunted Treeling (310 exp, 45x)", 32926, 31507, 7, mon = "Haunted Treeling" },
+		{ "Forest Fury (330 exp, 9x)", 33217, 32041, 10, mon = "Forest Fury" },
+		{ "Sacred Spider (330 exp, 16x)", 32941, 32732, 10, mon = "Sacred Spider" },
+		{ "Swarmer (350 exp, 56x)", 33552, 31265, 7, mon = "Swarmer" },
+		{ "Quara Constrictor (380 exp, 34x)", 32070, 32767, 12, mon = "Quara Constrictor" },
+		{ "Adept of the Cult (400 exp, 22x)", 32026, 31196, 10, mon = "Adept of the Cult" },
+		{ "Bane Bringer (400 exp, 12x)", 32740, 31952, 13, mon = "Bane Bringer" },
+		{ "Clay Guardian (400 exp, 34x)", 32308, 32587, 11, mon = "Clay Guardian" },
+		{ "Quara Predator Scout (400 exp, 24x)", 31950, 32688, 9, mon = "Quara Predator Scout" },
+		{ "Shadow Pupil (410 exp, 13x)", 33005, 32448, 12, mon = "Shadow Pupil" },
+		{ "Priestess (420 exp, 20x)", 33042, 32405, 10, mon = "Priestess" },
+		{ "Mutated Rat (450 exp, 36x)", 32213, 32707, 12, mon = "Mutated Rat" },
+		{ "Wailing Widow (450 exp, 46x)", 33674, 31740, 8, mon = "Wailing Widow" },
+		{ "Clomp (475 exp, 34x)", 33594, 31672, 7, mon = "Clomp" },
+		{ "Grave Guard (485 exp, 13x)", 32960, 32754, 11, mon = "Grave Guard" },
+		{ "Corym Vanguard (490 exp, 18x)", 33071, 32154, 11, mon = "Corym Vanguard" },
+		{ "Crystalcrusher (500 exp, 23x)", 32187, 32612, 12, mon = "Crystalcrusher" },
+		{ "Enlightened of the Cult (500 exp, 27x)", 32150, 31231, 11, mon = "Enlightened of the Cult" },
+		{ "Nightstalker (500 exp, 22x)", 32849, 32448, 12, mon = "Nightstalker" },
+		{ "Pooka (500 exp, 10x)", 33421, 32233, 7, mon = "Pooka" },
+		{ "Stonerefiner (500 exp, 39x)", 33059, 32005, 13, mon = "Stonerefiner" },
+		{ "Wyvern (515 exp, 18x)", 32849, 31803, 14, mon = "Wyvern" },
+		{ "Earth Elemental (550 exp, 52x)", 32337, 32588, 12, mon = "Earth Elemental" },
+		{ "Energy Elemental (550 exp, 38x)", 33600, 32380, 10, mon = "Energy Elemental" },
+		{ "Enraged Crystal Golem (550 exp, 23x)", 32948, 31951, 10, mon = "Enraged Crystal Golem" },
+		{ "Elder Mummy (560 exp, 14x)", 32938, 32773, 12, mon = "Elder Mummy" },
+		{ "Bonebeast (580 exp, 29x)", 33423, 32263, 11, mon = "Bonebeast" },
+		{ "Ice Witch (580 exp, 18x)", 32278, 31033, 11, mon = "Ice Witch" },
+		{ "Necromancer (580 exp, 43x)", 32996, 32391, 10, mon = "Necromancer" },
+		{ "Quara Mantassin (600 exp, 39x)", 32080, 32772, 12, mon = "Quara Mantassin" },
+		{ "Quara Pincher Scout (600 exp, 25x)", 31928, 32692, 10, mon = "Quara Pincher Scout" },
+		{ "Twisted Pooka (600 exp, 32x)", 33551, 32210, 8, mon = "Twisted Pooka" },
+		{ "Ogre Shaman (625 exp, 22x)", 33592, 31674, 7, mon = "Ogre Shaman" },
+		{ "Dragon Lord Hatchling (645 exp, 14x)", 32561, 31373, 15, mon = "Dragon Lord Hatchling" },
+		{ "Insectoid Worker (650 exp, 59x)", 33551, 31232, 7, mon = "Insectoid Worker" },
+		{ "Water Elemental (650 exp, 44x)", 32542, 32829, 9, mon = "Water Elemental" },
+		{ "Sandstone Scorpion (680 exp, 20x)", 32944, 32773, 12, mon = "Sandstone Scorpion" },
+		{ "Dragon (700 exp, 55x)", 33214, 31252, 7, mon = "Dragon" },
+		{ "Glooth Blob (700 exp, 61x)", 33559, 31902, 7, mon = "Glooth Blob" },
+		{ "Pixie (700 exp, 39x)", 33434, 32246, 7, mon = "Pixie" },
+		{ "Shark (700 exp, 22x)", 33446, 31796, 15, mon = "Shark" },
+		{ "Swan Maiden (700 exp, 11x)", 33542, 32248, 7, mon = "Swan Maiden" },
+		{ "Ancient Scarab (720 exp, 31x)", 33335, 32640, 12, mon = "Ancient Scarab" },
+		{ "Frost Dragon Hatchling (745 exp, 22x)", 32197, 31450, 7, mon = "Frost Dragon Hatchling" },
+		{ "Blood Hand (750 exp, 11x)", 32976, 32422, 11, mon = "Blood Hand" },
+		{ "Death Priest (750 exp, 14x)", 32942, 32773, 12, mon = "Death Priest" },
+		{ "Mutated Bat (750 exp, 30x)", 32323, 32612, 12, mon = "Mutated Bat" },
+		{ "Mutated Tiger (750 exp, 18x)", 33535, 31129, 8, mon = "Mutated Tiger" },
+		{ "Rot Elemental (750 exp, 36x)", 33561, 31905, 7, mon = "Rot Elemental" },
+		{ "Stampor (780 exp, 18x)", 32203, 30994, 12, mon = "Stampor" },
+		{ "Bog Raider (800 exp, 26x)", 32665, 31094, 7, mon = "Bog Raider" },
+		{ "Faun (800 exp, 22x)", 33565, 32236, 7, mon = "Faun" },
+		{ "Ogre Brute (800 exp, 36x)", 33667, 31597, 7, mon = "Ogre Brute" },
+		{ "Quara Hydromancer Scout (800 exp, 18x)", 31949, 32686, 9, mon = "Quara Hydromancer Scout" },
+		{ "Roaring Lion (800 exp, 19x)", 33145, 32335, 9, mon = "Roaring Lion" },
+		{ "Undead Gladiator (800 exp, 22x)", 33599, 31603, 8, mon = "Undead Gladiator" },
+		{ "Vampire Viscount (800 exp, 23x)", 32977, 31612, 11, mon = "Vampire Viscount" },
+		{ "Waspoid (830 exp, 54x)", 33543, 31240, 7, mon = "Waspoid" },
+		{ "Nymph (850 exp, 10x)", 33421, 32227, 7, mon = "Nymph" },
+		{ "Askarak Demon (900 exp, 17x)", 33292, 31934, 12, mon = "Askarak Demon" },
+		{ "Banshee (900 exp, 17x)", 32999, 32427, 14, mon = "Banshee" },
+		{ "Blood Priest (900 exp, 15x)", 33297, 31581, 9, mon = "Blood Priest" },
+		{ "Brimstone Bug (900 exp, 32x)", 33146, 31098, 7, mon = "Brimstone Bug" },
+		{ "Crystal Spider (900 exp, 28x)", 32374, 31051, 9, mon = "Crystal Spider" },
+		{ "Dark Faun (900 exp, 35x)", 33571, 32185, 9, mon = "Dark Faun" },
+		{ "Giant Spider (900 exp, 41x)", 32938, 32878, 10, mon = "Giant Spider" },
+		{ "Killer Caiman (900 exp, 29x)", 33277, 31161, 7, mon = "Killer Caiman" },
+		{ "Lich (900 exp, 17x)", 33097, 31782, 15, mon = "Lich" },
+		{ "Mooh'Tah Warrior (900 exp, 37x)", 33711, 31927, 7, mon = "Mooh'Tah Warrior" },
+		{ "Putrid Mummy (900 exp, 23x)", 33422, 32310, 12, mon = "Putrid Mummy" },
+		{ "Shaburak Demon (900 exp, 25x)", 33244, 31938, 12, mon = "Shaburak Demon" },
+		{ "Vicious Squire (900 exp, 32x)", 33297, 31581, 9, mon = "Vicious Squire" },
+		{ "Wiggler (900 exp, 39x)", 32920, 31892, 11, mon = "Wiggler" },
+		{ "Boogy (950 exp, 17x)", 33564, 32240, 7, mon = "Boogy" },
+		{ "Gravedigger (950 exp, 13x)", 33003, 32413, 11, mon = "Gravedigger" },
+		{ "Massive Energy Elemental (950 exp, 8x)", 33061, 32685, 3, mon = "Massive Energy Elemental" },
+		{ "Minotaur Cult Follower (950 exp, 38x)", 31942, 32466, 8, mon = "Minotaur Cult Follower" },
+		{ "Ogre Savage (950 exp, 13x)", 33620, 31711, 7, mon = "Ogre Savage" },
+		{ "Quara Hydromancer (950 exp, 24x)", 32272, 32920, 10, mon = "Quara Hydromancer" },
+		{ "Iks Pututu (980 exp, 30x)", 34058, 31861, 9, mon = "Iks Pututu" },
+		{ "Braindeath (985 exp, 15x)", 32817, 32428, 12, mon = "Braindeath" },
+		{ "Blood Beast (1000 exp, 32x)", 33575, 32041, 7, mon = "Blood Beast" },
+		{ "Crawler (1000 exp, 41x)", 33546, 31235, 7, mon = "Crawler" },
+		{ "Deepling Spellsinger (1000 exp, 33x)", 33443, 31245, 11, mon = "Deepling Spellsinger" },
+		{ "Weakened Frazzlemaw (1000 exp, 38x)", 33571, 32270, 9, mon = "Weakened Frazzlemaw" },
+		{ "Young Sea Serpent (1000 exp, 16x)", 31907, 31254, 9, mon = "Young Sea Serpent" },
+		{ "Iks Chuka (1050 exp, 44x)", 34030, 31855, 8, mon = "Iks Chuka" },
+		{ "Vampire Bride (1050 exp, 17x)", 32939, 32420, 14, mon = "Vampire Bride" },
+		{ "Enfeebled Silencer (1100 exp, 29x)", 33572, 32271, 9, mon = "Enfeebled Silencer" },
+		{ "Instable Breach Brood (1100 exp, 33x)", 32436, 32402, 10, mon = "Instable Breach Brood" },
+		{ "Lizard Legionnaire (1100 exp, 56x)", 33250, 31242, 7, mon = "Lizard Legionnaire" },
+		{ "Lost Husher (1100 exp, 27x)", 32201, 32662, 15, mon = "Lost Husher" },
+		{ "Massive Earth Elemental (1100 exp, 24x)", 32241, 32522, 13, mon = "Massive Earth Elemental" },
+		{ "Massive Water Elemental (1100 exp, 19x)", 32069, 32773, 12, mon = "Massive Water Elemental" },
+		{ "Minotaur Cult Prophet (1100 exp, 27x)", 31951, 32484, 8, mon = "Minotaur Cult Prophet" },
+		{ "Orclops Ravager (1100 exp, 21x)", 32738, 32124, 10, mon = "Orclops Ravager" },
+		{ "Parder (1100 exp, 25x)", 33687, 32742, 7, mon = "Parder" },
+		{ "Spitter (1100 exp, 41x)", 33581, 31229, 5, mon = "Spitter" },
+		{ "Vulcongra (1100 exp, 31x)", 32214, 32529, 15, mon = "Vulcongra" },
+		{ "Iks Aucar (1150 exp, 31x)", 34061, 31855, 9, mon = "Iks Aucar" },
+		{ "Drillworm (1200 exp, 29x)", 32257, 32574, 13, mon = "Drillworm" },
+		{ "Exotic Bat (1200 exp, 60x)", 33868, 31392, 8, mon = "Exotic Bat" },
+		{ "Hero (1200 exp, 21x)", 33297, 31581, 9, mon = "Hero" },
+		{ "Infected Weeper (1200 exp, 9x)", 33022, 31971, 11, mon = "Infected Weeper" },
+		{ "Jungle Moa (1200 exp, 19x)", 33807, 32712, 7, mon = "Jungle Moa" },
+		{ "Renegade Knight (1200 exp, 39x)", 33298, 31582, 9, mon = "Renegade Knight" },
+		{ "Vicious Manbat (1200 exp, 13x)", 32943, 32424, 14, mon = "Vicious Manbat" },
+		{ "Golden Servant Replica (1250 exp, 17x)", 32769, 32870, 13, mon = "Golden Servant Replica" },
+		{ "Worker Golem (1250 exp, 66x)", 31134, 32655, 8, mon = "Worker Golem" },
+		{ "Yielothax (1250 exp, 33x)", 32944, 31586, 9, mon = "Yielothax" },
+		{ "Metal Gargoyle (1278 exp, 48x)", 33419, 32088, 10, mon = "Metal Gargoyle" },
+		{ "Souleater (1300 exp, 129x)", 32864, 32446, 12, mon = "Souleater" },
+		{ "Lizard Dragon Priest (1320 exp, 18x)", 33096, 31163, 6, mon = "Lizard Dragon Priest" },
+		{ "Instable Sparkion (1350 exp, 24x)", 32470, 32407, 10, mon = "Instable Sparkion" },
+		{ "Minotaur Cult Zealot (1350 exp, 26x)", 31959, 32430, 9, mon = "Minotaur Cult Zealot" },
+		{ "Nightmare Scion (1350 exp, 25x)", 33561, 31586, 9, mon = "Nightmare Scion" },
+		{ "Diamond Servant Replica (1400 exp, 16x)", 32857, 32837, 13, mon = "Diamond Servant Replica" },
+		{ "Exotic Cave Spider (1400 exp, 24x)", 33829, 31381, 8, mon = "Exotic Cave Spider" },
+		{ "Massive Fire Elemental (1400 exp, 18x)", 33293, 31846, 14, mon = "Massive Fire Elemental" },
+		{ "Lizard High Guard (1450 exp, 157x)", 33048, 31171, 7, mon = "Lizard High Guard" },
+		{ "Orclops Doomhauler (1450 exp, 10x)", 32732, 32122, 10, mon = "Orclops Doomhauler" },
+		{ "Lumbering Carnivor (1452 exp, 17x)", 32747, 32629, 8, mon = "Lumbering Carnivor" },
+		{ "Deepling Warrior (1500 exp, 22x)", 33504, 31249, 11, mon = "Deepling Warrior" },
+		{ "Lost Thrower (1500 exp, 45x)", 32212, 32535, 15, mon = "Lost Thrower" },
+		{ "Quara Pincher (1500 exp, 32x)", 31940, 32754, 12, mon = "Quara Pincher" },
+		{ "Vile Grandmaster (1500 exp, 39x)", 32369, 31678, 9, mon = "Vile Grandmaster" },
+		{ "Worm Priestess (1500 exp, 26x)", 33557, 32005, 7, mon = "Worm Priestess" },
 	} },
 	{ label = "Hard (exp 1500-6000)", list = {
-		{ "Sparkion (1520 exp, 63x)", 32178, 31360, 12 },
-		{ "Wyrm (1550 exp, 42x)", 33080, 32392, 14 },
-		{ "Minotaur Invader (1600 exp, 12x)", 33583, 31948, 13 },
-		{ "Pirat Scoundrel (1600 exp, 26x)", 33906, 31187, 7 },
-		{ "Werebadger (1600 exp, 27x)", 33389, 31641, 9 },
-		{ "Werefox (1600 exp, 11x)", 33130, 31983, 8 },
-		{ "Glooth Golem (1606 exp, 26x)", 33652, 31953, 9 },
-		{ "Shaper Matriarch (1650 exp, 32x)", 32839, 32868, 14 },
-		{ "Spiky Carnivor (1650 exp, 21x)", 32753, 32627, 10 },
-		{ "Lizard Zaogun (1700 exp, 36x)", 33116, 31153, 6 },
-		{ "Minotaur Hunter (1700 exp, 37x)", 33604, 32016, 7 },
-		{ "Pirat Bombardier (1700 exp, 32x)", 33902, 31251, 6 },
-		{ "Devourer (1755 exp, 28x)", 33633, 31929, 9 },
-		{ "Glooth Anemone (1755 exp, 38x)", 33646, 31954, 10 },
-		{ "Breach Brood (1760 exp, 54x)", 32142, 31373, 11 },
-		{ "Broken Shaper (1800 exp, 108x)", 32856, 32748, 14 },
-		{ "Eternal Guardian (1800 exp, 25x)", 32726, 32575, 12 },
-		{ "Lost Exile (1800 exp, 25x)", 33779, 32268, 14 },
-		{ "Nightmare (1800 exp, 24x)", 33657, 32673, 11 },
-		{ "Pirat Cutthroat (1800 exp, 23x)", 33869, 31351, 8 },
-		{ "Stone Rhino (1800 exp, 9x)", 32896, 32858, 15 },
-		{ "Quara Predator (1850 exp, 23x)", 32273, 32920, 10 },
-		{ "Cursed Ape (1860 exp, 9x)", 34019, 31768, 10 },
-		{ "Glooth Brigand (1900 exp, 40x)", 33694, 32002, 12 },
-		{ "Stabilizing Dread Intruder (1900 exp, 20x)", 32028, 31351, 11 },
-		{ "Werewolf (1900 exp, 33x)", 33424, 31564, 11 },
-		{ "Stabilizing Reality Reaver (1950 exp, 20x)", 32034, 31347, 11 },
-		{ "Glooth Bandit (2000 exp, 54x)", 33694, 32002, 12 },
-		{ "Lizard Noble (2000 exp, 12x)", 33080, 31212, 4 },
-		{ "Wereboar (2000 exp, 25x)", 33390, 31641, 9 },
-		{ "Twisted Shaper (2050 exp, 39x)", 32856, 32750, 14 },
-		{ "Deepling Guard (2100 exp, 30x)", 33504, 31249, 11 },
-		{ "Dragon Lord (2100 exp, 55x)", 33223, 31277, 5 },
-		{ "Frost Dragon (2100 exp, 22x)", 32229, 31411, 8 },
-		{ "Hydra (2100 exp, 33x)", 33500, 31936, 10 },
-		{ "Rustheap Golem (2100 exp, 14x)", 33629, 32056, 15 },
-		{ "Spectre (2100 exp, 29x)", 33085, 31770, 13 },
-		{ "Werebear (2100 exp, 32x)", 33427, 31564, 11 },
-		{ "Menacing Carnivor (2112 exp, 26x)", 32752, 32628, 10 },
-		{ "Lizard Chosen (2200 exp, 51x)", 33275, 31177, 9 },
-		{ "Minotaur Amazon (2200 exp, 101x)", 31337, 32616, 8 },
-		{ "Walker (2200 exp, 13x)", 33654, 31975, 14 },
-		{ "Werehyaena (2200 exp, 131x)", 33197, 32396, 10 },
-		{ "Werehyaena Shaman (2200 exp, 52x)", 33174, 32456, 10 },
-		{ "Werelion (2200 exp, 46x)", 33130, 32321, 11 },
-		{ "Lost Basher (2300 exp, 39x)", 32304, 32584, 15 },
-		{ "Sea Serpent (2300 exp, 30x)", 31898, 31021, 10 },
-		{ "Shock Head (2300 exp, 17x)", 33595, 32518, 7 },
-		{ "Werelioness (2300 exp, 41x)", 33130, 32320, 11 },
-		{ "White Lion (2300 exp, 15x)", 33130, 32321, 11 },
-		{ "War Golem (2310 exp, 72x)", 31006, 32682, 8 },
-		{ "Draken Warmaster (2400 exp, 50x)", 33082, 31108, 3 },
-		{ "Dread Intruder (2400 exp, 52x)", 32147, 31361, 12 },
-		{ "Execowtioner (2400 exp, 67x)", 31301, 32678, 8 },
-		{ "Kollos (2400 exp, 20x)", 33592, 31224, 2 },
-		{ "Pirat Mate (2400 exp, 35x)", 33879, 31228, 6 },
-		{ "Reality Reaver (2480 exp, 68x)", 32181, 31365, 12 },
-		{ "Behemoth (2500 exp, 28x)", 33011, 32508, 9 },
-		{ "Destroyer (2500 exp, 45x)", 33508, 31791, 8 },
-		{ "Elder Wyrm (2500 exp, 49x)", 33083, 32391, 14 },
-		{ "Deepworm (2520 exp, 56x)", 33278, 32315, 15 },
-		{ "Hellspawn (2550 exp, 55x)", 33394, 31726, 8 },
-		{ "Moohtant (2600 exp, 45x)", 31302, 32680, 8 },
-		{ "Spidris (2600 exp, 26x)", 33521, 31203, 1 },
-		{ "Enslaved Dwarf (2700 exp, 12x)", 33400, 31953, 15 },
-		{ "Goggle Cake (2700 exp, 16x)", 33438, 32188, 8 },
-		{ "Nibblemaw (2700 exp, 13x)", 33370, 32168, 8 },
-		{ "Diremaw (2770 exp, 92x)", 33278, 32316, 15 },
-		{ "Diabolic Imp (2900 exp, 20x)", 33097, 31782, 15 },
-		{ "Humongous Fungus (2900 exp, 51x)", 33044, 31958, 10 },
-		{ "Stone Devourer (2900 exp, 17x)", 33060, 31972, 10 },
-		{ "Two-Headed Turtle (2930 exp, 66x)", 33766, 32776, 8 },
-		{ "Candy Horror (3000 exp, 16x)", 33411, 32156, 9 },
-		{ "Serpent Spawn (3050 exp, 30x)", 32742, 32591, 12 },
-		{ "Draken Spellweaver (3100 exp, 38x)", 33086, 31116, 4 },
-		{ "Foam Stalker (3120 exp, 22x)", 33718, 32741, 9 },
-		{ "Armadile (3200 exp, 24x)", 33044, 31959, 10 },
-		{ "Cave Devourer (3380 exp, 33x)", 33289, 32174, 15 },
-		{ "Betrayed Wraith (3500 exp, 26x)", 33109, 31590, 11 },
-		{ "Ripper Spectre (3500 exp, 27x)", 32706, 32247, 10 },
-		{ "Chasm Spawn (3600 exp, 59x)", 33461, 32252, 15 },
-		{ "Fury (3600 exp, 24x)", 33311, 31835, 15 },
-		{ "Defiler (3700 exp, 28x)", 33168, 31768, 12 },
-		{ "Hideous Fungus (3700 exp, 50x)", 33044, 31958, 10 },
-		{ "Frazzlemaw (3740 exp, 45x)", 33640, 32440, 7 },
-		{ "Hellfire Fighter (3800 exp, 36x)", 33673, 32684, 13 },
-		{ "Plaguesmith (3800 exp, 37x)", 33232, 31436, 13 },
-		{ "Candy Floss Elemental (3850 exp, 18x)", 33429, 32168, 8 },
-		{ "Magma Crawler (3900 exp, 37x)", 33079, 31958, 11 },
-		{ "Infernalist (4000 exp, 9x)", 33303, 31827, 15 },
-		{ "Lava Lurker (4000 exp, 29x)", 33988, 32265, 14 },
-		{ "Lost Soul (4000 exp, 27x)", 33109, 31590, 11 },
-		{ "Ravenous Lava Lurker (4000 exp, 47x)", 33933, 32203, 14 },
-		{ "Spidris Elite (4000 exp, 20x)", 33437, 31273, 8 },
-		{ "Warlock (4000 exp, 19x)", 32481, 31618, 15 },
-		{ "Medusa (4050 exp, 41x)", 32800, 32630, 15 },
-		{ "Dawnfire Asura (4100 exp, 31x)", 32814, 32754, 9 },
-		{ "Midnight Asura (4100 exp, 57x)", 32814, 32755, 9 },
-		{ "Retching Horror (4100 exp, 53x)", 33643, 32440, 7 },
-		{ "Frost Flower Asura (4200 exp, 16x)", 32825, 32798, 9 },
-		{ "Gazer Spectre (4200 exp, 27x)", 32678, 32655, 8 },
-		{ "Ogre Rowdy (4200 exp, 28x)", 33824, 31647, 8 },
-		{ "Dark Carnisylvan (4400 exp, 22x)", 32581, 32465, 13 },
-		{ "Phantasm (4400 exp, 30x)", 33062, 31754, 11 },
-		{ "Poisonous Carnisylvan (4400 exp, 21x)", 32584, 32463, 13 },
-		{ "Tunnel Tyrant (4420 exp, 34x)", 33288, 32176, 15 },
-		{ "Draken Abomination (4500 exp, 23x)", 33068, 31086, 12 },
-		{ "Flimsy Lost Soul (4500 exp, 65x)", 33599, 31496, 10 },
-		{ "Juvenile Bashmu (4500 exp, 24x)", 34043, 31685, 8 },
-		{ "Ghastly Dragon (4600 exp, 9x)", 33049, 31108, 14 },
-		{ "Dark Torturer (4650 exp, 60x)", 33600, 32381, 10 },
-		{ "Arachnophobica (4700 exp, 52x)", 32068, 31950, 13 },
-		{ "Choking Fear (4700 exp, 51x)", 33632, 32412, 7 },
-		{ "Crazed Summer Rearguard (4700 exp, 27x)", 32085, 32004, 13 },
-		{ "Crazed Winter Rearguard (4700 exp, 36x)", 32065, 31949, 13 },
-		{ "Hulking Carnisylvan (4700 exp, 11x)", 32560, 32448, 12 },
-		{ "Draken Elite (4750 exp, 10x)", 33103, 31116, 9 },
-		{ "Lost Berserker (4800 exp, 28x)", 33008, 31924, 12 },
-		{ "Skeleton Elite Warrior (4800 exp, 37x)", 32936, 32269, 10 },
-		{ "Bashmu (5000 exp, 33x)", 33976, 31689, 8 },
-		{ "Crazed Summer Vanguard (5000 exp, 26x)", 32014, 31949, 13 },
-		{ "Hand of Cursed Fate (5000 exp, 12x)", 33477, 32808, 9 },
-		{ "Ogre Ruffian (5000 exp, 22x)", 33793, 31603, 7 },
-		{ "Crape Man (5040 exp, 50x)", 33762, 32545, 7 },
-		{ "Dragolisk (5050 exp, 69x)", 33281, 31147, 13 },
-		{ "Feversleep (5060 exp, 27x)", 33691, 32291, 9 },
-		{ "Undead Elite Gladiator (5090 exp, 23x)", 32938, 32269, 10 },
-		{ "Manticore (5100 exp, 28x)", 33920, 31625, 7 },
-		{ "Silencer (5100 exp, 43x)", 33640, 32440, 7 },
-		{ "Naga Archer (5150 exp, 31x)", 33656, 32753, 8 },
-		{ "Cursed Prospector (5250 exp, 104x)", 33836, 31830, 9 },
-		{ "Blemished Spawn (5300 exp, 33x)", 32626, 31796, 10 },
-		{ "Venerable Girtablilu (5300 exp, 29x)", 33781, 31754, 10 },
-		{ "Crazed Winter Vanguard (5400 exp, 34x)", 32066, 31953, 13 },
-		{ "Ironblight (5400 exp, 28x)", 33010, 31923, 12 },
-		{ "Hellhound (5440 exp, 39x)", 33507, 31790, 8 },
-		{ "Grim Reaper (5500 exp, 49x)", 33543, 31725, 8 },
-		{ "Ogre Sage (5500 exp, 17x)", 33796, 31603, 7 },
-		{ "Mean Lost Soul (5580 exp, 41x)", 33593, 31450, 10 },
-		{ "Rhindeer (5600 exp, 51x)", 33732, 32496, 9 },
-		{ "Afflicted Strider (5700 exp, 11x)", 32632, 31791, 10 },
-		{ "Harpy (5720 exp, 39x)", 33762, 32543, 7 },
-		{ "Makara (5720 exp, 44x)", 33657, 32753, 8 },
-		{ "Girtablilu Warrior (5800 exp, 51x)", 33781, 31754, 10 },
-		{ "Soul-Broken Harbinger (5800 exp, 35x)", 32065, 31949, 13 },
-		{ "Weeper (5800 exp, 26x)", 33073, 31960, 11 },
-		{ "Wardragon (5810 exp, 56x)", 33237, 31187, 13 },
-		{ "Naga Warrior (5890 exp, 55x)", 33657, 32753, 8 },
-		{ "Orewalker (5900 exp, 18x)", 33005, 31953, 12 },
-		{ "Son of Verminor (5900 exp, 11x)", 33196, 31670, 12 },
-		{ "Varnished Diremaw (5900 exp, 14x)", 32048, 31456, 14 },
-		{ "Burster Spectre (6000 exp, 53x)", 33085, 32310, 8 },
-		{ "Demon (6000 exp, 49x)", 33510, 31790, 8 },
-		{ "Eyeless Devourer (6000 exp, 32x)", 32642, 31780, 10 },
-		{ "Insane Siren (6000 exp, 26x)", 32015, 31948, 13 },
+		{ "Sparkion (1520 exp, 63x)", 32178, 31360, 12, mon = "Sparkion" },
+		{ "Wyrm (1550 exp, 42x)", 33080, 32392, 14, mon = "Wyrm" },
+		{ "Minotaur Invader (1600 exp, 12x)", 33583, 31948, 13, mon = "Minotaur Invader" },
+		{ "Pirat Scoundrel (1600 exp, 26x)", 33906, 31187, 7, mon = "Pirat Scoundrel" },
+		{ "Werebadger (1600 exp, 27x)", 33389, 31641, 9, mon = "Werebadger" },
+		{ "Werefox (1600 exp, 11x)", 33130, 31983, 8, mon = "Werefox" },
+		{ "Glooth Golem (1606 exp, 26x)", 33652, 31953, 9, mon = "Glooth Golem" },
+		{ "Shaper Matriarch (1650 exp, 32x)", 32839, 32868, 14, mon = "Shaper Matriarch" },
+		{ "Spiky Carnivor (1650 exp, 21x)", 32753, 32627, 10, mon = "Spiky Carnivor" },
+		{ "Lizard Zaogun (1700 exp, 36x)", 33116, 31153, 6, mon = "Lizard Zaogun" },
+		{ "Minotaur Hunter (1700 exp, 37x)", 33604, 32016, 7, mon = "Minotaur Hunter" },
+		{ "Pirat Bombardier (1700 exp, 32x)", 33902, 31251, 6, mon = "Pirat Bombardier" },
+		{ "Devourer (1755 exp, 28x)", 33633, 31929, 9, mon = "Devourer" },
+		{ "Glooth Anemone (1755 exp, 38x)", 33646, 31954, 10, mon = "Glooth Anemone" },
+		{ "Breach Brood (1760 exp, 54x)", 32142, 31373, 11, mon = "Breach Brood" },
+		{ "Broken Shaper (1800 exp, 108x)", 32856, 32748, 14, mon = "Broken Shaper" },
+		{ "Eternal Guardian (1800 exp, 25x)", 32726, 32575, 12, mon = "Eternal Guardian" },
+		{ "Lost Exile (1800 exp, 25x)", 33779, 32268, 14, mon = "Lost Exile" },
+		{ "Nightmare (1800 exp, 24x)", 33657, 32673, 11, mon = "Nightmare" },
+		{ "Pirat Cutthroat (1800 exp, 23x)", 33869, 31351, 8, mon = "Pirat Cutthroat" },
+		{ "Stone Rhino (1800 exp, 9x)", 32896, 32858, 15, mon = "Stone Rhino" },
+		{ "Quara Predator (1850 exp, 23x)", 32273, 32920, 10, mon = "Quara Predator" },
+		{ "Cursed Ape (1860 exp, 9x)", 34019, 31768, 10, mon = "Cursed Ape" },
+		{ "Glooth Brigand (1900 exp, 40x)", 33694, 32002, 12, mon = "Glooth Brigand" },
+		{ "Stabilizing Dread Intruder (1900 exp, 20x)", 32028, 31351, 11, mon = "Stabilizing Dread Intruder" },
+		{ "Werewolf (1900 exp, 33x)", 33424, 31564, 11, mon = "Werewolf" },
+		{ "Stabilizing Reality Reaver (1950 exp, 20x)", 32034, 31347, 11, mon = "Stabilizing Reality Reaver" },
+		{ "Glooth Bandit (2000 exp, 54x)", 33694, 32002, 12, mon = "Glooth Bandit" },
+		{ "Lizard Noble (2000 exp, 12x)", 33080, 31212, 4, mon = "Lizard Noble" },
+		{ "Wereboar (2000 exp, 25x)", 33390, 31641, 9, mon = "Wereboar" },
+		{ "Twisted Shaper (2050 exp, 39x)", 32856, 32750, 14, mon = "Twisted Shaper" },
+		{ "Deepling Guard (2100 exp, 30x)", 33504, 31249, 11, mon = "Deepling Guard" },
+		{ "Dragon Lord (2100 exp, 55x)", 33223, 31277, 5, mon = "Dragon Lord" },
+		{ "Frost Dragon (2100 exp, 22x)", 32229, 31411, 8, mon = "Frost Dragon" },
+		{ "Hydra (2100 exp, 33x)", 33500, 31936, 10, mon = "Hydra" },
+		{ "Rustheap Golem (2100 exp, 14x)", 33629, 32056, 15, mon = "Rustheap Golem" },
+		{ "Spectre (2100 exp, 29x)", 33085, 31770, 13, mon = "Spectre" },
+		{ "Werebear (2100 exp, 32x)", 33427, 31564, 11, mon = "Werebear" },
+		{ "Menacing Carnivor (2112 exp, 26x)", 32752, 32628, 10, mon = "Menacing Carnivor" },
+		{ "Lizard Chosen (2200 exp, 51x)", 33275, 31177, 9, mon = "Lizard Chosen" },
+		{ "Minotaur Amazon (2200 exp, 101x)", 31337, 32616, 8, mon = "Minotaur Amazon" },
+		{ "Walker (2200 exp, 13x)", 33654, 31975, 14, mon = "Walker" },
+		{ "Werehyaena (2200 exp, 131x)", 33197, 32396, 10, mon = "Werehyaena" },
+		{ "Werehyaena Shaman (2200 exp, 52x)", 33174, 32456, 10, mon = "Werehyaena Shaman" },
+		{ "Werelion (2200 exp, 46x)", 33130, 32321, 11, mon = "Werelion" },
+		{ "Lost Basher (2300 exp, 39x)", 32304, 32584, 15, mon = "Lost Basher" },
+		{ "Sea Serpent (2300 exp, 30x)", 31898, 31021, 10, mon = "Sea Serpent" },
+		{ "Shock Head (2300 exp, 17x)", 33595, 32518, 7, mon = "Shock Head" },
+		{ "Werelioness (2300 exp, 41x)", 33130, 32320, 11, mon = "Werelioness" },
+		{ "White Lion (2300 exp, 15x)", 33130, 32321, 11, mon = "White Lion" },
+		{ "War Golem (2310 exp, 72x)", 31006, 32682, 8, mon = "War Golem" },
+		{ "Draken Warmaster (2400 exp, 50x)", 33082, 31108, 3, mon = "Draken Warmaster" },
+		{ "Dread Intruder (2400 exp, 52x)", 32147, 31361, 12, mon = "Dread Intruder" },
+		{ "Execowtioner (2400 exp, 67x)", 31301, 32678, 8, mon = "Execowtioner" },
+		{ "Kollos (2400 exp, 20x)", 33592, 31224, 2, mon = "Kollos" },
+		{ "Pirat Mate (2400 exp, 35x)", 33879, 31228, 6, mon = "Pirat Mate" },
+		{ "Reality Reaver (2480 exp, 68x)", 32181, 31365, 12, mon = "Reality Reaver" },
+		{ "Behemoth (2500 exp, 28x)", 33011, 32508, 9, mon = "Behemoth" },
+		{ "Destroyer (2500 exp, 45x)", 33508, 31791, 8, mon = "Destroyer" },
+		{ "Elder Wyrm (2500 exp, 49x)", 33083, 32391, 14, mon = "Elder Wyrm" },
+		{ "Deepworm (2520 exp, 56x)", 33278, 32315, 15, mon = "Deepworm" },
+		{ "Hellspawn (2550 exp, 55x)", 33394, 31726, 8, mon = "Hellspawn" },
+		{ "Moohtant (2600 exp, 45x)", 31302, 32680, 8, mon = "Moohtant" },
+		{ "Spidris (2600 exp, 26x)", 33521, 31203, 1, mon = "Spidris" },
+		{ "Enslaved Dwarf (2700 exp, 12x)", 33400, 31953, 15, mon = "Enslaved Dwarf" },
+		{ "Goggle Cake (2700 exp, 16x)", 33438, 32188, 8, mon = "Goggle Cake" },
+		{ "Nibblemaw (2700 exp, 13x)", 33370, 32168, 8, mon = "Nibblemaw" },
+		{ "Diremaw (2770 exp, 92x)", 33278, 32316, 15, mon = "Diremaw" },
+		{ "Diabolic Imp (2900 exp, 20x)", 33097, 31782, 15, mon = "Diabolic Imp" },
+		{ "Humongous Fungus (2900 exp, 51x)", 33044, 31958, 10, mon = "Humongous Fungus" },
+		{ "Stone Devourer (2900 exp, 17x)", 33060, 31972, 10, mon = "Stone Devourer" },
+		{ "Two-Headed Turtle (2930 exp, 66x)", 33766, 32776, 8, mon = "Two-Headed Turtle" },
+		{ "Candy Horror (3000 exp, 16x)", 33411, 32156, 9, mon = "Candy Horror" },
+		{ "Serpent Spawn (3050 exp, 30x)", 32742, 32591, 12, mon = "Serpent Spawn" },
+		{ "Draken Spellweaver (3100 exp, 38x)", 33086, 31116, 4, mon = "Draken Spellweaver" },
+		{ "Foam Stalker (3120 exp, 22x)", 33718, 32741, 9, mon = "Foam Stalker" },
+		{ "Armadile (3200 exp, 24x)", 33044, 31959, 10, mon = "Armadile" },
+		{ "Cave Devourer (3380 exp, 33x)", 33289, 32174, 15, mon = "Cave Devourer" },
+		{ "Betrayed Wraith (3500 exp, 26x)", 33109, 31590, 11, mon = "Betrayed Wraith" },
+		{ "Ripper Spectre (3500 exp, 27x)", 32706, 32247, 10, mon = "Ripper Spectre" },
+		{ "Chasm Spawn (3600 exp, 59x)", 33461, 32252, 15, mon = "Chasm Spawn" },
+		{ "Fury (3600 exp, 24x)", 33311, 31835, 15, mon = "Fury" },
+		{ "Defiler (3700 exp, 28x)", 33168, 31768, 12, mon = "Defiler" },
+		{ "Hideous Fungus (3700 exp, 50x)", 33044, 31958, 10, mon = "Hideous Fungus" },
+		{ "Frazzlemaw (3740 exp, 45x)", 33640, 32440, 7, mon = "Frazzlemaw" },
+		{ "Hellfire Fighter (3800 exp, 36x)", 33673, 32684, 13, mon = "Hellfire Fighter" },
+		{ "Plaguesmith (3800 exp, 37x)", 33232, 31436, 13, mon = "Plaguesmith" },
+		{ "Candy Floss Elemental (3850 exp, 18x)", 33429, 32168, 8, mon = "Candy Floss Elemental" },
+		{ "Magma Crawler (3900 exp, 37x)", 33079, 31958, 11, mon = "Magma Crawler" },
+		{ "Infernalist (4000 exp, 9x)", 33303, 31827, 15, mon = "Infernalist" },
+		{ "Lava Lurker (4000 exp, 29x)", 33988, 32265, 14, mon = "Lava Lurker" },
+		{ "Lost Soul (4000 exp, 27x)", 33109, 31590, 11, mon = "Lost Soul" },
+		{ "Ravenous Lava Lurker (4000 exp, 47x)", 33933, 32203, 14, mon = "Ravenous Lava Lurker" },
+		{ "Spidris Elite (4000 exp, 20x)", 33437, 31273, 8, mon = "Spidris Elite" },
+		{ "Warlock (4000 exp, 19x)", 32481, 31618, 15, mon = "Warlock" },
+		{ "Medusa (4050 exp, 41x)", 32800, 32630, 15, mon = "Medusa" },
+		{ "Dawnfire Asura (4100 exp, 31x)", 32814, 32754, 9, mon = "Dawnfire Asura" },
+		{ "Midnight Asura (4100 exp, 57x)", 32814, 32755, 9, mon = "Midnight Asura" },
+		{ "Retching Horror (4100 exp, 53x)", 33643, 32440, 7, mon = "Retching Horror" },
+		{ "Frost Flower Asura (4200 exp, 16x)", 32825, 32798, 9, mon = "Frost Flower Asura" },
+		{ "Gazer Spectre (4200 exp, 27x)", 32678, 32655, 8, mon = "Gazer Spectre" },
+		{ "Ogre Rowdy (4200 exp, 28x)", 33824, 31647, 8, mon = "Ogre Rowdy" },
+		{ "Dark Carnisylvan (4400 exp, 22x)", 32581, 32465, 13, mon = "Dark Carnisylvan" },
+		{ "Phantasm (4400 exp, 30x)", 33062, 31754, 11, mon = "Phantasm" },
+		{ "Poisonous Carnisylvan (4400 exp, 21x)", 32584, 32463, 13, mon = "Poisonous Carnisylvan" },
+		{ "Tunnel Tyrant (4420 exp, 34x)", 33288, 32176, 15, mon = "Tunnel Tyrant" },
+		{ "Draken Abomination (4500 exp, 23x)", 33068, 31086, 12, mon = "Draken Abomination" },
+		{ "Flimsy Lost Soul (4500 exp, 65x)", 33599, 31496, 10, mon = "Flimsy Lost Soul" },
+		{ "Juvenile Bashmu (4500 exp, 24x)", 34043, 31685, 8, mon = "Juvenile Bashmu" },
+		{ "Ghastly Dragon (4600 exp, 9x)", 33049, 31108, 14, mon = "Ghastly Dragon" },
+		{ "Dark Torturer (4650 exp, 60x)", 33600, 32381, 10, mon = "Dark Torturer" },
+		{ "Arachnophobica (4700 exp, 52x)", 32068, 31950, 13, mon = "Arachnophobica" },
+		{ "Choking Fear (4700 exp, 51x)", 33632, 32412, 7, mon = "Choking Fear" },
+		{ "Crazed Summer Rearguard (4700 exp, 27x)", 32085, 32004, 13, mon = "Crazed Summer Rearguard" },
+		{ "Crazed Winter Rearguard (4700 exp, 36x)", 32065, 31949, 13, mon = "Crazed Winter Rearguard" },
+		{ "Hulking Carnisylvan (4700 exp, 11x)", 32560, 32448, 12, mon = "Hulking Carnisylvan" },
+		{ "Draken Elite (4750 exp, 10x)", 33103, 31116, 9, mon = "Draken Elite" },
+		{ "Lost Berserker (4800 exp, 28x)", 33008, 31924, 12, mon = "Lost Berserker" },
+		{ "Skeleton Elite Warrior (4800 exp, 37x)", 32936, 32269, 10, mon = "Skeleton Elite Warrior" },
+		{ "Bashmu (5000 exp, 33x)", 33976, 31689, 8, mon = "Bashmu" },
+		{ "Crazed Summer Vanguard (5000 exp, 26x)", 32014, 31949, 13, mon = "Crazed Summer Vanguard" },
+		{ "Hand of Cursed Fate (5000 exp, 12x)", 33477, 32808, 9, mon = "Hand of Cursed Fate" },
+		{ "Ogre Ruffian (5000 exp, 22x)", 33793, 31603, 7, mon = "Ogre Ruffian" },
+		{ "Crape Man (5040 exp, 50x)", 33762, 32545, 7, mon = "Crape Man" },
+		{ "Dragolisk (5050 exp, 69x)", 33281, 31147, 13, mon = "Dragolisk" },
+		{ "Feversleep (5060 exp, 27x)", 33691, 32291, 9, mon = "Feversleep" },
+		{ "Undead Elite Gladiator (5090 exp, 23x)", 32938, 32269, 10, mon = "Undead Elite Gladiator" },
+		{ "Manticore (5100 exp, 28x)", 33920, 31625, 7, mon = "Manticore" },
+		{ "Silencer (5100 exp, 43x)", 33640, 32440, 7, mon = "Silencer" },
+		{ "Naga Archer (5150 exp, 31x)", 33656, 32753, 8, mon = "Naga Archer" },
+		{ "Cursed Prospector (5250 exp, 104x)", 33836, 31830, 9, mon = "Cursed Prospector" },
+		{ "Blemished Spawn (5300 exp, 33x)", 32626, 31796, 10, mon = "Blemished Spawn" },
+		{ "Venerable Girtablilu (5300 exp, 29x)", 33781, 31754, 10, mon = "Venerable Girtablilu" },
+		{ "Crazed Winter Vanguard (5400 exp, 34x)", 32066, 31953, 13, mon = "Crazed Winter Vanguard" },
+		{ "Ironblight (5400 exp, 28x)", 33010, 31923, 12, mon = "Ironblight" },
+		{ "Hellhound (5440 exp, 39x)", 33507, 31790, 8, mon = "Hellhound" },
+		{ "Grim Reaper (5500 exp, 49x)", 33543, 31725, 8, mon = "Grim Reaper" },
+		{ "Ogre Sage (5500 exp, 17x)", 33796, 31603, 7, mon = "Ogre Sage" },
+		{ "Mean Lost Soul (5580 exp, 41x)", 33593, 31450, 10, mon = "Mean Lost Soul" },
+		{ "Rhindeer (5600 exp, 51x)", 33732, 32496, 9, mon = "Rhindeer" },
+		{ "Afflicted Strider (5700 exp, 11x)", 32632, 31791, 10, mon = "Afflicted Strider" },
+		{ "Harpy (5720 exp, 39x)", 33762, 32543, 7, mon = "Harpy" },
+		{ "Makara (5720 exp, 44x)", 33657, 32753, 8, mon = "Makara" },
+		{ "Girtablilu Warrior (5800 exp, 51x)", 33781, 31754, 10, mon = "Girtablilu Warrior" },
+		{ "Soul-Broken Harbinger (5800 exp, 35x)", 32065, 31949, 13, mon = "Soul-Broken Harbinger" },
+		{ "Weeper (5800 exp, 26x)", 33073, 31960, 11, mon = "Weeper" },
+		{ "Wardragon (5810 exp, 56x)", 33237, 31187, 13, mon = "Wardragon" },
+		{ "Naga Warrior (5890 exp, 55x)", 33657, 32753, 8, mon = "Naga Warrior" },
+		{ "Orewalker (5900 exp, 18x)", 33005, 31953, 12, mon = "Orewalker" },
+		{ "Son of Verminor (5900 exp, 11x)", 33196, 31670, 12, mon = "Son of Verminor" },
+		{ "Varnished Diremaw (5900 exp, 14x)", 32048, 31456, 14, mon = "Varnished Diremaw" },
+		{ "Burster Spectre (6000 exp, 53x)", 33085, 32310, 8, mon = "Burster Spectre" },
+		{ "Demon (6000 exp, 49x)", 33510, 31790, 8, mon = "Demon" },
+		{ "Eyeless Devourer (6000 exp, 32x)", 32642, 31780, 10, mon = "Eyeless Devourer" },
+		{ "Insane Siren (6000 exp, 26x)", 32015, 31948, 13, mon = "Insane Siren" },
 	} },
 	{ label = "Very Hard (exp 6000+)", list = {
-		{ "Crypt Warrior (6050 exp, 23x)", 32438, 32521, 9 },
-		{ "Guzzlemaw (6050 exp, 53x)", 33628, 32458, 7 },
-		{ "Tremendous Tyrant (6100 exp, 11x)", 32064, 31464, 11 },
-		{ "Young Goanna (6100 exp, 31x)", 33903, 31600, 7 },
-		{ "Demon Outcast (6200 exp, 121x)", 33600, 32406, 10 },
-		{ "Lavafungus (6200 exp, 16x)", 32126, 31448, 15 },
-		{ "Vexclaw (6248 exp, 44x)", 33476, 32703, 14 },
-		{ "Deathling Scout (6300 exp, 30x)", 33584, 31424, 14 },
-		{ "Falcon Knight (6300 exp, 25x)", 33310, 31287, 8 },
-		{ "Streaked Devourer (6300 exp, 13x)", 32128, 31445, 15 },
-		{ "Thanatursus (6300 exp, 53x)", 32064, 31949, 13 },
-		{ "Blightwalker (6400 exp, 29x)", 33404, 32374, 13 },
-		{ "Deathling Spellsinger (6400 exp, 31x)", 33577, 31423, 14 },
-		{ "Priestess of the Wild Sun (6400 exp, 34x)", 33868, 31524, 8 },
-		{ "Lavaworm (6500 exp, 17x)", 32126, 31447, 15 },
-		{ "Adult Goanna (6650 exp, 37x)", 33900, 31580, 7 },
-		{ "Sineater Inferniarch (6750 exp, 49x)", 33834, 32335, 7 },
-		{ "Cave Chimera (6800 exp, 14x)", 32059, 31443, 13 },
-		{ "Liodile (6860 exp, 41x)", 33738, 32578, 10 },
-		{ "Falcon Paladin (6900 exp, 22x)", 33296, 31318, 9 },
-		{ "Terrorsleep (6900 exp, 26x)", 33684, 32357, 8 },
-		{ "Usurper Knight (6900 exp, 20x)", 32460, 32499, 7 },
-		{ "Cobra Assassin (6980 exp, 37x)", 33377, 32789, 8 },
-		{ "Usurper Warlock (7000 exp, 9x)", 32386, 32464, 6 },
-		{ "Freakish Lost Soul (7020 exp, 29x)", 31950, 32300, 10 },
-		{ "True Frost Flower Asura (7069 exp, 30x)", 32843, 32805, 10 },
-		{ "Cliff Strider (7100 exp, 18x)", 33013, 31925, 12 },
-		{ "Gorger Inferniarch (7180 exp, 40x)", 33837, 32355, 7 },
-		{ "Black Sphinx Acolyte (7200 exp, 35x)", 33868, 31524, 8 },
-		{ "Grimeleech (7216 exp, 43x)", 33657, 32636, 10 },
-		{ "Carnivostrich (7290 exp, 35x)", 33723, 32527, 10 },
-		{ "Cobra Scout (7310 exp, 17x)", 33376, 32789, 8 },
-		{ "True Midnight Asura (7313 exp, 38x)", 32843, 32804, 10 },
-		{ "Burning Gladiator (7350 exp, 40x)", 33865, 31524, 8 },
-		{ "Broodrider Inferniarch (7400 exp, 40x)", 33836, 32355, 7 },
-		{ "True Dawnfire Asura (7475 exp, 35x)", 32841, 32805, 10 },
-		{ "Sphinx (7500 exp, 48x)", 33872, 31441, 9 },
-		{ "Undead Dragon (7500 exp, 36x)", 33416, 32363, 13 },
-		{ "Cobra Vizier (7650 exp, 19x)", 33377, 32789, 8 },
-		{ "Boar Man (7720 exp, 46x)", 33735, 32487, 10 },
-		{ "Mega Dragon (7810 exp, 38x)", 33280, 31147, 13 },
-		{ "Lava Golem (7900 exp, 24x)", 33074, 31959, 11 },
-		{ "Floating Savant (8000 exp, 23x)", 33280, 32092, 9 },
-		{ "Hellhunter Inferniarch (8100 exp, 87x)", 33844, 32361, 8 },
-		{ "Spellreaper Inferniarch (8350 exp, 108x)", 33851, 32301, 10 },
-		{ "Crypt Warden (8400 exp, 45x)", 33877, 31448, 9 },
-		{ "Feral Sphinx (8800 exp, 28x)", 33900, 31580, 7 },
-		{ "Evil Prospector (9000 exp, 86x)", 33835, 31830, 9 },
-		{ "Lamassu (9000 exp, 15x)", 33789, 31541, 7 },
-		{ "Animated Feather (9860 exp, 19x)", 32494, 32592, 14 },
-		{ "Guardian of Tales (10600 exp, 11x)", 32675, 32710, 12 },
-		{ "Knowledge Elemental (10603 exp, 12x)", 32438, 32727, 12 },
-		{ "Juggernaut (11200 exp, 35x)", 33507, 31790, 8 },
-		{ "Sulphur Spouter (11517 exp, 56x)", 33636, 32800, 14 },
-		{ "Mantosaurus (11569 exp, 51x)", 33741, 32850, 14 },
-		{ "Stalking Stalk (11569 exp, 31x)", 33669, 32841, 14 },
-		{ "Hellflayer (11720 exp, 27x)", 33389, 32429, 13 },
-		{ "Sabretooth (11931 exp, 27x)", 33608, 32976, 14 },
-		{ "Headpecker (12026 exp, 27x)", 33741, 32850, 14 },
-		{ "Energetic Book (12034 exp, 24x)", 32443, 32775, 12 },
-		{ "Mercurial Menace (12095 exp, 46x)", 33741, 32850, 14 },
-		{ "Emerald Tortoise (12129 exp, 35x)", 33604, 32975, 14 },
-		{ "Gore Horn (12595 exp, 52x)", 33605, 32975, 14 },
-		{ "Nighthunter (12647 exp, 29x)", 33561, 32827, 14 },
-		{ "Hulking Prehemoth (12690 exp, 50x)", 33591, 32904, 14 },
-		{ "Icecold Book (12750 exp, 22x)", 32475, 32560, 13 },
-		{ "Gorerilla (13172 exp, 40x)", 33591, 32903, 14 },
-		{ "Noxious Ripptor (13190 exp, 50x)", 33738, 32880, 14 },
-		{ "Burning Book (13200 exp, 39x)", 32683, 32713, 12 },
-		{ "Sulphider (13328 exp, 31x)", 33593, 32852, 14 },
-		{ "Cursed Book (13345 exp, 12x)", 32608, 32541, 12 },
-		{ "Undertaker (13543 exp, 45x)", 33561, 32827, 14 },
-		{ "Shrieking Cry-Stal (13560 exp, 27x)", 33740, 32849, 14 },
-		{ "Squid Warden (15300 exp, 17x)", 32492, 32594, 14 },
-		{ "Rage Squid (16300 exp, 47x)", 32641, 32653, 12 },
-		{ "Sight of Surrender (17000 exp, 9x)", 33550, 32348, 7 },
-		{ "Brain Squid (17672 exp, 11x)", 32533, 32767, 12 },
-		{ "Brinebrute Inferniarch (20300 exp, 40x)", 33822, 32305, 11 },
-		{ "Hazardous Phantom (66000 exp, 15x)", 33909, 31084, 8 },
+		{ "Crypt Warrior (6050 exp, 23x)", 32438, 32521, 9, mon = "Crypt Warrior" },
+		{ "Guzzlemaw (6050 exp, 53x)", 33628, 32458, 7, mon = "Guzzlemaw" },
+		{ "Tremendous Tyrant (6100 exp, 11x)", 32064, 31464, 11, mon = "Tremendous Tyrant" },
+		{ "Young Goanna (6100 exp, 31x)", 33903, 31600, 7, mon = "Young Goanna" },
+		{ "Demon Outcast (6200 exp, 121x)", 33600, 32406, 10, mon = "Demon Outcast" },
+		{ "Lavafungus (6200 exp, 16x)", 32126, 31448, 15, mon = "Lavafungus" },
+		{ "Vexclaw (6248 exp, 44x)", 33476, 32703, 14, mon = "Vexclaw" },
+		{ "Deathling Scout (6300 exp, 30x)", 33584, 31424, 14, mon = "Deathling Scout" },
+		{ "Falcon Knight (6300 exp, 25x)", 33310, 31287, 8, mon = "Falcon Knight" },
+		{ "Streaked Devourer (6300 exp, 13x)", 32128, 31445, 15, mon = "Streaked Devourer" },
+		{ "Thanatursus (6300 exp, 53x)", 32064, 31949, 13, mon = "Thanatursus" },
+		{ "Blightwalker (6400 exp, 29x)", 33404, 32374, 13, mon = "Blightwalker" },
+		{ "Deathling Spellsinger (6400 exp, 31x)", 33577, 31423, 14, mon = "Deathling Spellsinger" },
+		{ "Priestess of the Wild Sun (6400 exp, 34x)", 33868, 31524, 8, mon = "Priestess of the Wild Sun" },
+		{ "Lavaworm (6500 exp, 17x)", 32126, 31447, 15, mon = "Lavaworm" },
+		{ "Adult Goanna (6650 exp, 37x)", 33900, 31580, 7, mon = "Adult Goanna" },
+		{ "Sineater Inferniarch (6750 exp, 49x)", 33834, 32335, 7, mon = "Sineater Inferniarch" },
+		{ "Cave Chimera (6800 exp, 14x)", 32059, 31443, 13, mon = "Cave Chimera" },
+		{ "Liodile (6860 exp, 41x)", 33738, 32578, 10, mon = "Liodile" },
+		{ "Falcon Paladin (6900 exp, 22x)", 33296, 31318, 9, mon = "Falcon Paladin" },
+		{ "Terrorsleep (6900 exp, 26x)", 33684, 32357, 8, mon = "Terrorsleep" },
+		{ "Usurper Knight (6900 exp, 20x)", 32460, 32499, 7, mon = "Usurper Knight" },
+		{ "Cobra Assassin (6980 exp, 37x)", 33377, 32789, 8, mon = "Cobra Assassin" },
+		{ "Usurper Warlock (7000 exp, 9x)", 32386, 32464, 6, mon = "Usurper Warlock" },
+		{ "Freakish Lost Soul (7020 exp, 29x)", 31950, 32300, 10, mon = "Freakish Lost Soul" },
+		{ "True Frost Flower Asura (7069 exp, 30x)", 32843, 32805, 10, mon = "True Frost Flower Asura" },
+		{ "Cliff Strider (7100 exp, 18x)", 33013, 31925, 12, mon = "Cliff Strider" },
+		{ "Gorger Inferniarch (7180 exp, 40x)", 33837, 32355, 7, mon = "Gorger Inferniarch" },
+		{ "Black Sphinx Acolyte (7200 exp, 35x)", 33868, 31524, 8, mon = "Black Sphinx Acolyte" },
+		{ "Grimeleech (7216 exp, 43x)", 33657, 32636, 10, mon = "Grimeleech" },
+		{ "Carnivostrich (7290 exp, 35x)", 33723, 32527, 10, mon = "Carnivostrich" },
+		{ "Cobra Scout (7310 exp, 17x)", 33376, 32789, 8, mon = "Cobra Scout" },
+		{ "True Midnight Asura (7313 exp, 38x)", 32843, 32804, 10, mon = "True Midnight Asura" },
+		{ "Burning Gladiator (7350 exp, 40x)", 33865, 31524, 8, mon = "Burning Gladiator" },
+		{ "Broodrider Inferniarch (7400 exp, 40x)", 33836, 32355, 7, mon = "Broodrider Inferniarch" },
+		{ "True Dawnfire Asura (7475 exp, 35x)", 32841, 32805, 10, mon = "True Dawnfire Asura" },
+		{ "Sphinx (7500 exp, 48x)", 33872, 31441, 9, mon = "Sphinx" },
+		{ "Undead Dragon (7500 exp, 36x)", 33416, 32363, 13, mon = "Undead Dragon" },
+		{ "Cobra Vizier (7650 exp, 19x)", 33377, 32789, 8, mon = "Cobra Vizier" },
+		{ "Boar Man (7720 exp, 46x)", 33735, 32487, 10, mon = "Boar Man" },
+		{ "Mega Dragon (7810 exp, 38x)", 33280, 31147, 13, mon = "Mega Dragon" },
+		{ "Lava Golem (7900 exp, 24x)", 33074, 31959, 11, mon = "Lava Golem" },
+		{ "Floating Savant (8000 exp, 23x)", 33280, 32092, 9, mon = "Floating Savant" },
+		{ "Hellhunter Inferniarch (8100 exp, 87x)", 33844, 32361, 8, mon = "Hellhunter Inferniarch" },
+		{ "Spellreaper Inferniarch (8350 exp, 108x)", 33851, 32301, 10, mon = "Spellreaper Inferniarch" },
+		{ "Crypt Warden (8400 exp, 45x)", 33877, 31448, 9, mon = "Crypt Warden" },
+		{ "Feral Sphinx (8800 exp, 28x)", 33900, 31580, 7, mon = "Feral Sphinx" },
+		{ "Evil Prospector (9000 exp, 86x)", 33835, 31830, 9, mon = "Evil Prospector" },
+		{ "Lamassu (9000 exp, 15x)", 33789, 31541, 7, mon = "Lamassu" },
+		{ "Animated Feather (9860 exp, 19x)", 32494, 32592, 14, mon = "Animated Feather" },
+		{ "Guardian of Tales (10600 exp, 11x)", 32675, 32710, 12, mon = "Guardian of Tales" },
+		{ "Knowledge Elemental (10603 exp, 12x)", 32438, 32727, 12, mon = "Knowledge Elemental" },
+		{ "Juggernaut (11200 exp, 35x)", 33507, 31790, 8, mon = "Juggernaut" },
+		{ "Sulphur Spouter (11517 exp, 56x)", 33636, 32800, 14, mon = "Sulphur Spouter" },
+		{ "Mantosaurus (11569 exp, 51x)", 33741, 32850, 14, mon = "Mantosaurus" },
+		{ "Stalking Stalk (11569 exp, 31x)", 33669, 32841, 14, mon = "Stalking Stalk" },
+		{ "Hellflayer (11720 exp, 27x)", 33389, 32429, 13, mon = "Hellflayer" },
+		{ "Sabretooth (11931 exp, 27x)", 33608, 32976, 14, mon = "Sabretooth" },
+		{ "Headpecker (12026 exp, 27x)", 33741, 32850, 14, mon = "Headpecker" },
+		{ "Energetic Book (12034 exp, 24x)", 32443, 32775, 12, mon = "Energetic Book" },
+		{ "Mercurial Menace (12095 exp, 46x)", 33741, 32850, 14, mon = "Mercurial Menace" },
+		{ "Emerald Tortoise (12129 exp, 35x)", 33604, 32975, 14, mon = "Emerald Tortoise" },
+		{ "Gore Horn (12595 exp, 52x)", 33605, 32975, 14, mon = "Gore Horn" },
+		{ "Nighthunter (12647 exp, 29x)", 33561, 32827, 14, mon = "Nighthunter" },
+		{ "Hulking Prehemoth (12690 exp, 50x)", 33591, 32904, 14, mon = "Hulking Prehemoth" },
+		{ "Icecold Book (12750 exp, 22x)", 32475, 32560, 13, mon = "Icecold Book" },
+		{ "Gorerilla (13172 exp, 40x)", 33591, 32903, 14, mon = "Gorerilla" },
+		{ "Noxious Ripptor (13190 exp, 50x)", 33738, 32880, 14, mon = "Noxious Ripptor" },
+		{ "Burning Book (13200 exp, 39x)", 32683, 32713, 12, mon = "Burning Book" },
+		{ "Sulphider (13328 exp, 31x)", 33593, 32852, 14, mon = "Sulphider" },
+		{ "Cursed Book (13345 exp, 12x)", 32608, 32541, 12, mon = "Cursed Book" },
+		{ "Undertaker (13543 exp, 45x)", 33561, 32827, 14, mon = "Undertaker" },
+		{ "Shrieking Cry-Stal (13560 exp, 27x)", 33740, 32849, 14, mon = "Shrieking Cry-Stal" },
+		{ "Squid Warden (15300 exp, 17x)", 32492, 32594, 14, mon = "Squid Warden" },
+		{ "Rage Squid (16300 exp, 47x)", 32641, 32653, 12, mon = "Rage Squid" },
+		{ "Sight of Surrender (17000 exp, 9x)", 33550, 32348, 7, mon = "Sight of Surrender" },
+		{ "Brain Squid (17672 exp, 11x)", 32533, 32767, 12, mon = "Brain Squid" },
+		{ "Brinebrute Inferniarch (20300 exp, 40x)", 33822, 32305, 11, mon = "Brinebrute Inferniarch" },
+		{ "Hazardous Phantom (66000 exp, 15x)", 33909, 31084, 8, mon = "Hazardous Phantom" },
 	} },
 }
 
@@ -841,45 +841,52 @@ local hubBossHall = Position(29998, 29915, 7)
 local arenaCenter = Position(30060, 29900, 7)
 local arenaLanding = Position(30060, 29909, 7)
 local ARENA_RADIUS = 10
-local raidCenter = Position(30060, 29860, 7)
-local raidLanding = Position(30060, 29869, 7)
 local raidNpcPosition = Position(30006, 30002, 7)
-local raidBosses = {
-	{ name = "The Imperor", outfit = { lookType = 237, lookHead = 0, lookBody = 0, lookLegs = 0, lookFeet = 0, lookAddons = 0, lookMount = 0 } },
-	{ name = "Zushuka", outfit = { lookType = 149, lookHead = 0, lookBody = 10, lookLegs = 0, lookFeet = 4, lookAddons = 0, lookMount = 0 } },
-	{ name = "Chizzoron the Distorter", outfit = { lookType = 340, lookHead = 0, lookBody = 0, lookLegs = 0, lookFeet = 0, lookAddons = 0, lookMount = 0 } },
-	{ name = "Dracola", outfit = { lookType = 231, lookHead = 0, lookBody = 0, lookLegs = 0, lookFeet = 0, lookAddons = 0, lookMount = 0 } },
-	{ name = "The Handmaiden", outfit = { lookType = 230, lookHead = 0, lookBody = 0, lookLegs = 0, lookFeet = 0, lookAddons = 0, lookMount = 0 } },
-	{ name = "Chikhaton", outfit = { lookType = 361, lookHead = 0, lookBody = 0, lookLegs = 0, lookFeet = 0, lookAddons = 0, lookMount = 0 } },
-	{ name = "Mr. Punish", outfit = { lookType = 234, lookHead = 0, lookBody = 0, lookLegs = 0, lookFeet = 0, lookAddons = 0, lookMount = 0 } },
-	{ name = "Orshabaal", outfit = { lookType = 201, lookHead = 0, lookBody = 0, lookLegs = 0, lookFeet = 0, lookAddons = 0, lookMount = 0 } },
-	{ name = "Irgix The Flimsy", outfit = { lookType = 1268, lookHead = 0, lookBody = 0, lookLegs = 0, lookFeet = 94, lookAddons = 0, lookMount = 0 } },
-	{ name = "Furyosa", outfit = { lookType = 149, lookHead = 94, lookBody = 79, lookLegs = 77, lookFeet = 3, lookAddons = 3, lookMount = 0 } },
-	{ name = "Thawing Dragon Lord", outfit = { lookType = 1077, lookHead = 0, lookBody = 0, lookLegs = 0, lookFeet = 0, lookAddons = 0, lookMount = 0 } },
-	{ name = "The Welter", outfit = { lookType = 563, lookHead = 0, lookBody = 0, lookLegs = 0, lookFeet = 0, lookAddons = 0, lookMount = 0 } },
-	{ name = "Amenef the Burning", outfit = { lookType = 541, lookHead = 113, lookBody = 114, lookLegs = 113, lookFeet = 113, lookAddons = 1, lookMount = 0 } },
-	{ name = "Unaz the Mean", outfit = { lookType = 1268, lookHead = 0, lookBody = 95, lookLegs = 0, lookFeet = 0, lookAddons = 0, lookMount = 0 } },
-	{ name = "Massacre", outfit = { lookType = 244, lookHead = 0, lookBody = 0, lookLegs = 0, lookFeet = 0, lookAddons = 0, lookMount = 0 } },
-	{ name = "Vok the Freakish", outfit = { lookType = 1268, lookHead = 0, lookBody = 98, lookLegs = 0, lookFeet = 94, lookAddons = 0, lookMount = 0 } },
-	{ name = "Mawhawk", outfit = { lookType = 595, lookHead = 0, lookBody = 0, lookLegs = 0, lookFeet = 0, lookAddons = 0, lookMount = 0 } },
-	{ name = "Zulazza the Corruptor", outfit = { lookType = 334, lookHead = 0, lookBody = 0, lookLegs = 0, lookFeet = 0, lookAddons = 0, lookMount = 0 } },
-	{ name = "The Pale Count", outfit = { lookType = 557, lookHead = 0, lookBody = 0, lookLegs = 0, lookFeet = 0, lookAddons = 0, lookMount = 0 } },
-	{ name = "Lisa", outfit = { lookType = 604, lookHead = 0, lookBody = 0, lookLegs = 0, lookFeet = 0, lookAddons = 0, lookMount = 0 } },
-	{ name = "Morgaroth", outfit = { lookType = 12, lookHead = 2, lookBody = 94, lookLegs = 78, lookFeet = 79, lookAddons = 0, lookMount = 0 } },
-	{ name = "Glooth Fairy", outfit = { lookType = 600, lookHead = 0, lookBody = 0, lookLegs = 0, lookFeet = 0, lookAddons = 0, lookMount = 0 } },
-	{ name = "The Armored Voidborn", outfit = { lookType = 987, lookHead = 0, lookBody = 0, lookLegs = 0, lookFeet = 0, lookAddons = 0, lookMount = 0 } },
-	{ name = "Bullwark", outfit = { lookType = 607, lookHead = 0, lookBody = 0, lookLegs = 0, lookFeet = 0, lookAddons = 0, lookMount = 0 } },
-	{ name = "Ghazbaran", outfit = { lookType = 12, lookHead = 0, lookBody = 85, lookLegs = 78, lookFeet = 94, lookAddons = 0, lookMount = 0 } },
-	{ name = "Drume", outfit = { lookType = 1317, lookHead = 38, lookBody = 76, lookLegs = 57, lookFeet = 114, lookAddons = 2, lookMount = 0 } },
-	{ name = "Ferumbras", outfit = { lookType = 229, lookHead = 0, lookBody = 0, lookLegs = 0, lookFeet = 0, lookAddons = 0, lookMount = 0 } },
-	{ name = "Urmahlullu the Weakened", outfit = { lookType = 1197, lookHead = 0, lookBody = 0, lookLegs = 0, lookFeet = 0, lookAddons = 0, lookMount = 0 } },
-	{ name = "Omrafir", outfit = { lookType = 12, lookHead = 78, lookBody = 3, lookLegs = 79, lookFeet = 79, lookAddons = 0, lookMount = 0 } },
-	{ name = "The Rootkraken", outfit = { lookType = 1765 } },
-	{ name = "The Monster", outfit = { lookType = 1600 } },
-	{ name = "The Abomination", outfit = { lookType = 1393, lookHead = 0, lookBody = 0, lookLegs = 0, lookFeet = 0, lookAddons = 0, lookMount = 0 } },
-	{ name = "Ancient Spawn of Morgathla", outfit = { lookType = 1055, lookHead = 0, lookBody = 0, lookLegs = 0, lookFeet = 0, lookAddons = 0, lookMount = 0 } },
-	{ name = "Morshabaal", outfit = { lookType = 1468, lookHead = 0, lookBody = 0, lookLegs = 0, lookFeet = 0, lookAddons = 0, lookMount = 0 } },
+local raidRooms = {
+	{ label = "Slabszy", center = Position(30060, 29860, 7), landing = Position(30060, 29869, 7), bossId = nil, bossName = nil, nextAt = 0, bosses = {
+		{ name = "The Imperor", outfit = { lookType = 237, lookHead = 0, lookBody = 0, lookLegs = 0, lookFeet = 0, lookAddons = 0, lookMount = 0 } },
+		{ name = "Zushuka", outfit = { lookType = 149, lookHead = 0, lookBody = 10, lookLegs = 0, lookFeet = 4, lookAddons = 0, lookMount = 0 } },
+		{ name = "Chizzoron the Distorter", outfit = { lookType = 340, lookHead = 0, lookBody = 0, lookLegs = 0, lookFeet = 0, lookAddons = 0, lookMount = 0 } },
+		{ name = "Dracola", outfit = { lookType = 231, lookHead = 0, lookBody = 0, lookLegs = 0, lookFeet = 0, lookAddons = 0, lookMount = 0 } },
+		{ name = "The Handmaiden", outfit = { lookType = 230, lookHead = 0, lookBody = 0, lookLegs = 0, lookFeet = 0, lookAddons = 0, lookMount = 0 } },
+		{ name = "Chikhaton", outfit = { lookType = 361, lookHead = 0, lookBody = 0, lookLegs = 0, lookFeet = 0, lookAddons = 0, lookMount = 0 } },
+		{ name = "Mr. Punish", outfit = { lookType = 234, lookHead = 0, lookBody = 0, lookLegs = 0, lookFeet = 0, lookAddons = 0, lookMount = 0 } },
+		{ name = "Orshabaal", outfit = { lookType = 201, lookHead = 0, lookBody = 0, lookLegs = 0, lookFeet = 0, lookAddons = 0, lookMount = 0 } },
+		{ name = "Irgix The Flimsy", outfit = { lookType = 1268, lookHead = 0, lookBody = 0, lookLegs = 0, lookFeet = 94, lookAddons = 0, lookMount = 0 } },
+		{ name = "Furyosa", outfit = { lookType = 149, lookHead = 94, lookBody = 79, lookLegs = 77, lookFeet = 3, lookAddons = 3, lookMount = 0 } },
+		{ name = "Thawing Dragon Lord", outfit = { lookType = 1077, lookHead = 0, lookBody = 0, lookLegs = 0, lookFeet = 0, lookAddons = 0, lookMount = 0 } },
+		{ name = "The Welter", outfit = { lookType = 563, lookHead = 0, lookBody = 0, lookLegs = 0, lookFeet = 0, lookAddons = 0, lookMount = 0 } },
+		{ name = "Amenef the Burning", outfit = { lookType = 541, lookHead = 113, lookBody = 114, lookLegs = 113, lookFeet = 113, lookAddons = 1, lookMount = 0 } },
+		{ name = "Unaz the Mean", outfit = { lookType = 1268, lookHead = 0, lookBody = 95, lookLegs = 0, lookFeet = 0, lookAddons = 0, lookMount = 0 } },
+		{ name = "Massacre", outfit = { lookType = 244, lookHead = 0, lookBody = 0, lookLegs = 0, lookFeet = 0, lookAddons = 0, lookMount = 0 } },
+		{ name = "Vok the Freakish", outfit = { lookType = 1268, lookHead = 0, lookBody = 98, lookLegs = 0, lookFeet = 94, lookAddons = 0, lookMount = 0 } },
+		{ name = "Mawhawk", outfit = { lookType = 595, lookHead = 0, lookBody = 0, lookLegs = 0, lookFeet = 0, lookAddons = 0, lookMount = 0 } },
+		{ name = "Zulazza the Corruptor", outfit = { lookType = 334, lookHead = 0, lookBody = 0, lookLegs = 0, lookFeet = 0, lookAddons = 0, lookMount = 0 } },
+	} },
+	{ label = "Mocny", center = Position(30090, 29860, 7), landing = Position(30090, 29869, 7), bossId = nil, bossName = nil, nextAt = 0, bosses = {
+		{ name = "The Pale Count", outfit = { lookType = 557, lookHead = 0, lookBody = 0, lookLegs = 0, lookFeet = 0, lookAddons = 0, lookMount = 0 } },
+		{ name = "Lisa", outfit = { lookType = 604, lookHead = 0, lookBody = 0, lookLegs = 0, lookFeet = 0, lookAddons = 0, lookMount = 0 } },
+		{ name = "Morgaroth", outfit = { lookType = 12, lookHead = 2, lookBody = 94, lookLegs = 78, lookFeet = 79, lookAddons = 0, lookMount = 0 } },
+		{ name = "Glooth Fairy", outfit = { lookType = 600, lookHead = 0, lookBody = 0, lookLegs = 0, lookFeet = 0, lookAddons = 0, lookMount = 0 } },
+		{ name = "The Armored Voidborn", outfit = { lookType = 987, lookHead = 0, lookBody = 0, lookLegs = 0, lookFeet = 0, lookAddons = 0, lookMount = 0 } },
+		{ name = "Bullwark", outfit = { lookType = 607, lookHead = 0, lookBody = 0, lookLegs = 0, lookFeet = 0, lookAddons = 0, lookMount = 0 } },
+		{ name = "Ghazbaran", outfit = { lookType = 12, lookHead = 0, lookBody = 85, lookLegs = 78, lookFeet = 94, lookAddons = 0, lookMount = 0 } },
+		{ name = "Drume", outfit = { lookType = 1317, lookHead = 38, lookBody = 76, lookLegs = 57, lookFeet = 114, lookAddons = 2, lookMount = 0 } },
+		{ name = "Ferumbras", outfit = { lookType = 229, lookHead = 0, lookBody = 0, lookLegs = 0, lookFeet = 0, lookAddons = 0, lookMount = 0 } },
+		{ name = "Urmahlullu the Weakened", outfit = { lookType = 1197, lookHead = 0, lookBody = 0, lookLegs = 0, lookFeet = 0, lookAddons = 0, lookMount = 0 } },
+	} },
+	{ label = "Legendarny", center = Position(30120, 29860, 7), landing = Position(30120, 29869, 7), bossId = nil, bossName = nil, nextAt = 0, bosses = {
+		{ name = "Omrafir", outfit = { lookType = 12, lookHead = 78, lookBody = 3, lookLegs = 79, lookFeet = 79, lookAddons = 0, lookMount = 0 } },
+		{ name = "The Rootkraken", outfit = { lookType = 1765 } },
+		{ name = "The Monster", outfit = { lookType = 1600 } },
+		{ name = "The Abomination", outfit = { lookType = 1393, lookHead = 0, lookBody = 0, lookLegs = 0, lookFeet = 0, lookAddons = 0, lookMount = 0 } },
+		{ name = "Ancient Spawn of Morgathla", outfit = { lookType = 1055, lookHead = 0, lookBody = 0, lookLegs = 0, lookFeet = 0, lookAddons = 0, lookMount = 0 } },
+		{ name = "Morshabaal", outfit = { lookType = 1468, lookHead = 0, lookBody = 0, lookLegs = 0, lookFeet = 0, lookAddons = 0, lookMount = 0 } },
+	} },
 }
+local survivalCenter = Position(30090, 29900, 7)
+local survivalLanding = Position(30090, 29909, 7)
+local taskNpcPosition = Position(30013, 29998, 7)
 local hubPads = {
 	["29996:29653:7"] = { goto = { 29998, 29681, 7 }, label = "Bossy 10/11 (arena, HP 110000-350000)" },
 	["29996:29655:7"] = { lobby = true },
@@ -936,6 +943,7 @@ local hubPads = {
 	["29996:30201:7"] = { lobby = true },
 	["29996:30203:7"] = { goto = { 29998, 30045, 7 }, label = "Low 1/7 (exp 20-30)" },
 	["30000:29960:7"] = { lobby = true },
+	["30001:30002:7"] = { survival = true },
 	["30003:29648:7"] = { boss = bosses[241] },
 	["30003:29652:7"] = { boss = bosses[242] },
 	["30003:29674:7"] = { boss = bosses[217] },
@@ -2002,39 +2010,57 @@ local function arenaStart(player, entry)
 	addEvent(arenaCheck, 2000, player:getId(), token, entry[1], entry.chest, entry.hint)
 end
 
--- Losowy Boss: w osobnej salce stoi jeden wylosowany mocny boss. Po zabiciu nastepny
--- pojawia sie po 10 minutach. Postac przy padzie w lobby zmienia wyglad miedzy bossami z puli.
--- Stan trzyma tylko identyfikatory, a kazdy tik sprawdza je od nowa.
+-- Losowy Boss: trzy salki wedlug sily (slabszy / mocny / legendarny). W kazdej stoi jeden wylosowany
+-- boss; po zabiciu nastepny pojawia sie po 10 minutach. Postac przy padzie w lobby zmienia wyglad
+-- miedzy bossami ze wszystkich pul. Stan trzyma tylko identyfikatory, kazdy tik sprawdza je od nowa.
 local RAID_RESPAWN_SECONDS = 10 * 60
 local RAID_NPC_NAME = "Losowy Boss"
-local raidState = { bossId = nil, bossName = nil, nextAt = 0, npcId = nil, look = 0 }
+local raidNpc = { id = nil, looks = {}, look = 0 }
+for _, room in ipairs(raidRooms) do
+	for _, boss in ipairs(room.bosses) do
+		raidNpc.looks[#raidNpc.looks + 1] = boss.outfit
+	end
+end
 
-local function raidSpawn()
-	if #raidBosses == 0 then
+local function raidSpawn(room)
+	if #room.bosses == 0 then
 		return
 	end
-	local pick = raidBosses[math.random(#raidBosses)]
-	local monster = Game.createMonster(pick.name, raidCenter, true, true)
+	local pick = room.bosses[math.random(#room.bosses)]
+	local monster = Game.createMonster(pick.name, room.center, true, true)
 	if monster then
-		raidState.bossId = monster:getId()
-		raidState.bossName = pick.name
-		Game.broadcastMessage("Losowy Boss: " .. pick.name .. " czeka w salce (pad w lobby hubu albo !tp).", MESSAGE_EVENT_ADVANCE)
+		room.bossId = monster:getId()
+		room.bossName = pick.name
+		Game.broadcastMessage("Losowy Boss (" .. room.label .. "): " .. pick.name .. " czeka w salce.", MESSAGE_EVENT_ADVANCE)
 	else
-		raidState.nextAt = os.time() + 30
+		room.nextAt = os.time() + 30
 	end
+end
+
+local function raidStatus(room)
+	if room.bossId and Creature(room.bossId) then
+		return room.label .. ": czeka " .. room.bossName
+	end
+	local left = math.max(0, room.nextAt - os.time())
+	return string.format("%s: nastepny za %d min %d s", room.label, math.floor(left / 60), left % 60)
 end
 
 local function raidEnter(player)
 	if inFight(player) then
 		return
 	end
-	travel(player, { RAID_NPC_NAME, raidLanding.x, raidLanding.y, raidLanding.z })
-	if raidState.bossId and Creature(raidState.bossId) then
-		player:sendTextMessage(MESSAGE_EVENT_ADVANCE, "W salce czeka: " .. raidState.bossName .. ".")
-	else
-		local left = math.max(0, raidState.nextAt - os.time())
-		player:sendTextMessage(MESSAGE_EVENT_ADVANCE, string.format("Boss pokonany. Nastepny pojawi sie za %d min %d s.", math.floor(left / 60), left % 60))
+	local window = ModalWindow({ title = "Losowy Boss", message = "Wybierz salke. Po zabiciu bossa nastepny pojawia sie po 10 minutach." })
+	for _, room in ipairs(raidRooms) do
+		window:addChoice(raidStatus(room), function(target)
+			travel(target, { RAID_NPC_NAME .. " - " .. room.label, room.landing.x, room.landing.y, room.landing.z })
+		end)
 	end
+	window:addButton("Wybierz")
+	window:addButton("Zamknij", function() end) -- przycisk bez funkcji uruchomilby zaznaczona pozycje
+	window:setPriority(true)
+	window:setDefaultEnterButton(2)
+	window:setDefaultEscapeButton(1)
+	window:sendToPlayer(player)
 end
 
 local raidNpcType = Game.createNpcType(RAID_NPC_NAME)
@@ -2045,37 +2071,39 @@ raidNpcType:register({
 	maxHealth = 100,
 	walkInterval = 0,
 	walkRadius = 0,
-	outfit = raidBosses[1] and raidBosses[1].outfit or { lookType = 35 },
+	outfit = raidNpc.looks[1] or { lookType = 35 },
 	flags = { floorchange = false },
 })
 
 local raidTick = GlobalEvent("OtsRandomBossTick")
 
 function raidTick.onThink(interval)
-	-- boss: wykrycie smierci i odliczanie do nastepnego
-	if raidState.bossId then
-		if not Creature(raidState.bossId) then
-			Game.broadcastMessage("Losowy Boss pokonany: " .. (raidState.bossName or "?") .. ". Nastepny za 10 minut.", MESSAGE_EVENT_ADVANCE)
-			raidState.bossId = nil
-			raidState.nextAt = os.time() + RAID_RESPAWN_SECONDS
+	-- bossy: wykrycie smierci i odliczanie do nastepnego, osobno w kazdej salce
+	for _, room in ipairs(raidRooms) do
+		if room.bossId then
+			if not Creature(room.bossId) then
+				Game.broadcastMessage("Losowy Boss pokonany: " .. (room.bossName or "?") .. " (" .. room.label .. "). Nastepny za 10 minut.", MESSAGE_EVENT_ADVANCE)
+				room.bossId = nil
+				room.nextAt = os.time() + RAID_RESPAWN_SECONDS
+			end
+		elseif os.time() >= room.nextAt then
+			raidSpawn(room)
 		end
-	elseif os.time() >= raidState.nextAt then
-		raidSpawn()
 	end
 
 	-- postac w lobby: tworzona przy pierwszym tiku, potem zmienia wyglad
-	local npc = raidState.npcId and Creature(raidState.npcId)
+	local npc = raidNpc.id and Creature(raidNpc.id)
 	if not npc then
 		npc = Game.createNpc(RAID_NPC_NAME, raidNpcPosition, false, true)
 		if npc then
 			npc:setMasterPos(raidNpcPosition)
 			npc:setDirection(DIRECTION_NORTH)
-			raidState.npcId = npc:getId()
+			raidNpc.id = npc:getId()
 		end
 	end
-	if npc and #raidBosses > 0 then
-		raidState.look = raidState.look % #raidBosses + 1
-		npc:setOutfit(raidBosses[raidState.look].outfit)
+	if npc and #raidNpc.looks > 0 then
+		raidNpc.look = raidNpc.look % #raidNpc.looks + 1
+		npc:setOutfit(raidNpc.looks[raidNpc.look])
 	end
 	return true
 end
@@ -2083,21 +2111,276 @@ end
 raidTick:interval(2000)
 raidTick:register()
 
--- !boss: co stoi w salce losowego bossa albo ile zostalo do nastepnego
+-- !boss: co stoi w salkach losowego bossa albo ile zostalo do nastepnego
 local raidInfo = TalkAction("!boss")
 
 function raidInfo.onSay(player, words, param)
-	if raidState.bossId and Creature(raidState.bossId) then
-		player:sendTextMessage(MESSAGE_EVENT_ADVANCE, "Losowy Boss: w salce czeka " .. raidState.bossName .. ".")
-	else
-		local left = math.max(0, raidState.nextAt - os.time())
-		player:sendTextMessage(MESSAGE_EVENT_ADVANCE, string.format("Losowy Boss: nastepny za %d min %d s.", math.floor(left / 60), left % 60))
+	local lines = {}
+	for _, room in ipairs(raidRooms) do
+		lines[#lines + 1] = raidStatus(room)
 	end
+	player:sendTextMessage(MESSAGE_EVENT_ADVANCE, "Losowy Boss. " .. table.concat(lines, "; ") .. ".")
 	return true
 end
 
 raidInfo:groupType("normal")
 raidInfo:register()
+
+-- Taski: jedno aktywne zadanie "zabij N sztuk potwora" z wybranego poziomu expowisk.
+-- Nagroda wpada sama po ostatnim zabiciu: Tibia Coins i christmas tokeny (dla Token Tradera).
+local TASK_TOKEN_ITEM = 6526
+local taskTiers = {
+	{ need = 100, coins = 10, tokens = 50 },
+	{ need = 150, coins = 25, tokens = 100 },
+	{ need = 200, coins = 50, tokens = 200 },
+	{ need = 300, coins = 100, tokens = 400 },
+}
+
+local function taskStore(player)
+	return player:kv():scoped("ots-task")
+end
+
+local function taskGet(player)
+	local store = taskStore(player)
+	local tier = tonumber(store:get("tier")) or 0
+	local index = tonumber(store:get("index")) or 0
+	local entry = hunts[tier] and hunts[tier].list[index]
+	if not entry or not taskTiers[tier] then
+		return nil
+	end
+	return { tier = tier, entry = entry, count = tonumber(store:get("count")) or 0, need = taskTiers[tier].need }
+end
+
+local function taskClear(player)
+	local store = taskStore(player)
+	store:set("tier", 0)
+	store:set("index", 0)
+	store:set("count", 0)
+end
+
+local function taskReward(tier)
+	return string.format("%d Tibia Coins i %d tokenow", taskTiers[tier].coins, taskTiers[tier].tokens)
+end
+
+local function openTasks(player)
+	local task = taskGet(player)
+	local window
+	if task then
+		window = ModalWindow({
+			title = "Taski",
+			message = string.format("Zadanie: zabij %d x %s.\nPostep: %d/%d.\nNagroda: %s.", task.need, task.entry.mon, task.count, task.need, taskReward(task.tier)),
+		})
+		window:addChoice("Teleport na expowisko", function(target)
+			local current = taskGet(target)
+			if current then
+				travel(target, current.entry)
+			end
+		end)
+		window:addChoice("Porzuc zadanie", function(target)
+			taskClear(target)
+			target:sendTextMessage(MESSAGE_EVENT_ADVANCE, "Zadanie porzucone. Mozesz wziac nowe.")
+		end)
+	else
+		local done = tonumber(taskStore(player):get("done")) or 0
+		window = ModalWindow({ title = "Taski", message = "Wybierz poziom. Potwor jest losowany z expowisk tego poziomu.\nUkonczone zadania: " .. done })
+		for tier, config in ipairs(taskTiers) do
+			if hunts[tier] then
+				window:addChoice(string.format("%s: %d potworow, nagroda %s", hunts[tier].label, config.need, taskReward(tier)), function(target)
+					if taskGet(target) then
+						return
+					end
+					local store = taskStore(target)
+					local index = math.random(#hunts[tier].list)
+					store:set("tier", tier)
+					store:set("index", index)
+					store:set("count", 0)
+					target:sendTextMessage(MESSAGE_EVENT_ADVANCE, string.format("Nowe zadanie: zabij %d x %s. Teleport znajdziesz pod !task.", config.need, hunts[tier].list[index].mon))
+				end)
+			end
+		end
+	end
+	window:addButton("Wybierz")
+	window:addButton("Zamknij", function() end) -- przycisk bez funkcji uruchomilby zaznaczona pozycje
+	window:setPriority(true)
+	window:setDefaultEnterButton(2)
+	window:setDefaultEscapeButton(1)
+	window:sendToPlayer(player)
+end
+
+local taskKill = EventCallback("OtsTaskOnKill")
+
+function taskKill.playerOnKill(player, monster)
+	if not player or not monster or monster:getMaster() then
+		return
+	end
+	local task = taskGet(player)
+	if not task or monster:getName():lower() ~= task.entry.mon:lower() then
+		return
+	end
+	local count = task.count + 1
+	if count < task.need then
+		taskStore(player):set("count", count)
+		if count % 25 == 0 then
+			player:sendTextMessage(MESSAGE_EVENT_ADVANCE, string.format("Task: %s %d/%d.", task.entry.mon, count, task.need))
+		end
+		return
+	end
+	local config = taskTiers[task.tier]
+	local store = taskStore(player)
+	store:set("done", (tonumber(store:get("done")) or 0) + 1)
+	taskClear(player)
+	player:addTibiaCoins(config.coins)
+	player:addItem(TASK_TOKEN_ITEM, config.tokens)
+	player:getPosition():sendMagicEffect(CONST_ME_FIREWORK_YELLOW)
+	player:sendTextMessage(MESSAGE_EVENT_ADVANCE, string.format("Task ukonczony: %d x %s. Nagroda: %s. Nowe zadanie: !task.", task.need, task.entry.mon, taskReward(task.tier)))
+end
+
+taskKill:register()
+
+local taskCommand = TalkAction("!task")
+
+function taskCommand.onSay(player, words, param)
+	openTasks(player)
+	return true
+end
+
+taskCommand:groupType("normal")
+taskCommand:register()
+
+-- Postac "Taski" w lobby hubu: wystarczy cokolwiek do niej powiedziec (np. hi), otwiera to samo okno.
+local TASK_NPC_NAME = "Taski"
+local taskNpcType = Game.createNpcType(TASK_NPC_NAME)
+taskNpcType.onSay = function(npc, creature, type, message)
+	local player = creature and creature:getPlayer()
+	if player and player:getPosition():getDistance(npc:getPosition()) <= 4 then
+		openTasks(player)
+	end
+end
+taskNpcType:register({
+	name = TASK_NPC_NAME,
+	description = TASK_NPC_NAME,
+	health = 100,
+	maxHealth = 100,
+	walkInterval = 0,
+	walkRadius = 0,
+	outfit = { lookType = 268, lookHead = 78, lookBody = 69, lookLegs = 58, lookFeet = 76, lookAddons = 3 },
+	flags = { floorchange = false },
+})
+
+local taskNpcPlace = GlobalEvent("OtsTaskNpc")
+
+function taskNpcPlace.onStartup()
+	local npc = Game.createNpc(TASK_NPC_NAME, taskNpcPosition, false, true)
+	if npc then
+		npc:setMasterPos(taskNpcPosition)
+		npc:setDirection(DIRECTION_SOUTH)
+	end
+	logger.info("[OTS taski] Postac w lobby: {}", npc and "tak" or "nie")
+	return true
+end
+
+taskNpcPlace:register()
+
+-- Fale: sala, w ktorej po wybiciu fali wchodzi nastepna, mocniejsza. Potwory ida po kolei
+-- z listy expowisk (rosnaco wedlug exp). Za kazda fale sa tokeny, co piata takze Tibia Coins.
+-- Odroczone wywolania niosa tylko id gracza i numer biegu (token).
+local survival = { token = 0, ids = {}, wave = 0 }
+local survivalMonsters = {}
+for _, group in ipairs(hunts) do
+	for _, entry in ipairs(group.list) do
+		survivalMonsters[#survivalMonsters + 1] = entry.mon
+	end
+end
+
+local function survivalClear()
+	for _, id in ipairs(survival.ids) do
+		local creature = Creature(id)
+		if creature then
+			creature:remove()
+		end
+	end
+	survival.ids = {}
+end
+
+local function inSurvival(player)
+	local pos = player:getPosition()
+	return pos.z == survivalCenter.z and math.abs(pos.x - survivalCenter.x) <= ARENA_RADIUS + 1 and math.abs(pos.y - survivalCenter.y) <= ARENA_RADIUS + 1
+end
+
+local survivalCheck
+
+local function survivalNext(playerId, token)
+	if token ~= survival.token then
+		return
+	end
+	local player = Player(playerId)
+	if not player or not inSurvival(player) then
+		survivalClear()
+		return
+	end
+	survival.wave = survival.wave + 1
+	local wave = survival.wave
+	local name = survivalMonsters[math.min(#survivalMonsters, 6 + wave * 10)]
+	local amount = math.min(5 + math.floor(wave / 2), 16)
+	for _ = 1, amount do
+		local pos = Position(survivalCenter.x + math.random(-ARENA_RADIUS + 1, ARENA_RADIUS - 1), survivalCenter.y + math.random(-ARENA_RADIUS + 1, 2), survivalCenter.z)
+		local monster = name and Game.createMonster(name, pos, true, true)
+		if monster then
+			survival.ids[#survival.ids + 1] = monster:getId()
+		end
+	end
+	player:sendTextMessage(MESSAGE_EVENT_ADVANCE, string.format("Fala %d: %d x %s.", wave, #survival.ids, name or "?"))
+	addEvent(survivalCheck, 2000, playerId, token)
+end
+
+survivalCheck = function(playerId, token)
+	if token ~= survival.token then
+		return
+	end
+	local player = Player(playerId)
+	if not player or not inSurvival(player) then
+		survivalClear()
+		return
+	end
+	for _, id in ipairs(survival.ids) do
+		if Creature(id) then
+			addEvent(survivalCheck, 2000, playerId, token)
+			return
+		end
+	end
+	survival.ids = {}
+	local wave = survival.wave
+	local tokens = wave * 5
+	player:addItem(TASK_TOKEN_ITEM, tokens)
+	local text = string.format("Fala %d wybita: +%d tokenow.", wave, tokens)
+	if wave % 5 == 0 then
+		player:addTibiaCoins(wave * 2)
+		text = text .. string.format(" Bonus: +%d Tibia Coins.", wave * 2)
+	end
+	local store = player:kv():scoped("ots-survival")
+	if wave > (tonumber(store:get("best")) or 0) then
+		store:set("best", wave)
+		text = text .. " Nowy rekord!"
+	end
+	player:sendTextMessage(MESSAGE_EVENT_ADVANCE, text .. " Nastepna fala za 5 s.")
+	addEvent(survivalNext, 5000, playerId, token)
+end
+
+local function survivalEnter(player)
+	if inFight(player) then
+		return
+	end
+	survivalClear()
+	survival.token = survival.token + 1
+	survival.wave = 0
+	travel(player, { "Fale", survivalLanding.x, survivalLanding.y, survivalLanding.z })
+	if not inSurvival(player) then
+		return
+	end
+	local best = tonumber(player:kv():scoped("ots-survival"):get("best")) or 0
+	player:sendTextMessage(MESSAGE_EVENT_ADVANCE, string.format("Fale: pierwsza fala za 5 s. Twoj rekord: fala %d. Wyjscie teleportem konczy bieg.", best))
+	addEvent(survivalNext, 5000, player:getId(), survival.token)
+end
 
 local openMain
 
@@ -2193,6 +2476,12 @@ openMain = function(player)
 		if OtsMountHall and not inFight(target) then
 			OtsMountHall(target)
 		end
+	end)
+	window:addChoice("Taski", function(target)
+		openTasks(target)
+	end)
+	window:addChoice("Fale potworow", function(target)
+		survivalEnter(target)
 	end)
 	window:addChoice("Losowy Boss (nowy co 10 min po zabiciu)", function(target)
 		raidEnter(target)
@@ -2318,6 +2607,8 @@ function hubStep.onStepIn(creature, item, position, fromPosition)
 		hubMove(player, templePosition)
 	elseif action.randomboss then
 		raidEnter(player)
+	elseif action.survival then
+		survivalEnter(player)
 	elseif action.mounts and OtsMountHall then
 		OtsMountHall(player)
 	elseif action.outfits and OtsOutfitHall then
@@ -2360,6 +2651,8 @@ function hubLook.playerOnLook(player, inspectedThing, inspectedPosition, lookDis
 		text = "Powrot do lobby hubu"
 	elseif action.randomboss then
 		text = "Losowy Boss"
+	elseif action.survival then
+		text = "Fale potworow"
 	elseif action.mounts then
 		text = "Wierzchowce do oswojenia"
 	elseif action.outfits then
