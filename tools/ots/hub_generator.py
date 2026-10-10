@@ -60,39 +60,65 @@ _mid = X0 + lobby_w // 2
 for dx, name, look in ((-4, 'Outfity', 273), (0, 'Thais', 128), (4, 'Questy', 367), (8, 'Bossy', 289)):
     floor(_mid + dx + 1, Y0 + 2)
     npcs.append(dict(name=name, outfit={'lookType': look, 'lookHead': 78, 'lookBody': 69, 'lookLegs': 58, 'lookFeet': 76, 'lookAddons': 3}, pos=[_mid + dx + 1, Y0 + 2, Z], south=False))
-for t, (g, (_, label)) in enumerate(zip(groups, tiers)):
-    yc0 = Y0 + WING_GAP * (t + 1)
-    rows = [g[i:i + ROWCAP] for i in range(0, len(g), ROWCAP)]
-    # kregoslup po zachodniej stronie laczy rzedy skrzydla
-    y_last = yc0 + ROW_GAP * (len(rows) - 1)
-    for x in range(X0 - 3, X0):
-        for y in range(yc0 - 1, y_last + 2):
-            floor(x, y)
-    pad(X0 - 2, yc0 - 2, dict(kind='lobby'))
-    board(X0 - 2, yc0 - 3, 'Lobby\nPowrot do wyboru poziomu', SIGN_A)
-    arrival = [X0 - 2, yc0, Z]
-    for r, row in enumerate(rows):
-        yc = yc0 + ROW_GAP * r
-        slots = (len(row) + 1) // 2
-        x_end = X0 + 2 + PITCH * slots
-        for x in range(X0, x_end):
-            for y in range(yc - 1, yc + 2):
+FLOOR_N = 24         # pozycji na jednym pietrze (2 rzedy po 12)
+ROW_N = 12
+COL_PITCH = 45       # odstep miedzy kolumnami pieter (osobna kolumna na kazdy poziom)
+FLOOR_PITCH = 26
+
+def build_floors(entries, x0, y_first, step, title, pad_action, sign_text, behind, range_text):
+    """Pietra: kazde to pierscien z dwoch rzedow, polaczonych na obu koncach.
+    Na zachodzie pady: poprzednie pietro, lobby, nastepne pietro (ostatnie wraca na pierwsze)."""
+    chunks = [entries[i:i + FLOOR_N] for i in range(0, len(entries), FLOOR_N)]
+    n = len(chunks)
+    arrivals = [[x0 - 2, y_first + step * k + 5, Z] for k in range(n)]
+    x_end = x0 + 2 + PITCH * (ROW_N // 2)
+    for k, chunk in enumerate(chunks):
+        yc = y_first + step * k
+        name = '%s %d/%d' % (title, k + 1, n)
+        for x in list(range(x0 - 3, x0)) + list(range(x_end, x_end + 3)):
+            for y in range(yc - 1, yc + 12):
                 floor(x, y)
-        pad(x_end, yc, dict(kind='lobby'))
-        board(x_end + 1, yc, 'Lobby\nPowrot do wyboru poziomu', SIGN_B)
-        for i, h in enumerate(row):
-            s, side = divmod(i, 2)
-            x = X0 + 3 + PITCH * s
+        for r in range(2):
+            yr = yc + 10 * r
+            for x in range(x0, x_end):
+                for y in range(yr - 1, yr + 2):
+                    floor(x, y)
+        for j, e in enumerate(chunk):
+            r, jj = divmod(j, ROW_N)
+            s_, side = divmod(jj, 2)
+            x = x0 + 3 + PITCH * s_
+            yr = yc + 10 * r
             sign = -1 if side == 0 else 1
-            pad(x, yc + 2 * sign, dict(kind='hunt', tier=t, index=g.index(h)))
-            board(x, yc + 3 * sign, '%s\n%d exp, %d potworow w okolicy' % (h['name'], h['exp'], h['n']), SIGN_A if sign < 0 else SIGN_B)
-            floor(x, yc + 4 * sign, pz=False)       # wysepka potwora, poza PZ
-            spawns.append((h['name'], x, yc + 4 * sign))
-    wings.append(dict(label='%s (%s)' % (label, RANGES[t]), arrival=arrival, count=len(g)))
+            pad(x, yr + 2 * sign, pad_action(k * FLOOR_N + j, e))
+            board(x, yr + 3 * sign, sign_text(e), SIGN_A if sign < 0 else SIGN_B)
+            behind(e, x, yr + 4 * sign, sign < 0)
+        def nav(y, target, text):
+            if target is None:
+                pad(x0 - 4, y, dict(kind='lobby'))
+            else:
+                tk = target % n
+                pad(x0 - 4, y, dict(kind='goto', pos=arrivals[tk], label='%s %d/%d (%s)' % (title, tk + 1, n, range_text(chunks[tk]))))
+            board(x0 - 5, y, text, SIGN_A)
+        if n > 1:
+            nav(yc + 3, k - 1, 'Poprzednie pietro\n%s %d/%d' % (title, (k - 1) % n + 1, n))
+            nav(yc + 7, k + 1, 'Nastepne pietro\n%s %d/%d' % (title, (k + 1) % n + 1, n))
+        nav(yc + 5, None, 'Lobby\nTu jestes: %s\n%s' % (name, range_text(chunk)))
+    return arrivals
+
+for t, (g, (_, label)) in enumerate(zip(groups, tiers)):
+    def _behind(h, x, y, north):
+        floor(x, y, pz=False)       # wysepka potwora, poza PZ
+        spawns.append((h['name'], x, y))
+    arr = build_floors(g, X0 + COL_PITCH * t, Y0 + WING_GAP, FLOOR_PITCH, label,
+        lambda i, h, t=t: dict(kind='hunt', tier=t, index=i),
+        lambda h: '%s\n%d exp, %d potworow w okolicy' % (h['name'], h['exp'], h['n']),
+        _behind,
+        lambda ch: 'exp %d-%d' % (ch[0]['exp'], ch[-1]['exp']))
+    wings.append(dict(label='%s (%s)' % (label, RANGES[t]), arrival=arr[0], count=len(g), floors=len(arr)))
     # lobby: pad poziomu, za nim tabliczka, obok postac z nazwa poziomu
     lx = X0 + 4 + 6 * t
     pad(lx, Y0 - 2, dict(kind='wing', wing=t))
-    board(lx, Y0 - 3, '%s\n%s\n%d potworow' % (label, RANGES[t], len(g)))
+    board(lx, Y0 - 3, '%s\n%s\n%d potworow, %d pieter' % (label, RANGES[t], len(g), len(arr)))
     floor(lx + 1, Y0 - 2)
     npcs.append(dict(name=label, outfit={'lookType': TIER_LOOKS[t], 'lookHead': 78, 'lookBody': 69, 'lookLegs': 58, 'lookFeet': 76, 'lookAddons': 3}, pos=[lx + 1, Y0 - 2, Z], south=True))
 
@@ -120,42 +146,26 @@ for i, qm in enumerate(QM):
         floor(ix, iy)
         tiles[(ix, iy, Z)]['items'].append((iid, 0, None))
 
-# Hala bossow: rzedy po 60 bossow (jak skrzydla expowisk), kregoslup po zachodniej stronie
+# Hala bossow: pietra po 24 bossy, kolejne pietra na polnoc
 BL = json.load(open('bosses_all.json'))
-yb = Y0 - 80
-brows = [BL[i:i + ROWCAP] for i in range(0, len(BL), ROWCAP)]
-yb_last = yb - ROW_GAP * (len(brows) - 1)
-for x in range(X0 - 3, X0):
-    for y in range(yb_last - 1, yb + 2):
-        floor(x, y)
-pad(X0 - 2, yb + 2, dict(kind='lobby')); board(X0 - 2, yb + 3, 'Lobby\nPowrot do hubu', SIGN_B)
-bosshall = [X0 - 2, yb, Z]
 boss_displays = []
-for r, row in enumerate(brows):
-    yc = yb - ROW_GAP * r
-    b_end = X0 + 2 + PITCH * ((len(row) + 1) // 2)
-    for x in range(X0, b_end):
-        for y in range(yc - 1, yc + 2):
-            floor(x, y)
-    pad(b_end, yc, dict(kind='lobby')); board(b_end + 1, yc, 'Lobby\nPowrot do hubu', SIGN_B)
-    for j, b in enumerate(row):
-        i = r * ROWCAP + j
-        s_, side = divmod(j, 2)
-        x = X0 + 3 + PITCH * s_
-        sign = -1 if side == 0 else 1
-        nice = ' '.join(w[:1].upper() + w[1:] for w in b['name'].split(' '))
-        pad(x, yc + 2 * sign, dict(kind='boss', index=i))
-        if b['pos']:
-            info = 'Dzwignia bossa. Wymagany poziom: %d' % b['lvl'] if b['lvl'] else 'Dzwignia bossa. Bez wymaganego poziomu'
-        else:
-            info = 'Arena. HP bossa: %d' % b['hp']
-        board(x, yc + 3 * sign, nice + '\n' + info, SIGN_A if sign < 0 else SIGN_B)
-        floor(x, yc + 4 * sign)
-        boss_displays.append(dict(name=nice, outfit=b['outfit'], pos=[x, yc + 4 * sign, Z], south=sign < 0))
+def _nice(b): return ' '.join(w[:1].upper() + w[1:] for w in b['name'].split(' '))
+def _bsign(b):
+    if b['pos']:
+        return _nice(b) + '\n' + ('Dzwignia bossa. Wymagany poziom: %d' % b['lvl'] if b['lvl'] else 'Dzwignia bossa. Bez wymaganego poziomu')
+    return _nice(b) + '\nArena. HP bossa: %d' % b['hp']
+def _bbehind(b, x, y, north):
+    floor(x, y)
+    boss_displays.append(dict(name=_nice(b), outfit=b['outfit'], pos=[x, y, Z], south=north))
+def _brange(ch):
+    return 'bossy z dzwignia' if ch[-1]['pos'] else ('dzwignie i arena' if ch[0]['pos'] else 'arena, HP %d-%d' % (ch[0]['hp'], ch[-1]['hp']))
+_barr = build_floors(BL, X0, Y0 - 90, -FLOOR_PITCH, 'Bossy', lambda i, b: dict(kind='boss', index=i), _bsign, _bbehind, _brange)
+bosshall = _barr[0]
+boss_floors = len(_barr)
 
 # Arena: wspolna sala walk dla bossow bez dzwigni i dla questow z walka. Poza PZ.
 ARENA_R = 10
-arena_center = [X0 + 13, Y0 - 170, Z]
+arena_center = [X0 + 60, Y0 - 100, Z]
 for x in range(arena_center[0] - ARENA_R, arena_center[0] + ARENA_R + 1):
     for y in range(arena_center[1] - ARENA_R, arena_center[1] + ARENA_R + 1):
         floor(x, y, pz=False)
@@ -249,7 +259,7 @@ with open('hub/ots-hub-monster.xml', 'w') as f:
 open('hub/ots-hub-house.xml', 'w').write('<?xml version="1.0"?>\n<houses />\n')
 open('hub/ots-hub-npc.xml', 'w').write('<?xml version="1.0"?>\n<npcs />\n')
 open('hub/ots-hub-zones.xml', 'w').write('<?xml version="1.0"?>\n<zones />\n')
-json.dump(dict(pads=pads, wings=wings, lobby=lobby_arrival, questhall=questhall, bosshall=bosshall, bossDisplays=boss_displays, npcs=npcs, arena=dict(center=arena_center, landing=arena_landing, radius=ARENA_R)), open('hub.json', 'w'))
+json.dump(dict(pads=pads, wings=wings, lobby=lobby_arrival, questhall=questhall, bosshall=bosshall, bossDisplays=boss_displays, npcs=npcs, bossFloors=boss_floors, arena=dict(center=arena_center, landing=arena_landing, radius=ARENA_R)), open('hub.json', 'w'))
 xs = [k[0] for k in tiles]; ys = [k[1] for k in tiles]
 print('tiles', len(tiles), 'pads', len(pads), 'spawns', len(spawns), 'bbox', min(xs), min(ys), max(xs), max(ys), 'bytes', len(out))
 for w in wings: print(w)
