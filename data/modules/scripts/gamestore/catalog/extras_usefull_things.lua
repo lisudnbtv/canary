@@ -57,6 +57,17 @@ return {
 			type = GameStore.OfferTypes.OFFER_TYPE_CHARGES,
 		},
 		{
+			-- OTS: wieczne jedzenie (skrypt: data-otservbr-global/scripts/ots/infinite_food.lua)
+			icons = { "Party_Cake.png" },
+			name = "Infinite Food",
+			price = 50,
+			itemtype = 6279,
+			count = 1,
+			movable = true,
+			description = "<i>A cake that never runs out.</i>\n\n{character}\n{storeinbox}\n{once}\n{useicon} use it to regenerate 250 hit points and 250 mana every second for 10 minutes\n{info} it is not consumed and can be used again at any time",
+			type = GameStore.OfferTypes.OFFER_TYPE_ITEM_UNIQUE,
+		},
+		{
 			icons = { "Gold_Pouch.png" },
 			name = "Gold Pouch",
 			price = 900,
