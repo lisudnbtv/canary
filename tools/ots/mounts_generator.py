@@ -281,6 +281,19 @@ local tamerConfig = {
 for _, mount in ipairs(mounts) do
 	tamerConfig.shop[#tamerConfig.shop + 1] = { itemName = mount.itemName, clientId = mount.item, buy = 1 }
 end
+-- Dodatkowo: music box (oswaja od reki dragonlinga, draptora, white deer, ironblighta, magma crawlera,
+-- midnight panther, wailing widow, wild horse i pande) oraz przedmioty, ktore daja wierzchowca po samym uzyciu.
+local tamerExtras = {
+	{ itemName = "music box", clientId = 16244, buy = 1 },
+	{ itemName = "vibrant egg", clientId = 23538, buy = 1 },
+	{ itemName = "crackling egg", clientId = 23684, buy = 1 },
+	{ itemName = "menacing egg", clientId = 23685, buy = 1 },
+	{ itemName = "spectral scrap of cloth", clientId = 32629, buy = 1 },
+	{ itemName = "demon in a green box", clientId = 50064, buy = 1 },
+}
+for _, extra in ipairs(tamerExtras) do
+	tamerConfig.shop[#tamerConfig.shop + 1] = extra
+end
 
 local keywordHandler = KeywordHandler:new()
 local npcHandler = NpcHandler:new(keywordHandler)
