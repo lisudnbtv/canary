@@ -5,7 +5,10 @@
 # Mape tworzy C:\OTS\restart.bat (kopiuje ja z dzialajacego kontenera).
 services:
   server:
+    # wlasny punkt startu: dopisuje ustawienia OTS do config.lua i uruchamia zwykly start.sh
+    entrypoint: ['/bin/bash', '/canary/ots/entry.sh']
     volumes:
+      - './ots:/canary/ots:ro'
       - '../data-otservbr-global/scripts/ots:/canary/data-otservbr-global/scripts/ots:ro'
       - '../data-otservbr-global/world/otservbr.otbm:/canary/data-otservbr-global/world/otservbr.otbm:ro'
       - '../data-otservbr-global/scripts/quests/the_pits_of_inferno_quest/movements_throne.lua:/canary/data-otservbr-global/scripts/quests/the_pits_of_inferno_quest/movements_throne.lua:ro'
