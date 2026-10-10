@@ -2086,7 +2086,7 @@ command:groupType("normal")
 command:register()
 
 -- Funkcje hubu sa zdefiniowane nizej, ale uzywa ich juz teleport w swiatyni.
-local HUB_MESSAGES = false
+local HUB_MESSAGES = true
 local hubMove, hubLobbyMessage
 
 -- Teleport przy swiatyni w Thais
@@ -2098,7 +2098,7 @@ function entryStep.onStepIn(creature, item, position, fromPosition)
 		return true
 	end
 	-- Teleport w swiatyni prowadzi do hubu expowisk; pelne menu jest pod komenda !tp.
-	hubMove(player, hubLobby, hubLobbyMessage() .. " Bossy, questy i miasta: komenda !tp.")
+	hubMove(player, hubLobby, "Hub: lobby")
 	return true
 end
 
@@ -2131,8 +2131,8 @@ hubMove = function(player, destination, message)
 	player:teleportTo(destination)
 	from:sendMagicEffect(CONST_ME_POFF)
 	destination:sendMagicEffect(CONST_ME_TELEPORT)
-	-- Opisy przy przejsciach w hubie sa wylaczone (postacie i tabliczki mowia to samo).
-	-- Zmien HUB_MESSAGES na true, zeby wrocily.
+	-- Krotkie opisy przy przejsciach w hubie. Klient sam dobiera czas wyswietlania do dlugosci
+	-- tekstu, wiec zeby znikaly szybko, musza byc jednolinijkowe. HUB_MESSAGES = false je wylacza.
 	if HUB_MESSAGES and message then
 		player:sendTextMessage(MESSAGE_EVENT_ADVANCE, message)
 	end
@@ -2163,21 +2163,21 @@ function hubStep.onStepIn(creature, item, position, fromPosition)
 		travel(player, action.hunt)
 	elseif action.wing then
 		local wing = hubWings[action.wing]
-		hubMove(player, Position(wing.x, wing.y, wing.z), "Poziom: " .. wing.label .. ". Pietro 1: potwory rosnaco wedlug exp, 24 na pietrze. Korytarz tworzy petle; pady po zachodniej stronie prowadza na nastepne i poprzednie pietro oraz do lobby.")
+		hubMove(player, Position(wing.x, wing.y, wing.z), "EXP " .. wing.label .. ", pietro 1")
 	elseif action.goto then
 		hubMove(player, Position(action.goto[1], action.goto[2], action.goto[3]), action.label)
 	elseif action.lobby then
-		hubMove(player, hubLobby, hubLobbyMessage())
+		hubMove(player, hubLobby, "Hub: lobby")
 	elseif action.thais and templePosition then
 		hubMove(player, templePosition)
 	elseif action.outfits and OtsOutfitHall then
 		OtsOutfitHall(player)
 	elseif action.questhall then
-		hubMove(player, hubQuestHall, "Hala questow: kazdy pad to jeden quest, za padem leza nagrody do zdobycia. Pady na koncach wracaja do lobby.")
+		hubMove(player, hubQuestHall, "Hala questow")
 	elseif action.quest then
 		startEntry(player, action.quest)
 	elseif action.bosshall then
-		hubMove(player, hubBossHall, "Hala bossow: pietro 1. Kazdy pad to jeden boss, za padem stoi jego podobizna; 24 bossy na pietrze. Najpierw bossy z dzwignia, dalej bossy przywolywane na arenie, rosnaco wedlug HP. Pady po zachodniej stronie prowadza na nastepne i poprzednie pietro oraz do lobby.")
+		hubMove(player, hubBossHall, "Hala bossow, pietro 1")
 	elseif action.boss then
 		startEntry(player, action.boss)
 	end
