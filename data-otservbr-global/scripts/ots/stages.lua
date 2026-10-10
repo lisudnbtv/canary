@@ -11,12 +11,12 @@ experienceStages = {
 	{ minlevel = 2501, multiplier = 250 },
 }
 
--- Skille: x100 na kazdym poziomie umiejetnosci
+-- Skille: x250 na kazdym poziomie umiejetnosci
 skillsStages = {
-	{ minlevel = 0, multiplier = 100 },
+	{ minlevel = 0, multiplier = 250 },
 }
 
--- Magic level: x90 na kazdym poziomie
+-- Magic level: x200 na kazdym poziomie
 magicLevelStages = {
-	{ minlevel = 0, multiplier = 90 },
+	{ minlevel = 0, multiplier = 200 },
 }

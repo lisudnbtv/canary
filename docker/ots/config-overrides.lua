@@ -14,13 +14,13 @@ classicAttackSpeed = true
 -- Darmowe konto premium dla wszystkich
 freePremium = true
 
--- Mnozniki. Exp idzie progami z pliku scripts/ots/stages.lua (tam tez skille x100 i magic x90);
+-- Mnozniki. Exp idzie progami z pliku scripts/ots/stages.lua (tam tez skille x250 i magic x200);
 -- rateSkill i rateMagic ponizej sa tylko wartoscia zapasowa.
 rateUseStages = true
 rateLoot = 10
 rateSpawn = 15
-rateSkill = 100
-rateMagic = 90
+rateSkill = 250
+rateMagic = 200
 
 -- Wheel of Destiny: punkty za kazdy poziom
 wheelPointsPerLevel = 100
