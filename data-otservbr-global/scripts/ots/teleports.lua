@@ -831,6 +831,7 @@ local quests = {
 	{ "The Thieves Guild: modified crossbow, assassin dagger, spellbook of warding", 0, 0, 0, arena = { { "Assassin", 6 }, { "Stalker", 4 }, { "Bandit", 4 }, { "Smuggler", 4 }, { "Assassin", 4 } }, chest = { 32310, 32209, 8 }, hint = "Skrzynia z nagroda jest tuz obok. Trzy skrzynie, mozna wziac jedna nagrode." },
 	{ "The Hidden City of Beregar: firewalker boots", 0, 0, 0, arena = { { "Dwarf Guard", 6 }, { "Dwarf Geomancer", 4 }, { "Worker Golem", 4 }, { "War Golem", 5 } }, chest = { 32580, 31404, 15 }, hint = "Skrzynia z nagroda jest tuz obok." },
 	{ "Koshei the Deathless: blue legs", 0, 0, 0, arena = { { "Lich", 4 }, { "Bonebeast", 5 }, { "Vampire", 5 }, { "Mummy", 5 }, { "Koshei the Deathless", 1 } }, chest = { 33261, 32445, 12 }, hint = "Skrzynia z nagroda jest tuz obok." },
+	{ "The Inquisition: 6 bossow pod rzad, jedna z 9 nagrod do wyboru", 33158, 31728, 11, hint = "Zabij bossa i wejdz w teleport w jego sali - prowadzi do nastepnego. Kolejnosc: Ushuriel, Zugurosh, Madareth, Latrivan i Golgordan, Annihilon, Hellgorak. Po kazdym masz 10 minut na przejscie." },
 	{ "The Demon Oak: demon legs / rainbow shield / thorn spitter / spellbook of ancient arcana (jedna do wyboru)", func = "OtsDemonOakStart" },
 	{ "Swiateczna arena: christmas tokeny z potworow", 0, 0, 0, arena = { { "Grynch Clan Goblin", 8 }, { "Animated Snowman", 6 }, { "Percht", 6 }, { "Schiach", 6 }, { "Baleful Bunny", 4 }, { "The Percht Queen", 1 } } },
 	{ "Behemoth Quest: guardian halberd, demon shield, golden armor", 33294, 31670, 13, hint = "Skrzynia z nagroda: ok. 11 krokow, kierunek polnoc. Przy skrzyni jest strefa PZ." },
@@ -855,7 +856,7 @@ local hubWings = {
 	{ label = "Hard (exp 1500-6000) (162 potworow)", x = 30088, y = 30045, z = 7 },
 	{ label = "Very Hard (exp 6000+) (111 potworow)", x = 30133, y = 30045, z = 7 },
 }
-local hubQuestHall = Position(30032, 29960, 7)
+local hubQuestHall = Position(30035, 29960, 7)
 local hubBossHall = Position(29998, 29915, 7)
 local arenaCenter = Position(30060, 29900, 7)
 local arenaLanding = Position(30060, 29909, 7)
@@ -1517,7 +1518,6 @@ local hubPads = {
 	["30060:30172:7"] = { hunt = hunts[2].list[130] },
 	["30060:30178:7"] = { hunt = hunts[2].list[141] },
 	["30060:30182:7"] = { hunt = hunts[2].list[142] },
-	["30063:29960:7"] = { lobby = true },
 	["30063:30038:7"] = { hunt = hunts[2].list[11] },
 	["30063:30042:7"] = { hunt = hunts[2].list[12] },
 	["30063:30048:7"] = { hunt = hunts[2].list[23] },
@@ -1542,6 +1542,8 @@ local hubPads = {
 	["30063:30172:7"] = { hunt = hunts[2].list[132] },
 	["30063:30178:7"] = { hunt = hunts[2].list[143] },
 	["30063:30182:7"] = { hunt = hunts[2].list[144] },
+	["30064:29958:7"] = { quest = quests[25] },
+	["30068:29960:7"] = { lobby = true },
 	["30086:30043:7"] = { goto = { 30088, 30201, 7 }, label = "Hard 7/7 (exp 5500-6000)" },
 	["30086:30045:7"] = { lobby = true },
 	["30086:30047:7"] = { goto = { 30088, 30071, 7 }, label = "Hard 2/7 (exp 1900-2200)" },

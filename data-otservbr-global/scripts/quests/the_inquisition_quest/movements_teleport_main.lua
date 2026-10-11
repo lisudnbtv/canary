@@ -1,3 +1,5 @@
+-- OTS: uproszczona Inkwizycja - wyjscie z sali bossa prowadzi od razu do sali nastepnego bossa
+-- (bez jaskin pomiedzy), a po Hellgoraku prosto do sali z nagrodami. Reszta pliku jak w oryginale.
 local teleports = {
 	-- to ushuriel ward
 	[2150] = {
@@ -8,9 +10,9 @@ local teleports = {
 	},
 	-- from ushuriel ward
 	[2151] = {
-		text = "Entering the Crystal Caves.",
+		text = "Entering Zugurosh's ward.",
 		bossStorage = 200,
-		newPos = Position(33069, 31782, 13),
+		newPos = Position(33124, 31692, 11),
 		storage = 1,
 	},
 	-- from crystal caves
@@ -41,9 +43,9 @@ local teleports = {
 	},
 	-- from zugurosh ward
 	[2157] = {
-		text = "Entering the Blood Halls.",
+		text = "Entering Madareth's ward.",
 		bossStorage = 201,
-		newPos = Position(33372, 31613, 14),
+		newPos = Position(33197, 31767, 11),
 		storage = 2,
 	},
 	-- from blood halls
@@ -69,9 +71,9 @@ local teleports = {
 	},
 	-- from madareth ward
 	[2162] = {
-		text = "Entering the Vats.",
+		text = "Entering the Demon Forge.",
 		bossStorage = 202,
-		newPos = Position(33153, 31782, 12),
+		newPos = Position(33232, 31733, 11),
 		storage = 3,
 	},
 	-- from vats
@@ -102,9 +104,9 @@ local teleports = {
 	},
 	-- from demon forge
 	[2168] = {
-		text = "Entering the Arcanum.",
+		text = "Entering the Annihilon's ward.",
 		bossStorage = 203,
-		newPos = Position(33038, 31753, 15),
+		newPos = Position(33197, 31703, 11),
 		storage = 4,
 	},
 	-- from arcanum
@@ -135,9 +137,9 @@ local teleports = {
 	},
 	-- from annihilon ward
 	[2174] = {
-		text = "Entering the Hive.",
+		text = "Entering the Hellgorak's ward.",
 		bossStorage = 204,
-		newPos = Position(33199, 31686, 12),
+		newPos = Position(33104, 31734, 11),
 		storage = 5,
 	},
 	-- from hive
@@ -158,9 +160,9 @@ local teleports = {
 	},
 	-- from hellgorak ward
 	[2178] = {
-		text = "Entering the Shadow Nexus. Abandon all Hope.",
+		text = "Entering the reward room. Choose exactly one chest.",
 		bossStorage = 205,
-		newPos = Position(33110, 31682, 12),
+		newPos = Position(32319, 32251, 9),
 		storage = 6,
 	},
 	-- from shadow nexus
