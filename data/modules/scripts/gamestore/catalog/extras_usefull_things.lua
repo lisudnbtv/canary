@@ -72,7 +72,7 @@ return {
 			icons = { "Stamina_Extension.png" },
 			name = "Full Stamina Refill",
 			price = 500,
-			itemtype = 17722,
+			itemtype = 18992,
 			count = 1,
 			movable = true,
 			description = "<i>Restores your stamina to the full 42 hours.</i>\n\n{character}\n{storeinbox}\n{useicon} use it to refill your stamina completely\n{info} single use",

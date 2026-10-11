@@ -1,6 +1,6 @@
--- OTS: Full Stamina Refill - przedmiot ze sklepu (hourglass). Uzycie przywraca
+-- OTS: Full Stamina Refill - przedmiot ze sklepu (filled elven vial). Uzycie przywraca
 -- pelna stamine (42 godziny) i zuzywa przedmiot.
-local ITEM_ID = 17722 -- hourglass; stamina extension (36725) ma w silniku wlasna obsluge jako mikstura z Tibiadrome
+local ITEM_ID = 18992 -- filled elven vial; stamina extension (36725) ma w silniku wlasna obsluge jako mikstura z Tibiadrome
 local FULL_STAMINA_MINUTES = 42 * 60
 
 local refill = Action()
