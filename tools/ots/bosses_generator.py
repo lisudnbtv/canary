@@ -21,6 +21,10 @@ for dp,_,fs in os.walk(R):
         _h=re.search(r'monster\.(?:maxHealth|health)\s*=\s*(\d+)',s); hp=int(_h.group(1)) if _h else 0
         have.add(nm.group(1).lower())
         extra.append(dict(name=nm.group(1),lvl=0,pos=None,hp=hp,outfit=of,events='monster.events' in s,reward='rewardBoss = true' in s))
+# bossy ze skryptami przypietymi do wlasnych sal (teleport po smierci, kolejne fazy, liczniki questow)
+# nie nadaja sie na arene - lista z przegladu w arena_risky.json
+_risky=set(json.load(open('arena_risky.json')))
+extra=[b for b in extra if b['name'] not in _risky]
 extra.sort(key=lambda b:(b['hp'],b['name']))
 out+=extra
 json.dump(out,open('bosses_all.json','w'))
