@@ -3,6 +3,36 @@ local senders = {}
 
 local convertType = helpers.convertType
 local useOfferConfigure = helpers.useOfferConfigure
+local otsConstants = require("gamestore.constants")
+
+-- OTS: serwer dziala bez internetu, wiec obrazki ofert (pliki .png) nie maja skad sie pobrac
+-- i klient pokazuje wykrzyknik. Dla ofert bez wlasnego przedmiotu wysylamy wyglad zastepczego.
+local OTS_LOOK_BY_TYPE = {
+	[otsConstants.OfferTypes.OFFER_TYPE_NAMECHANGE] = 347, -- scroll
+	[otsConstants.OfferTypes.OFFER_TYPE_SEXCHANGE] = 3463, -- mirror
+	[otsConstants.OfferTypes.OFFER_TYPE_EXPBOOST] = 36728, -- bestiary betterment
+	[otsConstants.OfferTypes.OFFER_TYPE_PREYSLOT] = 12260, -- hunting horn
+	[otsConstants.OfferTypes.OFFER_TYPE_PREYBONUS] = 12260,
+	[otsConstants.OfferTypes.OFFER_TYPE_WEEKLY_TASK_EXPANSION] = 12260,
+	[otsConstants.OfferTypes.OFFER_TYPE_TEMPLE] = 25718, -- temple teleport scroll
+	[otsConstants.OfferTypes.OFFER_TYPE_BLESSINGS] = 3057, -- amulet of loss
+	[otsConstants.OfferTypes.OFFER_TYPE_ALLBLESSINGS] = 3057,
+	[otsConstants.OfferTypes.OFFER_TYPE_PREMIUM] = 14758, -- premium scroll
+	[otsConstants.OfferTypes.OFFER_TYPE_INSTANT_REWARD_ACCESS] = 19250, -- reward chest
+	[otsConstants.OfferTypes.OFFER_TYPE_CHARMS] = 36726, -- charm upgrade
+	[otsConstants.OfferTypes.OFFER_TYPE_HIRELING_NAMECHANGE] = 29432, -- hireling lamp
+	[otsConstants.OfferTypes.OFFER_TYPE_HIRELING_SEXCHANGE] = 29432,
+	[otsConstants.OfferTypes.OFFER_TYPE_HIRELING_SKILL] = 29432,
+	[otsConstants.OfferTypes.OFFER_TYPE_HIRELING_OUTFIT] = 29432,
+}
+
+local function otsLookItem(offer)
+	local itemtype = offer.itemtype
+	if type(itemtype) == "table" then
+		itemtype = itemtype[1]
+	end
+	return tonumber(itemtype) or OTS_LOOK_BY_TYPE[offer.type]
+end
 
 local function getCategoriesRook()
 	local tmpTable, count = {}, 0
@@ -220,9 +250,17 @@ local function sendShowStoreOffers(playerId, category, redirectId)
 
 			local tryOnType = 0
 			local type = convertType(offer.type)
+			local otsLook = type == GameStore.ConverType.SHOW_NONE and otsLookItem(offer) or nil
 
-			msg:addByte(type)
-			if type == GameStore.ConverType.SHOW_NONE then
+			if otsLook then
+				msg:addByte(GameStore.ConverType.SHOW_ITEM)
+				msg:addU16(otsLook)
+			else
+				msg:addByte(type)
+			end
+			if otsLook then
+				-- OTS: zamiast obrazka z internetu pokazujemy wyglad przedmiotu
+			elseif type == GameStore.ConverType.SHOW_NONE then
 				msg:addString(offer.icons[1], "sendShowStoreOffers - offer.icons[1]")
 			elseif type == GameStore.ConverType.SHOW_MOUNT then
 				local mount = Mount(offer.id)
@@ -623,9 +661,17 @@ local function sendHomePage(playerId)
 		end
 
 		local type = convertType(offer.type)
+		local otsLook = type == GameStore.ConverType.SHOW_NONE and otsLookItem(offer) or nil
 
-		msg:addByte(type)
-		if type == GameStore.ConverType.SHOW_NONE then
+		if otsLook then
+			msg:addByte(GameStore.ConverType.SHOW_ITEM)
+			msg:addU16(otsLook)
+		else
+			msg:addByte(type)
+		end
+		if otsLook then
+			-- OTS: zamiast obrazka z internetu pokazujemy wyglad przedmiotu
+		elseif type == GameStore.ConverType.SHOW_NONE then
 			msg:addString(offer.icons[1], "sendHomePage - offer.icons[1]")
 		elseif type == GameStore.ConverType.SHOW_MOUNT then
 			local mount = Mount(offer.id)
