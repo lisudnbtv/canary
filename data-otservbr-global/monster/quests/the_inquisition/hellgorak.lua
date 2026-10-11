@@ -139,17 +139,18 @@ monster.defenses = {
 	{ name = "combat", interval = 1000, chance = 11, type = COMBAT_HEALING, minDamage = 400, maxDamage = 900, effect = CONST_ME_MAGIC_GREEN, target = false },
 }
 
+-- OTS: odpornosci obnizone z 98% (95% holy) do 40% (20% holy), zeby dalo sie go zabic w pojedynke
 monster.elements = {
-	{ type = COMBAT_PHYSICALDAMAGE, percent = 98 },
-	{ type = COMBAT_ENERGYDAMAGE, percent = 98 },
-	{ type = COMBAT_EARTHDAMAGE, percent = 98 },
-	{ type = COMBAT_FIREDAMAGE, percent = 98 },
+	{ type = COMBAT_PHYSICALDAMAGE, percent = 40 },
+	{ type = COMBAT_ENERGYDAMAGE, percent = 40 },
+	{ type = COMBAT_EARTHDAMAGE, percent = 40 },
+	{ type = COMBAT_FIREDAMAGE, percent = 40 },
 	{ type = COMBAT_LIFEDRAIN, percent = 100 },
 	{ type = COMBAT_MANADRAIN, percent = 0 },
 	{ type = COMBAT_DROWNDAMAGE, percent = -205 },
-	{ type = COMBAT_ICEDAMAGE, percent = 98 },
-	{ type = COMBAT_HOLYDAMAGE, percent = 95 },
-	{ type = COMBAT_DEATHDAMAGE, percent = 98 },
+	{ type = COMBAT_ICEDAMAGE, percent = 40 },
+	{ type = COMBAT_HOLYDAMAGE, percent = 20 },
+	{ type = COMBAT_DEATHDAMAGE, percent = 40 },
 }
 
 monster.immunities = {

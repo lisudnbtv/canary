@@ -16,6 +16,7 @@ services:
       - '../data-otservbr-global/scripts/quests/the_pits_of_inferno_quest/movements_throne.lua:/canary/data-otservbr-global/scripts/quests/the_pits_of_inferno_quest/movements_throne.lua:ro'
       - '../data-otservbr-global/scripts/quests/the_annihilator/lever.lua:/canary/data-otservbr-global/scripts/quests/the_annihilator/lever.lua:ro'
       - '../data-otservbr-global/scripts/quests/the_inquisition_quest/movements_teleport_main.lua:/canary/data-otservbr-global/scripts/quests/the_inquisition_quest/movements_teleport_main.lua:ro'
+      - '../data-otservbr-global/monster/quests/the_inquisition/hellgorak.lua:/canary/data-otservbr-global/monster/quests/the_inquisition/hellgorak.lua:ro'
       - '../data-otservbr-global/scripts/quests/in_service_of_yalahar/actions_reward.lua:/canary/data-otservbr-global/scripts/quests/in_service_of_yalahar/actions_reward.lua:ro'
       - '../data-otservbr-global/scripts/quests/soul_war/action-reward_soul_war.lua:/canary/data-otservbr-global/scripts/quests/soul_war/action-reward_soul_war.lua:ro'
       - '../data-otservbr-global/world/custom/ots-hub.otbm:/canary/data-otservbr-global/world/custom/ots-hub.otbm:ro'
