@@ -42,6 +42,10 @@ function sell.onSay(player, words, param)
 		player:sendTextMessage(MESSAGE_EVENT_ADVANCE, "W loot pouchu nie ma nic na sprzedaz.")
 		return true
 	end
+	-- odswiez otwarte okno poucha: bez tego klient pokazuje stare, powielone pozycje
+	if player.sendUpdateContainer then
+		player:sendUpdateContainer(pouch)
+	end
 	player:setBankBalance(player:getBankBalance() + total)
 	player:sendTextMessage(MESSAGE_EVENT_ADVANCE, string.format("Sprzedano %d przedmiotow za %d gp. Zloto jest na koncie w banku.", sold, total))
 	return true

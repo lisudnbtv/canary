@@ -51,6 +51,9 @@ local function collect(player, quiet)
 			end
 		end
 	end
+	if moved > 0 and player.sendUpdateContainer then
+		player:sendUpdateContainer(pouch) -- odswiez otwarte okno poucha
+	end
 	if moved > 0 then
 		local text = string.format("Lup z bossow przeniesiony do loot poucha: %d szt.", moved)
 		if left > 0 then
