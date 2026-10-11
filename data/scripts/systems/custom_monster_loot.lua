@@ -60,6 +60,33 @@ for _, monsterName in ipairs(soulWarMonsters) do
 	customLootConfig[monsterName] = entry
 end
 
+-- OTS: primal bag z kazdego potwora Gnomprony / Primal Ordeal, ta sama szansa co bag you desire (~10%).
+-- Plunder Patriarch ma primal bag w swoim wlasnym loocie (100%), wiec nie jest na liscie.
+local primalMonsters = {
+	"Hulking Prehemoth",
+	"Sabretooth",
+	"Stalking Stalk",
+	"Emerald Tortoise",
+	"Gore Horn",
+	"Gorerilla",
+	"Sulphider",
+	"Sulphur Spouter",
+	"Undertaker",
+	"Nighthunter",
+	"Mantosaurus",
+	"Noxious Ripptor",
+	"Headpecker",
+	"Mercurial Menace",
+	"Shrieking Cry-Stal",
+	"Magma Bubble",
+	"The Primal Menace",
+}
+for _, monsterName in ipairs(primalMonsters) do
+	local entry = customLootConfig[monsterName] or { items = {} }
+	entry.items[#entry.items + 1] = { name = "primal bag", chance = BAG_YOU_DESIRE_CHANCE }
+	customLootConfig[monsterName] = entry
+end
+
 local customMonsterLoot = GlobalEvent("CreateCustomMonsterLoot")
 
 function customMonsterLoot.onStartup()
