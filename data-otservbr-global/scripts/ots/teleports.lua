@@ -834,18 +834,18 @@ local quests = {
 	{ "The Inquisition: 6 bossow pod rzad, jedna z 9 nagrod do wyboru", 33158, 31728, 11, hint = "Zabij bossa i wejdz w teleport w jego sali - prowadzi do nastepnego. Kolejnosc: Ushuriel, Zugurosh, Madareth, Latrivan i Golgordan, Annihilon, Hellgorak. Po kazdym masz 10 minut na przejscie." },
 	{ "The Demon Oak: demon legs / rainbow shield / thorn spitter / spellbook of ancient arcana (jedna do wyboru)", func = "OtsDemonOakStart" },
 	{ "Swiateczna arena: christmas tokeny z potworow", 0, 0, 0, arena = { { "Grynch Clan Goblin", 8 }, { "Animated Snowman", 6 }, { "Percht", 6 }, { "Schiach", 6 }, { "Baleful Bunny", 4 }, { "The Percht Queen", 1 } } },
-	{ "Behemoth Quest: guardian halberd, demon shield, golden armor", 33294, 31670, 13, hint = "Skrzynia z nagroda: ok. 11 krokow, kierunek polnoc. Przy skrzyni jest strefa PZ." },
-	{ "Black Knight: crown armor, crown shield", 32870, 31943, 11, hint = "Skrzynia z nagroda: ok. 11 krokow, kierunek poludnie. Przy skrzyni jest strefa PZ." },
-	{ "Circle Room: war hammer", 32496, 31946, 14, hint = "Skrzynia z nagroda: ok. 45 krokow, kierunek poludnie. Przy skrzyni jest strefa PZ." },
-	{ "Crusader Helmet: crusader helmet", 32456, 31938, 14, hint = "Skrzynia z nagroda: ok. 45 krokow, kierunek zachod. Przy skrzyni jest strefa PZ." },
-	{ "Deeper Fibula: tower shield, warrior helmet", 32279, 32469, 10, hint = "Skrzynia z nagroda: ok. 45 krokow, kierunek zachod. Przy skrzyni jest strefa PZ." },
-	{ "Devil Helmet: devil helmet", 32450, 32150, 15, hint = "Skrzynia z nagroda: ok. 13 krokow, kierunek polnocny wschod. Przy skrzyni jest strefa PZ." },
-	{ "Draconia: ice rapier", 32800, 31589, 2, hint = "Skrzynia z nagroda: ok. 6 krokow, kierunek polnoc. Przy skrzyni jest strefa PZ." },
-	{ "Noble Armor: crown helmet", 32451, 32042, 8, hint = "Skrzynia z nagroda: ok. 5 krokow, kierunek poludnie. Przy skrzyni jest strefa PZ." },
-	{ "Orc Fortress: knight armor", 32974, 31769, 9, hint = "Skrzynia z nagroda: ok. 45 krokow, kierunek polnoc. Przy skrzyni jest strefa PZ." },
-	{ "The Medusa Quest: medusa shield, blue robe", 33031, 32396, 10, hint = "Skrzynia z nagroda: ok. 17 krokow, kierunek wschod. Przy skrzyni jest strefa PZ." },
-	{ "The Queen Of The Banshees: tower shield, boots of haste, giant sword", 32213, 31897, 15, hint = "Skrzynia z nagroda: ok. 12 krokow, kierunek poludnie. Przy skrzyni jest strefa PZ." },
-	{ "Vampire Shield: dragon lance, vampire shield", 33190, 31659, 14, hint = "Skrzynia z nagroda: ok. 22 krokow, kierunek poludnie. Przy skrzyni jest strefa PZ." },
+	{ "Behemoth Quest: guardian halberd, demon shield, golden armor", 33294, 31670, 13, hint = "Skrzynia z nagroda: ok. 11 krokow, kierunek polnoc. Przy skrzyni jest strefa PZ.", unlock = { 33286, 31650, 33303, 31678, 13 } },
+	{ "Black Knight: crown armor, crown shield", 32870, 31943, 11, hint = "Skrzynia z nagroda: ok. 11 krokow, kierunek poludnie. Przy skrzyni jest strefa PZ.", unlock = { 32860, 31935, 32878, 31962, 11 } },
+	{ "Circle Room: war hammer", 32496, 31946, 14, hint = "Skrzynia z nagroda: ok. 45 krokow, kierunek poludnie. Przy skrzyni jest strefa PZ.", unlock = { 32487, 31938, 32504, 32000, 14 } },
+	{ "Crusader Helmet: crusader helmet", 32456, 31938, 14, hint = "Skrzynia z nagroda: ok. 45 krokow, kierunek zachod. Przy skrzyni jest strefa PZ.", unlock = { 32419, 31930, 32464, 31951, 14 } },
+	{ "Deeper Fibula: tower shield, warrior helmet", 32279, 32469, 10, hint = "Skrzynia z nagroda: ok. 45 krokow, kierunek zachod. Przy skrzyni jest strefa PZ.", unlock = { 32231, 32461, 32287, 32479, 10 } },
+	{ "Devil Helmet: devil helmet", 32450, 32150, 15, hint = "Skrzynia z nagroda: ok. 13 krokow, kierunek polnocny wschod. Przy skrzyni jest strefa PZ.", unlock = { 32442, 32136, 32467, 32158, 15 } },
+	{ "Draconia: ice rapier", 32800, 31589, 2, hint = "Skrzynia z nagroda: ok. 6 krokow, kierunek polnoc. Przy skrzyni jest strefa PZ.", unlock = { 32792, 31574, 32811, 31597, 2 } },
+	{ "Noble Armor: crown helmet", 32451, 32042, 8, hint = "Skrzynia z nagroda: ok. 5 krokow, kierunek poludnie. Przy skrzyni jest strefa PZ.", unlock = { 32443, 32034, 32459, 32056, 8 } },
+	{ "Orc Fortress: knight armor", 32974, 31769, 9, hint = "Skrzynia z nagroda: ok. 45 krokow, kierunek polnoc. Przy skrzyni jest strefa PZ.", unlock = { 32966, 31719, 32988, 31777, 9 } },
+	{ "The Medusa Quest: medusa shield, blue robe", 33031, 32396, 10, hint = "Skrzynia z nagroda: ok. 17 krokow, kierunek wschod. Przy skrzyni jest strefa PZ.", unlock = { 33023, 32388, 33056, 32406, 10 } },
+	{ "The Queen Of The Banshees: tower shield, boots of haste, giant sword", 32213, 31897, 15, hint = "Skrzynia z nagroda: ok. 12 krokow, kierunek poludnie. Przy skrzyni jest strefa PZ.", unlock = { 32204, 31889, 32221, 31918, 15 } },
+	{ "Vampire Shield: dragon lance, vampire shield", 33190, 31659, 14, hint = "Skrzynia z nagroda: ok. 22 krokow, kierunek poludnie. Przy skrzyni jest strefa PZ.", unlock = { 33181, 31651, 33198, 31696, 14 } },
 }
 
 local HUB_ACTION_ID = 64992 -- pady w hubie expowisk
@@ -1949,6 +1949,43 @@ local function clearSpot(center)
 	end
 end
 
+-- Drzwi questowe ("sealed against unwanted intruders") otwieraja sie graczowi, ktory ma ustawiony
+-- storage o numerze rownym action id drzwi. Przy teleporcie na quest ustawiamy go dla wszystkich
+-- takich drzwi w okolicy trasy do skrzyni; drzwi bez action id dostaja wspolny numer.
+local QUEST_DOOR_FALLBACK_AID = 64999
+local questDoorIds = nil
+
+local function unlockQuestDoors(player, box)
+	if not questDoorIds then
+		questDoorIds = {}
+		for _, door in ipairs(QuestDoorTable or {}) do
+			questDoorIds[door.closedDoor] = true
+			questDoorIds[door.openDoor] = true
+		end
+	end
+	local unlocked = 0
+	for x = box[1], box[3] do
+		for y = box[2], box[4] do
+			local tile = Tile(Position(x, y, box[5]))
+			local items = tile and tile:getItems() or {}
+			for _, item in ipairs(items) do
+				if questDoorIds[item:getId()] then
+					local aid = item:getActionId()
+					if aid <= 0 then
+						aid = QUEST_DOOR_FALLBACK_AID
+						item:setActionId(aid)
+					end
+					if player:getStorageValue(aid) == -1 then
+						player:setStorageValue(aid, 1)
+					end
+					unlocked = unlocked + 1
+				end
+			end
+		end
+	end
+	return unlocked
+end
+
 local function inFight(player)
 	local here = Tile(player:getPosition())
 	local protected = isSafe(player) or (here and here:hasFlag(TILESTATE_PROTECTIONZONE))
@@ -1980,6 +2017,9 @@ local function travel(player, entry)
 	if not bare then
 		prepareSpot(destination)
 		clearSpot(destination)
+	end
+	if entry.unlock then
+		unlockQuestDoors(player, entry.unlock)
 	end
 	player:teleportTo(destination)
 	from:sendMagicEffect(CONST_ME_POFF)
