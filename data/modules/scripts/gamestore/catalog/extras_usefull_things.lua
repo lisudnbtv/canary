@@ -123,6 +123,17 @@ return {
 			type = GameStore.OfferTypes.OFFER_TYPE_ITEM,
 		},
 		{
+			-- OTS: lup z bossow prosto do loot poucha (skrypt: data-otservbr-global/scripts/ots/reward_collector.lua)
+			icons = { "Gold_Converter.png" },
+			name = "Boss Loot Collector",
+			price = 5000,
+			itemtype = 9212,
+			count = 1,
+			movable = true,
+			description = "<i>All boss loot from your reward chest goes straight into your loot pouch.</i>\n\n{character}\n{storeinbox}\n{useicon} use it once to unlock it permanently\n{info} works after every boss kill, on login and with !reward",
+			type = GameStore.OfferTypes.OFFER_TYPE_ITEM,
+		},
+		{
 			-- OTS: wieczne jedzenie (skrypt: data-otservbr-global/scripts/ots/infinite_food.lua)
 			icons = { "Party_Cake.png" },
 			name = "Infinite Food",
