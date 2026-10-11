@@ -2,16 +2,15 @@
 -- Kamien (essence of wishful thinking) uzywa sie na przedmiocie w plecaku albo na sobie.
 -- Kazdy poziom dodaje 3% bazowego ataku / obrony / pancerza (co najmniej +1 na poziom).
 -- Do +5 zawsze sie udaje; dalej szansa spada. Porazka tylko zuzywa kamien, poziom zostaje.
--- Przedmioty bez ataku, obrony i pancerza tez da sie ulepszyc, ale duzo trudniej:
--- bron (rozdzka, rod, luk...) daje wtedy +3% zadawanych obrazen na poziom, gdy jest zalozona,
--- pozostale (pierscien, amulet...) -0.5% otrzymywanych obrazen na poziom.
+-- Bron bez ataku (rozdzka, rod, luk...) tez da sie ulepszyc, ale duzo trudniej:
+-- daje wtedy +3% zadawanych obrazen na poziom, gdy jest zalozona.
+-- Pozostalych przedmiotow bez ataku, obrony i pancerza nie da sie ulepszyc.
 -- Kamienie sa w sklepie za TC i leca z bossow (reward boss), elit, fal i inwazji.
 local STONE_ID = 20139
 local MAX_LEVEL = 10
 local SUCCESS_CHANCE = { 100, 100, 100, 100, 100, 80, 70, 60, 50, 40 }
 local SUCCESS_CHANCE_PLAIN = { 60, 50, 40, 30, 25, 20, 15, 10, 7, 5 } -- przedmioty bez statystyk
 local PLAIN_WEAPON_DAMAGE = 0.03
-local PLAIN_OTHER_REDUCTION = 0.005
 local LEVEL_KEY = "ots-upgrade"
 
 local function upgraded(base, level)
@@ -54,6 +53,10 @@ function stone.onUse(player, item, fromPosition, target, toPosition, isHotkey)
 		return true
 	end
 	local plain = itemType:getAttack() <= 0 and itemType:getDefense() <= 0 and itemType:getArmor() <= 0
+	if plain and itemType:getWeaponType() == WEAPON_NONE then
+		player:sendCancelMessage("Tego przedmiotu nie da sie ulepszyc (nie ma ataku, obrony ani pancerza).")
+		return true
+	end
 	local chances = plain and SUCCESS_CHANCE_PLAIN or SUCCESS_CHANCE
 	local level = tonumber(target:getCustomAttribute(LEVEL_KEY)) or 0
 	if level >= MAX_LEVEL then
@@ -90,8 +93,6 @@ local function plainBonus(player)
 			if itemType:getAttack() <= 0 and itemType:getDefense() <= 0 and itemType:getArmor() <= 0 then
 				if itemType:getWeaponType() ~= WEAPON_NONE then
 					dealt = dealt + level * PLAIN_WEAPON_DAMAGE
-				else
-					taken = taken + level * PLAIN_OTHER_REDUCTION
 				end
 			end
 		end
