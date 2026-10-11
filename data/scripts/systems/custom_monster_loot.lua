@@ -56,7 +56,7 @@ local soulWarMonsters = {
 }
 for _, monsterName in ipairs(soulWarMonsters) do
 	local entry = customLootConfig[monsterName] or { items = {} }
-	entry.items[#entry.items + 1] = { name = "bag you desire", chance = BAG_YOU_DESIRE_CHANCE }
+	entry.items[#entry.items + 1] = { id = 34109, chance = BAG_YOU_DESIRE_CHANCE }
 	customLootConfig[monsterName] = entry
 end
 
@@ -83,7 +83,7 @@ local primalMonsters = {
 }
 for _, monsterName in ipairs(primalMonsters) do
 	local entry = customLootConfig[monsterName] or { items = {} }
-	entry.items[#entry.items + 1] = { name = "primal bag", chance = BAG_YOU_DESIRE_CHANCE }
+	entry.items[#entry.items + 1] = { id = 39546, chance = BAG_YOU_DESIRE_CHANCE }
 	customLootConfig[monsterName] = entry
 end
 
@@ -113,7 +113,7 @@ local rottenBloodMonsters = {
 }
 for _, monsterName in ipairs(rottenBloodMonsters) do
 	local entry = customLootConfig[monsterName] or { items = {} }
-	entry.items[#entry.items + 1] = { name = "bag you covet", chance = BAG_YOU_DESIRE_CHANCE }
+	entry.items[#entry.items + 1] = { id = 43895, chance = BAG_YOU_DESIRE_CHANCE } -- po id: nazwe "bag you covet" ma piec przedmiotow, otwierany jest 43895
 	customLootConfig[monsterName] = entry
 end
 
