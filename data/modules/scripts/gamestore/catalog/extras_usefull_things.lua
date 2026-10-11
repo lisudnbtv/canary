@@ -90,6 +90,39 @@ return {
 			type = GameStore.OfferTypes.OFFER_TYPE_ITEM,
 		},
 		{
+			-- OTS: kamien ulepszen (skrypt: data-otservbr-global/scripts/ots/upgrades.lua)
+			icons = { "Gold_Converter.png" },
+			name = "5x Upgrade Stone",
+			price = 500,
+			itemtype = 20139,
+			count = 5,
+			movable = true,
+			description = "<i>Upgrades an item by one level (up to +10).</i>\n\n{character}\n{storeinbox}\n{useicon} use it on an item in your backpack or equipment\n{info} a failed attempt only uses up the stone",
+			type = GameStore.OfferTypes.OFFER_TYPE_ITEM,
+		},
+		{
+			-- OTS: kamien ulepszen (skrypt: data-otservbr-global/scripts/ots/upgrades.lua)
+			icons = { "Gold_Converter.png" },
+			name = "10x Upgrade Stone",
+			price = 1000,
+			itemtype = 20139,
+			count = 10,
+			movable = true,
+			description = "<i>Upgrades an item by one level (up to +10).</i>\n\n{character}\n{storeinbox}\n{useicon} use it on an item in your backpack or equipment\n{info} a failed attempt only uses up the stone",
+			type = GameStore.OfferTypes.OFFER_TYPE_ITEM,
+		},
+		{
+			-- OTS: kamien ulepszen (skrypt: data-otservbr-global/scripts/ots/upgrades.lua)
+			icons = { "Gold_Converter.png" },
+			name = "25x Upgrade Stone",
+			price = 2500,
+			itemtype = 20139,
+			count = 25,
+			movable = true,
+			description = "<i>Upgrades an item by one level (up to +10).</i>\n\n{character}\n{storeinbox}\n{useicon} use it on an item in your backpack or equipment\n{info} a failed attempt only uses up the stone",
+			type = GameStore.OfferTypes.OFFER_TYPE_ITEM,
+		},
+		{
 			-- OTS: wieczne jedzenie (skrypt: data-otservbr-global/scripts/ots/infinite_food.lua)
 			icons = { "Party_Cake.png" },
 			name = "Infinite Food",
