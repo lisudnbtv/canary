@@ -906,6 +906,9 @@ local raidRooms = {
 }
 local survivalCenter = Position(30090, 29900, 7)
 local survivalLanding = Position(30090, 29909, 7)
+local rushCenter = Position(30120, 29900, 7)
+local rushLanding = Position(30120, 29909, 7)
+local rushBosses = { "The Imperor", "Zushuka", "Chizzoron the Distorter", "Dracola", "The Handmaiden", "Chikhaton", "Mr. Punish", "Orshabaal", "Irgix The Flimsy", "Furyosa", "Thawing Dragon Lord", "The Welter", "Amenef the Burning", "Unaz the Mean", "Massacre", "Vok the Freakish", "Mawhawk", "Zulazza the Corruptor", "The Pale Count", "Lisa", "Morgaroth", "Glooth Fairy", "The Armored Voidborn", "Bullwark", "Ghazbaran", "Drume", "Ferumbras", "Urmahlullu the Weakened", "Omrafir", "The Rootkraken", "The Monster", "The Abomination", "Ancient Spawn of Morgathla", "Morshabaal" }
 local taskNpcPosition = Position(30013, 29998, 7)
 local hubPads = {
 	["29996:29705:7"] = { goto = { 29998, 29733, 7 }, label = "Bossy 8/9 (arena, HP 25000-80000)" },
@@ -960,6 +963,7 @@ local hubPads = {
 	["29996:30227:7"] = { lobby = true },
 	["29996:30229:7"] = { goto = { 29998, 30045, 7 }, label = "Low 1/8 (exp 20-30)" },
 	["30000:29960:7"] = { lobby = true },
+	["30000:29998:7"] = { bossrush = true },
 	["30001:30002:7"] = { survival = true },
 	["30003:29700:7"] = { boss = bosses[193] },
 	["30003:29704:7"] = { boss = bosses[194] },
@@ -2464,6 +2468,10 @@ survivalCheck = function(playerId, token)
 	local gold = wave * 10000
 	player:setBankBalance(player:getBankBalance() + gold)
 	local text = string.format("Fala %d wybita: +%d gp na konto.", wave, gold)
+	if wave % 3 == 0 then
+		player:addItem(20139, 1)
+		text = text .. " +1 kamien ulepszen."
+	end
 	if wave % 5 == 0 then
 		player:addTibiaCoins(wave * 2)
 		text = text .. string.format(" Bonus: +%d Tibia Coins.", wave * 2)
@@ -2491,6 +2499,95 @@ local function survivalEnter(player)
 	local best = tonumber(player:kv():scoped("ots-survival"):get("best")) or 0
 	player:sendTextMessage(MESSAGE_EVENT_ADVANCE, string.format("Fale: pierwsza fala za chwile. Twoj rekord: fala %d. Wyjscie teleportem konczy bieg.", best))
 	addEvent(survivalNext, 2500, player:getId(), survival.token)
+end
+
+-- Boss Rush: bossy z pul Losowego Bossa jeden po drugim, od najslabszego. Po kazdym zabitym
+-- nagroda rosnie (zloto na konto i Tibia Coins), a po chwili wchodzi nastepny.
+-- Odroczone wywolania niosa tylko id gracza i numer biegu (token).
+local rush = { token = 0, bossId = nil, index = 0 }
+
+local function rushClear()
+	local creature = rush.bossId and Creature(rush.bossId)
+	if creature then
+		creature:remove()
+	end
+	rush.bossId = nil
+end
+
+local function inRush(player)
+	local pos = player:getPosition()
+	return pos.z == rushCenter.z and math.abs(pos.x - rushCenter.x) <= ARENA_RADIUS + 1 and math.abs(pos.y - rushCenter.y) <= ARENA_RADIUS + 1
+end
+
+local rushCheck
+
+local function rushNext(playerId, token)
+	if token ~= rush.token then
+		return
+	end
+	local player = Player(playerId)
+	if not player or not inRush(player) then
+		rushClear()
+		return
+	end
+	if rush.index >= #rushBosses then
+		player:sendTextMessage(MESSAGE_EVENT_ADVANCE, "Boss Rush ukonczony - wszystkie bossy pokonane!")
+		return
+	end
+	rush.index = rush.index + 1
+	local name = rushBosses[rush.index]
+	local monster = Game.createMonster(name, Position(rushCenter.x, rushCenter.y - 4, rushCenter.z), true, true)
+	if not monster then
+		addEvent(rushNext, 500, playerId, token) -- tego bossa nie da sie postawic, bierzemy nastepnego
+		return
+	end
+	rush.bossId = monster:getId()
+	player:sendTextMessage(MESSAGE_EVENT_ADVANCE, string.format("Boss Rush %d/%d: %s.", rush.index, #rushBosses, name))
+	addEvent(rushCheck, 1000, playerId, token)
+end
+
+rushCheck = function(playerId, token)
+	if token ~= rush.token then
+		return
+	end
+	local player = Player(playerId)
+	if not player or not inRush(player) then
+		rushClear()
+		return
+	end
+	if rush.bossId and Creature(rush.bossId) then
+		addEvent(rushCheck, 1000, playerId, token)
+		return
+	end
+	rush.bossId = nil
+	local index = rush.index
+	local gold = index * 50000
+	player:setBankBalance(player:getBankBalance() + gold)
+	player:addTibiaCoins(index * 2)
+	local text = string.format("Boss %d pokonany: +%d gp na konto, +%d Tibia Coins.", index, gold, index * 2)
+	local store = player:kv():scoped("ots-bossrush")
+	if index > (tonumber(store:get("best")) or 0) then
+		store:set("best", index)
+		text = text .. " Nowy rekord!"
+	end
+	player:sendTextMessage(MESSAGE_EVENT_ADVANCE, text)
+	addEvent(rushNext, 3000, playerId, token)
+end
+
+local function rushEnter(player)
+	if inFight(player) then
+		return
+	end
+	rushClear()
+	rush.token = rush.token + 1
+	rush.index = 0
+	travel(player, { "Boss Rush", rushLanding.x, rushLanding.y, rushLanding.z })
+	if not inRush(player) then
+		return
+	end
+	local best = tonumber(player:kv():scoped("ots-bossrush"):get("best")) or 0
+	player:sendTextMessage(MESSAGE_EVENT_ADVANCE, string.format("Boss Rush: pierwszy boss za chwile. Twoj rekord: %d. Wyjscie teleportem konczy bieg.", best))
+	addEvent(rushNext, 3000, player:getId(), rush.token)
 end
 
 local openMain
@@ -2593,6 +2690,9 @@ openMain = function(player)
 	end)
 	window:addChoice("Fale potworow", function(target)
 		survivalEnter(target)
+	end)
+	window:addChoice("Boss Rush (bossy jeden po drugim)", function(target)
+		rushEnter(target)
 	end)
 	window:addChoice("Losowy Boss (nowy co 10 min po zabiciu)", function(target)
 		raidEnter(target)
@@ -2720,6 +2820,8 @@ function hubStep.onStepIn(creature, item, position, fromPosition)
 		raidEnter(player)
 	elseif action.survival then
 		survivalEnter(player)
+	elseif action.bossrush then
+		rushEnter(player)
 	elseif action.mounts and OtsMountHall then
 		OtsMountHall(player)
 	elseif action.outfits and OtsOutfitHall then
@@ -2764,6 +2866,8 @@ function hubLook.playerOnLook(player, inspectedThing, inspectedPosition, lookDis
 		text = "Losowy Boss"
 	elseif action.survival then
 		text = "Fale potworow"
+	elseif action.bossrush then
+		text = "Boss Rush"
 	elseif action.mounts then
 		text = "Wierzchowce do oswojenia"
 	elseif action.outfits then

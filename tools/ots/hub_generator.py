@@ -78,8 +78,20 @@ for y in range(Y0 - 2, Y0 + 2):
     tiles[(X0 + lobby_w + 2, y, Z)]['items'].append((EXERCISE_DUMMY, 0, None))
 board(X0 + lobby_w + 1, Y0 - 3, 'Trening\nUzyj exercise weapon na manekinie')
 
+# Boss Rush: pad po polnocnej stronie lobby, przy zachodnim koncu
+pad(X0, Y0 - 2, dict(kind='bossrush'))
+board(X0, Y0 - 3, 'Boss Rush\nBossy jeden po drugim, coraz mocniejsze, nagroda rosnie z kazdym')
+# Depozyt, skrzynia nagrod i kapliczka imbu na zachodnim koncu lobby
+DEPOT_LOCKER, REWARD_CHEST, IMBU_SHRINE = 3499, 19250, 25061
+for _dy, _iid in ((-1, DEPOT_LOCKER), (0, REWARD_CHEST), (1, IMBU_SHRINE)):
+    floor(X0 - 1, Y0 + _dy)
+    tiles[(X0 - 1, Y0 + _dy, Z)]['items'].append((_iid, 0, None))
+board(X0 - 1, Y0 + 2, 'Depozyt, skrzynia nagrod z bossow i kapliczka imbu', SIGN_B)
+
 wings = []
 npcs = []
+floor(X0 + 1, Y0 - 2)
+npcs.append(dict(name='Boss Rush', outfit={'lookType': 12}, pos=[X0 + 1, Y0 - 2, Z], south=True))
 # postacie przy padach po poludniowej stronie lobby
 _mid = X0 + lobby_w // 2
 for dx, name, look in ((-12, 'Fale', 134), (-4, 'Outfity', 273), (0, 'Thais', 128), (4, 'Questy', 367), (8, 'Bossy', 289), (12, 'Mounty', 145)):
@@ -210,10 +222,12 @@ for i in range(3):
     raid_rooms.append(dict(center=c, landing=room(c)))
 surv_center = [X0 + 90, Y0 - 100, Z]
 surv_landing = room(surv_center)
+rush_center = [X0 + 120, Y0 - 100, Z]
+rush_landing = room(rush_center)
 
 # Prawdziwe PZ 3x3 w miejscu ladowania w kazdej sali walk:
 # potwor nie wejdzie i nie zaatakuje, dopoki gracz sam nie wyjdzie.
-for lx, ly, lz in [arena_landing, surv_landing] + [r['landing'] for r in raid_rooms]:
+for lx, ly, lz in [arena_landing, surv_landing, rush_landing] + [r['landing'] for r in raid_rooms]:
     for dx in (-1, 0, 1):
         for dy in (-1, 0, 1):
             tiles[(lx + dx, ly + dy, lz)]['pz'] = True
@@ -284,6 +298,8 @@ for (bx, by, z), ts in sorted(areas.items()):
         body += esc(b'\x09' + struct.pack('<H', t.get('ground', GROUND)))
         for iid, aid, text in t['items']:
             data = struct.pack('<H', iid)
+            if iid == 3499:
+                data += b'\x0a' + struct.pack('<H', 8)   # depot Thais
             if aid:
                 data += b'\x04' + struct.pack('<H', aid)
             if text:
@@ -306,7 +322,7 @@ with open('hub/ots-hub-monster.xml', 'w') as f:
 open('hub/ots-hub-house.xml', 'w').write('<?xml version="1.0"?>\n<houses />\n')
 open('hub/ots-hub-npc.xml', 'w').write('<?xml version="1.0"?>\n<npcs />\n')
 open('hub/ots-hub-zones.xml', 'w').write('<?xml version="1.0"?>\n<zones />\n')
-json.dump(dict(pads=pads, wings=wings, lobby=lobby_arrival, questhall=questhall, bosshall=bosshall, bossDisplays=boss_displays, npcs=npcs, bossFloors=boss_floors, raid=dict(rooms=raid_rooms, npc=raid_npc), survival=dict(center=surv_center, landing=surv_landing), taskNpc=task_npc, arena=dict(center=arena_center, landing=arena_landing, radius=ARENA_R)), open('hub.json', 'w'))
+json.dump(dict(pads=pads, wings=wings, lobby=lobby_arrival, questhall=questhall, bosshall=bosshall, bossDisplays=boss_displays, npcs=npcs, bossFloors=boss_floors, raid=dict(rooms=raid_rooms, npc=raid_npc), survival=dict(center=surv_center, landing=surv_landing), rush=dict(center=rush_center, landing=rush_landing), taskNpc=task_npc, arena=dict(center=arena_center, landing=arena_landing, radius=ARENA_R)), open('hub.json', 'w'))
 xs = [k[0] for k in tiles]; ys = [k[1] for k in tiles]
 print('tiles', len(tiles), 'pads', len(pads), 'spawns', len(spawns), 'bbox', min(xs), min(ys), max(xs), max(ys), 'bytes', len(out))
 for w in wings: print(w)
