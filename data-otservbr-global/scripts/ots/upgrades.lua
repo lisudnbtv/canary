@@ -1,13 +1,17 @@
 -- OTS: ulepszanie przedmiotow (+1 do +10) kamieniem ulepszen.
 -- Kamien (essence of wishful thinking) uzywa sie na przedmiocie w plecaku albo na sobie.
 -- Kazdy poziom dodaje 3% bazowego ataku / obrony / pancerza (co najmniej +1 na poziom).
--- Do +5 zawsze sie udaje; dalej szansa spada. Porazka zuzywa kamien, a od proby na +8
--- dodatkowo cofa przedmiot o jeden poziom.
--- Kamienie leca z bossow (reward boss), elit, fal, boss rusha i inwazji.
+-- Do +5 zawsze sie udaje; dalej szansa spada. Porazka tylko zuzywa kamien, poziom zostaje.
+-- Przedmioty bez ataku, obrony i pancerza tez da sie ulepszyc, ale duzo trudniej:
+-- bron (rozdzka, rod, luk...) daje wtedy +3% zadawanych obrazen na poziom, gdy jest zalozona,
+-- pozostale (pierscien, amulet...) -0.5% otrzymywanych obrazen na poziom.
+-- Kamienie sa w sklepie za TC i leca z bossow (reward boss), elit, fal i inwazji.
 local STONE_ID = 20139
 local MAX_LEVEL = 10
 local SUCCESS_CHANCE = { 100, 100, 100, 100, 100, 80, 70, 60, 50, 40 }
-local DROP_BACK_FROM = 8
+local SUCCESS_CHANCE_PLAIN = { 60, 50, 40, 30, 25, 20, 15, 10, 7, 5 } -- przedmioty bez statystyk
+local PLAIN_WEAPON_DAMAGE = 0.03
+local PLAIN_OTHER_REDUCTION = 0.005
 local LEVEL_KEY = "ots-upgrade"
 
 local function upgraded(base, level)
@@ -45,10 +49,12 @@ function stone.onUse(player, item, fromPosition, target, toPosition, isHotkey)
 		return true
 	end
 	local itemType = ItemType(target:getId())
-	if itemType:getAttack() <= 0 and itemType:getDefense() <= 0 and itemType:getArmor() <= 0 then
-		player:sendCancelMessage("Tego przedmiotu nie da sie ulepszyc (nie ma ataku, obrony ani pancerza).")
+	if target:getId() == STONE_ID or itemType:isStackable() or itemType:isContainer() then
+		player:sendCancelMessage("Tego przedmiotu nie da sie ulepszyc.")
 		return true
 	end
+	local plain = itemType:getAttack() <= 0 and itemType:getDefense() <= 0 and itemType:getArmor() <= 0
+	local chances = plain and SUCCESS_CHANCE_PLAIN or SUCCESS_CHANCE
 	local level = tonumber(target:getCustomAttribute(LEVEL_KEY)) or 0
 	if level >= MAX_LEVEL then
 		player:sendCancelMessage("Ten przedmiot ma juz maksymalny poziom +" .. MAX_LEVEL .. ".")
@@ -57,14 +63,10 @@ function stone.onUse(player, item, fromPosition, target, toPosition, isHotkey)
 
 	local nextLevel = level + 1
 	item:remove(1)
-	if math.random(100) <= SUCCESS_CHANCE[nextLevel] then
+	if math.random(100) <= chances[nextLevel] then
 		applyLevel(target, nextLevel)
 		player:getPosition():sendMagicEffect(CONST_ME_FIREWORK_YELLOW)
 		player:sendTextMessage(MESSAGE_EVENT_ADVANCE, string.format("Ulepszenie udane: %s +%d.", itemType:getName(), nextLevel))
-	elseif nextLevel >= DROP_BACK_FROM then
-		applyLevel(target, level - 1)
-		player:getPosition():sendMagicEffect(CONST_ME_POFF)
-		player:sendTextMessage(MESSAGE_EVENT_ADVANCE, string.format("Ulepszenie nieudane: %s spada na +%d.", itemType:getName(), level - 1))
 	else
 		player:getPosition():sendMagicEffect(CONST_ME_POFF)
 		player:sendTextMessage(MESSAGE_EVENT_ADVANCE, string.format("Ulepszenie nieudane: %s zostaje na +%d.", itemType:getName(), level))
@@ -74,6 +76,54 @@ end
 
 stone:id(STONE_ID)
 stone:register()
+
+-- Przedmioty bez statystyk: premia liczona przy kazdym ciosie z zalozonych rzeczy.
+local SLOTS = { CONST_SLOT_HEAD, CONST_SLOT_NECKLACE, CONST_SLOT_ARMOR, CONST_SLOT_RIGHT, CONST_SLOT_LEFT, CONST_SLOT_LEGS, CONST_SLOT_FEET, CONST_SLOT_RING }
+
+local function plainBonus(player)
+	local dealt, taken = 0, 0
+	for _, slot in ipairs(SLOTS) do
+		local item = player:getSlotItem(slot)
+		local level = item and tonumber(item:getCustomAttribute(LEVEL_KEY)) or 0
+		if level > 0 then
+			local itemType = ItemType(item:getId())
+			if itemType:getAttack() <= 0 and itemType:getDefense() <= 0 and itemType:getArmor() <= 0 then
+				if itemType:getWeaponType() ~= WEAPON_NONE then
+					dealt = dealt + level * PLAIN_WEAPON_DAMAGE
+				else
+					taken = taken + level * PLAIN_OTHER_REDUCTION
+				end
+			end
+		end
+	end
+	return dealt, taken
+end
+
+local plainCombat = EventCallback("OtsUpgradePlainCombat")
+
+function plainCombat.creatureOnCombat(caster, target, combatDamage)
+	if not combatDamage then
+		return
+	end
+	local factor = 1
+	if caster and type(caster.isPlayer) == "function" and caster:isPlayer() then
+		factor = factor * (1 + plainBonus(caster))
+	end
+	if target and type(target.isPlayer) == "function" and target:isPlayer() and target ~= caster then
+		local _, taken = plainBonus(target)
+		factor = factor * (1 - taken)
+	end
+	if factor == 1 then
+		return
+	end
+	for _, entry in ipairs({ combatDamage.primary, combatDamage.secondary }) do
+		if entry and tonumber(entry.value) and entry.value < 0 then
+			entry.value = math.floor(entry.value * factor)
+		end
+	end
+end
+
+plainCombat:register()
 
 -- Kazdy zabity reward boss daje jeden kamien prosto do plecaka.
 local bossStone = EventCallback("OtsUpgradeStoneFromBoss")
