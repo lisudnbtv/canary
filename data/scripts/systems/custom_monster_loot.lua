@@ -87,6 +87,36 @@ for _, monsterName in ipairs(primalMonsters) do
 	customLootConfig[monsterName] = entry
 end
 
+-- OTS: bag you covet z kazdego potwora Rotten Blood i z jego bossow, ta sama szansa (~10%).
+local rottenBloodMonsters = {
+	"Bloated Man-Maggot",
+	"Converter",
+	"Darklight Construct",
+	"Darklight Emitter",
+	"Darklight Matter",
+	"Darklight Source",
+	"Darklight Striker",
+	"Meandering Mushroom",
+	"Mycobiontic Beetle",
+	"Oozing Carcass",
+	"Oozing Corpus",
+	"Rotten Man-Maggot",
+	"Sopping Carcass",
+	"Sopping Corpus",
+	"Walking Pillar",
+	"Wandering Pillar",
+	"Vemiath",
+	"Chagorz",
+	"Ichgahal",
+	"Murcion",
+	"Bakragore",
+}
+for _, monsterName in ipairs(rottenBloodMonsters) do
+	local entry = customLootConfig[monsterName] or { items = {} }
+	entry.items[#entry.items + 1] = { name = "bag you covet", chance = BAG_YOU_DESIRE_CHANCE }
+	customLootConfig[monsterName] = entry
+end
+
 local customMonsterLoot = GlobalEvent("CreateCustomMonsterLoot")
 
 function customMonsterLoot.onStartup()
