@@ -27,12 +27,28 @@ for sp in ET.parse(C + 'otservbr-monster.xml').getroot():
         if m.get('name').lower() in bosses or t > 600: continue      # bez bossow i rzadkich spawnow
         if near(x, y, cz): sel.append((m.get('name'), x, y, cz, t))
 os.makedirs('spawnsq', exist_ok=True)
+import spots
+RING = [(1, 0), (-1, 0), (0, 1), (0, -1), (1, 1), (-1, -1), (1, -1), (-1, 1), (2, 0), (-2, 0), (0, 2), (0, -2)]
+_t = json.load(open('/home/claude/canary/tools/ots/pz_targets.json'))
+OURPZ = {(c[0] + a, c[1] + b, c[2]) for c in _t['centers'] for a in (-1, 0, 1) for b in (-1, 0, 1)} | {tuple(c) for c in _t['tiles']}
+def offsets(x, y, z):
+    # silnik odrzuca dwa potwory na tym samym polu w jednym spawnie, wiec dodatkowe stoja na sasiednich
+    # polach, po ktorych da sie chodzic (wedlug mapy) i ktore nie sa strefa PZ
+    out = []
+    for dx, dy in RING:
+        w, pz = spots.tile(x + dx, y + dy, z)
+        if w and not pz and (x + dx, y + dy, z) not in OURPZ:
+            out.append((dx, dy))
+            if len(out) == EXTRA: break
+    return out
+total = 0
 with open('spawnsq/ots-spawns-monster.xml', 'w') as f:
     f.write('<?xml version="1.0"?>\n<monsters>\n')
     for name, x, y, z, t in sel:
         f.write('\t<monster centerx="%d" centery="%d" centerz="%d" radius="2">\n' % (x, y, z))
-        for _ in range(EXTRA):
-            f.write('\t\t<monster name=%s x="0" y="0" z="%d" spawntime="%d" />\n' % (quoteattr(name), z, t))
+        for dx, dy in offsets(x, y, z):
+            f.write('\t\t<monster name=%s x="%d" y="%d" z="%d" spawntime="%d" />\n' % (quoteattr(name), dx, dy, z, t))
+            total += 1
         f.write('\t</monster>\n')
     f.write('</monsters>\n')
 for nm, tag in (('house', 'houses'), ('npc', 'npcs'), ('zones', 'zones')):
@@ -52,4 +68,4 @@ body += b'\xfe\x04' + esc(struct.pack('<HHB', X & 0xFF00, Y & 0xFF00, Z))
 body += b'\xfe\x05' + esc(bytes([X & 0xFF, Y & 0xFF])) + esc(b'\x09' + struct.pack('<H', 410)) + b'\xff\xff'
 body += b'\xfe\x0c\xff\xfe\x0f\xff\xff'
 open('spawnsq/ots-spawns.otbm', 'wb').write(b'\x00\x00\x00\x00\xfe\x00' + esc(struct.pack('<IHHII', 2, 0x855f, 0x8414, 3, 0x3e)) + bytes(body) + b'\xff')
-print('punkty spawnu:', len(sel), 'dodatkowe potwory:', len(sel) * EXTRA)
+print('punkty spawnu:', len(sel), 'dodatkowe potwory:', total)
