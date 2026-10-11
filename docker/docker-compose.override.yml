@@ -33,5 +33,7 @@ services:
       - '../data-otservbr-global/world/custom/ots-mounts-zones.xml:/canary/data-otservbr-global/world/custom/ots-mounts-zones.xml:ro'
       - '../data/XML/imbuements.xml:/canary/data/XML/imbuements.xml:ro'
       - '../data/scripts/systems/custom_monster_loot.lua:/canary/data/scripts/systems/custom_monster_loot.lua:ro'
+      - '../data/scripts/actions/items/reward_bags.lua:/canary/data/scripts/actions/items/reward_bags.lua:ro'
+      - '../data/scripts/talkactions/player/emote_spell.lua:/canary/data/scripts/talkactions/player/emote_spell.lua:ro'
       - '../data/modules/scripts/gamestore/catalog/extras_usefull_things.lua:/canary/data/modules/scripts/gamestore/catalog/extras_usefull_things.lua:ro'
       - '../data/items/items.xml:/canary/data/items/items.xml:ro'
