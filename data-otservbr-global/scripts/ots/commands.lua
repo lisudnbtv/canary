@@ -84,3 +84,79 @@ end
 
 bp:groupType("normal")
 bp:register()
+
+-- Clean Loot Pouch (miotla ze sklepu, wielokrotnego uzytku): usuwa z loot poucha wszystko,
+-- czego nie skupuje Loot Seller. Zostaja: zloto i monety, pojemniki, kamienie ulepszen,
+-- worki z nagrodami, przedmioty ulepszone (+1 i wyzej) i sama miotla.
+local CLEANER_ID = 3454 -- broom
+local KEEP = {
+	[ITEM_GOLD_COIN] = true,
+	[ITEM_PLATINUM_COIN] = true,
+	[ITEM_CRYSTAL_COIN] = true,
+	[20139] = true, -- kamien ulepszen
+	[9212] = true, -- Boss Loot Collector
+	[34109] = true, -- bag you desire
+	[39546] = true, -- primal bag
+	[43895] = true, -- bag you covet
+	[CLEANER_ID] = true,
+}
+
+local function junkIn(pouch)
+	if not prices then
+		loadPrices()
+	end
+	local junk = {}
+	for _, item in ipairs(pouch:getItems(true)) do
+		local id = item:getId()
+		if not item:isContainer() and not KEEP[id] and not prices[id] and not item:getCustomAttribute("ots-upgrade") then
+			junk[#junk + 1] = item
+		end
+	end
+	return junk
+end
+
+local cleaner = Action()
+
+function cleaner.onUse(player, item, fromPosition, target, toPosition, isHotkey)
+	local pouch = player:getItemById(ITEM_GOLD_POUCH, true)
+	if not pouch or not pouch:isContainer() then
+		player:sendCancelMessage("Nie masz loot poucha.")
+		return true
+	end
+	local count = 0
+	for _, entry in ipairs(junkIn(pouch)) do
+		count = count + entry:getCount()
+	end
+	if count == 0 then
+		player:sendTextMessage(MESSAGE_EVENT_ADVANCE, "W loot pouchu nie ma nic do wyrzucenia.")
+		return true
+	end
+	local playerId = player:getId()
+	local window = ModalWindow({ title = "Clean Loot Pouch", message = string.format("Usunac na zawsze %d szt. przedmiotow, ktorych nie da sie sprzedac?\nTo, co skupuje Loot Seller, zostaje (sprzedasz przez !sell).", count) })
+	window:addButton("Usun", function()
+		local target = Player(playerId)
+		local bag = target and target:getItemById(ITEM_GOLD_POUCH, true)
+		if not bag then
+			return
+		end
+		local removed = 0
+		local list = junkIn(bag)
+		for index = #list, 1, -1 do
+			removed = removed + list[index]:getCount()
+			list[index]:remove()
+		end
+		if target.sendUpdateContainer then
+			target:sendUpdateContainer(bag)
+		end
+		target:getPosition():sendMagicEffect(CONST_ME_POFF)
+		target:sendTextMessage(MESSAGE_EVENT_ADVANCE, string.format("Usunieto z loot poucha %d szt. zbednych przedmiotow.", removed))
+	end)
+	window:addButton("Anuluj", function() end)
+	window:setDefaultEnterButton(2)
+	window:setDefaultEscapeButton(2)
+	window:sendToPlayer(player)
+	return true
+end
+
+cleaner:id(CLEANER_ID)
+cleaner:register()

@@ -134,6 +134,17 @@ return {
 			type = GameStore.OfferTypes.OFFER_TYPE_ITEM,
 		},
 		{
+			-- OTS: czyszczenie loot poucha z rzeczy nie do sprzedania (skrypt: data-otservbr-global/scripts/ots/commands.lua)
+			icons = { "Gold_Converter.png" },
+			name = "Clean Loot Pouch",
+			price = 500,
+			itemtype = 3454,
+			count = 1,
+			movable = true,
+			description = "<i>Deletes everything from your loot pouch that the Loot Seller does not buy.</i>\n\n{character}\n{storeinbox}\n{useicon} use it, confirm, done - reusable\n{info} keeps coins, containers, upgrade stones, reward bags and upgraded items",
+			type = GameStore.OfferTypes.OFFER_TYPE_ITEM,
+		},
+		{
 			-- OTS: wieczne jedzenie (skrypt: data-otservbr-global/scripts/ots/infinite_food.lua)
 			icons = { "Party_Cake.png" },
 			name = "Infinite Food",
