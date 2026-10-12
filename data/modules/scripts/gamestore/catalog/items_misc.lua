@@ -25,7 +25,7 @@ return {
 			itemtype = 16095,
 			count = 1,
 			movable = true,
-			description = "<i>A lamp for the ammunition slot with 3 imbuement slots.</i>\n\n{character}\n{storeinbox}\n{info} accepts any imbuement: leech, critical, skills, protections, speed, capacity",
+			description = "<i>A lamp for the arrow slot.</i>\n\n{character}\n{storeinbox}\n{info} worn: +10 shielding, +10% speed, +10% capacity",
 			type = GameStore.OfferTypes.OFFER_TYPE_ITEM,
 		},
 		{
@@ -36,7 +36,7 @@ return {
 			itemtype = 22746,
 			count = 1,
 			movable = true,
-			description = "<i>An amulet with +25% protection against all damage.</i>\n\n{character}\n{storeinbox}\n{info} 3 imbuement slots: leech, critical, skills, speed, capacity",
+			description = "<i>An amulet with +25% protection against all damage.</i>\n\n{character}\n{storeinbox}\n{info} worn: life leech 5%, mana leech 3%, critical 5% (+25%)",
 			type = GameStore.OfferTypes.OFFER_TYPE_ITEM,
 		},
 		{
@@ -47,7 +47,7 @@ return {
 			itemtype = 34080,
 			count = 1,
 			movable = true,
-			description = "<i>A ring with +25% protection against all damage.</i>\n\n{character}\n{storeinbox}\n{info} 3 imbuement slots: leech, critical, skills, speed, capacity",
+			description = "<i>A ring with +25% protection against all damage.</i>\n\n{character}\n{storeinbox}\n{info} worn: +3 to all skills and magic level",
 			type = GameStore.OfferTypes.OFFER_TYPE_ITEM,
 		},
 	},

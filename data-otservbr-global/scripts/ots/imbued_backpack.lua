@@ -1,43 +1,100 @@
--- OTS: Imbued Backpack (sklep, 3000 TC): 100 slotow i stale bonusy jak z imbu, dopoki plecak
--- jest zalozony w slocie plecaka. Silnik nie liczy imbuementow z plecaka, wiec bonusy daje ten
--- skrypt (warunek z wlasnym SUBID, zakladany i zdejmowany co 2 s).
-local BACKPACK_ID = 3253 -- backpack of holding (items.xml: imbued backpack, 100 slotow)
-local SUBID = 64991
-local LIFE_LEECH = 500 -- setne czesci procenta: 500 = 5%
-local MANA_LEECH = 300 -- 3%
-local CRIT_CHANCE = 500 -- 5%
-local CRIT_DAMAGE = 2500 -- +25%
-local SPEED_PERCENT = 10
+-- OTS: przedmioty ze sklepu ze stalymi bonusami "pelnego imbu", ktore dzialaja, dopoki przedmiot
+-- jest zalozony we wlasciwym slocie. Silnik/klient nie pozwala tu na zwykle imbu (plecak,
+-- amulet, pierscien, slot strzal), wiec bonusy daje ten skrypt: kazdy przedmiot ma wlasny
+-- warunek (SUBID), zakladany i zdejmowany co 2 s.
+local ITEMS = {
+	{
+		name = "Imbued Backpack",
+		id = 3253,
+		slot = CONST_SLOT_BACKPACK,
+		subId = 64991,
+		lifeLeech = 500, -- setne czesci procenta: 500 = 5%
+		manaLeech = 300,
+		critChance = 500,
+		critDamage = 2500,
+		speedPercent = 10,
+	},
+	{
+		name = "Amulet of Resistance",
+		id = 22746,
+		slot = CONST_SLOT_NECKLACE,
+		subId = 64992,
+		lifeLeech = 500,
+		manaLeech = 300,
+		critChance = 500,
+		critDamage = 2500,
+	},
+	{
+		name = "Ring of Resistance",
+		id = 34080,
+		slot = CONST_SLOT_RING,
+		subId = 64993,
+		skills = 3, -- wszystkie skille walki i shielding
+		magic = 3,
+	},
+	{
+		name = "Imbued Crystal Lamp",
+		id = 16095,
+		slot = CONST_SLOT_AMMO,
+		subId = 64994,
+		shielding = 10,
+		speedPercent = 10,
+		capacityPercent = 110, -- 110 = +10% udzwigu
+	},
+}
 
-local active = {} -- id gracza -> bonus nalozony
+local active = {} -- "idGracza:subId" -> bonus nalozony
 
-local function wearing(player)
-	local item = player:getSlotItem(CONST_SLOT_BACKPACK)
-	return item and item:getId() == BACKPACK_ID
+local function wearing(player, config)
+	local item = player:getSlotItem(config.slot)
+	return item and item:getId() == config.id
 end
 
-local function apply(player)
+local function apply(player, config)
 	local skills = Condition(CONDITION_ATTRIBUTES, CONDITIONID_DEFAULT)
-	skills:setParameter(CONDITION_PARAM_SUBID, SUBID)
+	skills:setParameter(CONDITION_PARAM_SUBID, config.subId)
 	skills:setParameter(CONDITION_PARAM_TICKS, -1)
-	skills:setParameter(CONDITION_PARAM_SKILL_LIFE_LEECH_CHANCE, 100)
-	skills:setParameter(CONDITION_PARAM_SKILL_LIFE_LEECH_AMOUNT, LIFE_LEECH)
-	skills:setParameter(CONDITION_PARAM_SKILL_MANA_LEECH_CHANCE, 100)
-	skills:setParameter(CONDITION_PARAM_SKILL_MANA_LEECH_AMOUNT, MANA_LEECH)
-	skills:setParameter(CONDITION_PARAM_SKILL_CRITICAL_HIT_CHANCE, CRIT_CHANCE)
-	skills:setParameter(CONDITION_PARAM_SKILL_CRITICAL_HIT_DAMAGE, CRIT_DAMAGE)
+	if config.lifeLeech then
+		skills:setParameter(CONDITION_PARAM_SKILL_LIFE_LEECH_CHANCE, 100)
+		skills:setParameter(CONDITION_PARAM_SKILL_LIFE_LEECH_AMOUNT, config.lifeLeech)
+	end
+	if config.manaLeech then
+		skills:setParameter(CONDITION_PARAM_SKILL_MANA_LEECH_CHANCE, 100)
+		skills:setParameter(CONDITION_PARAM_SKILL_MANA_LEECH_AMOUNT, config.manaLeech)
+	end
+	if config.critChance then
+		skills:setParameter(CONDITION_PARAM_SKILL_CRITICAL_HIT_CHANCE, config.critChance)
+		skills:setParameter(CONDITION_PARAM_SKILL_CRITICAL_HIT_DAMAGE, config.critDamage)
+	end
+	if config.skills then
+		skills:setParameter(CONDITION_PARAM_SKILL_MELEE, config.skills)
+		skills:setParameter(CONDITION_PARAM_SKILL_FIST, config.skills)
+		skills:setParameter(CONDITION_PARAM_SKILL_DISTANCE, config.skills)
+		skills:setParameter(CONDITION_PARAM_SKILL_SHIELD, config.skills)
+	end
+	if config.shielding then
+		skills:setParameter(CONDITION_PARAM_SKILL_SHIELD, config.shielding)
+	end
+	if config.magic then
+		skills:setParameter(CONDITION_PARAM_STAT_MAGICPOINTS, config.magic)
+	end
+	if config.capacityPercent then
+		skills:setParameter(CONDITION_PARAM_STAT_CAPACITYPERCENT, config.capacityPercent)
+	end
 	player:addCondition(skills)
 
-	local haste = Condition(CONDITION_HASTE, CONDITIONID_DEFAULT)
-	haste:setParameter(CONDITION_PARAM_SUBID, SUBID)
-	haste:setParameter(CONDITION_PARAM_TICKS, -1)
-	haste:setParameter(CONDITION_PARAM_SPEED, math.floor(player:getBaseSpeed() * SPEED_PERCENT / 100))
-	player:addCondition(haste)
+	if config.speedPercent then
+		local haste = Condition(CONDITION_HASTE, CONDITIONID_DEFAULT)
+		haste:setParameter(CONDITION_PARAM_SUBID, config.subId)
+		haste:setParameter(CONDITION_PARAM_TICKS, -1)
+		haste:setParameter(CONDITION_PARAM_SPEED, math.floor(player:getBaseSpeed() * config.speedPercent / 100))
+		player:addCondition(haste)
+	end
 end
 
-local function clear(player)
-	player:removeCondition(CONDITION_ATTRIBUTES, CONDITIONID_DEFAULT, SUBID)
-	player:removeCondition(CONDITION_HASTE, CONDITIONID_DEFAULT, SUBID)
+local function clear(player, config)
+	player:removeCondition(CONDITION_ATTRIBUTES, CONDITIONID_DEFAULT, config.subId)
+	player:removeCondition(CONDITION_HASTE, CONDITIONID_DEFAULT, config.subId)
 end
 
 local tick = GlobalEvent("OtsImbuedBackpackTick")
@@ -45,19 +102,23 @@ local tick = GlobalEvent("OtsImbuedBackpackTick")
 function tick.onThink(interval)
 	for _, player in ipairs(Game.getPlayers()) do
 		local id = player:getId()
-		local on = wearing(player)
-		if on and not active[id] then
-			apply(player)
-			active[id] = true
-			player:sendTextMessage(MESSAGE_STATUS, "Imbued Backpack: bonusy wlaczone (leech, critical, szybkosc).")
-		elseif not on and active[id] then
-			clear(player)
-			active[id] = nil
+		for _, config in ipairs(ITEMS) do
+			local key = id .. ":" .. config.subId
+			local on = wearing(player, config)
+			if on and not active[key] then
+				apply(player, config)
+				active[key] = true
+				player:sendTextMessage(MESSAGE_STATUS, config.name .. ": bonusy wlaczone.")
+			elseif not on and active[key] then
+				clear(player, config)
+				active[key] = nil
+			end
 		end
 	end
-	for id in pairs(active) do
-		if not Player(id) then
-			active[id] = nil
+	for key in pairs(active) do
+		local id = tonumber(key:match("^(%d+):"))
+		if not id or not Player(id) then
+			active[key] = nil
 		end
 	end
 	return true
@@ -69,8 +130,10 @@ tick:register()
 local login = CreatureEvent("OtsImbuedBackpackLogin")
 
 function login.onLogin(player)
-	active[player:getId()] = nil
-	clear(player)
+	for _, config in ipairs(ITEMS) do
+		active[player:getId() .. ":" .. config.subId] = nil
+		clear(player, config)
+	end
 	return true
 end
 

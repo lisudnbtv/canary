@@ -36565,29 +36565,8 @@
 	</item>
 	<item id="16095" article="an" name="imbued crystal lamp">
 		<attribute key="primarytype" value="light sources"/>
-		<attribute key="description" value="Na slot amunicji (pochodnia). 3 sloty na dowolne imbu."/>
+		<attribute key="description" value="Na slot strzal. Zalozona: +10 shielding, +10% szybkosci, +10% udzwigu."/>
 		<attribute key="weight" value="1000"/>
-		<attribute key="imbuementslot" value="3">
-			<attribute key="life leech" value="3"/>
-			<attribute key="mana leech" value="3"/>
-			<attribute key="critical hit" value="3"/>
-			<attribute key="skillboost magic level" value="3"/>
-			<attribute key="skillboost distance" value="3"/>
-			<attribute key="skillboost sword" value="3"/>
-			<attribute key="skillboost axe" value="3"/>
-			<attribute key="skillboost club" value="3"/>
-			<attribute key="skillboost fist" value="3"/>
-			<attribute key="skillboost shielding" value="3"/>
-			<attribute key="elemental protection fire" value="3"/>
-			<attribute key="elemental protection ice" value="3"/>
-			<attribute key="elemental protection energy" value="3"/>
-			<attribute key="elemental protection earth" value="3"/>
-			<attribute key="elemental protection death" value="3"/>
-			<attribute key="elemental protection holy" value="3"/>
-			<attribute key="increase speed" value="3"/>
-			<attribute key="increase capacity" value="3"/>
-			<attribute key="paralysis deflection" value="3"/>
-		</attribute>
 		<attribute key="script" value="moveevent">
 			<attribute key="slot" value="ammo"/>
 		</attribute>
@@ -48375,7 +48354,7 @@ Awarded by TibiaMisterios.com.br"/>
 	</item>
 	<item id="22746" article="a" name="amulet of resistance">
 		<attribute key="primarytype" value="amulets and necklaces"/>
-		<attribute key="description" value="+25% odpornosci na wszystkie obrazenia. 3 sloty na imbu."/>
+		<attribute key="description" value="+25% odpornosci na wszystkie obrazenia. Zalozony: life leech 5%, mana leech 3%, critical 5% (+25%)."/>
 		<attribute key="showattributes" value="1"/>
 		<attribute key="absorbpercentphysical" value="25"/>
 		<attribute key="absorbpercentfire" value="25"/>
@@ -48385,21 +48364,6 @@ Awarded by TibiaMisterios.com.br"/>
 		<attribute key="absorbpercentholy" value="25"/>
 		<attribute key="absorbpercentdeath" value="25"/>
 		<attribute key="weight" value="300"/>
-		<attribute key="imbuementslot" value="3">
-			<attribute key="life leech" value="3"/>
-			<attribute key="mana leech" value="3"/>
-			<attribute key="critical hit" value="3"/>
-			<attribute key="skillboost magic level" value="3"/>
-			<attribute key="skillboost distance" value="3"/>
-			<attribute key="skillboost sword" value="3"/>
-			<attribute key="skillboost axe" value="3"/>
-			<attribute key="skillboost club" value="3"/>
-			<attribute key="skillboost fist" value="3"/>
-			<attribute key="skillboost shielding" value="3"/>
-			<attribute key="increase speed" value="3"/>
-			<attribute key="increase capacity" value="3"/>
-			<attribute key="paralysis deflection" value="3"/>
-		</attribute>
 		<attribute key="script" value="moveevent">
 			<attribute key="slot" value="necklace"/>
 		</attribute>
@@ -68399,7 +68363,7 @@ hands of its owner. Granted by TibiaRoyal.com"/>
 	</item>
 	<item id="34080" article="a" name="ring of resistance">
 		<attribute key="primarytype" value="rings"/>
-		<attribute key="description" value="+25% odpornosci na wszystkie obrazenia. 3 sloty na imbu."/>
+		<attribute key="description" value="+25% odpornosci na wszystkie obrazenia. Zalozony: +3 do wszystkich skilli i magic level."/>
 		<attribute key="showattributes" value="1"/>
 		<attribute key="absorbpercentphysical" value="25"/>
 		<attribute key="absorbpercentfire" value="25"/>
@@ -68409,21 +68373,6 @@ hands of its owner. Granted by TibiaRoyal.com"/>
 		<attribute key="absorbpercentholy" value="25"/>
 		<attribute key="absorbpercentdeath" value="25"/>
 		<attribute key="weight" value="300"/>
-		<attribute key="imbuementslot" value="3">
-			<attribute key="life leech" value="3"/>
-			<attribute key="mana leech" value="3"/>
-			<attribute key="critical hit" value="3"/>
-			<attribute key="skillboost magic level" value="3"/>
-			<attribute key="skillboost distance" value="3"/>
-			<attribute key="skillboost sword" value="3"/>
-			<attribute key="skillboost axe" value="3"/>
-			<attribute key="skillboost club" value="3"/>
-			<attribute key="skillboost fist" value="3"/>
-			<attribute key="skillboost shielding" value="3"/>
-			<attribute key="increase speed" value="3"/>
-			<attribute key="increase capacity" value="3"/>
-			<attribute key="paralysis deflection" value="3"/>
-		</attribute>
 		<attribute key="script" value="moveevent">
 			<attribute key="slot" value="ring"/>
 		</attribute>
