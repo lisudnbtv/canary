@@ -6,7 +6,7 @@ OtsYalaharFight = OtsYalaharFight or { id = 0, active = false }
 local CENTER = Position(32783, 31166, 10)
 local RANGE = 10
 local PORTAL = Position(32783, 31171, 10)
-local REWARD_ROOM = Position(32780, 31168, 14)
+local REWARD_ROOM = Position(32778, 31206, 7)
 local PORTAL_TIME = 10 * 60 * 1000
 OTS_YALAHAR_KILL_KEY = "ots-yalahar-azerus"
 OtsYalaharPortal = OtsYalaharPortal or { generation = 0 }

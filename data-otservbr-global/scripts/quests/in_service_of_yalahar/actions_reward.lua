@@ -14,6 +14,9 @@ local inServiceYalaharReward = Action()
 
 function inServiceYalaharReward.onUse(player, item, fromPosition, target, toPosition, isHotkey)
 	local reward = rewards[item.uid]
+	if not reward and OTS_YALAHAR_FOOTWRAPS_CHEST and item:getPosition() == OTS_YALAHAR_FOOTWRAPS_CHEST then
+		reward = rewards[30091]
+	end
 	if not reward then
 		return true
 	end
@@ -33,4 +36,5 @@ function inServiceYalaharReward.onUse(player, item, fromPosition, target, toPosi
 end
 
 inServiceYalaharReward:uid(3088, 3089, 3090, 30091)
+inServiceYalaharReward:position(Position(32776, 31207, 7))
 inServiceYalaharReward:register()

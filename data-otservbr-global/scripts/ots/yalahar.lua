@@ -3,7 +3,7 @@
 
 local entrance = Position(32783, 31174, 10)
 
-local rewardRoom = Position(32780, 31168, 14)
+local rewardRoom = Position(32778, 31206, 7)
 
 function OtsYalaharStart(player)
 	if player:kv():get("ots-yalahar-azerus") and not player:kv():get("ots-yalahar-reward") then
