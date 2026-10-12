@@ -930,8 +930,22 @@ local function towerNext(playerId, token)
 	local name = survivalMonsters[math.min(#survivalMonsters, 10 + floor * 4)]
 	local amount = math.min(8 + floor, 30)
 	tower.ids = {}
+	-- postac na srodek sali, potwory w pierscieniu 2-3 pola wokol niej
+	if player:getPosition() ~= towerCenter then
+		player:teleportTo(towerCenter)
+		towerCenter:sendMagicEffect(CONST_ME_TELEPORT)
+	end
+	local ring = {}
+	for dx = -3, 3 do
+		for dy = -3, 3 do
+			local d = math.max(math.abs(dx), math.abs(dy))
+			if d >= 2 then
+				ring[#ring + 1] = Position(towerCenter.x + dx, towerCenter.y + dy, towerCenter.z)
+			end
+		end
+	end
 	for _ = 1, amount do
-		local pos = Position(towerCenter.x + math.random(-ARENA_RADIUS + 1, ARENA_RADIUS - 1), towerCenter.y + math.random(-ARENA_RADIUS + 1, 2), towerCenter.z)
+		local pos = #ring > 0 and table.remove(ring, math.random(#ring)) or towerCenter
 		local monster = name and Game.createMonster(name, pos, true, true)
 		if monster then
 			tower.ids[#tower.ids + 1] = monster:getId()
@@ -940,7 +954,7 @@ local function towerNext(playerId, token)
 	local bossText = ""
 	if floor % 10 == 0 and #rushBosses > 0 then
 		local bossName = rushBosses[math.min(#rushBosses, math.floor(floor / 10))]
-		local boss = Game.createMonster(bossName, Position(towerCenter.x, towerCenter.y - 4, towerCenter.z), true, true)
+		local boss = Game.createMonster(bossName, Position(towerCenter.x, towerCenter.y - 2, towerCenter.z), true, true)
 		if boss then
 			tower.ids[#tower.ids + 1] = boss:getId()
 			bossText = " + boss " .. bossName
