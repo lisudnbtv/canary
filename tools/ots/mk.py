@@ -640,7 +640,7 @@ local function openTaskTier(player, tier)
 		local times = taskDoneCount(player, entry.mon)
 		local label = entry.mon
 		if times > 0 then
-			label = string.format("[Complete x%d] %s", times, entry.mon)
+			label = "[Complete] " .. entry.mon
 		end
 		window:addChoice(label, function(target)
 			taskStart(target, tier, index)
