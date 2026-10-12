@@ -909,6 +909,8 @@ local survivalLanding = Position(30090, 29909, 7)
 local rushCenter = Position(30120, 29900, 7)
 local rushLanding = Position(30120, 29909, 7)
 local rushBosses = { "The Imperor", "Zushuka", "Chizzoron the Distorter", "Dracola", "The Handmaiden", "Chikhaton", "Mr. Punish", "Orshabaal", "Irgix The Flimsy", "Furyosa", "Thawing Dragon Lord", "The Welter", "Amenef the Burning", "Unaz the Mean", "Massacre", "Vok the Freakish", "Mawhawk", "Zulazza the Corruptor", "The Pale Count", "Lisa", "Morgaroth", "Glooth Fairy", "The Armored Voidborn", "Bullwark", "Ghazbaran", "Drume", "Ferumbras", "Urmahlullu the Weakened", "Omrafir", "The Rootkraken", "The Monster", "The Abomination", "Ancient Spawn of Morgathla", "Morshabaal" }
+local towerCenter = Position(30150, 29900, 7)
+local towerLanding = Position(30150, 29909, 7)
 local taskNpcPosition = Position(30013, 29998, 7)
 local hubPads = {
 	["29996:29705:7"] = { goto = { 29998, 29733, 7 }, label = "Bossy 8/9 (arena, HP 25000-80000)" },
@@ -1359,6 +1361,7 @@ local hubPads = {
 	["30024:29958:7"] = { quest = quests[9] },
 	["30024:29962:7"] = { quest = quests[10] },
 	["30025:30002:7"] = { mounts = true },
+	["30026:29998:7"] = { tower = true },
 	["30029:29958:7"] = { quest = quests[11] },
 	["30029:29962:7"] = { quest = quests[12] },
 	["30034:29958:7"] = { quest = quests[13] },
@@ -2588,6 +2591,138 @@ local function survivalEnter(player)
 	addEvent(survivalNext, 2500, player:getId(), survival.token)
 end
 
+-- Wieza: kolejne pietra coraz silniejszych potworow (z listy expowisk, rosnaco), co 10 pieter boss.
+-- Rekord i punkt kontrolny (co 10 pieter) zapisuje sie na postaci - mozna zaczac od ostatniego punktu.
+-- Odroczone wywolania niosa tylko id gracza i numer biegu (token).
+local TOWER_BLESSED_STONE = 9615
+local tower = { token = 0, ids = {}, floor = 0 }
+
+local function towerClear()
+	for _, id in ipairs(tower.ids) do
+		local creature = Creature(id)
+		if creature then
+			creature:remove()
+		end
+	end
+	tower.ids = {}
+end
+
+local function inTower(player)
+	local pos = player:getPosition()
+	return pos.z == towerCenter.z and math.abs(pos.x - towerCenter.x) <= ARENA_RADIUS + 1 and math.abs(pos.y - towerCenter.y) <= ARENA_RADIUS + 1
+end
+
+local towerCheck
+
+local function towerNext(playerId, token)
+	if token ~= tower.token then
+		return
+	end
+	local player = Player(playerId)
+	if not player or not inTower(player) then
+		towerClear()
+		return
+	end
+	tower.floor = tower.floor + 1
+	local floor = tower.floor
+	local name = survivalMonsters[math.min(#survivalMonsters, 10 + floor * 4)]
+	local amount = math.min(8 + floor, 30)
+	tower.ids = {}
+	for _ = 1, amount do
+		local pos = Position(towerCenter.x + math.random(-ARENA_RADIUS + 1, ARENA_RADIUS - 1), towerCenter.y + math.random(-ARENA_RADIUS + 1, 2), towerCenter.z)
+		local monster = name and Game.createMonster(name, pos, true, true)
+		if monster then
+			tower.ids[#tower.ids + 1] = monster:getId()
+		end
+	end
+	local bossText = ""
+	if floor % 10 == 0 and #rushBosses > 0 then
+		local bossName = rushBosses[math.min(#rushBosses, math.floor(floor / 10))]
+		local boss = Game.createMonster(bossName, Position(towerCenter.x, towerCenter.y - 4, towerCenter.z), true, true)
+		if boss then
+			tower.ids[#tower.ids + 1] = boss:getId()
+			bossText = " + boss " .. bossName
+		end
+	end
+	player:sendTextMessage(MESSAGE_EVENT_ADVANCE, string.format("Wieza, pietro %d: %d x %s%s.", floor, amount, name or "?", bossText))
+	addEvent(towerCheck, 1000, playerId, token)
+end
+
+towerCheck = function(playerId, token)
+	if token ~= tower.token then
+		return
+	end
+	local player = Player(playerId)
+	if not player or not inTower(player) then
+		towerClear()
+		return
+	end
+	for _, id in ipairs(tower.ids) do
+		if Creature(id) then
+			addEvent(towerCheck, 1000, playerId, token)
+			return
+		end
+	end
+	tower.ids = {}
+	local floor = tower.floor
+	local gold = floor * 20000
+	player:setBankBalance(player:getBankBalance() + gold)
+	local text = string.format("Pietro %d zaliczone: +%d gp na konto.", floor, gold)
+	if floor % 5 == 0 then
+		player:addTibiaCoins(floor)
+		text = text .. string.format(" +%d Tibia Coins.", floor)
+	end
+	if floor % 10 == 0 then
+		player:addItem(TOWER_BLESSED_STONE, 1)
+		text = text .. " +1 blessed upgrade stone. Punkt kontrolny zapisany."
+	end
+	local store = player:kv():scoped("ots-tower")
+	if floor > (tonumber(store:get("best")) or 0) then
+		store:set("best", floor)
+		text = text .. " Nowy rekord!"
+	end
+	player:sendTextMessage(MESSAGE_EVENT_ADVANCE, text)
+	addEvent(towerNext, 3000, playerId, token)
+end
+
+local function towerStart(player, fromFloor)
+	if inFight(player) then
+		return
+	end
+	towerClear()
+	tower.token = tower.token + 1
+	tower.floor = fromFloor
+	travel(player, { "Wieza", towerLanding.x, towerLanding.y, towerLanding.z })
+	if not inTower(player) then
+		return
+	end
+	player:sendTextMessage(MESSAGE_EVENT_ADVANCE, string.format("Wieza: pietro %d za chwile. Wyjscie teleportem konczy bieg.", fromFloor + 1))
+	addEvent(towerNext, 3000, player:getId(), tower.token)
+end
+
+local function towerEnter(player)
+	if inFight(player) then
+		return
+	end
+	local best = tonumber(player:kv():scoped("ots-tower"):get("best")) or 0
+	local checkpoint = best - best % 10
+	local window = ModalWindow({ title = "Wieza", message = string.format("Rekord: pietro %d. Punkt kontrolny: pietro %d.\nNagrody: zloto za kazde pietro, TC co 5, blessed upgrade stone co 10 (boss).                    ", best, checkpoint) })
+	window:addChoice("Start od pietra 1", function(target)
+		towerStart(target, 0)
+	end)
+	if checkpoint > 0 then
+		window:addChoice(string.format("Start od pietra %d (punkt kontrolny)", checkpoint + 1), function(target)
+			towerStart(target, checkpoint)
+		end)
+	end
+	window:addButton("Wybierz")
+	window:addButton("Zamknij", function() end)
+	window:setPriority(true)
+	window:setDefaultEnterButton(2)
+	window:setDefaultEscapeButton(1)
+	window:sendToPlayer(player)
+end
+
 -- Boss Rush: bossy z pul Losowego Bossa jeden po drugim, od najslabszego. Po kazdym zabitym
 -- nagroda rosnie (zloto na konto i Tibia Coins), a po chwili wchodzi nastepny.
 -- Odroczone wywolania niosa tylko id gracza i numer biegu (token).
@@ -2816,6 +2951,9 @@ openMain = function(player)
 	window:addChoice("Fale potworow", function(target)
 		survivalEnter(target)
 	end)
+	window:addChoice("Wieza (pietra, boss co 10)", function(target)
+		towerEnter(target)
+	end)
 	window:addChoice("Boss Rush (bossy jeden po drugim)", function(target)
 		rushEnter(target)
 	end)
@@ -2954,6 +3092,8 @@ function hubStep.onStepIn(creature, item, position, fromPosition)
 		survivalEnter(player)
 	elseif action.bossrush then
 		rushEnter(player)
+	elseif action.tower then
+		towerEnter(player)
 	elseif action.mounts and OtsMountHall then
 		OtsMountHall(player)
 	elseif action.outfits and OtsOutfitHall then
@@ -3000,6 +3140,8 @@ function hubLook.playerOnLook(player, inspectedThing, inspectedPosition, lookDis
 		text = "Fale potworow"
 	elseif action.bossrush then
 		text = "Boss Rush"
+	elseif action.tower then
+		text = "Wieza"
 	elseif action.mounts then
 		text = "Wierzchowce do oswojenia"
 	elseif action.outfits then

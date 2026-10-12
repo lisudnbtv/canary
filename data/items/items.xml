@@ -28094,9 +28094,9 @@
 		<attribute key="maxtextlen" value="64"/>
 		<attribute key="weight" value="1250"/>
 	</item>
-	<item id="9615" article="a" name="midnight shard">
+	<item id="9615" article="a" name="blessed upgrade stone" plural="blessed upgrade stones">
 		<attribute key="primarytype" value="quest items"/>
-		<attribute key="description" value="Lucius might be interested in those shards"/>
+		<attribute key="description" value="Uzyj na przedmiocie: ulepszenie o +1 zawsze sie udaje (takze bron i +6 do +10). Powstaje z 10 kamieni ulepszen (!polacz)."/>
 		<attribute key="weight" value="300"/>
 	</item>
 	<item id="9616" article="a" name="bejeweled ship's telescope">

@@ -8,6 +8,8 @@
 -- pozostale (pierscien, amulet...) -0.5% otrzymywanych obrazen na poziom.
 -- Kamienie sa w sklepie za TC i leca z bossow (reward boss), elit, fal i inwazji.
 local STONE_ID = 20139
+local BLESSED_STONE_ID = 9615 -- blessed upgrade stone: zawsze udane +1, powstaje z 10 zwyklych (!polacz)
+local STONES_PER_BLESSED = 10
 local MAX_LEVEL = 10
 local SUCCESS_CHANCE = { 100, 100, 100, 100, 100, 80, 70, 60, 50, 40 }
 local SUCCESS_CHANCE_WEAPON = { 60, 50, 40, 30, 25, 20, 15, 10, 7, 5 } -- kazda bron: czesciej pali kamien
@@ -50,7 +52,8 @@ function stone.onUse(player, item, fromPosition, target, toPosition, isHotkey)
 		return true
 	end
 	local itemType = ItemType(target:getId())
-	if target:getId() == STONE_ID or itemType:isStackable() or itemType:isContainer() then
+	local blessed = item:getId() == BLESSED_STONE_ID
+	if target:getId() == STONE_ID or target:getId() == BLESSED_STONE_ID or itemType:isStackable() or itemType:isContainer() then
 		player:sendCancelMessage("Tego przedmiotu nie da sie ulepszyc.")
 		return true
 	end
@@ -65,7 +68,7 @@ function stone.onUse(player, item, fromPosition, target, toPosition, isHotkey)
 
 	local nextLevel = level + 1
 	item:remove(1)
-	if math.random(100) <= chances[nextLevel] then
+	if blessed or math.random(100) <= chances[nextLevel] then
 		applyLevel(target, nextLevel)
 		player:getPosition():sendMagicEffect(CONST_ME_FIREWORK_YELLOW)
 		player:sendTextMessage(MESSAGE_EVENT_ADVANCE, string.format("Ulepszenie udane: %s +%d.", itemType:getName(), nextLevel))
@@ -76,7 +79,7 @@ function stone.onUse(player, item, fromPosition, target, toPosition, isHotkey)
 	return true
 end
 
-stone:id(STONE_ID)
+stone:id(STONE_ID, BLESSED_STONE_ID)
 stone:register()
 
 -- Przedmioty bez statystyk: premia liczona przy kazdym ciosie z zalozonych rzeczy.
@@ -142,3 +145,26 @@ function bossStone.playerOnKill(player, monster)
 end
 
 bossStone:register()
+
+-- !polacz: kazde 10 zwyklych kamieni ulepszen zamienia w 1 blessed upgrade stone.
+local combine = TalkAction("!polacz")
+
+function combine.onSay(player, words, param)
+	local have = player:getItemCount(STONE_ID)
+	local make = math.floor(have / STONES_PER_BLESSED)
+	if make == 0 then
+		player:sendCancelMessage(string.format("Potrzebujesz %d kamieni ulepszen (masz %d).", STONES_PER_BLESSED, have))
+		return true
+	end
+	if not player:removeItem(STONE_ID, make * STONES_PER_BLESSED) then
+		player:sendCancelMessage("Nie udalo sie zabrac kamieni.")
+		return true
+	end
+	player:addItem(BLESSED_STONE_ID, make)
+	player:getPosition():sendMagicEffect(CONST_ME_MAGIC_GREEN)
+	player:sendTextMessage(MESSAGE_EVENT_ADVANCE, string.format("Polaczono %d kamieni w %d blessed upgrade stone. Ulepszenie nim zawsze sie udaje.", make * STONES_PER_BLESSED, make))
+	return true
+end
+
+combine:groupType("normal")
+combine:register()
