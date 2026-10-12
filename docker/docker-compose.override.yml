@@ -46,4 +46,5 @@ services:
       - '../data/modules/scripts/gamestore/catalog/extras_usefull_things.lua:/canary/data/modules/scripts/gamestore/catalog/extras_usefull_things.lua:ro'
       - '../data/libs/gamestore/senders.lua:/canary/data/libs/gamestore/senders.lua:ro'
       - '../data/scripts/talkactions/player/buy_house.lua:/canary/data/scripts/talkactions/player/buy_house.lua:ro'
+      - '../data/scripts/globalevents/save_interval.lua:/canary/data/scripts/globalevents/save_interval.lua:ro'
       - '../data/items/items.xml:/canary/data/items/items.xml:ro'

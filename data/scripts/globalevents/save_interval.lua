@@ -7,7 +7,8 @@ local function serverSave(interval)
 	end
 
 	saveServer()
-	local message = string.format(SAVE_INTERVAL_CONFIG_TIME > 1 and "Server save complete. Next save in %d %ss!" or "Server save complete. Next save in %d %s!", SAVE_INTERVAL_CONFIG_TIME, SAVE_INTERVAL_TYPE)
+	-- OTS: komunikaty po polsku
+	local message = string.format("Zapis serwera gotowy, przedmioty z ziemi (poza domami) sprzatniete. Nastepny za %d min.", math.floor(interval / 60000))
 	Game.broadcastMessage(message, MESSAGE_GAME_HIGHLIGHT)
 	logger.info(message)
 	Webhook.sendMessage("Server save", message, WEBHOOK_COLOR_WARNING)
@@ -31,7 +32,7 @@ function save.onTime(interval)
 	end
 
 	local warningSeconds = math.floor(warningDuration / 1000)
-	local message = "The server will save all accounts within " .. warningSeconds .. " seconds. You might lag or freeze for 5 seconds, please find a safe place."
+	local message = "Za " .. warningSeconds .. " s zapis serwera i sprzatanie przedmiotow lezacych na ziemi (poza domami)."
 	Game.broadcastMessage(message, MESSAGE_GAME_HIGHLIGHT)
 	logger.info(message)
 	isSaveScheduled = true

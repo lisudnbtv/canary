@@ -51,3 +51,11 @@ housePriceEachSQM = 1
 houseRentPeriod = "never"
 houseBuyLevel = 0
 houseLoseAfterInactivity = 0
+
+-- Zapis serwera co 30 min, przy okazji sprzatanie przedmiotow wyrzuconych na ziemie
+-- (takze w PZ, np. w depo i swiatyni; domy sa pomijane, przedmioty z mapy zostaja)
+toggleSaveInterval = true
+saveIntervalType = "minute"
+saveIntervalTime = 30
+toggleSaveIntervalCleanMap = true
+cleanProtectionZones = true
