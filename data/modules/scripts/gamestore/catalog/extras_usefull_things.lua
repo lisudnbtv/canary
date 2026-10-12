@@ -130,7 +130,7 @@ return {
 			itemtype = 9212,
 			count = 1,
 			movable = true,
-			description = "<i>All boss loot from your reward chest goes straight into your loot pouch.</i>\n\n{character}\n{storeinbox}\n{useicon} use it once to unlock it permanently\n{info} works after every boss kill, on login and with !reward",
+			description = "<i>All boss loot from your reward chest goes straight into your loot pouch.</i>\n\n{character}\n{storeinbox}\n{useicon} use it once to unlock it permanently\n{info} works after every boss kill, on login and with !bossloot",
 			type = GameStore.OfferTypes.OFFER_TYPE_ITEM,
 		},
 		{

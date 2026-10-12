@@ -1,6 +1,6 @@
 -- OTS: Boss Loot Collector - przedmiot ze sklepu. Po uzyciu na stale wlacza postaci zbieranie
 -- lupu z bossow: wszystko, co trafia do skrzyni nagrod (reward chest), samo przenosi sie
--- do loot poucha. Dziala po zabiciu bossa, przy logowaniu i na komende !reward.
+-- do loot poucha. Dziala po zabiciu bossa, przy logowaniu i na komende !bossloot.
 -- Odroczone wywolanie niesie tylko id gracza i od nowa go wyszukuje.
 local COLLECTOR_ID = 9212 -- golden trophy of excellence
 local KV_SCOPE = "ots-reward-collector"
@@ -82,7 +82,7 @@ function collector.onUse(player, item, fromPosition, target, toPosition, isHotke
 	player:kv():scoped(KV_SCOPE):set("on", true)
 	item:remove(1)
 	player:getPosition():sendMagicEffect(CONST_ME_FIREWORK_YELLOW)
-	player:sendTextMessage(MESSAGE_EVENT_ADVANCE, "Wlaczone na stale: lup z bossow bedzie sam trafial do loot poucha. Recznie: !reward.")
+	player:sendTextMessage(MESSAGE_EVENT_ADVANCE, "Wlaczone na stale: lup z bossow bedzie sam trafial do loot poucha. Recznie: !bossloot.")
 	collect(player, true)
 	return true
 end
@@ -115,7 +115,7 @@ end
 
 login:register()
 
-local command = TalkAction("!reward")
+local command = TalkAction("!bossloot")
 
 function command.onSay(player, words, param)
 	if not unlocked(player) then
