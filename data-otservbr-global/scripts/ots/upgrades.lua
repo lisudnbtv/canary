@@ -8,7 +8,7 @@
 -- pozostale (pierscien, amulet...) -0.5% otrzymywanych obrazen na poziom.
 -- Kamienie sa w sklepie za TC i leca z bossow (reward boss), elit, fal i inwazji.
 local STONE_ID = 20139
-local BLESSED_STONE_ID = 9615 -- blessed upgrade stone: zawsze udane +1, powstaje z 10 zwyklych (!polacz)
+local BLESSED_STONE_ID = 20138 -- blessed upgrade stone: zawsze udane +1, powstaje z 10 zwyklych (!polacz)
 local STONES_PER_BLESSED = 10
 local MAX_LEVEL = 10
 local SUCCESS_CHANCE = { 100, 100, 100, 100, 100, 80, 70, 60, 50, 40 }
@@ -168,3 +168,19 @@ end
 
 combine:groupType("normal")
 combine:register()
+
+-- Wymiana: pierwsza wersja blessed stone miala wyglad midnight shard (9615), ktorego nie dalo sie uzyc na przedmiocie.
+-- Przy logowaniu takie sztuki zamieniaja sie w nowy blessed upgrade stone.
+local OLD_BLESSED_ID = 9615
+local swap = CreatureEvent("OtsBlessedStoneSwap")
+
+function swap.onLogin(player)
+	local count = player:getItemCount(OLD_BLESSED_ID)
+	if count > 0 and player:removeItem(OLD_BLESSED_ID, count) then
+		player:addItem(BLESSED_STONE_ID, count)
+		player:sendTextMessage(MESSAGE_STATUS, string.format("Wymieniono %d blessed upgrade stone na nowa wersje.", count))
+	end
+	return true
+end
+
+swap:register()

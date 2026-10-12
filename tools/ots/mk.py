@@ -896,7 +896,7 @@ end
 -- Wieza: kolejne pietra coraz silniejszych potworow (z listy expowisk, rosnaco), co 10 pieter boss.
 -- Rekord i punkt kontrolny (co 10 pieter) zapisuje sie na postaci - mozna zaczac od ostatniego punktu.
 -- Odroczone wywolania niosa tylko id gracza i numer biegu (token).
-local TOWER_BLESSED_STONE = 9615
+local TOWER_BLESSED_STONE = 20138
 local tower = { token = 0, ids = {}, floor = 0 }
 
 local function towerClear()
