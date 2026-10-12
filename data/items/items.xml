@@ -48377,7 +48377,13 @@ Awarded by TibiaMisterios.com.br"/>
 		<attribute key="primarytype" value="amulets and necklaces"/>
 		<attribute key="description" value="+25% odpornosci na wszystkie obrazenia. 3 sloty na imbu."/>
 		<attribute key="showattributes" value="1"/>
-		<attribute key="absorbpercentall" value="25"/>
+		<attribute key="absorbpercentphysical" value="25"/>
+		<attribute key="absorbpercentfire" value="25"/>
+		<attribute key="absorbpercentenergy" value="25"/>
+		<attribute key="absorbpercentearth" value="25"/>
+		<attribute key="absorbpercentice" value="25"/>
+		<attribute key="absorbpercentholy" value="25"/>
+		<attribute key="absorbpercentdeath" value="25"/>
 		<attribute key="weight" value="300"/>
 		<attribute key="imbuementslot" value="3">
 			<attribute key="life leech" value="3"/>
@@ -68395,7 +68401,13 @@ hands of its owner. Granted by TibiaRoyal.com"/>
 		<attribute key="primarytype" value="rings"/>
 		<attribute key="description" value="+25% odpornosci na wszystkie obrazenia. 3 sloty na imbu."/>
 		<attribute key="showattributes" value="1"/>
-		<attribute key="absorbpercentall" value="25"/>
+		<attribute key="absorbpercentphysical" value="25"/>
+		<attribute key="absorbpercentfire" value="25"/>
+		<attribute key="absorbpercentenergy" value="25"/>
+		<attribute key="absorbpercentearth" value="25"/>
+		<attribute key="absorbpercentice" value="25"/>
+		<attribute key="absorbpercentholy" value="25"/>
+		<attribute key="absorbpercentdeath" value="25"/>
 		<attribute key="weight" value="300"/>
 		<attribute key="imbuementslot" value="3">
 			<attribute key="life leech" value="3"/>
