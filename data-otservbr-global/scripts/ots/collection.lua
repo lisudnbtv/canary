@@ -11,6 +11,8 @@ local BONUS_PER_STEP = 2
 local SUBID = 64993
 local NPC_NAME = "Kronikarz"
 local NPC_HOME = Position(32369, 32239, 7)
+local pendingGreeting = {} -- id gracza -> czeka na pierwsze pokazanie w tym logowaniu
+local kronikarzId = nil
 
 local function store(player)
 	return player:kv():scoped("ots-collection")
@@ -124,6 +126,7 @@ local login = CreatureEvent("OtsCollectionLogin")
 
 function login.onLogin(player)
 	applyBonus(player, totalSteps(progress(player)))
+	pendingGreeting[player:getId()] = true
 	return true
 end
 
@@ -140,9 +143,11 @@ command:groupType("normal")
 command:register()
 
 local npcType = Game.createNpcType(NPC_NAME)
+-- Okno pokazuje sie samo raz na logowanie, gdy podejdziesz do Kronikarza; potem tylko na "hi" albo !kolekcja.
 npcType.onSay = function(npc, creature, type, message)
 	local player = creature and creature:getPlayer()
-	if player and player:getPosition():getDistance(npc:getPosition()) <= 4 then
+	local text = message and message:lower() or ""
+	if player and (text == "hi" or text == "hello" or text == "kolekcja") and player:getPosition():getDistance(npc:getPosition()) <= 4 then
 		show(player)
 	end
 end
@@ -177,9 +182,36 @@ function place.onStartup()
 	local npc = spot and Game.createNpc(NPC_NAME, spot, false, true)
 	if npc then
 		npc:setMasterPos(spot)
+		kronikarzId = npc:getId()
 	end
 	logger.info("[OTS kolekcja] Kronikarz w swiatyni: {}", npc and "tak" or "nie")
 	return true
 end
 
 place:register()
+
+local greet = GlobalEvent("OtsCollectionGreeting")
+
+function greet.onThink(interval)
+	local npc = kronikarzId and Creature(kronikarzId)
+	if not npc then
+		return true
+	end
+	local npcPosition = npc:getPosition()
+	for id in pairs(pendingGreeting) do
+		local player = Player(id)
+		if not player then
+			pendingGreeting[id] = nil
+		else
+			local pos = player:getPosition()
+			if pos.z == npcPosition.z and pos:getDistance(npcPosition) <= 4 then
+				pendingGreeting[id] = nil
+				show(player)
+			end
+		end
+	end
+	return true
+end
+
+greet:interval(1000)
+greet:register()
