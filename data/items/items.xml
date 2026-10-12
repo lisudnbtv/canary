@@ -36563,9 +36563,34 @@
 		<attribute key="primarytype" value="light sources"/>
 		<attribute key="weight" value="1000"/>
 	</item>
-	<item id="16095" article="a" name="lit crystal lamp">
+	<item id="16095" article="an" name="imbued crystal lamp">
 		<attribute key="primarytype" value="light sources"/>
+		<attribute key="description" value="Na slot amunicji (pochodnia). 3 sloty na dowolne imbu."/>
 		<attribute key="weight" value="1000"/>
+		<attribute key="imbuementslot" value="3">
+			<attribute key="life leech" value="3"/>
+			<attribute key="mana leech" value="3"/>
+			<attribute key="critical hit" value="3"/>
+			<attribute key="skillboost magic level" value="3"/>
+			<attribute key="skillboost distance" value="3"/>
+			<attribute key="skillboost sword" value="3"/>
+			<attribute key="skillboost axe" value="3"/>
+			<attribute key="skillboost club" value="3"/>
+			<attribute key="skillboost fist" value="3"/>
+			<attribute key="skillboost shielding" value="3"/>
+			<attribute key="elemental protection fire" value="3"/>
+			<attribute key="elemental protection ice" value="3"/>
+			<attribute key="elemental protection energy" value="3"/>
+			<attribute key="elemental protection earth" value="3"/>
+			<attribute key="elemental protection death" value="3"/>
+			<attribute key="elemental protection holy" value="3"/>
+			<attribute key="increase speed" value="3"/>
+			<attribute key="increase capacity" value="3"/>
+			<attribute key="paralysis deflection" value="3"/>
+		</attribute>
+		<attribute key="script" value="moveevent">
+			<attribute key="slot" value="ammo"/>
+		</attribute>
 	</item>
 	<item id="16096" article="a" name="wand of defiance">
 		<attribute key="description" value="It reveals devastating energy arcs"/>

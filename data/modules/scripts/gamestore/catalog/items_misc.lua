@@ -17,5 +17,16 @@ return {
 			description = "<i>A backpack with 100 slots.</i>\n\n{character}\n{storeinbox}\n{info} worn in the backpack slot: life leech 5%, mana leech 3%, critical 5% (+25%), +10% speed",
 			type = GameStore.OfferTypes.OFFER_TYPE_ITEM,
 		},
+		{
+			-- OTS: lampa na slot amunicji z 3 slotami na imbu (items.xml: 16095)
+			icons = { "Gold_Converter.png" },
+			name = "Imbued Crystal Lamp",
+			price = 2000,
+			itemtype = 16095,
+			count = 1,
+			movable = true,
+			description = "<i>A lamp for the ammunition slot with 3 imbuement slots.</i>\n\n{character}\n{storeinbox}\n{info} accepts any imbuement: leech, critical, skills, protections, speed, capacity",
+			type = GameStore.OfferTypes.OFFER_TYPE_ITEM,
+		},
 	},
 }
