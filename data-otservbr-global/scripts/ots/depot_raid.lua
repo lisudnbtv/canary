@@ -3,7 +3,7 @@
 -- Uzycie rusza 4 fale wokol skrzyni: 1) 10 potworow z piekla, 2) 20 takich samych, 3) potwory z Soul War,
 -- 4) mocny boss. Po wybiciu wszystkiego uzycie skrzyni daje nagrode: crystal coiny, losowy mocny przedmiot
 -- i kamienie ulepszen. Potem skrzynia znika i zaczyna sie odliczanie do nastepnej.
--- Miejsce skrzyni: domyslnie przy depo; "!skrzynia tutaj" zapisuje pole, na ktorym stoisz.
+-- Miejsce skrzyni: zapisane raz (dawna komenda "!skrzynia tutaj"), inaczej domyslne przy depo. "!skrzynia" pokazuje stan.
 -- Odroczone wywolania niosa tylko numer biegu (token) i identyfikatory potworow.
 local CHEST_ID = 2472 -- skrzynia jak w questach (nie da sie jej podniesc)
 local CHEST_ACTION_ID = 64988
@@ -181,26 +181,6 @@ chest:register()
 local command = TalkAction("!skrzynia")
 
 function command.onSay(player, words, param)
-	if param:lower():find("tutaj") then
-		local pos = player:getPosition()
-		local tile = Tile(pos)
-		if not tile or tile:hasFlag(TILESTATE_HOUSE) then
-			player:sendCancelMessage("Tu nie mozna postawic skrzyni.")
-			return true
-		end
-		if state.phase == "fighting" then
-			player:sendCancelMessage("Najpierw skoncz trwajace fale.")
-			return true
-		end
-		local hadChest = findChest() ~= nil
-		removeChest()
-		kv.scoped("ots-depot-raid"):set("pos", { x = pos.x, y = pos.y, z = pos.z })
-		if hadChest then
-			placeChest()
-		end
-		player:sendTextMessage(MESSAGE_EVENT_ADVANCE, string.format("Skrzynia najazdu bedzie stawiana tutaj: %d, %d, %d.", pos.x, pos.y, pos.z))
-		return true
-	end
 	local text
 	if state.phase == "waiting" then
 		text = string.format("Nastepna Skrzynia najazdu za okolo %d min.", math.ceil(math.max(0, state.nextAt - os.time()) / 60))
