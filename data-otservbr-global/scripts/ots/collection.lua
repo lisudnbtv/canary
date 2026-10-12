@@ -91,11 +91,13 @@ local function show(player)
 		steps * BONUS_PER_STEP
 	)
 	local window = ModalWindow({ title = "Kolekcja", message = text })
-	-- Klient obsluguje Enter tylko w oknie z lista, dlatego jedna pozycja "OK".
-	window:addChoice("OK (Enter zamyka)", function() end)
+	-- Uklad jak w oknach !tp, gdzie Enter dziala: dwa przyciski, wartosci zamienione,
+	-- bo klient 15.x czyta je odwrotnie (Enter = przycisk 1 "OK", Esc = przycisk 2).
+	window:addChoice("OK", function() end)
+	window:addButton("OK", function() end)
 	window:addButton("Zamknij", function() end)
 	window:setPriority(true)
-	window:setDefaultEnterButton(1)
+	window:setDefaultEnterButton(2)
 	window:setDefaultEscapeButton(1)
 	window:sendToPlayer(player)
 end
