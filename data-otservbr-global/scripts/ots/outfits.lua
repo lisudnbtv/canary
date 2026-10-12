@@ -357,6 +357,7 @@ local function apply(player, lookType, addons)
 end
 
 -- Zmiana stroju: bonusy przeliczone na nowo.
+local lastLook = {} -- id gracza -> ostatnio zgloszony stroj
 local change = EventCallback("OtsOutfitBonusOnChange")
 
 function change.creatureOnChangeOutfit(creature, outfit)
@@ -365,9 +366,13 @@ function change.creatureOnChangeOutfit(creature, outfit)
 		return true
 	end
 
-	if apply(player, outfit.lookType, outfit.lookAddons or 0) then
-		player:sendTextMessage(MESSAGE_EVENT_ADVANCE, "Bonus stroju - " .. describe(outfit.lookType, outfit.lookAddons or 0))
+	-- Komunikat tylko przy zmianie samego stroju lub dodatkow (nie przy wsiadaniu na mounta),
+	-- krotki, na dole ekranu. Pelny opis bonusow: !outfit.
+	local look = outfit.lookType .. ":" .. (outfit.lookAddons or 0)
+	if apply(player, outfit.lookType, outfit.lookAddons or 0) and lastLook[player:getId()] ~= look then
+		player:sendTextMessage(MESSAGE_STATUS, "Bonus stroju aktywny (szczegoly: !outfit).")
 	end
+	lastLook[player:getId()] = look
 	return true
 end
 
@@ -379,6 +384,7 @@ local login = EventCallback("OtsOutfitBonusOnLogin")
 function login.playerOnLoginComplete(player)
 	local outfit = player:getOutfit()
 	apply(player, outfit.lookType, outfit.lookAddons or 0)
+	lastLook[player:getId()] = outfit.lookType .. ":" .. (outfit.lookAddons or 0)
 end
 
 login:register()
