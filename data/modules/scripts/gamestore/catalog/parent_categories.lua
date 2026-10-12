@@ -23,6 +23,13 @@ return {
 		rookgaard = true,
 		subclasses = { "Extra Services", "Useful Things" },
 	},
+	items = {
+		-- OTS: wlasne przedmioty serwera
+		icons = { "Category_Extras.png" },
+		name = "Przedmioty",
+		rookgaard = true,
+		subclasses = { "Royal Paladin", "Elite Knight", "Master Sorcerer", "Elder Druid", "Exalted Monk", "Rozne" },
+	},
 	tournament = {
 		icons = { "Category_Tournament.png" },
 		name = "Tournament",
