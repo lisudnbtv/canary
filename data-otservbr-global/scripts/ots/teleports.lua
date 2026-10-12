@@ -821,7 +821,7 @@ local bosses = {
 }
 
 local quests = {
-	{ "Pits of Inferno: soft boots, avenger, arcane staff, arbalest", func = "OtsPoiStart", done = { st = { { "9248" }, { "9249" }, { "9250" } } } },
+	{ "Pits of Inferno: soft boots, avenger, arcane staff, arbalest", func = "OtsPoiStart", done = { st = { { "Storage.Quest.U7_9.ThePitsOfInferno.ThroneAshfalor" }, { "9248" }, { "9249" }, { "9250" } } } },
 	{ "Barbarian Arena: bron do wyboru (3 poziomy, 10 walk)", func = "OtsArenaStart", done = { st = { { "Storage.Quest.U8_0.BarbarianArena.Arena", 4 } } } },
 	{ "In Service of Yalahar: yalahari armor / mask / leg piece / footwraps", func = "OtsYalaharStart", done = { st = { { "Storage.Quest.U8_4.InServiceOfYalahar.Questline", 54 } } } },
 	{ "Soul War: 6 bossow po kolei, nagroda: komplet Soul War dla Twojej profesji", func = "OtsSoulWarStart", done = { fn = { "OtsSoulWarDone" } } },
