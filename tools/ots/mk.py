@@ -58,7 +58,7 @@ QM=[dict(name='Pits of Inferno',items=[6529,6527,3341,5803]),
     dict(name='Barbarian Arena',items=[7434,7390,7429,7384,7389,7415]),
     dict(name='In Service of Yalahar',items=[8862,8864,8863,50289]),
     dict(name='Soul War',items=[34082,34088,34090,34091,34094,34099])]
-o.append('\t{ "Pits of Inferno: soft boots, avenger, arcane staff, arbalest", func = "OtsPoiStart" },')
+o.append('\t{ "Pits of Inferno: soft boots, avenger, arcane staff, arbalest", func = "OtsPoiStart", done = { st = { { "9248" }, { "9249" }, { "9250" } } } },')
 o.append('\t{ "Barbarian Arena: bron do wyboru (3 poziomy, 10 walk)", func = "OtsArenaStart", done = { st = { { "Storage.Quest.U8_0.BarbarianArena.Arena", 4 } } } },')
 o.append('\t{ "In Service of Yalahar: yalahari armor / mask / leg piece / footwraps", func = "OtsYalaharStart", done = { st = { { "Storage.Quest.U8_4.InServiceOfYalahar.Questline", 54 } } } },')
 o.append('\t{ "Soul War: komplet przedmiotow Soul War dla Twojej profesji", func = "OtsSoulWarStart" },')
@@ -1319,6 +1319,9 @@ end
 
 -- Czy quest jest juz zrobiony: skrzynie z nagroda zapisuja to w questKV (kv) albo w storage.
 local function storageByPath(path)
+	if tonumber(path) then
+		return tonumber(path)
+	end
 	local value = _G
 	for part in path:gmatch("[^%.]+") do
 		if type(value) ~= "table" then

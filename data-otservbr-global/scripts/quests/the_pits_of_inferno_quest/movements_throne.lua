@@ -157,7 +157,7 @@ function throne.onStepIn(creature, item, position, fromPosition)
 	player:kv():set(PROGRESS_KEY, 1)
 	player:teleportTo(rewardRoom)
 	rewardRoom:sendMagicEffect(CONST_ME_TELEPORT)
-	player:sendTextMessage(MESSAGE_EVENT_ADVANCE, "Pits of Inferno ukonczone. Jestes w pokoju nagrod (strefa PZ). Powrot: komenda !tp.")
+	player:sendTextMessage(MESSAGE_EVENT_ADVANCE, "Pits of Inferno ukonczone. Jestes w pokoju nagrod (strefa PZ). Powrot: teleport na srodku pokoju.")
 	return true
 end
 

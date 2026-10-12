@@ -821,7 +821,7 @@ local bosses = {
 }
 
 local quests = {
-	{ "Pits of Inferno: soft boots, avenger, arcane staff, arbalest", func = "OtsPoiStart" },
+	{ "Pits of Inferno: soft boots, avenger, arcane staff, arbalest", func = "OtsPoiStart", done = { st = { { "9248" }, { "9249" }, { "9250" } } } },
 	{ "Barbarian Arena: bron do wyboru (3 poziomy, 10 walk)", func = "OtsArenaStart", done = { st = { { "Storage.Quest.U8_0.BarbarianArena.Arena", 4 } } } },
 	{ "In Service of Yalahar: yalahari armor / mask / leg piece / footwraps", func = "OtsYalaharStart", done = { st = { { "Storage.Quest.U8_4.InServiceOfYalahar.Questline", 54 } } } },
 	{ "Soul War: komplet przedmiotow Soul War dla Twojej profesji", func = "OtsSoulWarStart" },
@@ -3794,6 +3794,9 @@ end
 
 -- Czy quest jest juz zrobiony: skrzynie z nagroda zapisuja to w questKV (kv) albo w storage.
 local function storageByPath(path)
+	if tonumber(path) then
+		return tonumber(path)
+	end
 	local value = _G
 	for part in path:gmatch("[^%.]+") do
 		if type(value) ~= "table" then
