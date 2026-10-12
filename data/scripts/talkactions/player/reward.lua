@@ -1,69 +1,59 @@
-local config = {
-	items = {
-		{ id = 35284, charges = 64400 },
-		{ id = 35279, charges = 64400 },
-		{ id = 35281, charges = 64400 },
-		{ id = 35283, charges = 64400 },
-		{ id = 35282, charges = 64400 },
-		{ id = 35280, charges = 64400 },
-		{ id = 44066, charges = 64400 },
-	},
-	storage = tonumber(Storage.PlayerWeaponReward), -- storage key, player can only win once
+-- OTS: zastepuje wbudowane !reward (wylaczone w configu, zajmowalo komende).
+-- OTS: !reward - jednorazowa nagroda na start dla kazdej postaci: lasting exercise weapons
+-- (po 14400 ladunkow) do trenowania na manekinie w depo. Bronie dla profesji + tarcza.
+-- Trafiaja do skrzynki sklepu (Store inbox), zeby nie obciazac plecaka.
+local KV_KEY = "ots-starter-reward"
+local CHARGES = 14400
+local SHIELD = 44067
+local BY_VOCATION = {
+	[1] = { 35290 }, -- sorcerer: wand
+	[2] = { 35289 }, -- druid: rod
+	[3] = { 35288 }, -- paladin: bow
+	[4] = { 35285, 35286, 35287 }, -- knight: sword, axe, club
+	[9] = { 50295 }, -- monk: wraps
 }
 
-local function sendExerciseRewardModal(player)
-	local window = ModalWindow({
-		title = "Exercise Reward",
-		message = "choose a item",
-	})
-	for _, it in pairs(config.items) do
-		local iType = ItemType(it.id)
-		if iType then
-			window:addChoice(iType:getName(), function(player, button, choice)
-				if button.name ~= "Select" then
-					return true
-				end
+local command = TalkAction("!reward")
 
-				local inbox = player:getStoreInbox()
-				local inboxItems = inbox:getItems()
-				if inbox and #inboxItems < inbox:getMaxCapacity() and player:getFreeCapacity() >= iType:getWeight() then
-					local item = inbox:addItem(it.id, it.charges)
-					if item then
-						item:setActionId(IMMOVABLE_ACTION_ID)
-						item:setAttribute(ITEM_ATTRIBUTE_STORE, systemTime())
-						item:setAttribute(ITEM_ATTRIBUTE_DESCRIPTION, string.format("You won this exercise weapon as a reward to be a %s player. Use it in a dummy!\nHave a nice game..", configManager.getString(configKeys.SERVER_NAME)))
-					else
-						player:sendTextMessage(MESSAGE_LOOK, "You need to have capacity and empty slots to receive.")
-						return
-					end
-					player:sendTextMessage(MESSAGE_LOOK, string.format("Congratulations, you received a %s with %i charges in your store inbox.", iType:getName(), it.charges))
-					player:setStorageValue(config.storage, 1)
-				else
-					player:sendTextMessage(MESSAGE_LOOK, "You need to have capacity and empty slots to receive.")
-				end
-			end)
+function command.onSay(player, words, param)
+	if player:kv():get(KV_KEY) then
+		player:sendCancelMessage("Nagrode na start ta postac juz odebrala.")
+		return true
+	end
+	local weapons = BY_VOCATION[player:getVocation():getBaseId()]
+	if not weapons then
+		player:sendCancelMessage("Najpierw wybierz profesje.")
+		return true
+	end
+	local inbox = player:getStoreInbox()
+	if not inbox then
+		player:sendCancelMessage("Nie udalo sie otworzyc skrzynki sklepu.")
+		return true
+	end
+	local ids = {}
+	for _, id in ipairs(weapons) do
+		ids[#ids + 1] = id
+	end
+	ids[#ids + 1] = SHIELD
+	local given = 0
+	for _, id in ipairs(ids) do
+		local item = Game.createItem(id, 1)
+		if item then
+			item:setAttribute(ITEM_ATTRIBUTE_CHARGES, CHARGES)
+			if inbox:addItemEx(item, INDEX_WHEREEVER, FLAG_NOLIMIT) == RETURNVALUE_NOERROR then
+				given = given + 1
+			end
 		end
 	end
-	window:addButton("Select")
-	window:addButton("Close")
-	window:setDefaultEnterButton(0)
-	window:setDefaultEscapeButton(1)
-	window:sendToPlayer(player)
-end
-
-local exerciseRewardModal = TalkAction("!reward")
-function exerciseRewardModal.onSay(player, words, param)
-	if not configManager.getBoolean(configKeys.TOGGLE_RECEIVE_REWARD) or player:getTown():getId() < TOWNS_LIST.AB_DENDRIEL then
+	if given == 0 then
+		player:sendCancelMessage("Nie udalo sie wydac nagrody - sprobuj ponownie.")
 		return true
 	end
-	if player:getStorageValue(config.storage) > 0 then
-		player:sendTextMessage(MESSAGE_LOOK, "You already received your exercise weapon reward!")
-		return true
-	end
-	sendExerciseRewardModal(player)
+	player:kv():set(KV_KEY, true)
+	player:getPosition():sendMagicEffect(CONST_ME_FIREWORK_YELLOW)
+	player:sendTextMessage(MESSAGE_EVENT_ADVANCE, string.format("Nagroda na start: %d x lasting exercise (po %d ladunkow) w skrzynce sklepu. Trenuj na manekinie w depo.", given, CHARGES))
 	return true
 end
 
-exerciseRewardModal:separator(" ")
-exerciseRewardModal:groupType("normal")
-exerciseRewardModal:register()
+command:groupType("normal")
+command:register()
