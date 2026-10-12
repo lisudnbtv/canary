@@ -49,6 +49,7 @@ services:
       - '../data/scripts/globalevents/save_interval.lua:/canary/data/scripts/globalevents/save_interval.lua:ro'
       - '../data/scripts/talkactions/player/reward.lua:/canary/data/scripts/talkactions/player/reward.lua:ro'
       - '../data/chatchannels/chatchannels.xml:/canary/data/chatchannels/chatchannels.xml:ro'
+      - '../data/items/appearances.dat:/canary/data/items/appearances.dat:ro'
       - '../data/chatchannels/scripts/ots_tasks.lua:/canary/data/chatchannels/scripts/ots_tasks.lua:ro'
       - '../data-otservbr-global/scripts/creaturescripts/others/login.lua:/canary/data-otservbr-global/scripts/creaturescripts/others/login.lua:ro'
       - '../data/items/items.xml:/canary/data/items/items.xml:ro'
