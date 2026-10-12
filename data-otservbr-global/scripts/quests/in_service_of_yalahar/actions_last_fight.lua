@@ -1,3 +1,17 @@
+-- OTS: ostatnia walka In Service of Yalahar pod jednego gracza.
+-- Zmiany wzgledem oryginalu:
+--  * Azerus nie znika po 5 minutach - sala czysci sie dopiero, gdy nikogo w niej nie ma
+--    (albo po 30 minutach), wiec da sie go spokojnie dobic w pojedynke;
+--  * przemiana Azerusa po 3 minutach zachowuje jego obecne zycie zamiast leczyc do pelna;
+--  * kazda walka ma swoj numer - zalegle fale i sprzatanie z poprzedniej walki nic nie robia.
+OtsYalaharFight = OtsYalaharFight or { id = 0, active = false }
+
+local CENTER = Position(32783, 31166, 10)
+local RANGE = 10
+local CHECK_START = 5 * 60 * 1000
+local CHECK_EVERY = 60 * 1000
+local MAX_CHECKS = 25
+
 local waves = {
 	Position(32779, 31166, 10),
 	Position(32787, 31166, 10),
@@ -7,78 +21,95 @@ local waves = {
 	Position(32784, 31170, 10),
 }
 
-local creatureNames = {
-	[1] = "rift worm",
-	[2] = "rift scythe",
-	[3] = "rift brood",
-	[4] = "war golem",
-}
+local creatureNames = { "rift worm", "rift scythe", "rift brood", "war golem" }
 
 local effectPositions = {
 	Position(32779, 31161, 10),
 	Position(32787, 31171, 10),
 }
 
-local function doClearAreaAzerus()
-	if Game.getStorageValue(Storage.Quest.U8_4.InServiceOfYalahar.LastFight) == 1 then
-		local spectators, spectator = Game.getSpectators(Position(32783, 31166, 10), false, false, 10, 10, 10, 10)
-		for i = 1, #spectators do
-			spectator = spectators[i]
-			if spectator:isMonster() then
-				spectator:getPosition():sendMagicEffect(CONST_ME_POFF)
-				spectator:remove()
-			end
-		end
-		Game.setStorageValue(Storage.Quest.U8_4.InServiceOfYalahar.LastFight, 0)
-	end
-	return true
+local function current(fightId)
+	return OtsYalaharFight.active and OtsYalaharFight.id == fightId
 end
 
-local function doChangeAzerus()
-	local spectators, spectator = Game.getSpectators(Position(32783, 31166, 10), false, false, 10, 10, 10, 10)
+function OtsYalaharClearArena()
+	local spectators = Game.getSpectators(CENTER, false, false, RANGE, RANGE, RANGE, RANGE)
 	for i = 1, #spectators do
-		spectator = spectators[i]
-		if spectator:isMonster() and spectator:getName():lower() == "azerus" then
-			spectator:say("No! I am losing my energy!", TALKTYPE_MONSTER_SAY)
-			Game.createMonster("Azerus", spectator:getPosition(), false, true)
+		local spectator = spectators[i]
+		if spectator:isMonster() then
+			spectator:getPosition():sendMagicEffect(CONST_ME_POFF)
 			spectator:remove()
-			return true
 		end
 	end
-	return false
 end
 
-local function summonMonster(name, position)
+function OtsYalaharEndFight()
+	OtsYalaharFight.active = false
+	OtsYalaharFight.id = OtsYalaharFight.id + 1
+	Game.setStorageValue(Storage.Quest.U8_4.InServiceOfYalahar.LastFight, 0)
+end
+
+local function playersInArena()
+	return #Game.getSpectators(CENTER, false, true, RANGE, RANGE, RANGE, RANGE) > 0
+end
+
+local function checkArena(fightId, checksLeft)
+	if not current(fightId) then
+		return
+	end
+	if playersInArena() and checksLeft > 0 then
+		addEvent(checkArena, CHECK_EVERY, fightId, checksLeft - 1)
+		return
+	end
+	OtsYalaharClearArena()
+	OtsYalaharEndFight()
+end
+
+local function changeAzerus(fightId)
+	if not current(fightId) then
+		return
+	end
+	local spectators = Game.getSpectators(CENTER, false, false, RANGE, RANGE, RANGE, RANGE)
+	for i = 1, #spectators do
+		local spectator = spectators[i]
+		if spectator:isMonster() and spectator:getName():lower() == "azerus" then
+			local health = spectator:getHealth()
+			local position = spectator:getPosition()
+			spectator:say("No! I am losing my energy!", TALKTYPE_MONSTER_SAY)
+			spectator:remove()
+			local azerus = Game.createMonster("Azerus", position, false, true)
+			if azerus then
+				azerus:setHealth(math.max(1, health))
+			end
+			return
+		end
+	end
+end
+
+local function summonMonster(fightId, name, position)
+	if not current(fightId) then
+		return
+	end
 	Game.createMonster(name, position, false, true)
-	--Game.createMonster(name, position)
 	position:sendMagicEffect(CONST_ME_TELEPORT)
 end
 
 local inServiceYalaharLastFight = Action()
 function inServiceYalaharLastFight.onUse(player, item, fromPosition, target, toPosition, isHotkey)
-	if Game.getStorageValue(Storage.Quest.U8_4.InServiceOfYalahar.LastFight) == 1 then
+	if OtsYalaharFight.active or Game.getStorageValue(Storage.Quest.U8_4.InServiceOfYalahar.LastFight) == 1 then
 		player:say("You have to wait some time before this globe charges.", TALKTYPE_MONSTER_SAY)
 		return true
 	end
 
-	local amountOfPlayers = 1
-	local spectators = Game.getSpectators(Position(32783, 31166, 10), false, true, 10, 10, 10, 10)
-	if #spectators < amountOfPlayers then
-		for i = 1, #spectators do
-			spectators[i]:sendTextMessage(MESSAGE_EVENT_ADVANCE, "You need atleast " .. amountOfPlayers .. " players inside the quest room.")
-		end
-		return true
-	end
-
+	OtsYalaharFight.id = OtsYalaharFight.id + 1
+	OtsYalaharFight.active = true
+	local fightId = OtsYalaharFight.id
 	Game.setStorageValue(Storage.Quest.U8_4.InServiceOfYalahar.LastFight, 1)
-	addEvent(Game.createMonster, 18 * 1000, "Azerus2", Position(32783, 31167, 10), false, true)
-	--addEvent(Game.createMonster, 18 * 1000, "Azerus2", Position(32783, 31167, 10))
 
-	local azeruswavemonster
+	addEvent(summonMonster, 18 * 1000, fightId, "Azerus2", Position(32783, 31167, 10))
 	for i = 1, #creatureNames do
-		azeruswavemonster = creatureNames[i]
 		for k = 1, #waves do
-			addEvent(summonMonster, (i - 1) * 60 * 1000, azeruswavemonster, waves[k])
+			addEvent(summonMonster, (i - 1) * 60 * 1000, fightId, creatureNames[i], Position(waves[k].x, waves[k].y, waves[k].z))
 		end
 	end
 
@@ -86,8 +117,8 @@ function inServiceYalaharLastFight.onUse(player, item, fromPosition, target, toP
 		effectPositions[i]:sendMagicEffect(CONST_ME_HOLYAREA)
 	end
 
-	addEvent(doChangeAzerus, 3 * 60 * 1000)
-	addEvent(doClearAreaAzerus, 5 * 60 * 1000)
+	addEvent(changeAzerus, 3 * 60 * 1000, fightId)
+	addEvent(checkArena, CHECK_START, fightId, MAX_CHECKS)
 	return true
 end
 

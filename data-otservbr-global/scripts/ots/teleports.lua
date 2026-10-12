@@ -823,7 +823,7 @@ local bosses = {
 local quests = {
 	{ "Pits of Inferno: soft boots, avenger, arcane staff, arbalest", func = "OtsPoiStart" },
 	{ "Barbarian Arena: bron do wyboru (3 poziomy, 10 walk)", func = "OtsArenaStart" },
-	{ "In Service of Yalahar: yalahari armor / mask / leg piece / footwraps", func = "OtsYalaharStart" },
+	{ "In Service of Yalahar: yalahari armor / mask / leg piece / footwraps", func = "OtsYalaharStart", done = { st = { { "Storage.Quest.U8_4.InServiceOfYalahar.Questline", 54 } } } },
 	{ "Soul War: komplet przedmiotow Soul War dla Twojej profesji", func = "OtsSoulWarStart" },
 	{ "Demon Helmet: steel boots, demon helmet, demon shield", 33324, 31575, 15, done = { st = { { "Storage.Quest.U6_4.DemonHelmet.Rewards.DemonHelmet" }, { "Storage.Quest.U6_4.DemonHelmet.Rewards.DemonShield" }, { "Storage.Quest.U6_4.DemonHelmet.Rewards.SteelBoots" } } }, hint = "Pokonaj potwory w sali, pociagnij dzwignie po wschodniej stronie. Skrzynie sa na zachodzie, za kamieniem (pole PZ)." },
 	{ "The Annihilator: demon armor, magic sword, stonecutter axe", 33224, 31671, 13, plain = true, done = { st = { { "Storage.Quest.U7_24.TheAnnihilator.Reward" } } }, hint = "Stan na jednym z czterech pol przy dzwigni i pociagnij ja. Wymagany poziom 100. Skrzynie sa na wschod od sali walki (pola PZ)." },
