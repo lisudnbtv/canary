@@ -167,3 +167,6 @@ end
 
 oak:id(914, 915, 916, 917)
 oak:register()
+
+-- Wejscie sciezka (pole za martwym drzewem): to samo co klikniecie drzewa, bez taska na demony.
+OtsDemonOakEnter = enter
