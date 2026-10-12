@@ -95,7 +95,7 @@ for nm,rw,chest,mons,extra in AQ:
 # (lancuch teleportow jest w podmienionym movements_teleport_main.lua)
 INQ_WARDS=[[33158,31728,11],[33124,31692,11],[33197,31767,11],[33232,31733,11],[33197,31703,11],[33104,31734,11]]
 QM.append(dict(name='The Inquisition',items=[8062,8090,8053,8060,8023,8096,8100,8102,8026]))
-o.append('\t{ "The Inquisition: 6 bossow pod rzad, jedna z 9 nagrod do wyboru", %d, %d, %d, hint = "Zabij bossa i wejdz w teleport w jego sali - prowadzi do nastepnego. Kolejnosc: Ushuriel, Zugurosh, Madareth, Latrivan i Golgordan, Annihilon, Hellgorak. Po kazdym masz 10 minut na przejscie." },'%tuple(INQ_WARDS[0]))
+o.append('\t{ "The Inquisition: 6 bossow pod rzad, jedna z 9 nagrod do wyboru", %d, %d, %d, hint = "Zabij bossa i wejdz w teleport w jego sali - prowadzi do nastepnego. Kolejnosc: Ushuriel, Zugurosh, Madareth, Latrivan i Golgordan, Annihilon, Hellgorak. Po kazdym masz 10 minut na przejscie.", done = { st = { { "Storage.Quest.U8_2.TheInquisitionQuest.Reward" } } } },'%tuple(INQ_WARDS[0]))
 # Demon Oak w wersji uproszczonej (skrypt scripts/ots/demon_oak.lua)
 QM.append(dict(name='The Demon Oak',items=[3389,8077,14768,14769]))
 o.append('\t{ "The Demon Oak: demon legs / rainbow shield / thorn spitter / spellbook of ancient arcana (jedna do wyboru)", func = "OtsDemonOakStart", done = { st = { { "Storage.Quest.U8_2.TheDemonOak.Done", 2 } } } },')
