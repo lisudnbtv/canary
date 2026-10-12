@@ -40,6 +40,7 @@ def _done(p,r):
     if kv: parts.append('kv = { %s }'%', '.join(q(k) for k in kv))
     if st: parts.append('st = { %s }'%', '.join('{ %s }'%q(s) for s in st))
     return 'done = { %s }, '%', '.join(parts)
+SHORTCUT_QUESTS={'Deeper Fibula'}  # questy z teleportem prosto pod skrzynie
 o.append('}\n\nlocal quests = {')
 import gear
 NICE={'Behemothquest':'Behemoth Quest','Noblearmor':'Noble Armor','Devilhemet':'Devil Helmet','Deeperfibula':'Deeper Fibula','Orcfortress':'Orc Fortress','Vampireshield':'Vampire Shield','Blackknight':'Black Knight','Circleroom':'Circle Room','Crusaderhelmet':'Crusader Helmet'}
@@ -113,6 +114,8 @@ for x in Q:
     lab='%s: %s'%(x['name'],rw)
     QM.append(dict(name=x['name'],items=[ITEMID[n] for n in x['rewards'] if n in ITEMID]))
     hint='Skrzynia z nagroda: ok. %d krokow, kierunek %s. Przy skrzyni jest strefa PZ.'%(x['dist'],direction(x['start'],x['chest']))
+    if x['name'] in SHORTCUT_QUESTS:
+        x['start']=x['chest']; hint='Skrot: teleport prosto pod skrzynie z nagroda (pole PZ).'
     _bx=(min(x['start'][0],x['chest'][0])-8,min(x['start'][1],x['chest'][1])-8,max(x['start'][0],x['chest'][0])+8,max(x['start'][1],x['chest'][1])+8,x['start'][2])
     o.append('\t{ %s, %d, %d, %d, %shint = %s, unlock = { %d, %d, %d, %d, %d } },'%(q(lab),*x['start'],_done(x['chest'],14),q(hint),*_bx))
 o.append('}\n')
