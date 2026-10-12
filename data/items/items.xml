@@ -9017,8 +9017,10 @@
 		<attribute key="description" value="(This item has 2 charges left)"/>
 		<attribute key="weight" value="1500"/>
 	</item>
-	<item id="3253" article="a" name="backpack of holding">
-		<attribute key="containersize" value="24"/>
+	<item id="3253" article="an" name="imbued backpack">
+		<attribute key="primarytype" value="containers"/>
+		<attribute key="description" value="100 slotow. Zalozony daje: life leech 5%, mana leech 3%, critical 5% (+25%), +10% szybkosci. Ma tez 3 sloty na zwykle imbu."/>
+		<attribute key="containersize" value="100"/>
 		<attribute key="weight" value="1500"/>
 		<attribute key="imbuementslot" value="3">
 			<attribute key="increase capacity" value="3"/>

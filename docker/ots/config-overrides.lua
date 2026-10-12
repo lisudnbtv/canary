@@ -59,3 +59,6 @@ saveIntervalType = "minute"
 saveIntervalTime = 30
 toggleSaveIntervalCleanMap = true
 cleanProtectionZones = true
+
+-- Trening na manekinie: ciosy dwa razy czesciej niz zwykly (szybki) atak
+rateExerciseTrainingSpeed = rateAttackSpeed * 2
