@@ -1,7 +1,7 @@
 -- OTS: "Skrzynia najazdu" przy depo w Thais.
 -- Co 30 min (liczone od odebrania nagrody) pojawia sie skrzynia i czeka, az ktos jej uzyje - nie znika sama.
--- Uzycie rusza 4 fale wokol skrzyni: 1) 10 potworow z piekla, 2) 20 takich samych, 3) potwory z Soul War,
--- 4) mocny boss. Po wybiciu wszystkiego uzycie skrzyni daje nagrode: crystal coiny, losowy mocny przedmiot
+-- Uzycie rusza 4 fale wokol skrzyni: 1) 30 potworow z piekla, 2) 60 takich samych, 3) 45 potworow z Soul War,
+-- 4) mocny boss (od Ghazbarana w gore). Po wybiciu wszystkiego uzycie skrzyni daje nagrode: crystal coiny, losowy mocny przedmiot
 -- i kamienie ulepszen. Potem skrzynia znika i zaczyna sie odliczanie do nastepnej.
 -- Miejsce skrzyni: zapisane raz (dawna komenda "!skrzynia tutaj"), inaczej domyslne przy depo. "!skrzynia" pokazuje stan.
 -- Odroczone wywolania niosa tylko numer biegu (token) i identyfikatory potworow.
@@ -16,11 +16,11 @@ local REWARD_STONES = 3
 
 local HELL = { "Demon", "Juggernaut", "Hellhound", "Plaguesmith" }
 local SOUL_WAR = { "Hazardous Phantom", "Infernal Phantom", "Infernal Demon", "Rotten Golem", "Branchy Crawler", "Mould Phantom", "Courage Leech", "Bony Sea Devil", "Many Faces", "Cloak of Terror", "Vibrant Phantom", "Turbulent Elemental", "Capricious Phantom" }
-local BOSSES = { "Morgaroth", "Ghazbaran", "Ferumbras", "Lisa", "Drume", "Bullwark", "The Pale Count", "The Armored Voidborn" }
+local BOSSES = { "Ghazbaran", "Drume", "Ferumbras", "Urmahlullu the Weakened", "Omrafir", "The Rootkraken", "The Monster", "The Abomination", "Ancient Spawn of Morgathla", "Morshabaal" }
 local WAVES = {
-	{ label = "Fala 1/4: piekielne potwory", pool = HELL, count = 10 },
-	{ label = "Fala 2/4: wiecej piekielnych potworow", pool = HELL, count = 20 },
-	{ label = "Fala 3/4: potwory z Soul War", pool = SOUL_WAR, count = 15 },
+	{ label = "Fala 1/4: piekielne potwory", pool = HELL, count = 30 },
+	{ label = "Fala 2/4: wiecej piekielnych potworow", pool = HELL, count = 60 },
+	{ label = "Fala 3/4: potwory z Soul War", pool = SOUL_WAR, count = 45 },
 	{ label = "Fala 4/4: boss", pool = BOSSES, count = 1 },
 }
 local REWARD_ITEMS = {
@@ -104,7 +104,7 @@ local function spawnWave(index)
 	local wave = WAVES[index]
 	local center = chestPosition()
 	state.ids = {}
-	local free = reachableSpots(center, 5)
+	local free = reachableSpots(center, 9)
 	for _ = 1, wave.count do
 		if #free == 0 then
 			break
