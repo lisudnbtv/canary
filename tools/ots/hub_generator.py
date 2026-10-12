@@ -70,13 +70,7 @@ board(X0 + lobby_w // 2 - 12, Y0 + 3, 'Fale\nCoraz mocniejsze fale potworow, nag
 task_npc = [X0 + lobby_w // 2, Y0 - 2, Z]
 floor(task_npc[0], task_npc[1])
 board(task_npc[0], Y0 - 3, 'Taski\nPowiedz hi albo wpisz !task')
-# Trenerzy: cztery exercise dummy na wschodnim koncu lobby (stoi sie w PZ, tuz obok)
-EXERCISE_DUMMY = 28558
-for y in range(Y0 - 2, Y0 + 2):
-    floor(X0 + lobby_w + 1, y)
-    floor(X0 + lobby_w + 2, y)
-    tiles[(X0 + lobby_w + 2, y, Z)]['items'].append((EXERCISE_DUMMY, 0, None))
-board(X0 + lobby_w + 1, Y0 - 3, 'Trening\nUzyj exercise weapon na manekinie')
+# Trener (exercise dummy) stoi w depo w Thais - stawia go skrypt thais_extras.lua
 
 # Boss Rush: pad po polnocnej stronie lobby, przy zachodnim koncu
 pad(X0, Y0 - 2, dict(kind='bossrush'))

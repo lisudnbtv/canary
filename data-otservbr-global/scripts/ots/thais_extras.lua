@@ -3,6 +3,9 @@
 local SHORTCUT_ACTION_ID = 64996
 local IMBUING_SHRINE = 25061
 local MAGIC_FORCEFIELD = 1949
+local EXERCISE_DUMMY = 28558
+local MAILBOX = 3501
+local OLD_MAILBOX_POSITION = Position(32350, 32222, 7)
 
 local shortcuts = {
 	{ from = Position(32379, 32243, 7), to = Position(32345, 32221, 7), label = "Depo" },
@@ -12,6 +15,8 @@ local shortcuts = {
 local objects = {
 	{ id = IMBUING_SHRINE, pos = Position(32358, 32239, 7) },
 	{ id = ITEM_REWARD_CHEST, pos = Position(32378, 32239, 7) },
+	{ id = EXERCISE_DUMMY, pos = Position(32350, 32222, 7) }, -- trener w depo (w miejscu skrzynki pocztowej)
+	{ id = MAILBOX, pos = Position(32350, 32223, 7) }, -- skrzynka pocztowa pole nizej
 }
 
 -- Przejscie na wprost miedzy depo a swiatynia przez drewniany dom: sciany znikaja, zostaje podloga.
@@ -79,6 +84,11 @@ local place = GlobalEvent("OtsThaisExtras")
 
 function place.onStartup()
 	local placed = 0
+	local oldTile = Tile(OLD_MAILBOX_POSITION)
+	local oldMailbox = oldTile and oldTile:getItemById(MAILBOX)
+	if oldMailbox then
+		oldMailbox:remove()
+	end
 	for _, object in ipairs(objects) do
 		if hasItem(object.pos, object.id) or Game.createItem(object.id, 1, object.pos) then
 			placed = placed + 1
@@ -98,7 +108,7 @@ function place.onStartup()
 		ruprecht:setMasterPos(RUPRECHT_POSITION)
 	end
 	logger.info("[OTS Thais] Ruprecht w depo: {}, teleporty questow do swiatyni: {}/{}", ruprecht and "tak" or "nie", redirectExits(), #templeExits)
-	logger.info("[OTS Thais] Imbu, skrzynie nagrod i przejscia swiatynia-depo: {}/{}", placed, #objects + #shortcuts)
+	logger.info("[OTS Thais] Imbu, skrzynie nagrod, trener, poczta i przejscia swiatynia-depo: {}/{}", placed, #objects + #shortcuts)
 	return true
 end
 
