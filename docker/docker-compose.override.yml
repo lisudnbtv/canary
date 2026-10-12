@@ -45,4 +45,5 @@ services:
       - '../data/scripts/talkactions/player/emote_spell.lua:/canary/data/scripts/talkactions/player/emote_spell.lua:ro'
       - '../data/modules/scripts/gamestore/catalog/extras_usefull_things.lua:/canary/data/modules/scripts/gamestore/catalog/extras_usefull_things.lua:ro'
       - '../data/libs/gamestore/senders.lua:/canary/data/libs/gamestore/senders.lua:ro'
+      - '../data/scripts/talkactions/player/buy_house.lua:/canary/data/scripts/talkactions/player/buy_house.lua:ro'
       - '../data/items/items.xml:/canary/data/items/items.xml:ro'

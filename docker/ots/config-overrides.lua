@@ -44,3 +44,10 @@ rateSpellCooldown = 1.0
 
 -- Komenda !emote on/off (czary jako emote zamiast tekstu)
 emoteSpells = true
+
+-- Domki: zakup komenda !buyhouse (stojac przed drzwiami), 1 gp za kratke, na stale bez czynszu
+toggleCyclopediaHouseAuction = false
+housePriceEachSQM = 1
+houseRentPeriod = "never"
+houseBuyLevel = 0
+houseLoseAfterInactivity = 0

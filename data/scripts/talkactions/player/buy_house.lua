@@ -50,13 +50,13 @@ function buyHouse.onSay(player, words, param)
 		player:sendCancelMessage("You do not have enough money.")
 		return true
 	end
-	metrics.addCounter("balance_decrease", remainsPrice, {
+	metrics.addCounter("balance_decrease", price, {
 		player = player:getName(),
 		context = "house_purchase",
 	})
 
 	house:setHouseOwner(player:getGuid())
-	player:sendTextMessage(MESSAGE_EVENT_ADVANCE, "You have successfully bought this house, be sure to have the money for the rent in the bank.")
+	player:sendTextMessage(MESSAGE_EVENT_ADVANCE, "Dom kupiony za " .. price .. " gp. Jest Twoj na stale, bez czynszu.")
 	local houseSpells = { "House Door List", "House Guest List", "House Kick", "House Subowner List" }
 	local learnedSpells = {}
 
