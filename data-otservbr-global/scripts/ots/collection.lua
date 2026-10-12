@@ -210,7 +210,10 @@ function greet.onThink(interval)
 			local pos = player:getPosition()
 			if pos.z == npcPosition.z and pos:getDistance(npcPosition) <= 4 then
 				pendingGreeting[id] = nil
-				show(player)
+				-- Okno otwarte "samo" w trakcie chodzenia nie dostaje klawiatury (Enter nie dziala),
+				-- dlatego przy podejsciu jest krotkie podsumowanie, a okno na "hi" albo !kolekcja.
+				local bosses, outfits, mounts, waves = progress(player)
+				player:sendTextMessage(MESSAGE_EVENT_ADVANCE, string.format("Kolekcja: bossy %d/%d, stroje %d/%d, mounty %d/%d, rekord fal %d, progi %d/12. Szczegoly: !kolekcja", bosses, BOSS_TOTAL, outfits, OUTFIT_TOTAL, mounts, MOUNT_TOTAL, waves, totalSteps(bosses, outfits, mounts, waves)))
 			end
 		end
 	end
