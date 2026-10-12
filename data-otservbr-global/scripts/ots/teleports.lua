@@ -825,27 +825,27 @@ local quests = {
 	{ "Barbarian Arena: bron do wyboru (3 poziomy, 10 walk)", func = "OtsArenaStart" },
 	{ "In Service of Yalahar: yalahari armor / mask / leg piece / footwraps", func = "OtsYalaharStart" },
 	{ "Soul War: komplet przedmiotow Soul War dla Twojej profesji", func = "OtsSoulWarStart" },
-	{ "Demon Helmet: steel boots, demon helmet, demon shield", 33324, 31575, 15, hint = "Pokonaj potwory w sali, pociagnij dzwignie po wschodniej stronie. Skrzynie sa na zachodzie, za kamieniem (pole PZ)." },
-	{ "The Annihilator: demon armor, magic sword, stonecutter axe", 33224, 31671, 13, plain = true, hint = "Stan na jednym z czterech pol przy dzwigni i pociagnij ja. Wymagany poziom 100. Skrzynie sa na wschod od sali walki (pola PZ)." },
-	{ "Wrath of the Emperor: royal scale robe, royal draken mail, elite draken helmet", 0, 0, 0, arena = { { "Draken Elite", 4 }, { "Draken Abomination", 4 }, { "Draken Warmaster", 4 }, { "Draken Spellweaver", 4 }, { "Draken Elite", 2 } }, chest = { 33073, 31170, 8 }, hint = "Skrzynia z nagroda jest tuz obok. Skrzynie stoja obok siebie; zbroje sa w kolejnych skrzyniach." },
-	{ "The Thieves Guild: modified crossbow, assassin dagger, spellbook of warding", 0, 0, 0, arena = { { "Assassin", 6 }, { "Stalker", 4 }, { "Bandit", 4 }, { "Smuggler", 4 }, { "Assassin", 4 } }, chest = { 32310, 32209, 8 }, hint = "Skrzynia z nagroda jest tuz obok. Trzy skrzynie, mozna wziac jedna nagrode." },
-	{ "The Hidden City of Beregar: firewalker boots", 0, 0, 0, arena = { { "Dwarf Guard", 6 }, { "Dwarf Geomancer", 4 }, { "Worker Golem", 4 }, { "War Golem", 5 } }, chest = { 32580, 31404, 15 }, hint = "Skrzynia z nagroda jest tuz obok." },
-	{ "Koshei the Deathless: blue legs", 0, 0, 0, arena = { { "Lich", 4 }, { "Bonebeast", 5 }, { "Vampire", 5 }, { "Mummy", 5 }, { "Koshei the Deathless", 1 } }, chest = { 33261, 32445, 12 }, hint = "Skrzynia z nagroda jest tuz obok." },
+	{ "Demon Helmet: steel boots, demon helmet, demon shield", 33324, 31575, 15, done = { st = { { "Storage.Quest.U6_4.DemonHelmet.Rewards.DemonHelmet" }, { "Storage.Quest.U6_4.DemonHelmet.Rewards.DemonShield" }, { "Storage.Quest.U6_4.DemonHelmet.Rewards.SteelBoots" } } }, hint = "Pokonaj potwory w sali, pociagnij dzwignie po wschodniej stronie. Skrzynie sa na zachodzie, za kamieniem (pole PZ)." },
+	{ "The Annihilator: demon armor, magic sword, stonecutter axe", 33224, 31671, 13, plain = true, done = { st = { { "Storage.Quest.U7_24.TheAnnihilator.Reward" } } }, hint = "Stan na jednym z czterech pol przy dzwigni i pociagnij ja. Wymagany poziom 100. Skrzynie sa na wschod od sali walki (pola PZ)." },
+	{ "Wrath of the Emperor: royal scale robe, royal draken mail, elite draken helmet", 0, 0, 0, arena = { { "Draken Elite", 4 }, { "Draken Abomination", 4 }, { "Draken Warmaster", 4 }, { "Draken Spellweaver", 4 }, { "Draken Elite", 2 } }, chest = { 33073, 31170, 8 }, done = { st = { { "Storage.Quest.U8_6.WrathOfTheEmperor.Chest100PlatinumCoins" }, { "Storage.Quest.U8_6.WrathOfTheEmperor.ChestBag" }, { "Storage.Quest.U8_6.WrathOfTheEmperor.ChestItems" } } }, hint = "Skrzynia z nagroda jest tuz obok. Skrzynie stoja obok siebie; zbroje sa w kolejnych skrzyniach." },
+	{ "The Thieves Guild: modified crossbow, assassin dagger, spellbook of warding", 0, 0, 0, arena = { { "Assassin", 6 }, { "Stalker", 4 }, { "Bandit", 4 }, { "Smuggler", 4 }, { "Assassin", 4 } }, chest = { 32310, 32209, 8 }, done = { st = { { "Storage.Quest.U8_2.TheThievesGuildQuest.RewardEnd" } } }, hint = "Skrzynia z nagroda jest tuz obok. Trzy skrzynie, mozna wziac jedna nagrode." },
+	{ "The Hidden City of Beregar: firewalker boots", 0, 0, 0, arena = { { "Dwarf Guard", 6 }, { "Dwarf Geomancer", 4 }, { "Worker Golem", 4 }, { "War Golem", 5 } }, chest = { 32580, 31404, 15 }, done = { st = { { "Storage.Quest.U8_4.TheHiddenCityOfBeregar.FirewalkerBoots" } } }, hint = "Skrzynia z nagroda jest tuz obok." },
+	{ "Koshei the Deathless: blue legs", 0, 0, 0, arena = { { "Lich", 4 }, { "Bonebeast", 5 }, { "Vampire", 5 }, { "Mummy", 5 }, { "Koshei the Deathless", 1 } }, chest = { 33261, 32445, 12 }, done = { st = { { "Storage.Quest.U8_1.KosheiTheDeathless.KosheiTheDeathlessLegs" } } }, hint = "Skrzynia z nagroda jest tuz obok." },
 	{ "The Inquisition: 6 bossow pod rzad, jedna z 9 nagrod do wyboru", 33158, 31728, 11, hint = "Zabij bossa i wejdz w teleport w jego sali - prowadzi do nastepnego. Kolejnosc: Ushuriel, Zugurosh, Madareth, Latrivan i Golgordan, Annihilon, Hellgorak. Po kazdym masz 10 minut na przejscie." },
-	{ "The Demon Oak: demon legs / rainbow shield / thorn spitter / spellbook of ancient arcana (jedna do wyboru)", func = "OtsDemonOakStart" },
+	{ "The Demon Oak: demon legs / rainbow shield / thorn spitter / spellbook of ancient arcana (jedna do wyboru)", func = "OtsDemonOakStart", done = { st = { { "Storage.Quest.U8_2.TheDemonOak.Done", 2 } } } },
 	{ "Swiateczna arena: christmas tokeny z potworow", 0, 0, 0, arena = { { "Grynch Clan Goblin", 8 }, { "Animated Snowman", 6 }, { "Percht", 6 }, { "Schiach", 6 }, { "Baleful Bunny", 4 }, { "The Percht Queen", 1 } } },
-	{ "Behemoth Quest: guardian halberd, demon shield, golden armor", 33294, 31670, 13, hint = "Skrzynia z nagroda: ok. 11 krokow, kierunek polnoc. Przy skrzyni jest strefa PZ.", unlock = { 33286, 31650, 33303, 31678, 13 } },
-	{ "Black Knight: crown armor, crown shield", 32870, 31943, 11, hint = "Skrzynia z nagroda: ok. 11 krokow, kierunek poludnie. Przy skrzyni jest strefa PZ.", unlock = { 32860, 31935, 32878, 31962, 11 } },
-	{ "Circle Room: war hammer", 32496, 31946, 14, hint = "Skrzynia z nagroda: ok. 45 krokow, kierunek poludnie. Przy skrzyni jest strefa PZ.", unlock = { 32487, 31938, 32504, 32000, 14 } },
-	{ "Crusader Helmet: crusader helmet", 32456, 31938, 14, hint = "Skrzynia z nagroda: ok. 45 krokow, kierunek zachod. Przy skrzyni jest strefa PZ.", unlock = { 32419, 31930, 32464, 31951, 14 } },
-	{ "Deeper Fibula: tower shield, warrior helmet", 32279, 32469, 10, hint = "Skrzynia z nagroda: ok. 45 krokow, kierunek zachod. Przy skrzyni jest strefa PZ.", unlock = { 32231, 32461, 32287, 32479, 10 } },
-	{ "Devil Helmet: devil helmet", 32450, 32150, 15, hint = "Skrzynia z nagroda: ok. 13 krokow, kierunek polnocny wschod. Przy skrzyni jest strefa PZ.", unlock = { 32442, 32136, 32467, 32158, 15 } },
-	{ "Draconia: ice rapier", 32800, 31589, 2, hint = "Skrzynia z nagroda: ok. 6 krokow, kierunek polnoc. Przy skrzyni jest strefa PZ.", unlock = { 32792, 31574, 32811, 31597, 2 } },
-	{ "Noble Armor: crown helmet", 32451, 32042, 8, hint = "Skrzynia z nagroda: ok. 5 krokow, kierunek poludnie. Przy skrzyni jest strefa PZ.", unlock = { 32443, 32034, 32459, 32056, 8 } },
-	{ "Orc Fortress: knight armor", 32974, 31769, 9, hint = "Skrzynia z nagroda: ok. 45 krokow, kierunek polnoc. Przy skrzyni jest strefa PZ.", unlock = { 32966, 31719, 32988, 31777, 9 } },
-	{ "The Medusa Quest: medusa shield, blue robe", 33031, 32396, 10, hint = "Skrzynia z nagroda: ok. 17 krokow, kierunek wschod. Przy skrzyni jest strefa PZ.", unlock = { 33023, 32388, 33056, 32406, 10 } },
-	{ "The Queen Of The Banshees: tower shield, boots of haste, giant sword", 32213, 31897, 15, hint = "Skrzynia z nagroda: ok. 12 krokow, kierunek poludnie. Przy skrzyni jest strefa PZ.", unlock = { 32204, 31889, 32221, 31918, 15 } },
-	{ "Vampire Shield: dragon lance, vampire shield", 33190, 31659, 14, hint = "Skrzynia z nagroda: ok. 22 krokow, kierunek poludnie. Przy skrzyni jest strefa PZ.", unlock = { 33181, 31651, 33198, 31696, 14 } },
+	{ "Behemoth Quest: guardian halberd, demon shield, golden armor", 33294, 31670, 13, done = { kv = { "behemothquest1", "behemothquest2", "behemothquest3", "behemothquest4" } }, hint = "Skrzynia z nagroda: ok. 11 krokow, kierunek polnoc. Przy skrzyni jest strefa PZ.", unlock = { 33286, 31650, 33303, 31678, 13 } },
+	{ "Black Knight: crown armor, crown shield", 32870, 31943, 11, done = { kv = { "Blackknight1", "Blackknight2" } }, hint = "Skrzynia z nagroda: ok. 11 krokow, kierunek poludnie. Przy skrzyni jest strefa PZ.", unlock = { 32860, 31935, 32878, 31962, 11 } },
+	{ "Circle Room: war hammer", 32496, 31946, 14, done = { kv = { "circleroom1", "circleroom2" } }, hint = "Skrzynia z nagroda: ok. 45 krokow, kierunek poludnie. Przy skrzyni jest strefa PZ.", unlock = { 32487, 31938, 32504, 32000, 14 } },
+	{ "Crusader Helmet: crusader helmet", 32456, 31938, 14, done = { kv = { "crusaderhelmet" } }, hint = "Skrzynia z nagroda: ok. 45 krokow, kierunek zachod. Przy skrzyni jest strefa PZ.", unlock = { 32419, 31930, 32464, 31951, 14 } },
+	{ "Deeper Fibula: tower shield, warrior helmet", 32279, 32469, 10, done = { kv = { "deeperfibula1", "deeperfibula2" } }, hint = "Skrzynia z nagroda: ok. 45 krokow, kierunek zachod. Przy skrzyni jest strefa PZ.", unlock = { 32231, 32461, 32287, 32479, 10 } },
+	{ "Devil Helmet: devil helmet", 32450, 32150, 15, done = { kv = { "devilhemet1", "devilhemet2", "devilhemet3" } }, hint = "Skrzynia z nagroda: ok. 13 krokow, kierunek polnocny wschod. Przy skrzyni jest strefa PZ.", unlock = { 32442, 32136, 32467, 32158, 15 } },
+	{ "Draconia: ice rapier", 32800, 31589, 2, done = { kv = { "draconia1", "draconia2" } }, hint = "Skrzynia z nagroda: ok. 6 krokow, kierunek polnoc. Przy skrzyni jest strefa PZ.", unlock = { 32792, 31574, 32811, 31597, 2 } },
+	{ "Noble Armor: crown helmet", 32451, 32042, 8, done = { kv = { "noblearmor1", "noblearmor2" } }, hint = "Skrzynia z nagroda: ok. 5 krokow, kierunek poludnie. Przy skrzyni jest strefa PZ.", unlock = { 32443, 32034, 32459, 32056, 8 } },
+	{ "Orc Fortress: knight armor", 32974, 31769, 9, done = { kv = { "orcfortress1", "orcfortress2", "orcfortress3" } }, hint = "Skrzynia z nagroda: ok. 45 krokow, kierunek polnoc. Przy skrzyni jest strefa PZ.", unlock = { 32966, 31719, 32988, 31777, 9 } },
+	{ "The Medusa Quest: medusa shield, blue robe", 33031, 32396, 10, done = { st = { { "Storage.Quest.U7_3.TheMedusaQuest" } } }, hint = "Skrzynia z nagroda: ok. 17 krokow, kierunek wschod. Przy skrzyni jest strefa PZ.", unlock = { 33023, 32388, 33056, 32406, 10 } },
+	{ "The Queen Of The Banshees: tower shield, boots of haste, giant sword", 32213, 31897, 15, done = { st = { { "Storage.Quest.U7_2.TheQueenOfTheBanshees.Reward.BootsOfHaste" }, { "Storage.Quest.U7_2.TheQueenOfTheBanshees.Reward.GiantSword" }, { "Storage.Quest.U7_2.TheQueenOfTheBanshees.Reward.PlatinumCoin" }, { "Storage.Quest.U7_2.TheQueenOfTheBanshees.Reward.StealthRing" }, { "Storage.Quest.U7_2.TheQueenOfTheBanshees.Reward.StoneSkinAmulet" }, { "Storage.Quest.U7_2.TheQueenOfTheBanshees.Reward.TowerShield" } } }, hint = "Skrzynia z nagroda: ok. 12 krokow, kierunek poludnie. Przy skrzyni jest strefa PZ.", unlock = { 32204, 31889, 32221, 31918, 15 } },
+	{ "Vampire Shield: dragon lance, vampire shield", 33190, 31659, 14, done = { kv = { "vampireshield1", "vampireshield2", "vampireshield3" } }, hint = "Skrzynia z nagroda: ok. 22 krokow, kierunek poludnie. Przy skrzyni jest strefa PZ.", unlock = { 33181, 31651, 33198, 31696, 14 } },
 }
 
 local HUB_ACTION_ID = 64992 -- pady w hubie expowisk
@@ -2305,7 +2305,56 @@ local function taskReward(tier)
 	return string.format("%d TC, %d gp, %d tokenow + %d losowa nagroda (kamienie / stamina / TC / worek)", config.coins, config.gold, config.tokens, config.rolls)
 end
 
-local function openTasks(player)
+local function taskDoneCount(player, monster)
+	return tonumber(player:kv():scoped("ots-task-done"):get(monster:lower())) or 0
+end
+
+local function taskStart(player, tier, index)
+	if taskGet(player) then
+		return
+	end
+	local store = taskStore(player)
+	store:set("tier", tier)
+	store:set("index", index)
+	store:set("count", 0)
+	local config = taskTiers[tier]
+	player:sendTextMessage(MESSAGE_EVENT_ADVANCE, string.format("Nowe zadanie: zabij %d x %s. Teleport znajdziesz pod !task.", config.need, hunts[tier].list[index].mon))
+	player:sendChannelMessage("Taski", string.format("Nowe zadanie: %s 0/%d. Nagroda: %s.", hunts[tier].list[index].mon, config.need, taskReward(tier)), TALKTYPE_CHANNEL_O, 12)
+end
+
+local openTasks
+
+-- Lista potworow z poziomu: [Complete xN] przy tych, ktorych task byl juz zrobiony.
+local function openTaskTier(player, tier)
+	local config = taskTiers[tier]
+	local window = ModalWindow({ title = "Taski - " .. hunts[tier].label, message = string.format("%d potworow, nagroda: %s.\n[Complete] = task juz zrobiony (mozna powtorzyc).                    ", config.need, taskReward(tier)) })
+	window:addChoice("Losowy potwor z tego poziomu", function(target)
+		taskStart(target, tier, math.random(#hunts[tier].list))
+	end)
+	for index, entry in ipairs(hunts[tier].list) do
+		if index > 250 then
+			break
+		end
+		local times = taskDoneCount(player, entry.mon)
+		local label = entry.mon
+		if times > 0 then
+			label = string.format("[Complete x%d] %s", times, entry.mon)
+		end
+		window:addChoice(label, function(target)
+			taskStart(target, tier, index)
+		end)
+	end
+	window:addButton("Wybierz")
+	window:addButton("Wstecz", function(target)
+		openTasks(target)
+	end)
+	window:setPriority(true)
+	window:setDefaultEnterButton(2)
+	window:setDefaultEscapeButton(1)
+	window:sendToPlayer(player)
+end
+
+openTasks = function(player)
 	local task = taskGet(player)
 	local window
 	if task then
@@ -2325,19 +2374,17 @@ local function openTasks(player)
 		end)
 	else
 		local done = tonumber(taskStore(player):get("done")) or 0
-		window = ModalWindow({ title = "Taski", message = "Wybierz poziom. Potwor jest losowany z expowisk tego poziomu.\nUkonczone zadania: " .. done })
+		window = ModalWindow({ title = "Taski", message = "Wybierz poziom, potem potwora (albo losowego). Kazdy task mozna robic wiele razy.\nUkonczone zadania: " .. done .. "                                        " })
 		for tier, config in ipairs(taskTiers) do
 			if hunts[tier] then
-				window:addChoice(string.format("%s: %d potworow, nagroda %s", hunts[tier].label, config.need, taskReward(tier)), function(target)
-					if taskGet(target) then
-						return
+				local finished = 0
+				for _, entry in ipairs(hunts[tier].list) do
+					if taskDoneCount(player, entry.mon) > 0 then
+						finished = finished + 1
 					end
-					local store = taskStore(target)
-					local index = math.random(#hunts[tier].list)
-					store:set("tier", tier)
-					store:set("index", index)
-					store:set("count", 0)
-					target:sendTextMessage(MESSAGE_EVENT_ADVANCE, string.format("Nowe zadanie: zabij %d x %s. Teleport znajdziesz pod !task.", config.need, hunts[tier].list[index].mon))
+				end
+				window:addChoice(string.format("%s: %d potworow (Complete: %d/%d)", hunts[tier].label, config.need, finished, #hunts[tier].list), function(target)
+					openTaskTier(target, tier)
 				end)
 			end
 		end
@@ -2375,6 +2422,8 @@ function taskKill.playerOnKill(player, monster)
 	local config = taskTiers[task.tier]
 	local store = taskStore(player)
 	store:set("done", (tonumber(store:get("done")) or 0) + 1)
+	local doneStore = player:kv():scoped("ots-task-done")
+	doneStore:set(task.entry.mon:lower(), (tonumber(doneStore:get(task.entry.mon:lower())) or 0) + 1)
 	taskClear(player)
 	player:addTibiaCoins(config.coins)
 	player:addItem(TASK_TOKEN_ITEM, config.tokens)
@@ -2648,11 +2697,49 @@ local function startEntry(player, entry)
 	end
 end
 
+-- Czy quest jest juz zrobiony: skrzynie z nagroda zapisuja to w questKV (kv) albo w storage.
+local function storageByPath(path)
+	local value = _G
+	for part in path:gmatch("[^%.]+") do
+		if type(value) ~= "table" then
+			return nil
+		end
+		value = value[part]
+	end
+	return tonumber(value)
+end
+
+local function questDone(player, entry)
+	local done = entry.done
+	if not done then
+		return false
+	end
+	for _, name in ipairs(done.kv or {}) do
+		if player:questKV(name):get("completed") then
+			return true
+		end
+	end
+	for _, item in ipairs(done.st or {}) do
+		local key = storageByPath(item[1])
+		if key and player:getStorageValue(key) >= (item[2] or 1) then
+			return true
+		end
+	end
+	return false
+end
+
+-- Dluga pierwsza linia poszerza okno w kliencie, zeby nazwy na liscie sie miescily.
+local WIDE_MESSAGE = "Wybierz cel z listy i kliknij Wybierz. [Complete] = juz zrobione.                                        "
+
 local function openList(player, title, list, back)
-	local window = ModalWindow({ title = title, message = "Wybierz cel i kliknij Wybierz." })
+	local window = ModalWindow({ title = title, message = WIDE_MESSAGE })
 	for i = 1, math.min(#list, 255) do
 		local entry = list[i]
-		window:addChoice(entry[1], function(target)
+		local label = entry[1]
+		if entry.done and questDone(player, entry) then
+			label = "[Complete] " .. label
+		end
+		window:addChoice(label, function(target)
 			startEntry(target, entry)
 		end)
 	end

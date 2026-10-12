@@ -30,6 +30,16 @@ for b in json.load(open('bosses_all.json')):
         o.append('\t{ %s, %d, %d, %d },'%(q(lab),*b['pos']))
     else:
         o.append('\t{ %s, 0, 0, 0, arena = { { %s, 1 } } },'%(q('%s (arena, HP %d)'%(nm,b['hp'])),q(b['name'])))
+_CH=[c for c in json.load(open('chests.json')) if c['pos']]
+def _done(p,r):
+    n=[c for c in _CH if c['pos'][2]==p[2] and abs(c['pos'][0]-p[0])<=r and abs(c['pos'][1]-p[1])<=r]
+    kv=sorted({c['kv'] for c in n if c['kv']})
+    st=sorted({c['storage'] for c in n if c['storage'] and not c['kv']}) if not kv else []
+    if not kv and not st: return ''
+    parts=[]
+    if kv: parts.append('kv = { %s }'%', '.join(q(k) for k in kv))
+    if st: parts.append('st = { %s }'%', '.join('{ %s }'%q(s) for s in st))
+    return 'done = { %s }, '%', '.join(parts)
 o.append('}\n\nlocal quests = {')
 import gear
 NICE={'Behemothquest':'Behemoth Quest','Noblearmor':'Noble Armor','Devilhemet':'Devil Helmet','Deeperfibula':'Deeper Fibula','Orcfortress':'Orc Fortress','Vampireshield':'Vampire Shield','Blackknight':'Black Knight','Circleroom':'Circle Room','Crusaderhelmet':'Crusader Helmet'}
@@ -54,7 +64,7 @@ o.append('\t{ "Soul War: komplet przedmiotow Soul War dla Twojej profesji", func
 MAN=json.load(open('manual.json'))
 for x in MAN:
     QM.append(dict(name=x['label'].split(':')[0],items=[ITEMID[n.strip()] for n in x['label'].split(':')[1].split(',') if n.strip() in ITEMID]))
-    o.append('\t{ %s, %d, %d, %d, %shint = %s },'%(q(x['label']),*x['pos'],'plain = true, ' if x.get('plain') else '',q(x['hint'])))
+    o.append('\t{ %s, %d, %d, %d, %s%shint = %s },'%(q(x['label']),*x['pos'],'plain = true, ' if x.get('plain') else '',_done(x['pos'],20),q(x['hint'])))
 # Questy bez wlasnej walki: najpierw walka na arenie, potem teleport pod skrzynie.
 import spots as _sp
 def _near(c):
@@ -79,7 +89,7 @@ for nm,rw,chest,mons,extra in AQ:
     land=_near(chest); _AQL.append(land)
     QM.append(dict(name=nm,items=[ITEMID[n] for n in rw if n in ITEMID]))
     hint=('Skrzynia z nagroda jest tuz obok. '+extra).strip()
-    o.append('\t{ %s, 0, 0, 0, arena = { %s }, chest = { %d, %d, %d }, hint = %s },'%(q('%s: %s'%(nm,', '.join(rw))),', '.join('{ %s, %d }'%(q(a),b) for a,b in mons),*land,q(hint)))
+    o.append('\t{ %s, 0, 0, 0, arena = { %s }, chest = { %d, %d, %d }, %shint = %s },'%(q('%s: %s'%(nm,', '.join(rw))),', '.join('{ %s, %d }'%(q(a),b) for a,b in mons),*land,_done(chest,3),q(hint)))
 # Inkwizycja w wersji uproszczonej: szesc sal bossow pod rzad, potem sala z nagrodami
 # (lancuch teleportow jest w podmienionym movements_teleport_main.lua)
 INQ_WARDS=[[33158,31728,11],[33124,31692,11],[33197,31767,11],[33232,31733,11],[33197,31703,11],[33104,31734,11]]
@@ -87,7 +97,7 @@ QM.append(dict(name='The Inquisition',items=[8062,8090,8053,8060,8023,8096,8100,
 o.append('\t{ "The Inquisition: 6 bossow pod rzad, jedna z 9 nagrod do wyboru", %d, %d, %d, hint = "Zabij bossa i wejdz w teleport w jego sali - prowadzi do nastepnego. Kolejnosc: Ushuriel, Zugurosh, Madareth, Latrivan i Golgordan, Annihilon, Hellgorak. Po kazdym masz 10 minut na przejscie." },'%tuple(INQ_WARDS[0]))
 # Demon Oak w wersji uproszczonej (skrypt scripts/ots/demon_oak.lua)
 QM.append(dict(name='The Demon Oak',items=[3389,8077,14768,14769]))
-o.append('\t{ "The Demon Oak: demon legs / rainbow shield / thorn spitter / spellbook of ancient arcana (jedna do wyboru)", func = "OtsDemonOakStart" },')
+o.append('\t{ "The Demon Oak: demon legs / rainbow shield / thorn spitter / spellbook of ancient arcana (jedna do wyboru)", func = "OtsDemonOakStart", done = { st = { { "Storage.Quest.U8_2.TheDemonOak.Done", 2 } } } },')
 # Swiateczna arena: jedyne miejsce do farmienia christmas tokenow (leca z tych potworow), bez skrzyni, do powtarzania
 QM.append(dict(name='Swiateczna arena',items=[6526]))
 o.append('\t{ "Swiateczna arena: christmas tokeny z potworow", 0, 0, 0, arena = { { "Grynch Clan Goblin", 8 }, { "Animated Snowman", 6 }, { "Percht", 6 }, { "Schiach", 6 }, { "Baleful Bunny", 4 }, { "The Percht Queen", 1 } } },')
@@ -104,7 +114,7 @@ for x in Q:
     QM.append(dict(name=x['name'],items=[ITEMID[n] for n in x['rewards'] if n in ITEMID]))
     hint='Skrzynia z nagroda: ok. %d krokow, kierunek %s. Przy skrzyni jest strefa PZ.'%(x['dist'],direction(x['start'],x['chest']))
     _bx=(min(x['start'][0],x['chest'][0])-8,min(x['start'][1],x['chest'][1])-8,max(x['start'][0],x['chest'][0])+8,max(x['start'][1],x['chest'][1])+8,x['start'][2])
-    o.append('\t{ %s, %d, %d, %d, hint = %s, unlock = { %d, %d, %d, %d, %d } },'%(q(lab),*x['start'],q(hint),*_bx))
+    o.append('\t{ %s, %d, %d, %d, %shint = %s, unlock = { %d, %d, %d, %d, %d } },'%(q(lab),*x['start'],_done(x['chest'],14),q(hint),*_bx))
 o.append('}\n')
 json.dump(QM,open('quests_menu.json','w'))
 P=json.load(open('poi.json'))
@@ -597,7 +607,56 @@ local function taskReward(tier)
 	return string.format("%d TC, %d gp, %d tokenow + %d losowa nagroda (kamienie / stamina / TC / worek)", config.coins, config.gold, config.tokens, config.rolls)
 end
 
-local function openTasks(player)
+local function taskDoneCount(player, monster)
+	return tonumber(player:kv():scoped("ots-task-done"):get(monster:lower())) or 0
+end
+
+local function taskStart(player, tier, index)
+	if taskGet(player) then
+		return
+	end
+	local store = taskStore(player)
+	store:set("tier", tier)
+	store:set("index", index)
+	store:set("count", 0)
+	local config = taskTiers[tier]
+	player:sendTextMessage(MESSAGE_EVENT_ADVANCE, string.format("Nowe zadanie: zabij %d x %s. Teleport znajdziesz pod !task.", config.need, hunts[tier].list[index].mon))
+	player:sendChannelMessage("Taski", string.format("Nowe zadanie: %s 0/%d. Nagroda: %s.", hunts[tier].list[index].mon, config.need, taskReward(tier)), TALKTYPE_CHANNEL_O, 12)
+end
+
+local openTasks
+
+-- Lista potworow z poziomu: [Complete xN] przy tych, ktorych task byl juz zrobiony.
+local function openTaskTier(player, tier)
+	local config = taskTiers[tier]
+	local window = ModalWindow({ title = "Taski - " .. hunts[tier].label, message = string.format("%d potworow, nagroda: %s.\n[Complete] = task juz zrobiony (mozna powtorzyc).                    ", config.need, taskReward(tier)) })
+	window:addChoice("Losowy potwor z tego poziomu", function(target)
+		taskStart(target, tier, math.random(#hunts[tier].list))
+	end)
+	for index, entry in ipairs(hunts[tier].list) do
+		if index > 250 then
+			break
+		end
+		local times = taskDoneCount(player, entry.mon)
+		local label = entry.mon
+		if times > 0 then
+			label = string.format("[Complete x%d] %s", times, entry.mon)
+		end
+		window:addChoice(label, function(target)
+			taskStart(target, tier, index)
+		end)
+	end
+	window:addButton("Wybierz")
+	window:addButton("Wstecz", function(target)
+		openTasks(target)
+	end)
+	window:setPriority(true)
+	window:setDefaultEnterButton(2)
+	window:setDefaultEscapeButton(1)
+	window:sendToPlayer(player)
+end
+
+openTasks = function(player)
 	local task = taskGet(player)
 	local window
 	if task then
@@ -617,19 +676,17 @@ local function openTasks(player)
 		end)
 	else
 		local done = tonumber(taskStore(player):get("done")) or 0
-		window = ModalWindow({ title = "Taski", message = "Wybierz poziom. Potwor jest losowany z expowisk tego poziomu.\nUkonczone zadania: " .. done })
+		window = ModalWindow({ title = "Taski", message = "Wybierz poziom, potem potwora (albo losowego). Kazdy task mozna robic wiele razy.\nUkonczone zadania: " .. done .. "                                        " })
 		for tier, config in ipairs(taskTiers) do
 			if hunts[tier] then
-				window:addChoice(string.format("%s: %d potworow, nagroda %s", hunts[tier].label, config.need, taskReward(tier)), function(target)
-					if taskGet(target) then
-						return
+				local finished = 0
+				for _, entry in ipairs(hunts[tier].list) do
+					if taskDoneCount(player, entry.mon) > 0 then
+						finished = finished + 1
 					end
-					local store = taskStore(target)
-					local index = math.random(#hunts[tier].list)
-					store:set("tier", tier)
-					store:set("index", index)
-					store:set("count", 0)
-					target:sendTextMessage(MESSAGE_EVENT_ADVANCE, string.format("Nowe zadanie: zabij %d x %s. Teleport znajdziesz pod !task.", config.need, hunts[tier].list[index].mon))
+				end
+				window:addChoice(string.format("%s: %d potworow (Complete: %d/%d)", hunts[tier].label, config.need, finished, #hunts[tier].list), function(target)
+					openTaskTier(target, tier)
 				end)
 			end
 		end
@@ -667,6 +724,8 @@ function taskKill.playerOnKill(player, monster)
 	local config = taskTiers[task.tier]
 	local store = taskStore(player)
 	store:set("done", (tonumber(store:get("done")) or 0) + 1)
+	local doneStore = player:kv():scoped("ots-task-done")
+	doneStore:set(task.entry.mon:lower(), (tonumber(doneStore:get(task.entry.mon:lower())) or 0) + 1)
 	taskClear(player)
 	player:addTibiaCoins(config.coins)
 	player:addItem(TASK_TOKEN_ITEM, config.tokens)
@@ -940,11 +999,49 @@ local function startEntry(player, entry)
 	end
 end
 
+-- Czy quest jest juz zrobiony: skrzynie z nagroda zapisuja to w questKV (kv) albo w storage.
+local function storageByPath(path)
+	local value = _G
+	for part in path:gmatch("[^%.]+") do
+		if type(value) ~= "table" then
+			return nil
+		end
+		value = value[part]
+	end
+	return tonumber(value)
+end
+
+local function questDone(player, entry)
+	local done = entry.done
+	if not done then
+		return false
+	end
+	for _, name in ipairs(done.kv or {}) do
+		if player:questKV(name):get("completed") then
+			return true
+		end
+	end
+	for _, item in ipairs(done.st or {}) do
+		local key = storageByPath(item[1])
+		if key and player:getStorageValue(key) >= (item[2] or 1) then
+			return true
+		end
+	end
+	return false
+end
+
+-- Dluga pierwsza linia poszerza okno w kliencie, zeby nazwy na liscie sie miescily.
+local WIDE_MESSAGE = "Wybierz cel z listy i kliknij Wybierz. [Complete] = juz zrobione.                                        "
+
 local function openList(player, title, list, back)
-	local window = ModalWindow({ title = title, message = "Wybierz cel i kliknij Wybierz." })
+	local window = ModalWindow({ title = title, message = WIDE_MESSAGE })
 	for i = 1, math.min(#list, 255) do
 		local entry = list[i]
-		window:addChoice(entry[1], function(target)
+		local label = entry[1]
+		if entry.done and questDone(player, entry) then
+			label = "[Complete] " .. label
+		end
+		window:addChoice(label, function(target)
 			startEntry(target, entry)
 		end)
 	end
