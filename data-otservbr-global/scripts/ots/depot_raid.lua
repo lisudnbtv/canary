@@ -70,14 +70,48 @@ local function clearMonsters()
 	state.ids = {}
 end
 
+-- Wolne pola wokol srodka, do ktorych da sie dojsc pieszo od srodka (bez domkow, PZ, schodow, scian).
+-- Dzieki temu potwory nie pojawiaja sie w domkach ani w zamknietych pomieszczeniach.
+local function reachableSpots(center, radius)
+	local list, seen, queue = {}, {}, { center }
+	seen[center.x .. ":" .. center.y] = true
+	local head = 1
+	while queue[head] do
+		local pos = queue[head]
+		head = head + 1
+		for dx = -1, 1 do
+			for dy = -1, 1 do
+				local nx, ny = pos.x + dx, pos.y + dy
+				local id = nx .. ":" .. ny
+				if not seen[id] and math.abs(nx - center.x) <= radius and math.abs(ny - center.y) <= radius then
+					seen[id] = true
+					local nextPos = Position(nx, ny, center.z)
+					local tile = Tile(nextPos)
+					if tile and tile:isWalkable(true, false, true, true, false) then
+						queue[#queue + 1] = nextPos
+						if not tile:getTopCreature() then
+							list[#list + 1] = nextPos
+						end
+					end
+				end
+			end
+		end
+	end
+	return list
+end
+
 local function spawnWave(index)
 	local wave = WAVES[index]
 	local center = chestPosition()
 	state.ids = {}
+	local free = reachableSpots(center, 5)
 	for _ = 1, wave.count do
+		if #free == 0 then
+			break
+		end
 		local name = wave.pool[math.random(#wave.pool)]
-		local pos = Position(center.x + math.random(-4, 4), center.y + math.random(-4, 4), center.z)
-		local monster = Game.createMonster(name, pos, true, true)
+		local pos = table.remove(free, math.random(#free))
+		local monster = Game.createMonster(name, pos, false, true)
 		if monster then
 			state.ids[#state.ids + 1] = monster:getId()
 		end

@@ -33,14 +33,45 @@ local themes = {
 
 local state = { active = false, ids = {}, spot = nil, theme = nil, startedAt = 0, nextAt = os.time() + FIRST_AFTER_SECONDS, fighters = {} }
 
+-- Wolne pola wokol srodka, do ktorych da sie dojsc pieszo od srodka (bez domkow, PZ, schodow, scian).
+-- Dzieki temu potwory nie pojawiaja sie w domkach ani w zamknietych pomieszczeniach.
+local function reachableSpots(center, radius)
+	local list, seen, queue = {}, {}, { center }
+	seen[center.x .. ":" .. center.y] = true
+	local head = 1
+	while queue[head] do
+		local pos = queue[head]
+		head = head + 1
+		for dx = -1, 1 do
+			for dy = -1, 1 do
+				local nx, ny = pos.x + dx, pos.y + dy
+				local id = nx .. ":" .. ny
+				if not seen[id] and math.abs(nx - center.x) <= radius and math.abs(ny - center.y) <= radius then
+					seen[id] = true
+					local nextPos = Position(nx, ny, center.z)
+					local tile = Tile(nextPos)
+					if tile and tile:isWalkable(true, false, true, true, false) then
+						queue[#queue + 1] = nextPos
+						if not tile:getTopCreature() then
+							list[#list + 1] = nextPos
+						end
+					end
+				end
+			end
+		end
+	end
+	return list
+end
+
 local function start()
 	local theme = themes[math.random(#themes)]
 	local spot = spots[math.random(#spots)]
 	local ids = {}
+	local free = reachableSpots(spot, 5)
 	for _, group in ipairs(theme.monsters) do
 		for _ = 1, group[2] do
-			local pos = Position(spot.x + math.random(-4, 4), spot.y + math.random(-4, 4), spot.z)
-			local monster = Game.createMonster(group[1], pos, true, true)
+			local pos = #free > 0 and table.remove(free, math.random(#free))
+			local monster = pos and Game.createMonster(group[1], pos, false, true)
 			if monster then
 				ids[#ids + 1] = monster:getId()
 			end
