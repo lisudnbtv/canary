@@ -35,8 +35,15 @@ function buyHouse.onSay(player, words, param)
 		return true
 	end
 
-	if player:getHouse() then
-		player:sendCancelMessage("You are already the owner of a house.")
+	-- OTS: do 10 domow na postac
+	local owned, guid = 0, player:getGuid()
+	for _, other in ipairs(Game.getHouses()) do
+		if other:getOwnerGuid() == guid then
+			owned = owned + 1
+		end
+	end
+	if owned >= 10 then
+		player:sendCancelMessage("Masz juz 10 domow - to limit.")
 		return true
 	end
 
