@@ -155,6 +155,17 @@ HL.append('local rushBosses = { '+', '.join(q(_b['name']) for _b in sorted(_RB,k
 _TW=HUB.get('tower',{})
 HL.append('local towerCenter = Position(%d, %d, %d)'%tuple(_TW.get('center',[0,0,0])))
 HL.append('local towerLanding = Position(%d, %d, %d)'%tuple(_TW.get('landing',[0,0,0])))
+_BS=HUB.get('bestiary',{})
+HL.append('local bestiaryCenter = Position(%d, %d, %d)'%tuple(_BS.get('center',[0,0,0])))
+HL.append('local bestiaryLanding = Position(%d, %d, %d)'%tuple(_BS.get('landing',[0,0,0])))
+_BM=json.load(open('bestiary.json'))
+HL.append('local bestiaryClasses = {')
+for _c in sorted({x['cls'] for x in _BM}):
+    HL.append('\t{ name = %s, list = {'%q(_c))
+    for _x in [x for x in _BM if x['cls']==_c]:
+        HL.append('\t\t{ %s, %d, %d },'%(q(_x['name']),_x['race'],_x['kill']))
+    HL.append('\t} },')
+HL.append('}')
 HL.append('local taskNpcPosition = Position(%d, %d, %d)'%tuple(HUB.get('taskNpc',[0,0,0])))
 HL.append('local hubPads = {')
 for k,a in sorted(HUB['pads'].items()):
@@ -896,6 +907,159 @@ local function survivalEnter(player)
 	addEvent(survivalNext, 2500, player:getId(), survival.token)
 end
 
+-- Bestiariusz: sala, w ktorej wokol postaci pojawiaja sie fale wybranego potwora, az bestiariusz
+-- tego potwora sie zapelni albo gracz wyjdzie. Zabojstwa licza sie normalnie (silnik dolicza je sam).
+-- Postep czytany ze storage silnika (STORAGEVALUE_BESTIARYKILLCOUNT + raceId).
+local BESTIARY_KILL_STORAGE = 61305000
+local BESTIARY_WAVE = 14
+local bestiaryRun = { token = 0, ids = {}, monster = nil }
+
+local function bestiaryKills(player, race)
+	return math.max(0, player:getStorageValue(BESTIARY_KILL_STORAGE + race))
+end
+
+local function inBestiaryRoom(player)
+	local pos = player:getPosition()
+	return pos.z == bestiaryCenter.z and math.abs(pos.x - bestiaryCenter.x) <= ARENA_RADIUS + 1 and math.abs(pos.y - bestiaryCenter.y) <= ARENA_RADIUS + 1
+end
+
+local function bestiaryClear()
+	for _, id in ipairs(bestiaryRun.ids) do
+		local creature = Creature(id)
+		if creature then
+			creature:remove()
+		end
+	end
+	bestiaryRun.ids = {}
+end
+
+local bestiaryCheck
+
+local function bestiaryWave(playerId, token)
+	if token ~= bestiaryRun.token then
+		return
+	end
+	local player = Player(playerId)
+	if not player or not inBestiaryRoom(player) then
+		bestiaryClear()
+		return
+	end
+	local entry = bestiaryRun.monster
+	local kills = bestiaryKills(player, entry[2])
+	if kills >= entry[3] then
+		player:sendTextMessage(MESSAGE_EVENT_ADVANCE, string.format("Bestiariusz: %s ukonczony (%d/%d)! Wybierz kolejnego potwora.", entry[1], kills, entry[3]))
+		return
+	end
+	local here = player:getPosition()
+	local ring = {}
+	for dx = -3, 3 do
+		for dy = -3, 3 do
+			if math.max(math.abs(dx), math.abs(dy)) >= 2 then
+				local pos = Position(here.x + dx, here.y + dy, here.z)
+				local tile = Tile(pos)
+				if math.abs(pos.x - bestiaryCenter.x) <= ARENA_RADIUS and math.abs(pos.y - bestiaryCenter.y) <= ARENA_RADIUS and tile and tile:isWalkable(true, true, true, true, false) then
+					ring[#ring + 1] = pos
+				end
+			end
+		end
+	end
+	bestiaryRun.ids = {}
+	local amount = math.min(BESTIARY_WAVE, entry[3] - kills)
+	for _ = 1, amount do
+		local pos = #ring > 0 and table.remove(ring, math.random(#ring)) or bestiaryCenter
+		local monster = Game.createMonster(entry[1], pos, true, true)
+		if monster then
+			bestiaryRun.ids[#bestiaryRun.ids + 1] = monster:getId()
+		end
+	end
+	if #bestiaryRun.ids == 0 then
+		player:sendCancelMessage("Tego potwora nie da sie przywolac w sali.")
+		return
+	end
+	player:sendTextMessage(MESSAGE_STATUS, string.format("Bestiariusz: %s %d/%d.", entry[1], kills, entry[3]))
+	addEvent(bestiaryCheck, 1000, playerId, token)
+end
+
+bestiaryCheck = function(playerId, token)
+	if token ~= bestiaryRun.token then
+		return
+	end
+	local player = Player(playerId)
+	if not player or not inBestiaryRoom(player) then
+		bestiaryClear()
+		return
+	end
+	for _, id in ipairs(bestiaryRun.ids) do
+		if Creature(id) then
+			addEvent(bestiaryCheck, 1000, playerId, token)
+			return
+		end
+	end
+	addEvent(bestiaryWave, 1500, playerId, token)
+end
+
+local function bestiaryStart(player, entry)
+	if inFight(player) then
+		return
+	end
+	bestiaryClear()
+	bestiaryRun.token = bestiaryRun.token + 1
+	bestiaryRun.monster = entry
+	if not inBestiaryRoom(player) then
+		travel(player, { "Bestiariusz", bestiaryLanding.x, bestiaryLanding.y, bestiaryLanding.z })
+	end
+	if not inBestiaryRoom(player) then
+		return
+	end
+	player:sendTextMessage(MESSAGE_EVENT_ADVANCE, string.format("Bestiariusz: %s, %d/%d. Fale wokol ciebie, wyjscie teleportem konczy.", entry[1], bestiaryKills(player, entry[2]), entry[3]))
+	addEvent(bestiaryWave, 2000, player:getId(), bestiaryRun.token)
+end
+
+local openBestiary
+
+local function openBestiaryClass(player, class)
+	local window = ModalWindow({ title = "Bestiariusz - " .. class.name, message = "Wybierz potwora - fale beda pojawiac sie wokol ciebie.                                        " })
+	for index, entry in ipairs(class.list) do
+		if index > 250 then
+			break
+		end
+		local kills = bestiaryKills(player, entry[2])
+		local label = kills >= entry[3] and ("[Complete] " .. entry[1]) or string.format("%s  %d/%d", entry[1], kills, entry[3])
+		window:addChoice(label, function(target)
+			bestiaryStart(target, entry)
+		end)
+	end
+	window:addButton("Wybierz")
+	window:addButton("Wstecz", function(target)
+		openBestiary(target)
+	end)
+	window:setPriority(true)
+	window:setDefaultEnterButton(2)
+	window:setDefaultEscapeButton(1)
+	window:sendToPlayer(player)
+end
+
+openBestiary = function(player)
+	local window = ModalWindow({ title = "Bestiariusz", message = "Wybierz klase potworow. W nawiasie: ukonczone / wszystkie.                                        " })
+	for _, class in ipairs(bestiaryClasses) do
+		local finished = 0
+		for _, entry in ipairs(class.list) do
+			if bestiaryKills(player, entry[2]) >= entry[3] then
+				finished = finished + 1
+			end
+		end
+		window:addChoice(string.format("%s (%d/%d)", class.name, finished, #class.list), function(target)
+			openBestiaryClass(target, class)
+		end)
+	end
+	window:addButton("Wybierz")
+	window:addButton("Zamknij", function() end)
+	window:setPriority(true)
+	window:setDefaultEnterButton(2)
+	window:setDefaultEscapeButton(1)
+	window:sendToPlayer(player)
+end
+
 -- Wieza: kolejne pietra coraz silniejszych potworow (z listy expowisk, rosnaco), co 10 pieter boss.
 -- Rekord i punkt kontrolny (co 10 pieter) zapisuje sie na postaci - mozna zaczac od ostatniego punktu.
 -- Odroczone wywolania niosa tylko id gracza i numer biegu (token).
@@ -1272,6 +1436,9 @@ openMain = function(player)
 	window:addChoice("Fale potworow", function(target)
 		survivalEnter(target)
 	end)
+	window:addChoice("Bestiariusz (fale wybranego potwora)", function(target)
+		openBestiary(target)
+	end)
 	window:addChoice("Wieza (pietra, boss co 10)", function(target)
 		towerEnter(target)
 	end)
@@ -1415,6 +1582,8 @@ function hubStep.onStepIn(creature, item, position, fromPosition)
 		rushEnter(player)
 	elseif action.tower then
 		towerEnter(player)
+	elseif action.bestiary then
+		openBestiary(player)
 	elseif action.mounts and OtsMountHall then
 		OtsMountHall(player)
 	elseif action.outfits and OtsOutfitHall then
@@ -1463,6 +1632,8 @@ function hubLook.playerOnLook(player, inspectedThing, inspectedPosition, lookDis
 		text = "Boss Rush"
 	elseif action.tower then
 		text = "Wieza"
+	elseif action.bestiary then
+		text = "Bestiariusz"
 	elseif action.mounts then
 		text = "Wierzchowce do oswojenia"
 	elseif action.outfits then

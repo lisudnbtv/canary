@@ -911,6 +911,796 @@ local rushLanding = Position(30120, 29909, 7)
 local rushBosses = { "The Imperor", "Zushuka", "Chizzoron the Distorter", "Dracola", "The Handmaiden", "Chikhaton", "Mr. Punish", "Orshabaal", "Irgix The Flimsy", "Furyosa", "Thawing Dragon Lord", "The Welter", "Amenef the Burning", "Unaz the Mean", "Massacre", "Vok the Freakish", "Mawhawk", "Zulazza the Corruptor", "The Pale Count", "Lisa", "Morgaroth", "Glooth Fairy", "The Armored Voidborn", "Bullwark", "Ghazbaran", "Drume", "Ferumbras", "Urmahlullu the Weakened", "Omrafir", "The Rootkraken", "The Monster", "The Abomination", "Ancient Spawn of Morgathla", "Morshabaal" }
 local towerCenter = Position(30150, 29900, 7)
 local towerLanding = Position(30150, 29909, 7)
+local bestiaryCenter = Position(30180, 29900, 7)
+local bestiaryLanding = Position(30180, 29909, 7)
+local bestiaryClasses = {
+	{ name = "Amphibic", list = {
+		{ "Azure Frog", 268, 500 },
+		{ "Bog Frog", 738, 250 },
+		{ "Coral Frog", 269, 500 },
+		{ "Crimson Frog", 270, 500 },
+		{ "Filth Toad", 735, 500 },
+		{ "Green Frog", 267, 250 },
+		{ "Infernal Frog", 563, 1000 },
+		{ "Makara", 2262, 2500 },
+		{ "Orchid Frog", 271, 500 },
+		{ "Salamander", 913, 500 },
+		{ "Toad", 262, 500 },
+	} },
+	{ name = "Aquatic", list = {
+		{ "Abyssal Calamary", 1105, 500 },
+		{ "Blood Crab", 261, 500 },
+		{ "Calamary", 780, 500 },
+		{ "Crab", 112, 500 },
+		{ "Crustacea Gigantica", 697, 5 },
+		{ "Deathling Scout", 1667, 2500 },
+		{ "Deathling Spellsinger", 1677, 2500 },
+		{ "Deepling Brawler", 859, 1000 },
+		{ "Deepling Elite", 862, 1000 },
+		{ "Deepling Guard", 770, 1000 },
+		{ "Deepling Master Librarian", 860, 1000 },
+		{ "Deepling Scout", 734, 1000 },
+		{ "Deepling Spellsinger", 772, 1000 },
+		{ "Deepling Tyrant", 861, 2500 },
+		{ "Deepling Warrior", 769, 1000 },
+		{ "Deepling Worker", 795, 500 },
+		{ "Deepsea Blood Crab", 437, 500 },
+		{ "Fish", 784, 250 },
+		{ "Jellyfish", 781, 500 },
+		{ "Manta Ray", 779, 1000 },
+		{ "Northern Pike", 783, 25 },
+		{ "Quara Constrictor", 239, 1000 },
+		{ "Quara Constrictor Scout", 240, 1000 },
+		{ "Quara Hydromancer", 243, 1000 },
+		{ "Quara Hydromancer Scout", 244, 1000 },
+		{ "Quara Looter", 2543, 2500 },
+		{ "Quara Mantassin", 241, 1000 },
+		{ "Quara Mantassin Scout", 242, 500 },
+		{ "Quara Pincher", 245, 1000 },
+		{ "Quara Pincher Scout", 246, 1000 },
+		{ "Quara Plunderer", 2542, 2500 },
+		{ "Quara Predator", 237, 1000 },
+		{ "Quara Predator Scout", 238, 1000 },
+		{ "Quara Raider", 2541, 2500 },
+		{ "Renegade Quara Constrictor", 1097, 1000 },
+		{ "Renegade Quara Hydromancer", 1098, 1000 },
+		{ "Renegade Quara Mantassin", 1099, 1000 },
+		{ "Renegade Quara Pincher", 1100, 1000 },
+		{ "Renegade Quara Predator", 1101, 1000 },
+		{ "Shark", 782, 1000 },
+	} },
+	{ name = "Bird", list = {
+		{ "Agrestic Chicken", 1979, 250 },
+		{ "Berserker Chicken", 561, 1000 },
+		{ "Carnivostrich", 2341, 2500 },
+		{ "Cave Parrot", 1307, 250 },
+		{ "Chicken", 111, 250 },
+		{ "Demon Parrot", 562, 1000 },
+		{ "Dire Penguin", 335, 5 },
+		{ "Flamingo", 212, 250 },
+		{ "Harpy", 2340, 2500 },
+		{ "Headpecker", 2275, 5000 },
+		{ "Jungle Moa", 2257, 1000 },
+		{ "Marsh Stalker", 914, 500 },
+		{ "Parrot", 217, 250 },
+		{ "Penguin", 318, 250 },
+		{ "Pigeon", 915, 25 },
+		{ "Seagull", 264, 250 },
+		{ "Terror Bird", 218, 500 },
+	} },
+	{ name = "Construct", list = {
+		{ "Animated Snowman", 1751, 1000 },
+		{ "Biting Book", 1656, 2500 },
+		{ "Clay Guardian", 706, 1000 },
+		{ "Damaged Crystal Golem", 874, 500 },
+		{ "Damaged Worker Golem", 524, 500 },
+		{ "Diamond Servant", 702, 5 },
+		{ "Diamond Servant Replica", 1326, 1000 },
+		{ "Enraged Crystal Golem", 873, 1000 },
+		{ "Eternal Guardian", 615, 1000 },
+		{ "Gingerbread Man", 2549, 25 },
+		{ "Glooth Golem", 1038, 1000 },
+		{ "Goggle Cake", 2534, 2500 },
+		{ "Golden Servant", 701, 5 },
+		{ "Golden Servant Replica", 1327, 1000 },
+		{ "Ice Golem", 326, 1000 },
+		{ "Infected Weeper", 897, 2500 },
+		{ "Iron Servant", 700, 5 },
+		{ "Iron Servant Replica", 1325, 1000 },
+		{ "Lava Golem", 884, 2500 },
+		{ "Magma Crawler", 885, 2500 },
+		{ "Metal Gargoyle", 1039, 1000 },
+		{ "Orewalker", 883, 2500 },
+		{ "Rotten Golem", 1939, 5000 },
+		{ "Rustheap Golem", 1041, 1000 },
+		{ "Sandstone Scorpion", 705, 1000 },
+		{ "Shrieking Cry-Stal", 2278, 5000 },
+		{ "Stone Devourer", 879, 2500 },
+		{ "Stone Golem", 67, 500 },
+		{ "Walker", 1043, 1000 },
+		{ "Walking Pillar", 2394, 5000 },
+		{ "Wandering Pillar", 2395, 5000 },
+		{ "War Golem", 533, 1000 },
+		{ "Weeper", 882, 2500 },
+		{ "Worker Golem", 503, 1000 },
+	} },
+	{ name = "Demon", list = {
+		{ "Askarak Demon", 727, 1000 },
+		{ "Askarak Lord", 728, 1000 },
+		{ "Askarak Prince", 729, 1000 },
+		{ "Brachiodemon", 1930, 5000 },
+		{ "Brinebrute Inferniarch", 2601, 2500 },
+		{ "Broodrider Inferniarch", 2603, 2500 },
+		{ "Dark Torturer", 285, 2500 },
+		{ "Dawnfire Asura", 1134, 2500 },
+		{ "Demon", 35, 2500 },
+		{ "Demon Outcast", 1019, 2500 },
+		{ "Destroyer", 287, 1000 },
+		{ "Diabolic Imp", 288, 1000 },
+		{ "Duskbringer", 581, 5 },
+		{ "Fire Devil", 40, 500 },
+		{ "Floating Savant", 1637, 2500 },
+		{ "Frost Flower Asura", 1619, 1000 },
+		{ "Fury", 291, 2500 },
+		{ "Gorger Inferniarch", 2604, 2500 },
+		{ "Gozzler", 523, 500 },
+		{ "Grimeleech", 1196, 2500 },
+		{ "Hellfire Fighter", 295, 2500 },
+		{ "Hellflayer", 1198, 2500 },
+		{ "Hellhound", 294, 2500 },
+		{ "Hellhunter Inferniarch", 2600, 2500 },
+		{ "Hellspawn", 519, 1000 },
+		{ "Herald of Gloom", 586, 5 },
+		{ "Infernal Demon", 1938, 5000 },
+		{ "Juggernaut", 296, 2500 },
+		{ "Many Faces", 1927, 5000 },
+		{ "Midnight Asura", 1135, 1000 },
+		{ "Nightfiend", 973, 5 },
+		{ "Plaguesmith", 314, 1000 },
+		{ "Shaburak Demon", 724, 1000 },
+		{ "Shaburak Lord", 725, 1000 },
+		{ "Shaburak Prince", 726, 1000 },
+		{ "Shadow Hound", 582, 5 },
+		{ "Sineater Inferniarch", 2602, 2500 },
+		{ "Spellreaper Inferniarch", 2599, 2500 },
+		{ "True Dawnfire Asura", 1620, 2500 },
+		{ "True Frost Flower Asura", 1622, 2500 },
+		{ "True Midnight Asura", 1621, 2500 },
+		{ "Vexclaw", 1197, 2500 },
+	} },
+	{ name = "Dragon", list = {
+		{ "Dragolisk", 2456, 2500 },
+		{ "Dragon", 34, 1000 },
+		{ "Dragon Hatchling", 385, 1000 },
+		{ "Dragon Lord", 39, 1000 },
+		{ "Dragon Lord Hatchling", 386, 1000 },
+		{ "Draken Abomination", 673, 2500 },
+		{ "Draken Elite", 672, 2500 },
+		{ "Draken Spellweaver", 618, 2500 },
+		{ "Draken Warmaster", 617, 1000 },
+		{ "Elder Wyrm", 963, 2500 },
+		{ "Frost Dragon", 317, 1000 },
+		{ "Frost Dragon Hatchling", 402, 1000 },
+		{ "Ghastly Dragon", 643, 2500 },
+		{ "Haunted Dragon", 1376, 2500 },
+		{ "Hydra", 121, 1000 },
+		{ "Ice Dragon", 1380, 1000 },
+		{ "Mega Dragon", 2459, 2500 },
+		{ "Wardragon", 2458, 2500 },
+		{ "Wyrm", 461, 1000 },
+	} },
+	{ name = "Elemental", list = {
+		{ "Candy Floss Elemental", 2533, 2500 },
+		{ "Cliff Strider", 889, 2500 },
+		{ "Converter", 2379, 5000 },
+		{ "Earth Elemental", 458, 1000 },
+		{ "Energy Elemental", 457, 1000 },
+		{ "Fire Elemental", 49, 1000 },
+		{ "Foam Stalker", 2259, 2500 },
+		{ "High Voltage Elemental", 1116, 1000 },
+		{ "Honey Elemental", 2551, 1000 },
+		{ "Ironblight", 890, 2500 },
+		{ "Knowledge Elemental", 1670, 2500 },
+		{ "Lava Lurker", 1563, 2500 },
+		{ "Massive Earth Elemental", 455, 1000 },
+		{ "Massive Energy Elemental", 456, 1000 },
+		{ "Massive Fire Elemental", 313, 1000 },
+		{ "Massive Water Elemental", 279, 1000 },
+		{ "Raging Fire", 1121, 5 },
+		{ "Ravenous Lava Lurker", 1569, 1000 },
+		{ "Sulphur Spouter", 2265, 5000 },
+		{ "Turbulent Elemental", 1940, 5000 },
+		{ "Water Elemental", 236, 1000 },
+	} },
+	{ name = "Extra Dimensional", list = {
+		{ "Breach Brood", 1235, 2500 },
+		{ "Courage Leech", 1941, 5000 },
+		{ "Dread Intruder", 1260, 2500 },
+		{ "Instable Breach Brood", 1265, 1000 },
+		{ "Instable Sparkion", 1264, 1000 },
+		{ "Mitmah Scout", 2460, 2500 },
+		{ "Mitmah Seer", 2461, 2500 },
+		{ "Reality Reaver", 1224, 2500 },
+		{ "Sparkion", 1234, 2500 },
+		{ "Stabilizing Dread Intruder", 1267, 1000 },
+		{ "Stabilizing Reality Reaver", 1266, 1000 },
+		{ "Yielothax", 717, 1000 },
+	} },
+	{ name = "Fey", list = {
+		{ "Angry Sugar Fairy", 2552, 2500 },
+		{ "Arctic Faun", 1626, 1000 },
+		{ "Boogy", 1439, 1000 },
+		{ "Cream Blob", 2568, 25 },
+		{ "Dark Faun", 1496, 1000 },
+		{ "Dryad", 383, 5 },
+		{ "Faun", 1434, 1000 },
+		{ "Fruit Drop", 2565, 25 },
+		{ "Nymph", 1485, 1000 },
+		{ "Percht", 1740, 1000 },
+		{ "Pixie", 1438, 1000 },
+		{ "Pooka", 1435, 1000 },
+		{ "Schiach", 1741, 1000 },
+		{ "Sugar Cube", 2548, 25 },
+		{ "Sugar Cube Worker", 2567, 25 },
+		{ "Swan Maiden", 1437, 1000 },
+		{ "Truffle", 2547, 25 },
+		{ "Truffle Cook", 2563, 25 },
+		{ "Twisted Pooka", 1436, 1000 },
+		{ "Wisp", 462, 250 },
+	} },
+	{ name = "Giant", list = {
+		{ "Behemoth", 55, 1000 },
+		{ "Cyclops", 22, 500 },
+		{ "Cyclops Drone", 391, 1000 },
+		{ "Cyclops Smith", 389, 1000 },
+		{ "Frost Giant", 324, 500 },
+		{ "Frost Giantess", 334, 500 },
+		{ "Hulking Prehemoth", 2271, 5000 },
+		{ "Ogre Brute", 1161, 1000 },
+		{ "Ogre Rowdy", 1821, 2500 },
+		{ "Ogre Ruffian", 1820, 2500 },
+		{ "Ogre Sage", 1822, 2500 },
+		{ "Ogre Savage", 1162, 1000 },
+		{ "Ogre Shaman", 1163, 1000 },
+		{ "Orclops Doomhauler", 1314, 1000 },
+		{ "Orclops Ravager", 1320, 1000 },
+	} },
+	{ name = "Human", list = {
+		{ "Acolyte of Darkness", 578, 5 },
+		{ "Acolyte of the Cult", 253, 1000 },
+		{ "Adept of the Cult", 254, 1000 },
+		{ "Adventurer", 922, 500 },
+		{ "Amazon", 77, 500 },
+		{ "Assassin", 224, 500 },
+		{ "Bandit", 223, 500 },
+		{ "Barbarian Bloodwalker", 323, 1000 },
+		{ "Barbarian Brutetamer", 332, 500 },
+		{ "Barbarian Headsplitter", 333, 500 },
+		{ "Barbarian Skullhunter", 322, 500 },
+		{ "Black Sphinx Acolyte", 1800, 2500 },
+		{ "Blood Hand", 974, 1000 },
+		{ "Blood Priest", 961, 1000 },
+		{ "Burning Gladiator", 1798, 2500 },
+		{ "Cobra Assassin", 1775, 2500 },
+		{ "Cobra Scout", 1776, 2500 },
+		{ "Cobra Vizier", 1824, 2500 },
+		{ "Crazed Beggar", 525, 500 },
+		{ "Crypt Defiler", 868, 500 },
+		{ "Cult Believer", 1512, 1000 },
+		{ "Cult Enforcer", 1513, 1000 },
+		{ "Cult Scholar", 1514, 1000 },
+		{ "Dark Apprentice", 372, 500 },
+		{ "Dark Carnisylvan", 2109, 2500 },
+		{ "Dark Magician", 371, 500 },
+		{ "Dark Monk", 225, 500 },
+		{ "Enlightened of the Cult", 252, 1000 },
+		{ "Feverish Citizen", 719, 500 },
+		{ "Gang Member", 526, 500 },
+		{ "Gladiator", 527, 500 },
+		{ "Glooth Bandit", 1119, 1000 },
+		{ "Glooth Brigand", 1120, 1000 },
+		{ "Goldhanded Cultist", 1481, 1000 },
+		{ "Grave Robber", 867, 500 },
+		{ "Hero", 73, 1000 },
+		{ "Hulking Carnisylvan", 2107, 2500 },
+		{ "Hunter", 11, 500 },
+		{ "Ice Witch", 331, 1000 },
+		{ "Infernalist", 529, 2500 },
+		{ "Mad Scientist", 528, 500 },
+		{ "Misguided Thief", 1413, 1000 },
+		{ "Monk", 57, 500 },
+		{ "Mutated Human", 521, 1000 },
+		{ "Necromancer", 9, 1000 },
+		{ "Nomad", 310, 500 },
+		{ "Nomad Blue", 776, 500 },
+		{ "Nomad Female", 777, 500 },
+		{ "Novice of the Cult", 255, 500 },
+		{ "Pirate Buccaneer", 249, 1000 },
+		{ "Pirate Corsair", 250, 1000 },
+		{ "Pirate Cutthroat", 248, 1000 },
+		{ "Pirate Marauder", 247, 500 },
+		{ "Poacher", 376, 500 },
+		{ "Poisonous Carnisylvan", 2108, 2500 },
+		{ "Priestess", 58, 1000 },
+		{ "Priestess of the Wild Sun", 1799, 2500 },
+		{ "Renegade Knight", 1146, 1000 },
+		{ "Shadow Pupil", 960, 1000 },
+		{ "Smuggler", 222, 500 },
+		{ "Stalker", 72, 500 },
+		{ "Usurper Archer", 1973, 2500 },
+		{ "Usurper Knight", 1972, 2500 },
+		{ "Usurper Warlock", 1974, 2500 },
+		{ "Valkyrie", 12, 500 },
+		{ "Vicious Squire", 1145, 1000 },
+		{ "Vile Grandmaster", 1147, 1000 },
+		{ "Warlock", 10, 1000 },
+		{ "Wild Warrior", 47, 500 },
+		{ "Witch", 54, 500 },
+	} },
+	{ name = "Humanoid", list = {
+		{ "Barkless Devotee", 1486, 1000 },
+		{ "Barkless Fanatic", 1488, 1000 },
+		{ "Boar Man", 2339, 2500 },
+		{ "Broken Shaper", 1321, 1000 },
+		{ "Bulltaur Alchemist", 2448, 2500 },
+		{ "Bulltaur Brute", 2447, 2500 },
+		{ "Bulltaur Forgepriest", 2449, 2500 },
+		{ "Chakoya Toolshaper", 328, 500 },
+		{ "Chakoya Tribewarden", 319, 500 },
+		{ "Chakoya Windcaller", 329, 500 },
+		{ "Corym Charlatan", 916, 500 },
+		{ "Corym Skirmisher", 917, 1000 },
+		{ "Corym Vanguard", 918, 1000 },
+		{ "Crape Man", 2337, 2500 },
+		{ "Crazed Summer Rearguard", 1733, 2500 },
+		{ "Crazed Summer Vanguard", 1732, 2500 },
+		{ "Crazed Winter Rearguard", 1731, 2500 },
+		{ "Crazed Winter Vanguard", 1730, 2500 },
+		{ "Dwarf", 69, 500 },
+		{ "Dwarf Geomancer", 66, 1000 },
+		{ "Dwarf Guard", 70, 500 },
+		{ "Dwarf Henchman", 379, 1000 },
+		{ "Dwarf Soldier", 71, 500 },
+		{ "Dworc Fleshhunter", 215, 500 },
+		{ "Dworc Venomsniper", 216, 500 },
+		{ "Dworc Voodoomaster", 214, 500 },
+		{ "Elf", 62, 500 },
+		{ "Elf Arcanist", 63, 500 },
+		{ "Elf Overseer", 741, 5 },
+		{ "Elf Scout", 64, 500 },
+		{ "Enslaved Dwarf", 886, 1000 },
+		{ "Execowtioner", 1046, 1000 },
+		{ "Firestarter", 737, 500 },
+		{ "Frost Troll", 53, 250 },
+		{ "Furious Troll", 540, 500 },
+		{ "Goblin", 61, 250 },
+		{ "Goblin Assassin", 463, 500 },
+		{ "Goblin Leader", 377, 5 },
+		{ "Goblin Scavenger", 464, 500 },
+		{ "Grynch Clan Goblin", 393, 5 },
+		{ "Insane Siren", 1735, 2500 },
+		{ "Island Troll", 277, 250 },
+		{ "Liodile", 2338, 2500 },
+		{ "Little Corym Charlatan", 920, 500 },
+		{ "Lost Basher", 925, 1000 },
+		{ "Lost Berserker", 888, 2500 },
+		{ "Lost Exile", 1529, 1000 },
+		{ "Lost Husher", 924, 1000 },
+		{ "Lost Thrower", 926, 1000 },
+		{ "Minotaur", 25, 500 },
+		{ "Minotaur Amazon", 1045, 2500 },
+		{ "Minotaur Archer", 24, 500 },
+		{ "Minotaur Cult Follower", 1508, 1000 },
+		{ "Minotaur Cult Prophet", 1509, 1000 },
+		{ "Minotaur Cult Zealot", 1510, 1000 },
+		{ "Minotaur Guard", 29, 500 },
+		{ "Minotaur Hunter", 1052, 1000 },
+		{ "Minotaur Invader", 1109, 1000 },
+		{ "Minotaur Mage", 23, 500 },
+		{ "Misguided Bully", 1412, 1000 },
+		{ "Mooh'Tah Warrior", 1051, 1000 },
+		{ "Moohtant", 1044, 1000 },
+		{ "Orc", 5, 500 },
+		{ "Orc Berserker", 8, 1000 },
+		{ "Orc Cult Fanatic", 1506, 1000 },
+		{ "Orc Cult Inquisitor", 1505, 1000 },
+		{ "Orc Cult Minion", 1507, 1000 },
+		{ "Orc Cult Priest", 1504, 1000 },
+		{ "Orc Cultist", 1503, 1000 },
+		{ "Orc Leader", 59, 1000 },
+		{ "Orc Marauder", 614, 1000 },
+		{ "Orc Rider", 4, 500 },
+		{ "Orc Shaman", 6, 500 },
+		{ "Orc Spearman", 50, 500 },
+		{ "Orc Warlord", 2, 1000 },
+		{ "Orc Warrior", 7, 500 },
+		{ "Pirat Bombardier", 2038, 1000 },
+		{ "Pirat Cutthroat", 2036, 1000 },
+		{ "Pirat Mate", 2039, 1000 },
+		{ "Pirat Scoundrel", 2037, 1000 },
+		{ "Rhindeer", 2342, 2500 },
+		{ "Shaper Matriarch", 1394, 1000 },
+		{ "Soul-Broken Harbinger", 1734, 2500 },
+		{ "Swamp Troll", 76, 500 },
+		{ "Troll", 15, 250 },
+		{ "Troll Champion", 392, 500 },
+		{ "Troll Guard", 745, 5 },
+		{ "Troll Legionnaire", 541, 1000 },
+		{ "Twisted Shaper", 1322, 1000 },
+		{ "Worm Priestess", 1053, 1000 },
+	} },
+	{ name = "Lycanthrope", list = {
+		{ "Cunning Werepanther", 2403, 2500 },
+		{ "Feral Werecrocodile", 2389, 2500 },
+		{ "Werebadger", 1144, 1000 },
+		{ "Werebear", 1142, 1000 },
+		{ "Wereboar", 1143, 1000 },
+		{ "Werecrocodile", 2388, 2500 },
+		{ "Werefox", 1549, 1000 },
+		{ "Werehyaena", 1963, 1000 },
+		{ "Werehyaena Shaman", 1964, 1000 },
+		{ "Werelion", 1965, 2500 },
+		{ "Werelioness", 1966, 2500 },
+		{ "Werepanther", 2390, 2500 },
+		{ "Weretiger", 2386, 2500 },
+		{ "Werewolf", 510, 1000 },
+		{ "White Weretiger", 2387, 2500 },
+	} },
+	{ name = "Magical", list = {
+		{ "Animated Feather", 1671, 2500 },
+		{ "Arachnophobica", 1729, 2500 },
+		{ "Armadile", 880, 2500 },
+		{ "Bashmu", 2100, 2500 },
+		{ "Blue Djinn", 80, 1000 },
+		{ "Bog Raider", 460, 1000 },
+		{ "Bonelord", 17, 500 },
+		{ "Brain Squid", 1653, 2500 },
+		{ "Burning Book", 1663, 2500 },
+		{ "Candy Horror", 2535, 2500 },
+		{ "Choking Fear", 1015, 2500 },
+		{ "Crypt Warden", 1805, 2500 },
+		{ "Crystal Spider", 330, 1000 },
+		{ "Crystal Wolf", 740, 5 },
+		{ "Crystalcrusher", 869, 1000 },
+		{ "Cursed Book", 1655, 2500 },
+		{ "Darklight Construct", 2378, 5000 },
+		{ "Darklight Emitter", 2382, 5000 },
+		{ "Darklight Source", 2398, 5000 },
+		{ "Darklight Striker", 2399, 5000 },
+		{ "Dragonling", 894, 1000 },
+		{ "Efreet", 103, 1000 },
+		{ "Elder Bonelord", 108, 1000 },
+		{ "Energetic Book", 1665, 2500 },
+		{ "Energuardian of Tales", 1666, 2500 },
+		{ "Enfeebled Silencer", 1443, 1000 },
+		{ "Feral Sphinx", 1807, 2500 },
+		{ "Feversleep", 1021, 1000 },
+		{ "Flying Book", 1654, 1000 },
+		{ "Forest Fury", 980, 1000 },
+		{ "Frazzlemaw", 1022, 2500 },
+		{ "Gargoyle", 95, 500 },
+		{ "Gazer", 109, 500 },
+		{ "Girtablilu Warrior", 2099, 2500 },
+		{ "Green Djinn", 51, 1000 },
+		{ "Gryphon", 1819, 1000 },
+		{ "Guardian of Tales", 1659, 2500 },
+		{ "Guzzlemaw", 1013, 2500 },
+		{ "Icecold Book", 1664, 2500 },
+		{ "Juvenile Bashmu", 2101, 2500 },
+		{ "Lamassu", 1806, 2500 },
+		{ "Lumbering Carnivor", 1721, 1000 },
+		{ "Manticore", 1816, 2500 },
+		{ "Marid", 104, 1000 },
+		{ "Medusa", 570, 2500 },
+		{ "Menacing Carnivor", 1723, 2500 },
+		{ "Midnight Panther", 698, 5 },
+		{ "Nibblemaw", 2531, 2500 },
+		{ "Nightmare", 299, 1000 },
+		{ "Nightmare Scion", 518, 1000 },
+		{ "Nightstalker", 520, 1000 },
+		{ "Phantasm", 292, 2500 },
+		{ "Rage Squid", 1668, 2500 },
+		{ "Redeemed Soul", 1138, 500 },
+		{ "Retching Horror", 1018, 2500 },
+		{ "Rorc", 978, 1000 },
+		{ "Shock Head", 1004, 2500 },
+		{ "Sight of Surrender", 1012, 2500 },
+		{ "Silencer", 1014, 1000 },
+		{ "Sphinx", 1808, 2500 },
+		{ "Spiky Carnivor", 1722, 2500 },
+		{ "Squid Warden", 1669, 2500 },
+		{ "Tainted Soul", 1137, 500 },
+		{ "Terrorsleep", 1016, 2500 },
+		{ "Thanatursus", 1728, 2500 },
+		{ "Thornfire Wolf", 739, 5 },
+		{ "Venerable Girtablilu", 2098, 2500 },
+		{ "Weakened Frazzlemaw", 1442, 1000 },
+	} },
+	{ name = "Mammal", list = {
+		{ "Badger", 105, 250 },
+		{ "Baleful Bunny", 1742, 1000 },
+		{ "Bat", 122, 250 },
+		{ "Bear", 16, 500 },
+		{ "Black Sheep", 13, 250 },
+		{ "Boar", 693, 500 },
+		{ "Brown Horse", 752, 250 },
+		{ "Cat", 387, 25 },
+		{ "Cave Rat", 56, 250 },
+		{ "Clomp", 1174, 1000 },
+		{ "Deer", 31, 250 },
+		{ "Dog", 32, 25 },
+		{ "Doom Deer", 559, 1000 },
+		{ "Dromedary", 733, 250 },
+		{ "Elephant", 211, 500 },
+		{ "Evil Sheep", 555, 1000 },
+		{ "Evil Sheep Lord", 556, 1000 },
+		{ "Exotic Bat", 2051, 1000 },
+		{ "Fox", 1548, 250 },
+		{ "Gloom Wolf", 1139, 500 },
+		{ "Gnarlhound", 630, 500 },
+		{ "Gore Horn", 2266, 5000 },
+		{ "Gorerilla", 2277, 5000 },
+		{ "Grey Horse", 751, 250 },
+		{ "Horse", 750, 250 },
+		{ "Hot Dog", 557, 1000 },
+		{ "Husky", 325, 25 },
+		{ "Hyaena", 94, 500 },
+		{ "Killer Rabbit", 560, 500 },
+		{ "Kongra", 116, 500 },
+		{ "Lion", 41, 500 },
+		{ "Mammoth", 260, 500 },
+		{ "Merlkin", 117, 500 },
+		{ "Modified Gnarlhound", 877, 25 },
+		{ "Mole", 1570, 500 },
+		{ "Mushroom Sniffer", 870, 25 },
+		{ "Mutated Bat", 509, 1000 },
+		{ "Mutated Rat", 502, 1000 },
+		{ "Mutated Tiger", 516, 1000 },
+		{ "Nighthunter", 2270, 5000 },
+		{ "Noble Lion", 1118, 1000 },
+		{ "Panda", 123, 500 },
+		{ "Parder", 2256, 1000 },
+		{ "Pig", 60, 250 },
+		{ "Polar Bear", 42, 500 },
+		{ "Rabbit", 74, 250 },
+		{ "Rat", 21, 250 },
+		{ "Roaring Lion", 981, 1000 },
+		{ "Sabretooth", 2267, 5000 },
+		{ "Sheep", 14, 250 },
+		{ "Sibang", 118, 500 },
+		{ "Silver Rabbit", 327, 250 },
+		{ "Skunk", 106, 250 },
+		{ "Squirrel", 384, 250 },
+		{ "Starving Wolf", 723, 500 },
+		{ "Stone Rhino", 1395, 1000 },
+		{ "Terrified Elephant", 771, 500 },
+		{ "Tiger", 125, 500 },
+		{ "Vulcongra", 898, 2500 },
+		{ "War Wolf", 3, 500 },
+		{ "Water Buffalo", 872, 5 },
+		{ "White Deer", 720, 250 },
+		{ "White Lion", 1967, 2500 },
+		{ "White Tiger", 2391, 500 },
+		{ "Wild Horse", 730, 5 },
+		{ "Winter Wolf", 52, 250 },
+		{ "Wolf", 27, 250 },
+		{ "Yeti", 110, 5 },
+	} },
+	{ name = "Plant", list = {
+		{ "Bane Bringer", 679, 5 },
+		{ "Branchy Crawler", 1931, 5000 },
+		{ "Carniphila", 120, 1000 },
+		{ "Cloak of Terror", 1928, 5000 },
+		{ "Glooth Anemone", 1042, 1000 },
+		{ "Haunted Treeling", 511, 1000 },
+		{ "Hideous Fungus", 891, 2500 },
+		{ "Humongous Fungus", 881, 2500 },
+		{ "Lavafungus", 2095, 2500 },
+		{ "Leaf Golem", 979, 500 },
+		{ "Omnivora", 1141, 1000 },
+		{ "Rootthing Amber Shaper", 2539, 2500 },
+		{ "Rootthing Bug Tracker", 2538, 2500 },
+		{ "Rootthing Nutshell", 2540, 2500 },
+		{ "Spit Nettle", 221, 500 },
+		{ "Stalking Stalk", 2272, 5000 },
+		{ "Swampling", 919, 500 },
+		{ "Wilting Leaf Golem", 982, 1000 },
+	} },
+	{ name = "Reptile", list = {
+		{ "Adult Goanna", 1818, 2500 },
+		{ "Cobra", 81, 500 },
+		{ "Crocodile", 119, 500 },
+		{ "Draptor", 695, 5 },
+		{ "Emerald Tortoise", 2268, 5000 },
+		{ "Killer Caiman", 627, 1000 },
+		{ "Lizard Chosen", 620, 1000 },
+		{ "Lizard Dragon Priest", 623, 1000 },
+		{ "Lizard High Guard", 625, 1000 },
+		{ "Lizard Legionnaire", 624, 1000 },
+		{ "Lizard Magistratus", 655, 1000 },
+		{ "Lizard Noble", 656, 2500 },
+		{ "Lizard Sentinel", 114, 500 },
+		{ "Lizard Snakecharmer", 115, 1000 },
+		{ "Lizard Templar", 113, 500 },
+		{ "Lizard Zaogun", 616, 1000 },
+		{ "Mantosaurus", 2274, 5000 },
+		{ "Mercurial Menace", 2279, 5000 },
+		{ "Naga Archer", 2260, 2500 },
+		{ "Naga Warrior", 2261, 2500 },
+		{ "Noxious Ripptor", 2276, 5000 },
+		{ "Sea Serpent", 438, 1000 },
+		{ "Seacrest Serpent", 1096, 2500 },
+		{ "Serpent Spawn", 220, 1000 },
+		{ "Snake", 28, 250 },
+		{ "Stampor", 694, 1000 },
+		{ "Stonerefiner", 1525, 1000 },
+		{ "Thornback Tortoise", 259, 500 },
+		{ "Tortoise", 258, 500 },
+		{ "Two-Headed Turtle", 2258, 2500 },
+		{ "Wyvern", 290, 1000 },
+		{ "Young Goanna", 1817, 2500 },
+		{ "Young Sea Serpent", 439, 1000 },
+	} },
+	{ name = "Slime", list = {
+		{ "Acid Blob", 513, 1000 },
+		{ "Chocolate Blob", 2550, 25 },
+		{ "Darklight Matter", 2380, 5000 },
+		{ "Death Blob", 514, 1000 },
+		{ "Defiler", 289, 2500 },
+		{ "Devourer", 1056, 1000 },
+		{ "Glooth Blob", 1054, 1000 },
+		{ "Ink Blob", 1658, 2500 },
+		{ "Meandering Mushroom", 2376, 5000 },
+		{ "Mercury Blob", 515, 500 },
+		{ "Midnight Spawn", 584, 5 },
+		{ "Slime", 19, 500 },
+		{ "Son of Verminor", 265, 2500 },
+		{ "Squidgy Slime", 20, 500 },
+	} },
+	{ name = "Undead", list = {
+		{ "Bane of Light", 580, 5 },
+		{ "Banshee", 78, 1000 },
+		{ "Betrayed Wraith", 284, 1000 },
+		{ "Blightwalker", 298, 2500 },
+		{ "Blood Beast", 1040, 1000 },
+		{ "Bonebeast", 101, 1000 },
+		{ "Bony Sea Devil", 1926, 5000 },
+		{ "Braindeath", 321, 1000 },
+		{ "Burster Spectre", 1726, 2500 },
+		{ "Capricious Phantom", 1932, 5000 },
+		{ "Crypt Shambler", 100, 500 },
+		{ "Cursed Ape", 2347, 1000 },
+		{ "Cursed Prospector", 1880, 2500 },
+		{ "Death Priest", 710, 1000 },
+		{ "Demon Skeleton", 37, 1000 },
+		{ "Distorted Phantom", 1962, 5000 },
+		{ "Druid's Apparition", 1946, 5000 },
+		{ "Elder Mummy", 711, 1000 },
+		{ "Evil Prospector", 1885, 2500 },
+		{ "Falcon Knight", 1646, 2500 },
+		{ "Falcon Paladin", 1647, 2500 },
+		{ "Flimsy Lost Soul", 1864, 2500 },
+		{ "Freakish Lost Soul", 1866, 2500 },
+		{ "Gazer Spectre", 1725, 2500 },
+		{ "Ghost", 48, 500 },
+		{ "Ghost Wolf", 1148, 500 },
+		{ "Ghoul", 18, 500 },
+		{ "Ghoulish Hyaena", 704, 1000 },
+		{ "Grave Guard", 707, 1000 },
+		{ "Gravedigger", 975, 1000 },
+		{ "Grim Reaper", 465, 2500 },
+		{ "Hand of Cursed Fate", 281, 2500 },
+		{ "Honour Guard", 712, 500 },
+		{ "Iks Ahpututu", 2349, 5 },
+		{ "Iks Aucar", 2344, 1000 },
+		{ "Iks Chuka", 2345, 1000 },
+		{ "Iks Churrascan", 2350, 1000 },
+		{ "Iks Pututu", 2343, 1000 },
+		{ "Iks Yapunac", 2437, 2500 },
+		{ "Infernal Phantom", 1933, 5000 },
+		{ "Knight's Apparition", 1947, 5000 },
+		{ "Lich", 99, 1000 },
+		{ "Lost Soul", 283, 1000 },
+		{ "Mean Lost Soul", 1865, 2500 },
+		{ "Monk's Apparition", 2636, 5000 },
+		{ "Mould Phantom", 1945, 5000 },
+		{ "Mummy", 65, 500 },
+		{ "Oozing Carcass", 2377, 5000 },
+		{ "Oozing Corpus", 2381, 5000 },
+		{ "Paladin's Apparition", 1948, 5000 },
+		{ "Pirate Ghost", 257, 500 },
+		{ "Pirate Skeleton", 256, 500 },
+		{ "Putrid Mummy", 1415, 1000 },
+		{ "Ripper Spectre", 1724, 2500 },
+		{ "Rot Elemental", 1055, 1000 },
+		{ "Skeleton", 33, 500 },
+		{ "Skeleton Elite Warrior", 1674, 2500 },
+		{ "Skeleton Warrior", 446, 500 },
+		{ "Sopping Carcass", 2396, 5000 },
+		{ "Sopping Corpus", 2397, 5000 },
+		{ "Sorcerer's Apparition", 1949, 5000 },
+		{ "Souleater", 675, 1000 },
+		{ "Spectre", 286, 1000 },
+		{ "Tarnished Spirit", 976, 500 },
+		{ "Tomb Servant", 708, 1000 },
+		{ "Undead Cavebear", 696, 5 },
+		{ "Undead Dragon", 282, 2500 },
+		{ "Undead Elite Gladiator", 1675, 2500 },
+		{ "Undead Gladiator", 508, 1000 },
+		{ "Undead Mine Worker", 594, 500 },
+		{ "Undead Prospector", 595, 500 },
+		{ "Vampire", 68, 1000 },
+		{ "Vampire Bride", 483, 1000 },
+		{ "Vampire Pig", 558, 1000 },
+		{ "Vampire Viscount", 958, 1000 },
+		{ "Vibrant Phantom", 1929, 5000 },
+		{ "Vicious Manbat", 959, 5 },
+		{ "White Shade", 962, 500 },
+		{ "Zombie", 512, 1000 },
+	} },
+	{ name = "Vermin", list = {
+		{ "Afflicted Strider", 2094, 2500 },
+		{ "Ancient Scarab", 79, 1000 },
+		{ "Blemished Spawn", 2093, 2500 },
+		{ "Bloated Man-Maggot", 2392, 5000 },
+		{ "Brimstone Bug", 674, 1000 },
+		{ "Bug", 45, 250 },
+		{ "Butterfly", 227, 25 },
+		{ "Carrion Worm", 251, 500 },
+		{ "Cave Chimera", 2096, 2500 },
+		{ "Cave Devourer", 1544, 2500 },
+		{ "Centipede", 124, 500 },
+		{ "Chasm Spawn", 1546, 2500 },
+		{ "Crawler", 786, 1000 },
+		{ "Deepworm", 1531, 2500 },
+		{ "Diremaw", 1532, 2500 },
+		{ "Drillworm", 878, 1000 },
+		{ "Emerald Damselfly", 912, 500 },
+		{ "Exotic Cave Spider", 2024, 1000 },
+		{ "Eyeless Devourer", 2092, 2500 },
+		{ "Giant Spider", 38, 1000 },
+		{ "Hibernal Moth", 1737, 1000 },
+		{ "Hive Overseer", 801, 2500 },
+		{ "Insect Swarm", 621, 500 },
+		{ "Insectoid Scout", 732, 500 },
+		{ "Insectoid Worker", 796, 1000 },
+		{ "Kollos", 788, 1000 },
+		{ "Lacewing Moth", 1736, 1000 },
+		{ "Ladybug", 778, 500 },
+		{ "Lancer Beetle", 633, 1000 },
+		{ "Larva", 82, 500 },
+		{ "Lavaworm", 2088, 2500 },
+		{ "Mycobiontic Beetle", 2375, 5000 },
+		{ "Pink Butterfly", 213, 25 },
+		{ "Poison Spider", 36, 250 },
+		{ "Red Butterfly", 228, 25 },
+		{ "Rotten Man-Maggot", 2393, 5000 },
+		{ "Rotworm", 26, 500 },
+		{ "Sacred Spider", 709, 1000 },
+		{ "Sandcrawler", 641, 250 },
+		{ "Scarab", 83, 500 },
+		{ "Scorpion", 43, 500 },
+		{ "Slug", 731, 500 },
+		{ "Spider", 30, 250 },
+		{ "Spidris", 787, 1000 },
+		{ "Spidris Elite", 797, 1000 },
+		{ "Spitter", 791, 1000 },
+		{ "Streaked Devourer", 2091, 2500 },
+		{ "Sulphider", 2264, 5000 },
+		{ "Swarmer", 790, 1000 },
+		{ "Tarantula", 219, 500 },
+		{ "Terramite", 631, 500 },
+		{ "Tremendous Tyrant", 2089, 2500 },
+		{ "Tunnel Tyrant", 1545, 2500 },
+		{ "Undertaker", 2269, 5000 },
+		{ "Varnished Diremaw", 2090, 2500 },
+		{ "Wailing Widow", 632, 1000 },
+		{ "Wasp", 44, 250 },
+		{ "Waspoid", 792, 1000 },
+		{ "Wiggler", 899, 1000 },
+		{ "Yellow Butterfly", 235, 25 },
+	} },
+}
 local taskNpcPosition = Position(30013, 29998, 7)
 local hubPads = {
 	["29996:29705:7"] = { goto = { 29998, 29733, 7 }, label = "Bossy 8/9 (arena, HP 25000-80000)" },
@@ -1097,6 +1887,7 @@ local hubPads = {
 	["30006:30198:7"] = { hunt = hunts[1].list[148] },
 	["30006:30204:7"] = { hunt = hunts[1].list[159] },
 	["30006:30208:7"] = { hunt = hunts[1].list[160] },
+	["30007:29998:7"] = { bestiary = true },
 	["30009:29700:7"] = { boss = bosses[197] },
 	["30009:29704:7"] = { boss = bosses[198] },
 	["30009:29726:7"] = { boss = bosses[173] },
@@ -2591,6 +3382,159 @@ local function survivalEnter(player)
 	addEvent(survivalNext, 2500, player:getId(), survival.token)
 end
 
+-- Bestiariusz: sala, w ktorej wokol postaci pojawiaja sie fale wybranego potwora, az bestiariusz
+-- tego potwora sie zapelni albo gracz wyjdzie. Zabojstwa licza sie normalnie (silnik dolicza je sam).
+-- Postep czytany ze storage silnika (STORAGEVALUE_BESTIARYKILLCOUNT + raceId).
+local BESTIARY_KILL_STORAGE = 61305000
+local BESTIARY_WAVE = 14
+local bestiaryRun = { token = 0, ids = {}, monster = nil }
+
+local function bestiaryKills(player, race)
+	return math.max(0, player:getStorageValue(BESTIARY_KILL_STORAGE + race))
+end
+
+local function inBestiaryRoom(player)
+	local pos = player:getPosition()
+	return pos.z == bestiaryCenter.z and math.abs(pos.x - bestiaryCenter.x) <= ARENA_RADIUS + 1 and math.abs(pos.y - bestiaryCenter.y) <= ARENA_RADIUS + 1
+end
+
+local function bestiaryClear()
+	for _, id in ipairs(bestiaryRun.ids) do
+		local creature = Creature(id)
+		if creature then
+			creature:remove()
+		end
+	end
+	bestiaryRun.ids = {}
+end
+
+local bestiaryCheck
+
+local function bestiaryWave(playerId, token)
+	if token ~= bestiaryRun.token then
+		return
+	end
+	local player = Player(playerId)
+	if not player or not inBestiaryRoom(player) then
+		bestiaryClear()
+		return
+	end
+	local entry = bestiaryRun.monster
+	local kills = bestiaryKills(player, entry[2])
+	if kills >= entry[3] then
+		player:sendTextMessage(MESSAGE_EVENT_ADVANCE, string.format("Bestiariusz: %s ukonczony (%d/%d)! Wybierz kolejnego potwora.", entry[1], kills, entry[3]))
+		return
+	end
+	local here = player:getPosition()
+	local ring = {}
+	for dx = -3, 3 do
+		for dy = -3, 3 do
+			if math.max(math.abs(dx), math.abs(dy)) >= 2 then
+				local pos = Position(here.x + dx, here.y + dy, here.z)
+				local tile = Tile(pos)
+				if math.abs(pos.x - bestiaryCenter.x) <= ARENA_RADIUS and math.abs(pos.y - bestiaryCenter.y) <= ARENA_RADIUS and tile and tile:isWalkable(true, true, true, true, false) then
+					ring[#ring + 1] = pos
+				end
+			end
+		end
+	end
+	bestiaryRun.ids = {}
+	local amount = math.min(BESTIARY_WAVE, entry[3] - kills)
+	for _ = 1, amount do
+		local pos = #ring > 0 and table.remove(ring, math.random(#ring)) or bestiaryCenter
+		local monster = Game.createMonster(entry[1], pos, true, true)
+		if monster then
+			bestiaryRun.ids[#bestiaryRun.ids + 1] = monster:getId()
+		end
+	end
+	if #bestiaryRun.ids == 0 then
+		player:sendCancelMessage("Tego potwora nie da sie przywolac w sali.")
+		return
+	end
+	player:sendTextMessage(MESSAGE_STATUS, string.format("Bestiariusz: %s %d/%d.", entry[1], kills, entry[3]))
+	addEvent(bestiaryCheck, 1000, playerId, token)
+end
+
+bestiaryCheck = function(playerId, token)
+	if token ~= bestiaryRun.token then
+		return
+	end
+	local player = Player(playerId)
+	if not player or not inBestiaryRoom(player) then
+		bestiaryClear()
+		return
+	end
+	for _, id in ipairs(bestiaryRun.ids) do
+		if Creature(id) then
+			addEvent(bestiaryCheck, 1000, playerId, token)
+			return
+		end
+	end
+	addEvent(bestiaryWave, 1500, playerId, token)
+end
+
+local function bestiaryStart(player, entry)
+	if inFight(player) then
+		return
+	end
+	bestiaryClear()
+	bestiaryRun.token = bestiaryRun.token + 1
+	bestiaryRun.monster = entry
+	if not inBestiaryRoom(player) then
+		travel(player, { "Bestiariusz", bestiaryLanding.x, bestiaryLanding.y, bestiaryLanding.z })
+	end
+	if not inBestiaryRoom(player) then
+		return
+	end
+	player:sendTextMessage(MESSAGE_EVENT_ADVANCE, string.format("Bestiariusz: %s, %d/%d. Fale wokol ciebie, wyjscie teleportem konczy.", entry[1], bestiaryKills(player, entry[2]), entry[3]))
+	addEvent(bestiaryWave, 2000, player:getId(), bestiaryRun.token)
+end
+
+local openBestiary
+
+local function openBestiaryClass(player, class)
+	local window = ModalWindow({ title = "Bestiariusz - " .. class.name, message = "Wybierz potwora - fale beda pojawiac sie wokol ciebie.                                        " })
+	for index, entry in ipairs(class.list) do
+		if index > 250 then
+			break
+		end
+		local kills = bestiaryKills(player, entry[2])
+		local label = kills >= entry[3] and ("[Complete] " .. entry[1]) or string.format("%s  %d/%d", entry[1], kills, entry[3])
+		window:addChoice(label, function(target)
+			bestiaryStart(target, entry)
+		end)
+	end
+	window:addButton("Wybierz")
+	window:addButton("Wstecz", function(target)
+		openBestiary(target)
+	end)
+	window:setPriority(true)
+	window:setDefaultEnterButton(2)
+	window:setDefaultEscapeButton(1)
+	window:sendToPlayer(player)
+end
+
+openBestiary = function(player)
+	local window = ModalWindow({ title = "Bestiariusz", message = "Wybierz klase potworow. W nawiasie: ukonczone / wszystkie.                                        " })
+	for _, class in ipairs(bestiaryClasses) do
+		local finished = 0
+		for _, entry in ipairs(class.list) do
+			if bestiaryKills(player, entry[2]) >= entry[3] then
+				finished = finished + 1
+			end
+		end
+		window:addChoice(string.format("%s (%d/%d)", class.name, finished, #class.list), function(target)
+			openBestiaryClass(target, class)
+		end)
+	end
+	window:addButton("Wybierz")
+	window:addButton("Zamknij", function() end)
+	window:setPriority(true)
+	window:setDefaultEnterButton(2)
+	window:setDefaultEscapeButton(1)
+	window:sendToPlayer(player)
+end
+
 -- Wieza: kolejne pietra coraz silniejszych potworow (z listy expowisk, rosnaco), co 10 pieter boss.
 -- Rekord i punkt kontrolny (co 10 pieter) zapisuje sie na postaci - mozna zaczac od ostatniego punktu.
 -- Odroczone wywolania niosa tylko id gracza i numer biegu (token).
@@ -2967,6 +3911,9 @@ openMain = function(player)
 	window:addChoice("Fale potworow", function(target)
 		survivalEnter(target)
 	end)
+	window:addChoice("Bestiariusz (fale wybranego potwora)", function(target)
+		openBestiary(target)
+	end)
 	window:addChoice("Wieza (pietra, boss co 10)", function(target)
 		towerEnter(target)
 	end)
@@ -3110,6 +4057,8 @@ function hubStep.onStepIn(creature, item, position, fromPosition)
 		rushEnter(player)
 	elseif action.tower then
 		towerEnter(player)
+	elseif action.bestiary then
+		openBestiary(player)
 	elseif action.mounts and OtsMountHall then
 		OtsMountHall(player)
 	elseif action.outfits and OtsOutfitHall then
@@ -3158,6 +4107,8 @@ function hubLook.playerOnLook(player, inspectedThing, inspectedPosition, lookDis
 		text = "Boss Rush"
 	elseif action.tower then
 		text = "Wieza"
+	elseif action.bestiary then
+		text = "Bestiariusz"
 	elseif action.mounts then
 		text = "Wierzchowce do oswojenia"
 	elseif action.outfits then

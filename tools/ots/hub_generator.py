@@ -82,12 +82,17 @@ for _dy, _iid in ((-1, DEPOT_LOCKER), (0, REWARD_CHEST), (1, IMBU_SHRINE)):
     tiles[(X0 - 1, Y0 + _dy, Z)]['items'].append((_iid, 0, None))
 board(X0 - 1, Y0 + 2, 'Depozyt, skrzynia nagrod z bossow i kapliczka imbu', SIGN_B)
 
+# Bestiariusz: pad po polnocnej stronie lobby (miedzy skrzydlami Low i Medium)
+pad(X0 + 7, Y0 - 2, dict(kind='bestiary'))
+board(X0 + 7, Y0 - 3, 'Bestiariusz\nFale wybranego potwora do uzupelnienia bestiariusza')
 # Wieza: pad po polnocnej stronie lobby, przy wschodnim koncu
 pad(X0 + lobby_w, Y0 - 2, dict(kind='tower'))
 board(X0 + lobby_w, Y0 - 3, 'Wieza\nPietra coraz silniejszych potworow, boss co 10 pieter')
 
 wings = []
 npcs = []
+floor(X0 + 8, Y0 - 2)
+npcs.append(dict(name='Bestiariusz', outfit={'lookType': 130, 'lookHead': 0, 'lookBody': 87, 'lookLegs': 87, 'lookFeet': 95, 'lookAddons': 1}, pos=[X0 + 8, Y0 - 2, Z], south=True))
 floor(X0 + lobby_w + 1, Y0 - 2)
 npcs.append(dict(name='Wieza', outfit={'lookType': 268, 'lookHead': 78, 'lookBody': 69, 'lookLegs': 58, 'lookFeet': 76, 'lookAddons': 3}, pos=[X0 + lobby_w + 1, Y0 - 2, Z], south=True))
 floor(X0 + 1, Y0 - 2)
@@ -226,10 +231,12 @@ rush_center = [X0 + 120, Y0 - 100, Z]
 rush_landing = room(rush_center)
 tower_center = [X0 + 150, Y0 - 100, Z]
 tower_landing = room(tower_center)
+best_center = [X0 + 180, Y0 - 100, Z]
+best_landing = room(best_center)
 
 # Prawdziwe PZ 3x3 w miejscu ladowania w kazdej sali walk:
 # potwor nie wejdzie i nie zaatakuje, dopoki gracz sam nie wyjdzie.
-for lx, ly, lz in [arena_landing, surv_landing, rush_landing, tower_landing] + [r['landing'] for r in raid_rooms]:
+for lx, ly, lz in [arena_landing, surv_landing, rush_landing, tower_landing, best_landing] + [r['landing'] for r in raid_rooms]:
     for dx in (-1, 0, 1):
         for dy in (-1, 0, 1):
             tiles[(lx + dx, ly + dy, lz)]['pz'] = True
@@ -324,7 +331,7 @@ with open('hub/ots-hub-monster.xml', 'w') as f:
 open('hub/ots-hub-house.xml', 'w').write('<?xml version="1.0"?>\n<houses />\n')
 open('hub/ots-hub-npc.xml', 'w').write('<?xml version="1.0"?>\n<npcs />\n')
 open('hub/ots-hub-zones.xml', 'w').write('<?xml version="1.0"?>\n<zones />\n')
-json.dump(dict(pads=pads, wings=wings, lobby=lobby_arrival, questhall=questhall, bosshall=bosshall, bossDisplays=boss_displays, npcs=npcs, bossFloors=boss_floors, raid=dict(rooms=raid_rooms, npc=raid_npc), survival=dict(center=surv_center, landing=surv_landing), rush=dict(center=rush_center, landing=rush_landing), tower=dict(center=tower_center, landing=tower_landing), taskNpc=task_npc, arena=dict(center=arena_center, landing=arena_landing, radius=ARENA_R)), open('hub.json', 'w'))
+json.dump(dict(pads=pads, wings=wings, lobby=lobby_arrival, questhall=questhall, bosshall=bosshall, bossDisplays=boss_displays, npcs=npcs, bossFloors=boss_floors, raid=dict(rooms=raid_rooms, npc=raid_npc), survival=dict(center=surv_center, landing=surv_landing), rush=dict(center=rush_center, landing=rush_landing), tower=dict(center=tower_center, landing=tower_landing), bestiary=dict(center=best_center, landing=best_landing), taskNpc=task_npc, arena=dict(center=arena_center, landing=arena_landing, radius=ARENA_R)), open('hub.json', 'w'))
 xs = [k[0] for k in tiles]; ys = [k[1] for k in tiles]
 print('tiles', len(tiles), 'pads', len(pads), 'spawns', len(spawns), 'bbox', min(xs), min(ys), max(xs), max(ys), 'bytes', len(out))
 for w in wings: print(w)
