@@ -48373,13 +48373,26 @@ Awarded by TibiaMisterios.com.br"/>
 		<attribute key="duration" value="60"/>
 		<attribute key="decayTo" value="0"/>
 	</item>
-	<item id="22746" name="ancient amulet">
+	<item id="22746" article="a" name="amulet of resistance">
 		<attribute key="primarytype" value="amulets and necklaces"/>
-		<attribute key="weight" value="840"/>
+		<attribute key="description" value="+25% odpornosci na wszystkie obrazenia. 3 sloty na imbu."/>
+		<attribute key="showattributes" value="1"/>
+		<attribute key="absorbpercentall" value="25"/>
+		<attribute key="weight" value="300"/>
 		<attribute key="imbuementslot" value="3">
 			<attribute key="life leech" value="3"/>
 			<attribute key="mana leech" value="3"/>
 			<attribute key="critical hit" value="3"/>
+			<attribute key="skillboost magic level" value="3"/>
+			<attribute key="skillboost distance" value="3"/>
+			<attribute key="skillboost sword" value="3"/>
+			<attribute key="skillboost axe" value="3"/>
+			<attribute key="skillboost club" value="3"/>
+			<attribute key="skillboost fist" value="3"/>
+			<attribute key="skillboost shielding" value="3"/>
+			<attribute key="increase speed" value="3"/>
+			<attribute key="increase capacity" value="3"/>
+			<attribute key="paralysis deflection" value="3"/>
 		</attribute>
 		<attribute key="script" value="moveevent">
 			<attribute key="slot" value="necklace"/>
@@ -68378,13 +68391,26 @@ hands of its owner. Granted by TibiaRoyal.com"/>
 		<attribute key="description" value="It was awarded by a CM as a token of gratitude for valuable feedback"/>
 		<attribute key="weight" value="1000"/>
 	</item>
-	<item id="34080" article="a" name="lion ring">
+	<item id="34080" article="a" name="ring of resistance">
 		<attribute key="primarytype" value="rings"/>
-		<attribute key="weight" value="40"/>
+		<attribute key="description" value="+25% odpornosci na wszystkie obrazenia. 3 sloty na imbu."/>
+		<attribute key="showattributes" value="1"/>
+		<attribute key="absorbpercentall" value="25"/>
+		<attribute key="weight" value="300"/>
 		<attribute key="imbuementslot" value="3">
 			<attribute key="life leech" value="3"/>
 			<attribute key="mana leech" value="3"/>
 			<attribute key="critical hit" value="3"/>
+			<attribute key="skillboost magic level" value="3"/>
+			<attribute key="skillboost distance" value="3"/>
+			<attribute key="skillboost sword" value="3"/>
+			<attribute key="skillboost axe" value="3"/>
+			<attribute key="skillboost club" value="3"/>
+			<attribute key="skillboost fist" value="3"/>
+			<attribute key="skillboost shielding" value="3"/>
+			<attribute key="increase speed" value="3"/>
+			<attribute key="increase capacity" value="3"/>
+			<attribute key="paralysis deflection" value="3"/>
 		</attribute>
 		<attribute key="script" value="moveevent">
 			<attribute key="slot" value="ring"/>

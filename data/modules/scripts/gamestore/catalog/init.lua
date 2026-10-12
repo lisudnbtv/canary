@@ -6,6 +6,7 @@ local modules = {
 	"items_elder_druid",
 	"items_exalted_monk",
 	"items_misc",
+	"items_upgrade",
 	"premium_time",
 	"consumables",
 	"consumables_blessings",

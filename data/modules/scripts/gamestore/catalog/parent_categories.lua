@@ -28,7 +28,7 @@ return {
 		icons = { "Category_Extras.png" },
 		name = "Przedmioty",
 		rookgaard = true,
-		subclasses = { "Royal Paladin", "Elite Knight", "Master Sorcerer", "Elder Druid", "Exalted Monk", "Rozne" },
+		subclasses = { "Royal Paladin", "Elite Knight", "Master Sorcerer", "Elder Druid", "Exalted Monk", "Rozne", "Upgrade" },
 	},
 	tournament = {
 		icons = { "Category_Tournament.png" },

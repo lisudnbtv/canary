@@ -28,5 +28,27 @@ return {
 			description = "<i>A lamp for the ammunition slot with 3 imbuement slots.</i>\n\n{character}\n{storeinbox}\n{info} accepts any imbuement: leech, critical, skills, protections, speed, capacity",
 			type = GameStore.OfferTypes.OFFER_TYPE_ITEM,
 		},
+		{
+			-- OTS: +25% odpornosci na wszystko i 3 sloty imbu (items.xml: 22746)
+			icons = { "Gold_Converter.png" },
+			name = "Amulet of Resistance",
+			price = 3000,
+			itemtype = 22746,
+			count = 1,
+			movable = true,
+			description = "<i>An amulet with +25% protection against all damage.</i>\n\n{character}\n{storeinbox}\n{info} 3 imbuement slots: leech, critical, skills, speed, capacity",
+			type = GameStore.OfferTypes.OFFER_TYPE_ITEM,
+		},
+		{
+			-- OTS: +25% odpornosci na wszystko i 3 sloty imbu (items.xml: 34080)
+			icons = { "Gold_Converter.png" },
+			name = "Ring of Resistance",
+			price = 3000,
+			itemtype = 34080,
+			count = 1,
+			movable = true,
+			description = "<i>A ring with +25% protection against all damage.</i>\n\n{character}\n{storeinbox}\n{info} 3 imbuement slots: leech, critical, skills, speed, capacity",
+			type = GameStore.OfferTypes.OFFER_TYPE_ITEM,
+		},
 	},
 }
