@@ -59,7 +59,7 @@ QM=[dict(name='Pits of Inferno',items=[6529,6527,3341,5803]),
     dict(name='In Service of Yalahar',items=[8862,8864,8863,50289]),
     dict(name='Soul War',items=[34082,34088,34090,34091,34094,34099])]
 o.append('\t{ "Pits of Inferno: soft boots, avenger, arcane staff, arbalest", func = "OtsPoiStart" },')
-o.append('\t{ "Barbarian Arena: bron do wyboru (3 poziomy, 10 walk)", func = "OtsArenaStart" },')
+o.append('\t{ "Barbarian Arena: bron do wyboru (3 poziomy, 10 walk)", func = "OtsArenaStart", done = { st = { { "Storage.Quest.U8_0.BarbarianArena.Arena", 4 } } } },')
 o.append('\t{ "In Service of Yalahar: yalahari armor / mask / leg piece / footwraps", func = "OtsYalaharStart", done = { st = { { "Storage.Quest.U8_4.InServiceOfYalahar.Questline", 54 } } } },')
 o.append('\t{ "Soul War: komplet przedmiotow Soul War dla Twojej profesji", func = "OtsSoulWarStart" },')
 MAN=json.load(open('manual.json'))
