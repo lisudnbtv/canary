@@ -1130,7 +1130,14 @@ openMain = function(player)
 		end)
 	end)
 	window:addChoice("Stroje (questy)", function(target)
-		if OtsOutfitHall and not inFight(target) then
+		if inFight(target) then
+			return
+		end
+		if OtsOutfitList then
+			OtsOutfitList(target, function(again)
+				openMain(again)
+			end)
+		elseif OtsOutfitHall then
 			OtsOutfitHall(target)
 		end
 	end)

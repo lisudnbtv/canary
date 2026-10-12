@@ -729,6 +729,59 @@ function OtsOutfitHall(player)
 	move(player, hall, "Questy na stroje, pietro 1")
 end
 
+-- Lista strojow z oznaczeniem [Complete]; wybor przenosi prosto do sali danego stroju.
+local function questComplete(player, index)
+	local quest = quests[index]
+	return isDone(player, index) or (quest.male > 0 and player:hasOutfit(quest.male, 3)) or (quest.female > 0 and player:hasOutfit(quest.female, 3))
+end
+
+function OtsOutfitList(player, back)
+	local finished = 0
+	for index = 1, #quests do
+		if questComplete(player, index) then
+			finished = finished + 1
+		end
+	end
+	local window = ModalWindow({ title = "Questy na stroje", message = string.format("Wybierz stroj - teleport do jego sali. [Complete] = juz zrobiony.\nZrobione: %d/%d                                        ", finished, #quests) })
+	window:addChoice("Hala strojow (wybor na miejscu)", function(target)
+		OtsOutfitHall(target)
+	end)
+	for index, quest in ipairs(quests) do
+		if index > 250 then
+			break
+		end
+		local label = quest.name
+		if questComplete(player, index) then
+			label = "[Complete] " .. quest.name
+		end
+		window:addChoice(label, function(target)
+			move(target, quest.entry, string.format("Stroj %s: pokonane %d/%d.", quest.name, math.min(killsOf(target, index), REQUIRED_KILLS), REQUIRED_KILLS))
+		end)
+	end
+	window:addButton("Wybierz")
+	if back then
+		window:addButton("Wstecz", function(target)
+			back(target)
+		end)
+	else
+		window:addButton("Zamknij", function() end)
+	end
+	window:setPriority(true)
+	window:setDefaultEnterButton(2)
+	window:setDefaultEscapeButton(1)
+	window:sendToPlayer(player)
+end
+
+local listCommand = TalkAction("!stroje")
+
+function listCommand.onSay(player, words, param)
+	OtsOutfitList(player)
+	return true
+end
+
+listCommand:groupType("normal")
+listCommand:register()
+
 local padStep = MoveEvent()
 
 function padStep.onStepIn(creature, item, position, fromPosition)
