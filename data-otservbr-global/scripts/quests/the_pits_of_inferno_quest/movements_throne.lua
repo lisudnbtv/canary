@@ -67,6 +67,18 @@ local PROGRESS_KEY = "ots-poi-room"
 local byUid = {}
 for index, room in ipairs(rooms) do
 	byUid[room.uid] = index
+	local minX, maxX, minY, maxY = math.huge, -math.huge, math.huge, -math.huge
+	for y, runs in pairs(room.rows) do
+		minY = math.min(minY, y)
+		maxY = math.max(maxY, y)
+		for _, x in ipairs(runs) do
+			minX = math.min(minX, x)
+			maxX = math.max(maxX, x)
+		end
+	end
+	room.center = Position(math.floor((minX + maxX) / 2), math.floor((minY + maxY) / 2), room.floor)
+	room.rangeX = math.ceil((maxX - minX) / 2) + 1
+	room.rangeY = math.ceil((maxY - minY) / 2) + 1
 end
 
 -- [guid gracza] = { room = numer sali, kills = pokonane potwory }
@@ -103,6 +115,18 @@ local function enterRoom(player, index)
 	end
 end
 
+-- Ile zywych potworow (bez przywolanych) zostalo w sali.
+local function aliveInRoom(room)
+	local count = 0
+	local spectators = Game.getSpectators(room.center, false, false, room.rangeX, room.rangeX, room.rangeY, room.rangeY)
+	for _, creature in ipairs(spectators) do
+		if creature:isMonster() and not creature:getMaster() and inRoom(room, creature:getPosition()) then
+			count = count + 1
+		end
+	end
+	return count
+end
+
 -- Wywolywane z menu teleportow: start albo kontynuacja od zapisanej sali.
 function OtsPoiStart(player)
 	local saved = tonumber(player:kv():get(PROGRESS_KEY)) or 1
@@ -132,10 +156,15 @@ function throne.onStepIn(creature, item, position, fromPosition)
 		progress[player:getGuid()] = state
 	end
 
+	-- Tron dziala po pokonaniu wymaganej liczby potworow albo gdy w sali nie zostal zaden zywy
+	-- (czesc spawnow bywa pusta lub nieosiagalna, a licznik ginie po wylogowaniu).
 	if state.kills < room.kills then
-		player:teleportTo(fromPosition, true)
-		player:sendTextMessage(MESSAGE_EVENT_ADVANCE, string.format("Tron jeszcze nie dziala. Pokonaj potwory w tej sali: %d/%d.", state.kills, room.kills))
-		return true
+		local alive = aliveInRoom(room)
+		if alive > 0 then
+			player:teleportTo(fromPosition, true)
+			player:sendTextMessage(MESSAGE_EVENT_ADVANCE, string.format("Tron jeszcze nie dziala. Pokonane: %d/%d, w sali zostalo jeszcze %d potworow.", state.kills, room.kills, alive))
+			return true
+		end
 	end
 
 	player:setStorageValue(room.storage, room.value)
