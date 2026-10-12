@@ -5,8 +5,10 @@
 -- i kamienie ulepszen. Potem skrzynia znika i zaczyna sie odliczanie do nastepnej.
 -- Miejsce skrzyni: zapisane raz (dawna komenda "!skrzynia tutaj"), inaczej domyslne przy depo. "!skrzynia" pokazuje stan.
 -- Odroczone wywolania niosa tylko numer biegu (token) i identyfikatory potworow.
-local CHEST_ID = 2472 -- skrzynia jak w questach (nie da sie jej podniesc)
-local CHEST_ACTION_ID = 64988
+local CHEST_ID = 2483 -- large trunk
+-- IMMOVABLE_ACTION_ID: silnik nie pozwala ruszyc takiego przedmiotu - ani graczom, ani potworom.
+-- Uzycie skrzyni lapie akcja przypisana do pola, na ktorym stoi.
+local CHEST_ACTION_ID = IMMOVABLE_ACTION_ID
 local RESPAWN_SECONDS = 30 * 60
 local FIRST_AFTER_SECONDS = 2 * 60
 local ABANDON_SECONDS = 10 * 60 -- nikogo w poblizu przez tyle czasu: fale przepadaja, skrzynia czeka od nowa
@@ -32,12 +34,16 @@ local REWARD_ITEMS = {
 local state = { phase = "waiting", nextAt = os.time() + FIRST_AFTER_SECONDS, wave = 0, ids = {}, token = 0, lastSeen = 0 }
 
 local function chestPosition()
-	local saved = kv.scoped("ots-depot-raid"):get("pos")
+	local ok, saved = pcall(function()
+		return kv.scoped("ots-depot-raid"):get("pos")
+	end)
+	saved = ok and saved or nil
 	if type(saved) == "table" and saved.x then
 		return Position(saved.x, saved.y, saved.z)
 	end
 	return DEFAULT_POSITION
 end
+
 
 local function findChest()
 	local tile = Tile(chestPosition())
@@ -181,6 +187,9 @@ tick:register()
 local chest = Action()
 
 function chest.onUse(player, item, fromPosition, target, toPosition, isHotkey)
+	if item:getId() ~= CHEST_ID then
+		return false
+	end
 	if state.phase == "ready" then
 		state.phase = "fighting"
 		state.wave = 0
@@ -209,7 +218,7 @@ function chest.onUse(player, item, fromPosition, target, toPosition, isHotkey)
 	return true
 end
 
-chest:aid(CHEST_ACTION_ID)
+chest:position(chestPosition())
 chest:register()
 
 local command = TalkAction("!skrzynia")
