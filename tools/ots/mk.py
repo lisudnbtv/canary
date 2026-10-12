@@ -61,7 +61,7 @@ QM=[dict(name='Pits of Inferno',items=[6529,6527,3341,5803]),
 o.append('\t{ "Pits of Inferno: soft boots, avenger, arcane staff, arbalest", func = "OtsPoiStart", done = { st = { { "9248" }, { "9249" }, { "9250" } } } },')
 o.append('\t{ "Barbarian Arena: bron do wyboru (3 poziomy, 10 walk)", func = "OtsArenaStart", done = { st = { { "Storage.Quest.U8_0.BarbarianArena.Arena", 4 } } } },')
 o.append('\t{ "In Service of Yalahar: yalahari armor / mask / leg piece / footwraps", func = "OtsYalaharStart", done = { st = { { "Storage.Quest.U8_4.InServiceOfYalahar.Questline", 54 } } } },')
-o.append('\t{ "Soul War: komplet przedmiotow Soul War dla Twojej profesji", func = "OtsSoulWarStart" },')
+o.append('\t{ "Soul War: 6 bossow po kolei, nagroda: komplet Soul War dla Twojej profesji", func = "OtsSoulWarStart", done = { fn = { "OtsSoulWarDone" } } },')
 MAN=json.load(open('manual.json'))
 for x in MAN:
     QM.append(dict(name=x['label'].split(':')[0],items=[ITEMID[n.strip()] for n in x['label'].split(':')[1].split(',') if n.strip() in ITEMID]))
@@ -1336,6 +1336,12 @@ local function questDone(player, entry)
 	local done = entry.done
 	if not done then
 		return false
+	end
+	for _, fname in ipairs(done.fn or {}) do
+		local check = _G[fname]
+		if check and check(player) then
+			return true
+		end
 	end
 	for _, name in ipairs(done.kv or {}) do
 		if player:questKV(name):get("completed") then

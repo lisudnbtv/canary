@@ -824,7 +824,7 @@ local quests = {
 	{ "Pits of Inferno: soft boots, avenger, arcane staff, arbalest", func = "OtsPoiStart", done = { st = { { "9248" }, { "9249" }, { "9250" } } } },
 	{ "Barbarian Arena: bron do wyboru (3 poziomy, 10 walk)", func = "OtsArenaStart", done = { st = { { "Storage.Quest.U8_0.BarbarianArena.Arena", 4 } } } },
 	{ "In Service of Yalahar: yalahari armor / mask / leg piece / footwraps", func = "OtsYalaharStart", done = { st = { { "Storage.Quest.U8_4.InServiceOfYalahar.Questline", 54 } } } },
-	{ "Soul War: komplet przedmiotow Soul War dla Twojej profesji", func = "OtsSoulWarStart" },
+	{ "Soul War: 6 bossow po kolei, nagroda: komplet Soul War dla Twojej profesji", func = "OtsSoulWarStart", done = { fn = { "OtsSoulWarDone" } } },
 	{ "Demon Helmet: steel boots, demon helmet, demon shield", 33324, 31575, 15, done = { st = { { "Storage.Quest.U6_4.DemonHelmet.Rewards.DemonHelmet" }, { "Storage.Quest.U6_4.DemonHelmet.Rewards.DemonShield" }, { "Storage.Quest.U6_4.DemonHelmet.Rewards.SteelBoots" } } }, hint = "Pokonaj potwory w sali, pociagnij dzwignie po wschodniej stronie. Skrzynie sa na zachodzie, za kamieniem (pole PZ)." },
 	{ "The Annihilator: demon armor, magic sword, stonecutter axe", 33224, 31671, 13, plain = true, done = { st = { { "Storage.Quest.U7_24.TheAnnihilator.Reward" } } }, hint = "Stan na jednym z czterech pol przy dzwigni i pociagnij ja. Wymagany poziom 100. Skrzynie sa na wschod od sali walki (pola PZ)." },
 	{ "Wrath of the Emperor: royal scale robe, royal draken mail, elite draken helmet", 0, 0, 0, arena = { { "Draken Elite", 4 }, { "Draken Abomination", 4 }, { "Draken Warmaster", 4 }, { "Draken Spellweaver", 4 }, { "Draken Elite", 2 } }, chest = { 33073, 31170, 8 }, done = { st = { { "Storage.Quest.U8_6.WrathOfTheEmperor.Chest100PlatinumCoins" }, { "Storage.Quest.U8_6.WrathOfTheEmperor.ChestBag" }, { "Storage.Quest.U8_6.WrathOfTheEmperor.ChestItems" } } }, hint = "Skrzynia z nagroda jest tuz obok. Skrzynie stoja obok siebie; zbroje sa w kolejnych skrzyniach." },
@@ -3811,6 +3811,12 @@ local function questDone(player, entry)
 	local done = entry.done
 	if not done then
 		return false
+	end
+	for _, fname in ipairs(done.fn or {}) do
+		local check = _G[fname]
+		if check and check(player) then
+			return true
+		end
 	end
 	for _, name in ipairs(done.kv or {}) do
 		if player:questKV(name):get("completed") then
