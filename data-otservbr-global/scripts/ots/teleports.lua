@@ -2245,11 +2245,38 @@ raidInfo:register()
 -- Nagroda wpada sama po ostatnim zabiciu: Tibia Coins i christmas tokeny (dla Token Tradera).
 local TASK_TOKEN_ITEM = 6526
 local taskTiers = {
-	{ need = 100, coins = 10, tokens = 50 },
-	{ need = 150, coins = 25, tokens = 100 },
-	{ need = 200, coins = 50, tokens = 200 },
-	{ need = 300, coins = 100, tokens = 400 },
+	{ need = 200, coins = 10, tokens = 5, gold = 100000, rolls = 1 },
+	{ need = 500, coins = 25, tokens = 10, gold = 300000, rolls = 1 },
+	{ need = 1000, coins = 60, tokens = 20, gold = 1000000, rolls = 2 },
+	{ need = 2000, coins = 150, tokens = 40, gold = 3000000, rolls = 3 },
 }
+
+-- Losowe nagrody dodatkowe (kazde losowanie wybiera jedna wedlug wagi).
+local taskRandomRewards = {
+	{ weight = 45, name = "kamien ulepszen", give = function(player, tier) player:addItem(20139, tier) return tier .. " x kamien ulepszen" end },
+	{ weight = 20, name = "pelna stamina", give = function(player) player:addItem(18992, 1) return "fiolka pelnej staminy" end },
+	{ weight = 25, name = "Tibia Coins", give = function(player, tier) player:addTibiaCoins(tier * 10) return (tier * 10) .. " dodatkowych Tibia Coins" end },
+	{ weight = 10, name = "worek z nagroda", give = function(player)
+		local bags = { { 34109, "bag you desire" }, { 39546, "primal bag" }, { 43895, "bag you covet" } }
+		local bag = bags[math.random(#bags)]
+		player:addItem(bag[1], 1)
+		return bag[2]
+	end },
+}
+
+local function taskRollReward(player, tier)
+	local total = 0
+	for _, reward in ipairs(taskRandomRewards) do
+		total = total + reward.weight
+	end
+	local roll = math.random(total)
+	for _, reward in ipairs(taskRandomRewards) do
+		roll = roll - reward.weight
+		if roll <= 0 then
+			return reward.give(player, tier)
+		end
+	end
+end
 
 local function taskStore(player)
 	return player:kv():scoped("ots-task")
@@ -2274,7 +2301,8 @@ local function taskClear(player)
 end
 
 local function taskReward(tier)
-	return string.format("%d Tibia Coins i %d tokenow", taskTiers[tier].coins, taskTiers[tier].tokens)
+	local config = taskTiers[tier]
+	return string.format("%d TC, %d gp, %d tokenow + %d losowa nagroda (kamienie / stamina / TC / worek)", config.coins, config.gold, config.tokens, config.rolls)
 end
 
 local function openTasks(player)
@@ -2350,9 +2378,14 @@ function taskKill.playerOnKill(player, monster)
 	taskClear(player)
 	player:addTibiaCoins(config.coins)
 	player:addItem(TASK_TOKEN_ITEM, config.tokens)
+	player:setBankBalance(player:getBankBalance() + config.gold)
+	local extras = {}
+	for _ = 1, config.rolls do
+		extras[#extras + 1] = taskRollReward(player, task.tier)
+	end
 	player:getPosition():sendMagicEffect(CONST_ME_FIREWORK_YELLOW)
 	player:sendTextMessage(MESSAGE_EVENT_ADVANCE, string.format("Gratulacje! Wymagana liczba potworow zostala zabita: %d x %s.", task.need, task.entry.mon))
-	taskChannel(player, string.format("Gratulacje! Task ukonczony: %d/%d %s. Nagroda: %s. Nowe zadanie: !task.", task.need, task.need, task.entry.mon, taskReward(task.tier)))
+	taskChannel(player, string.format("Gratulacje! Task ukonczony: %d/%d %s. Nagroda: %d TC, %d gp na konto, %d tokenow, losowo: %s. Nowe zadanie: !task.", task.need, task.need, task.entry.mon, config.coins, config.gold, config.tokens, table.concat(extras, ", ")))
 end
 
 taskKill:register()
