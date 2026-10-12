@@ -2322,6 +2322,12 @@ local function openTasks(player)
 	window:sendToPlayer(player)
 end
 
+-- Kanal czatu "Taski" (id 12, data/chatchannels/chatchannels.xml): postep kazdego zabicia.
+local TASK_CHANNEL_ID = 12
+local function taskChannel(player, text)
+	player:sendChannelMessage("Taski", text, TALKTYPE_CHANNEL_O, TASK_CHANNEL_ID)
+end
+
 local taskKill = EventCallback("OtsTaskOnKill")
 
 function taskKill.playerOnKill(player, monster)
@@ -2335,9 +2341,7 @@ function taskKill.playerOnKill(player, monster)
 	local count = task.count + 1
 	if count < task.need then
 		taskStore(player):set("count", count)
-		if count % 25 == 0 then
-			player:sendTextMessage(MESSAGE_EVENT_ADVANCE, string.format("Task: %s %d/%d.", task.entry.mon, count, task.need))
-		end
+		taskChannel(player, string.format("%s: %d/%d", task.entry.mon, count, task.need))
 		return
 	end
 	local config = taskTiers[task.tier]
@@ -2347,7 +2351,8 @@ function taskKill.playerOnKill(player, monster)
 	player:addTibiaCoins(config.coins)
 	player:addItem(TASK_TOKEN_ITEM, config.tokens)
 	player:getPosition():sendMagicEffect(CONST_ME_FIREWORK_YELLOW)
-	player:sendTextMessage(MESSAGE_EVENT_ADVANCE, string.format("Task ukonczony: %d x %s. Nagroda: %s. Nowe zadanie: !task.", task.need, task.entry.mon, taskReward(task.tier)))
+	player:sendTextMessage(MESSAGE_EVENT_ADVANCE, string.format("Gratulacje! Wymagana liczba potworow zostala zabita: %d x %s.", task.need, task.entry.mon))
+	taskChannel(player, string.format("Gratulacje! Task ukonczony: %d/%d %s. Nagroda: %s. Nowe zadanie: !task.", task.need, task.need, task.entry.mon, taskReward(task.tier)))
 end
 
 taskKill:register()
