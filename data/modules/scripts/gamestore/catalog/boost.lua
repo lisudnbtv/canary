@@ -1,5 +1,5 @@
 return {
-	icons = { "Category_Boosts.png" },
+	icons = { "ots_cat_boost.png" },
 	name = "Boosts",
 	rookgaard = true,
 	state = GameStore.States.STATE_NONE,

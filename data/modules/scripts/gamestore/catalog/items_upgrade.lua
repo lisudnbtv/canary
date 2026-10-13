@@ -1,6 +1,6 @@
 -- OTS: sklep > Przedmioty > Upgrade (kamienie ulepszen)
 return {
-	icons = { "Category_Extras.png" },
+	icons = { "ots_cat_items_upgrade.png" },
 	name = "Upgrade",
 	parent = "Przedmioty",
 	rookgaard = true,

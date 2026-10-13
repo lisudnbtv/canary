@@ -1,6 +1,6 @@
 -- OTS: sklep > Przedmioty > Elder Druid (wlasne przedmioty serwera)
 return {
-	icons = { "Category_Extras.png" },
+	icons = { "ots_cat_items_elder_druid.png" },
 	name = "Elder Druid",
 	parent = "Przedmioty",
 	rookgaard = true,

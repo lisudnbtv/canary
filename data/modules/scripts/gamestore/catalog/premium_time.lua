@@ -32,7 +32,7 @@ if configManager.getBoolean(configKeys.VIP_SYSTEM_ENABLED) then
 end
 
 return {
-	icons = { "Category_PremiumTime.png" },
+	icons = { "ots_cat_premium_time.png" },
 	name = premiumCategoryName,
 	rookgaard = true,
 	state = GameStore.States.STATE_NONE,

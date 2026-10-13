@@ -1,5 +1,5 @@
 return {
-	icons = { "Category_ExclusiveOffers.png" },
+	icons = { "ots_cat_tournament_exclusive_offers.png" },
 	name = "Exclusive Offers",
 	parent = "Tournament",
 	rookgaard = true,

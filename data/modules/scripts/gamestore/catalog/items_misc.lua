@@ -1,6 +1,6 @@
 -- OTS: sklep > Przedmioty > Rozne (wlasne przedmioty serwera)
 return {
-	icons = { "Category_Extras.png" },
+	icons = { "ots_cat_items_misc.png" },
 	name = "Rozne",
 	parent = "Przedmioty",
 	rookgaard = true,

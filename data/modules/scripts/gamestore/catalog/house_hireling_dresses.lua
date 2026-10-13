@@ -1,5 +1,5 @@
 return {
-	icons = { "Category_HouseTools_NPCDresses.png" },
+	icons = { "ots_cat_house_hireling_dresses.png" },
 	name = "Hireling Dresses",
 	parent = "Houses",
 	rookgaard = true,

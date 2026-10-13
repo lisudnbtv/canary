@@ -2,7 +2,7 @@
 -- Exalted cores i slivery do Kuzni Wzniesienia (stoi w hubie na polnoc od depozytu)
 -- oraz gemy, kruszarki (crusher) i fragmenty do Gem Atelier (zakladka w oknie Wheel of Destiny), osobno dla kazdej profesji.
 return {
-	icons = { "Category_Extras.png" },
+	icons = { "ots_cat_items_forge.png" },
 	name = "Kuznia i Gemy",
 	parent = "Przedmioty",
 	rookgaard = true,

@@ -62,3 +62,6 @@ cleanProtectionZones = true
 
 -- Trening na manekinie: ciosy cztery razy czesciej niz zwykly (szybki) atak
 rateExerciseTrainingSpeed = rateAttackSpeed * 4
+
+-- Ikony kategorii sklepu: klient pobiera je z tej strony (pliki w docker/ots/storeimages, serwuje je MyAAC)
+coinImagesURL = "http://127.0.0.1:8080/ots-store/"

@@ -1,5 +1,5 @@
 return {
-	icons = { "Category_Runes.png" },
+	icons = { "ots_cat_consumables_runes.png" },
 	name = "Runes",
 	parent = "Consumables",
 	rookgaard = true,
