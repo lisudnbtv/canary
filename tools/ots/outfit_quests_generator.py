@@ -9,7 +9,7 @@ PITCH = 3
 ROOM = 13            # bok areny
 STEP = 32            # odstep miedzy salami
 COLS = 12
-KILLS = 20
+KILLS = 50
 HUB_LOBBY = tuple(json.load(open('hub.json'))['lobby'])
 
 xml = open('/home/claude/canary/data/XML/outfits.xml').read()
@@ -188,7 +188,7 @@ for nm, tag in (('house', 'houses'), ('npc', 'npcs'), ('zones', 'zones')):
 def q(s): return '"' + s.replace('\\', '\\\\').replace('"', '\\"') + '"'
 L = []
 L.append('''-- OTS: questy na stroje. Plik generowany razem z mapa world/custom/ots-outfits.otbm.
--- Kazdy stroj ma wlasna sale: pokonaj %d potworow, potem otworz skrzynie.
+-- Kazdy stroj ma wlasna sale: pokonaj %d potworow (wszystkie sa elitami z czarna czaszka), potem otworz skrzynie.
 -- Nagroda: stroj z oboma dodatkami (wersja meska i zenska).
 
 local PAD_ACTION_ID = %d
@@ -215,6 +215,9 @@ for k, i in sorted(chests.items()):
     L.append('\t[%s] = %d,' % (q(k), i + 1))
 L.append('}\n')
 L.append(r'''
+OtsOutfitRooms = quests
+OtsOutfitRoomSize = ROOM_SIZE
+
 local function key(pos)
 	return pos.x .. ":" .. pos.y .. ":" .. pos.z
 end
@@ -331,6 +334,9 @@ function padStep.onStepIn(creature, item, position, fromPosition)
 			text = string.format("Stroj %s: pokonane %d/%d. Skrzynia jest po polnocnej stronie sali.", quest.name, math.min(killsOf(player, pad.room), REQUIRED_KILLS), REQUIRED_KILLS)
 		end
 		move(player, quest.entry, text)
+		if not isDone(player, pad.room) and OtsOutfitRoomEnter then
+			OtsOutfitRoomEnter(player, pad.room)
+		end
 	elseif pad.goto then
 		move(player, pad.goto, pad.label)
 	elseif pad.hub then

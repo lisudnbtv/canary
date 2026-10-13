@@ -1,10 +1,10 @@
 -- OTS: questy na stroje. Plik generowany razem z mapa world/custom/ots-outfits.otbm.
--- Kazdy stroj ma wlasna sale: pokonaj 20 potworow, potem otworz skrzynie.
+-- Kazdy stroj ma wlasna sale: pokonaj 50 potworow (wszystkie sa elitami z czarna czaszka), potem otworz skrzynie.
 -- Nagroda: stroj z oboma dodatkami (wersja meska i zenska).
 
 local PAD_ACTION_ID = 64994
 local CHEST_ACTION_ID = 64995
-local REQUIRED_KILLS = 20
+local REQUIRED_KILLS = 50
 local ROOM_SIZE = 13
 local hall = Position(29998, 31005, 7)
 local hubLobby = Position(30013, 30000, 7)
@@ -688,6 +688,9 @@ local chests = {
 }
 
 
+OtsOutfitRooms = quests
+OtsOutfitRoomSize = ROOM_SIZE
+
 local function key(pos)
 	return pos.x .. ":" .. pos.y .. ":" .. pos.z
 end
@@ -804,6 +807,9 @@ function padStep.onStepIn(creature, item, position, fromPosition)
 			text = string.format("Stroj %s: pokonane %d/%d. Skrzynia jest po polnocnej stronie sali.", quest.name, math.min(killsOf(player, pad.room), REQUIRED_KILLS), REQUIRED_KILLS)
 		end
 		move(player, quest.entry, text)
+		if not isDone(player, pad.room) and OtsOutfitRoomEnter then
+			OtsOutfitRoomEnter(player, pad.room)
+		end
 	elseif pad.goto then
 		move(player, pad.goto, pad.label)
 	elseif pad.hub then

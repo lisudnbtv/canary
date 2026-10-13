@@ -45,7 +45,7 @@ function tick.onThink(interval)
 		if tile and not tile:hasFlag(TILESTATE_PROTECTIONZONE) and not alive[player:getGuid()] and math.random(100) <= CHANCE_PERCENT then
 			local candidates = {}
 			for _, creature in ipairs(Game.getSpectators(position, false, false, 7, 7, 5, 5)) do
-				if creature:isMonster() and not creature:getMaster() and not elites[creature:getId()] and creature:getMaxHealth() >= MIN_HEALTH then
+				if creature:isMonster() and not creature:getMaster() and not elites[creature:getId()] and not (OtsOutfitElite and OtsOutfitElite[creature:getId()]) and creature:getMaxHealth() >= MIN_HEALTH then
 					local monsterType = creature:getType()
 					if monsterType and not monsterType:isRewardBoss() then
 						candidates[#candidates + 1] = creature
