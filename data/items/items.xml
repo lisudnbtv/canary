@@ -90454,7 +90454,7 @@ Granted by TibiaGoals.com"/>
 		<attribute key="manaleechamount" value="100" />
 		<attribute key="criticalhitchance" value="200" />
 		<attribute key="criticalhitdamage" value="400" />
-		<attribute key="imbuementslot" value="3">
+		<attribute key="imbuementslot" value="5">
 			<attribute key="life leech" value="3" />
 			<attribute key="mana leech" value="3" />
 			<attribute key="critical hit" value="3" />
@@ -90487,7 +90487,7 @@ Granted by TibiaGoals.com"/>
 		<attribute key="manaleechamount" value="100" />
 		<attribute key="criticalhitchance" value="200" />
 		<attribute key="criticalhitdamage" value="400" />
-		<attribute key="imbuementslot" value="3">
+		<attribute key="imbuementslot" value="5">
 			<attribute key="life leech" value="3" />
 			<attribute key="mana leech" value="3" />
 			<attribute key="critical hit" value="3" />
@@ -90516,7 +90516,7 @@ Granted by TibiaGoals.com"/>
 		<attribute key="manaleechamount" value="100" />
 		<attribute key="criticalhitchance" value="200" />
 		<attribute key="criticalhitdamage" value="300" />
-		<attribute key="imbuementslot" value="3">
+		<attribute key="imbuementslot" value="5">
 			<attribute key="life leech" value="3" />
 			<attribute key="mana leech" value="3" />
 			<attribute key="critical hit" value="3" />
@@ -90544,7 +90544,7 @@ Granted by TibiaGoals.com"/>
 		<attribute key="manaleechamount" value="100" />
 		<attribute key="criticalhitchance" value="100" />
 		<attribute key="criticalhitdamage" value="300" />
-		<attribute key="imbuementslot" value="3">
+		<attribute key="imbuementslot" value="5">
 			<attribute key="life leech" value="3" />
 			<attribute key="mana leech" value="3" />
 			<attribute key="critical hit" value="3" />
@@ -90567,8 +90567,8 @@ Granted by TibiaGoals.com"/>
 		<attribute key="primarytype" value="sword weapons" />
 		<attribute key="weaponType" value="sword" />
 		<attribute key="weight" value="6100" />
-		<attribute key="attack" value="10" />
-		<attribute key="elementfire" value="48" />
+		<attribute key="attack" value="48" />
+		<attribute key="elementfire" value="40" />
 		<attribute key="defense" value="34" />
 		<attribute key="extradef" value="4" />
 		<attribute key="skillsword" value="6" />
@@ -90576,7 +90576,7 @@ Granted by TibiaGoals.com"/>
 		<attribute key="manaleechamount" value="200" />
 		<attribute key="criticalhitchance" value="1000" />
 		<attribute key="criticalhitdamage" value="1500" />
-		<attribute key="imbuementslot" value="3">
+		<attribute key="imbuementslot" value="5">
 			<attribute key="life leech" value="3" />
 			<attribute key="mana leech" value="3" />
 			<attribute key="critical hit" value="3" />
@@ -90595,8 +90595,8 @@ Granted by TibiaGoals.com"/>
 		<attribute key="primarytype" value="axe weapons" />
 		<attribute key="weaponType" value="axe" />
 		<attribute key="weight" value="7200" />
-		<attribute key="attack" value="10" />
-		<attribute key="elementenergy" value="48" />
+		<attribute key="attack" value="48" />
+		<attribute key="elementenergy" value="40" />
 		<attribute key="defense" value="34" />
 		<attribute key="extradef" value="4" />
 		<attribute key="skillaxe" value="6" />
@@ -90604,7 +90604,7 @@ Granted by TibiaGoals.com"/>
 		<attribute key="manaleechamount" value="200" />
 		<attribute key="criticalhitchance" value="1000" />
 		<attribute key="criticalhitdamage" value="1500" />
-		<attribute key="imbuementslot" value="3">
+		<attribute key="imbuementslot" value="5">
 			<attribute key="life leech" value="3" />
 			<attribute key="mana leech" value="3" />
 			<attribute key="critical hit" value="3" />
@@ -90623,8 +90623,8 @@ Granted by TibiaGoals.com"/>
 		<attribute key="primarytype" value="club weapons" />
 		<attribute key="weaponType" value="club" />
 		<attribute key="weight" value="6900" />
-		<attribute key="attack" value="10" />
-		<attribute key="elementdeath" value="48" />
+		<attribute key="attack" value="48" />
+		<attribute key="elementdeath" value="40" />
 		<attribute key="defense" value="34" />
 		<attribute key="extradef" value="4" />
 		<attribute key="skillclub" value="6" />
@@ -90632,7 +90632,7 @@ Granted by TibiaGoals.com"/>
 		<attribute key="manaleechamount" value="200" />
 		<attribute key="criticalhitchance" value="1000" />
 		<attribute key="criticalhitdamage" value="1500" />
-		<attribute key="imbuementslot" value="3">
+		<attribute key="imbuementslot" value="5">
 			<attribute key="life leech" value="3" />
 			<attribute key="mana leech" value="3" />
 			<attribute key="critical hit" value="3" />
@@ -90658,7 +90658,7 @@ Granted by TibiaGoals.com"/>
 		<attribute key="manaleechamount" value="100" />
 		<attribute key="criticalhitchance" value="200" />
 		<attribute key="criticalhitdamage" value="300" />
-		<attribute key="imbuementslot" value="3">
+		<attribute key="imbuementslot" value="5">
 			<attribute key="life leech" value="3" />
 			<attribute key="mana leech" value="3" />
 			<attribute key="critical hit" value="3" />
@@ -90685,7 +90685,7 @@ Granted by TibiaGoals.com"/>
 		<attribute key="manaleechamount" value="100" />
 		<attribute key="criticalhitchance" value="200" />
 		<attribute key="criticalhitdamage" value="400" />
-		<attribute key="imbuementslot" value="3">
+		<attribute key="imbuementslot" value="5">
 			<attribute key="life leech" value="3" />
 			<attribute key="mana leech" value="3" />
 			<attribute key="critical hit" value="3" />
@@ -90713,7 +90713,7 @@ Granted by TibiaGoals.com"/>
 		<attribute key="manaleechamount" value="100" />
 		<attribute key="criticalhitchance" value="200" />
 		<attribute key="criticalhitdamage" value="400" />
-		<attribute key="imbuementslot" value="3">
+		<attribute key="imbuementslot" value="5">
 			<attribute key="life leech" value="3" />
 			<attribute key="mana leech" value="3" />
 			<attribute key="critical hit" value="3" />
@@ -90740,7 +90740,7 @@ Granted by TibiaGoals.com"/>
 		<attribute key="manaleechamount" value="100" />
 		<attribute key="criticalhitchance" value="200" />
 		<attribute key="criticalhitdamage" value="300" />
-		<attribute key="imbuementslot" value="3">
+		<attribute key="imbuementslot" value="5">
 			<attribute key="life leech" value="3" />
 			<attribute key="mana leech" value="3" />
 			<attribute key="critical hit" value="3" />
@@ -90766,7 +90766,7 @@ Granted by TibiaGoals.com"/>
 		<attribute key="manaleechamount" value="100" />
 		<attribute key="criticalhitchance" value="100" />
 		<attribute key="criticalhitdamage" value="300" />
-		<attribute key="imbuementslot" value="3">
+		<attribute key="imbuementslot" value="5">
 			<attribute key="life leech" value="3" />
 			<attribute key="mana leech" value="3" />
 			<attribute key="critical hit" value="3" />
@@ -90790,16 +90790,16 @@ Granted by TibiaGoals.com"/>
 		<attribute key="weaponType" value="distance" />
 		<attribute key="slotType" value="two-handed" />
 		<attribute key="ammotype" value="arrow" />
-		<attribute key="range" value="6" />
 		<attribute key="weight" value="4700" />
-		<attribute key="attack" value="12" />
+		<attribute key="attack" value="15" />
 		<attribute key="hitchance" value="7" />
+		<attribute key="range" value="7" />
 		<attribute key="skilldist" value="6" />
 		<attribute key="lifeleechamount" value="500" />
 		<attribute key="manaleechamount" value="200" />
 		<attribute key="criticalhitchance" value="1000" />
 		<attribute key="criticalhitdamage" value="1500" />
-		<attribute key="imbuementslot" value="3">
+		<attribute key="imbuementslot" value="5">
 			<attribute key="life leech" value="3" />
 			<attribute key="mana leech" value="3" />
 			<attribute key="critical hit" value="3" />
@@ -90818,16 +90818,16 @@ Granted by TibiaGoals.com"/>
 		<attribute key="weaponType" value="distance" />
 		<attribute key="slotType" value="two-handed" />
 		<attribute key="ammotype" value="bolt" />
-		<attribute key="range" value="6" />
 		<attribute key="weight" value="4700" />
-		<attribute key="attack" value="13" />
+		<attribute key="attack" value="15" />
 		<attribute key="hitchance" value="8" />
+		<attribute key="range" value="7" />
 		<attribute key="skilldist" value="6" />
 		<attribute key="lifeleechamount" value="500" />
 		<attribute key="manaleechamount" value="200" />
 		<attribute key="criticalhitchance" value="1000" />
 		<attribute key="criticalhitdamage" value="1500" />
-		<attribute key="imbuementslot" value="3">
+		<attribute key="imbuementslot" value="5">
 			<attribute key="life leech" value="3" />
 			<attribute key="mana leech" value="3" />
 			<attribute key="critical hit" value="3" />
@@ -90847,14 +90847,17 @@ Granted by TibiaGoals.com"/>
 		<attribute key="showattributes" value="1" />
 		<attribute key="containersize" value="12" />
 		<attribute key="weight" value="2000" />
-		<attribute key="perfectshotdamage" value="25" />
-		<attribute key="perfectshotrange" value="3" />
+		<attribute key="weaponType" value="shield" />
+		<attribute key="defense" value="50" />
+		<attribute key="magiclevelpoints" value="10" />
+		<attribute key="perfectshotdamage" value="40" />
+		<attribute key="perfectshotrange" value="5" />
 		<attribute key="skilldist" value="4" />
 		<attribute key="lifeleechamount" value="100" />
 		<attribute key="manaleechamount" value="100" />
 		<attribute key="criticalhitchance" value="200" />
 		<attribute key="criticalhitdamage" value="300" />
-		<attribute key="imbuementslot" value="3">
+		<attribute key="imbuementslot" value="5">
 			<attribute key="life leech" value="3" />
 			<attribute key="mana leech" value="3" />
 			<attribute key="critical hit" value="3" />
@@ -90880,7 +90883,7 @@ Granted by TibiaGoals.com"/>
 		<attribute key="manaleechamount" value="100" />
 		<attribute key="criticalhitchance" value="200" />
 		<attribute key="criticalhitdamage" value="400" />
-		<attribute key="imbuementslot" value="3">
+		<attribute key="imbuementslot" value="5">
 			<attribute key="life leech" value="3" />
 			<attribute key="mana leech" value="3" />
 			<attribute key="critical hit" value="3" />
@@ -90908,7 +90911,7 @@ Granted by TibiaGoals.com"/>
 		<attribute key="manaleechamount" value="100" />
 		<attribute key="criticalhitchance" value="200" />
 		<attribute key="criticalhitdamage" value="400" />
-		<attribute key="imbuementslot" value="3">
+		<attribute key="imbuementslot" value="5">
 			<attribute key="life leech" value="3" />
 			<attribute key="mana leech" value="3" />
 			<attribute key="critical hit" value="3" />
@@ -90935,7 +90938,7 @@ Granted by TibiaGoals.com"/>
 		<attribute key="manaleechamount" value="100" />
 		<attribute key="criticalhitchance" value="200" />
 		<attribute key="criticalhitdamage" value="300" />
-		<attribute key="imbuementslot" value="3">
+		<attribute key="imbuementslot" value="5">
 			<attribute key="life leech" value="3" />
 			<attribute key="mana leech" value="3" />
 			<attribute key="critical hit" value="3" />
@@ -90962,7 +90965,7 @@ Granted by TibiaGoals.com"/>
 		<attribute key="manaleechamount" value="100" />
 		<attribute key="criticalhitchance" value="100" />
 		<attribute key="criticalhitdamage" value="300" />
-		<attribute key="imbuementslot" value="3">
+		<attribute key="imbuementslot" value="5">
 			<attribute key="life leech" value="3" />
 			<attribute key="mana leech" value="3" />
 			<attribute key="critical hit" value="3" />
@@ -90992,7 +90995,7 @@ Granted by TibiaGoals.com"/>
 		<attribute key="manaleechamount" value="200" />
 		<attribute key="criticalhitchance" value="1000" />
 		<attribute key="criticalhitdamage" value="1500" />
-		<attribute key="imbuementslot" value="3">
+		<attribute key="imbuementslot" value="5">
 			<attribute key="life leech" value="3" />
 			<attribute key="mana leech" value="3" />
 			<attribute key="critical hit" value="3" />
@@ -91000,10 +91003,10 @@ Granted by TibiaGoals.com"/>
 		</attribute>
 		<attribute key="script" value="moveevent;weapon">
 			<attribute key="level" value="100" />
-			<attribute key="mana" value="22" />
+			<attribute key="mana" value="30" />
 			<attribute key="unproperly" value="true" />
-			<attribute key="fromDamage" value="115" />
-			<attribute key="toDamage" value="135" />
+			<attribute key="fromDamage" value="200" />
+			<attribute key="toDamage" value="235" />
 			<attribute key="weaponType" value="wand" />
 			<attribute key="wandType" value="fire" />
 			<attribute key="vocation" value="Sorcerer;true, Master Sorcerer" />
@@ -91016,12 +91019,13 @@ Granted by TibiaGoals.com"/>
 		<attribute key="weight" value="2600" />
 		<attribute key="defense" value="24" />
 		<attribute key="absorbpercentphysical" value="3" />
-		<attribute key="magiclevelpoints" value="4" />
+		<attribute key="skillshield" value="40" />
+		<attribute key="magiclevelpoints" value="10" />
 		<attribute key="lifeleechamount" value="100" />
 		<attribute key="manaleechamount" value="100" />
 		<attribute key="criticalhitchance" value="200" />
 		<attribute key="criticalhitdamage" value="300" />
-		<attribute key="imbuementslot" value="3">
+		<attribute key="imbuementslot" value="5">
 			<attribute key="life leech" value="3" />
 			<attribute key="mana leech" value="3" />
 			<attribute key="critical hit" value="3" />
@@ -91048,7 +91052,7 @@ Granted by TibiaGoals.com"/>
 		<attribute key="manaleechamount" value="100" />
 		<attribute key="criticalhitchance" value="200" />
 		<attribute key="criticalhitdamage" value="400" />
-		<attribute key="imbuementslot" value="3">
+		<attribute key="imbuementslot" value="5">
 			<attribute key="life leech" value="3" />
 			<attribute key="mana leech" value="3" />
 			<attribute key="critical hit" value="3" />
@@ -91076,7 +91080,7 @@ Granted by TibiaGoals.com"/>
 		<attribute key="manaleechamount" value="100" />
 		<attribute key="criticalhitchance" value="200" />
 		<attribute key="criticalhitdamage" value="400" />
-		<attribute key="imbuementslot" value="3">
+		<attribute key="imbuementslot" value="5">
 			<attribute key="life leech" value="3" />
 			<attribute key="mana leech" value="3" />
 			<attribute key="critical hit" value="3" />
@@ -91103,7 +91107,7 @@ Granted by TibiaGoals.com"/>
 		<attribute key="manaleechamount" value="100" />
 		<attribute key="criticalhitchance" value="200" />
 		<attribute key="criticalhitdamage" value="300" />
-		<attribute key="imbuementslot" value="3">
+		<attribute key="imbuementslot" value="5">
 			<attribute key="life leech" value="3" />
 			<attribute key="mana leech" value="3" />
 			<attribute key="critical hit" value="3" />
@@ -91130,7 +91134,7 @@ Granted by TibiaGoals.com"/>
 		<attribute key="manaleechamount" value="100" />
 		<attribute key="criticalhitchance" value="100" />
 		<attribute key="criticalhitdamage" value="300" />
-		<attribute key="imbuementslot" value="3">
+		<attribute key="imbuementslot" value="5">
 			<attribute key="life leech" value="3" />
 			<attribute key="mana leech" value="3" />
 			<attribute key="critical hit" value="3" />
@@ -91160,7 +91164,7 @@ Granted by TibiaGoals.com"/>
 		<attribute key="manaleechamount" value="200" />
 		<attribute key="criticalhitchance" value="1000" />
 		<attribute key="criticalhitdamage" value="1500" />
-		<attribute key="imbuementslot" value="3">
+		<attribute key="imbuementslot" value="5">
 			<attribute key="life leech" value="3" />
 			<attribute key="mana leech" value="3" />
 			<attribute key="critical hit" value="3" />
@@ -91168,10 +91172,10 @@ Granted by TibiaGoals.com"/>
 		</attribute>
 		<attribute key="script" value="moveevent;weapon">
 			<attribute key="level" value="100" />
-			<attribute key="mana" value="22" />
+			<attribute key="mana" value="30" />
 			<attribute key="unproperly" value="true" />
-			<attribute key="fromDamage" value="115" />
-			<attribute key="toDamage" value="135" />
+			<attribute key="fromDamage" value="200" />
+			<attribute key="toDamage" value="235" />
 			<attribute key="weaponType" value="wand" />
 			<attribute key="wandType" value="earth" />
 			<attribute key="vocation" value="Druid;true, Elder Druid" />
@@ -91184,12 +91188,13 @@ Granted by TibiaGoals.com"/>
 		<attribute key="weight" value="2300" />
 		<attribute key="defense" value="24" />
 		<attribute key="absorbpercentphysical" value="3" />
-		<attribute key="magiclevelpoints" value="4" />
+		<attribute key="skillshield" value="40" />
+		<attribute key="magiclevelpoints" value="10" />
 		<attribute key="lifeleechamount" value="100" />
 		<attribute key="manaleechamount" value="100" />
 		<attribute key="criticalhitchance" value="200" />
 		<attribute key="criticalhitdamage" value="300" />
-		<attribute key="imbuementslot" value="3">
+		<attribute key="imbuementslot" value="5">
 			<attribute key="life leech" value="3" />
 			<attribute key="mana leech" value="3" />
 			<attribute key="critical hit" value="3" />
@@ -91217,7 +91222,7 @@ Granted by TibiaGoals.com"/>
 		<attribute key="manaleechamount" value="100" />
 		<attribute key="criticalhitchance" value="200" />
 		<attribute key="criticalhitdamage" value="400" />
-		<attribute key="imbuementslot" value="3">
+		<attribute key="imbuementslot" value="5">
 			<attribute key="life leech" value="3" />
 			<attribute key="mana leech" value="3" />
 			<attribute key="critical hit" value="3" />
@@ -91246,7 +91251,7 @@ Granted by TibiaGoals.com"/>
 		<attribute key="manaleechamount" value="100" />
 		<attribute key="criticalhitchance" value="200" />
 		<attribute key="criticalhitdamage" value="400" />
-		<attribute key="imbuementslot" value="3">
+		<attribute key="imbuementslot" value="5">
 			<attribute key="life leech" value="3" />
 			<attribute key="mana leech" value="3" />
 			<attribute key="critical hit" value="3" />
@@ -91275,7 +91280,7 @@ Granted by TibiaGoals.com"/>
 		<attribute key="manaleechamount" value="100" />
 		<attribute key="criticalhitchance" value="200" />
 		<attribute key="criticalhitdamage" value="300" />
-		<attribute key="imbuementslot" value="3">
+		<attribute key="imbuementslot" value="5">
 			<attribute key="life leech" value="3" />
 			<attribute key="mana leech" value="3" />
 			<attribute key="critical hit" value="3" />
@@ -91303,7 +91308,7 @@ Granted by TibiaGoals.com"/>
 		<attribute key="manaleechamount" value="100" />
 		<attribute key="criticalhitchance" value="100" />
 		<attribute key="criticalhitdamage" value="300" />
-		<attribute key="imbuementslot" value="3">
+		<attribute key="imbuementslot" value="5">
 			<attribute key="life leech" value="3" />
 			<attribute key="mana leech" value="3" />
 			<attribute key="critical hit" value="3" />
@@ -91329,14 +91334,14 @@ Granted by TibiaGoals.com"/>
 		<attribute key="elementalbond" value="earth" />
 		<attribute key="slottype" value="dualwielding" />
 		<attribute key="weight" value="7100" />
-		<attribute key="attack" value="52" />
-		<attribute key="defense" value="22" />
-		<attribute key="skillfist" value="6" />
+		<attribute key="attack" value="58" />
+		<attribute key="defense" value="25" />
+		<attribute key="skillfist" value="8" />
 		<attribute key="lifeleechamount" value="500" />
 		<attribute key="manaleechamount" value="200" />
 		<attribute key="criticalhitchance" value="1000" />
 		<attribute key="criticalhitdamage" value="1500" />
-		<attribute key="imbuementslot" value="3">
+		<attribute key="imbuementslot" value="5">
 			<attribute key="life leech" value="3" />
 			<attribute key="mana leech" value="3" />
 			<attribute key="critical hit" value="3" />

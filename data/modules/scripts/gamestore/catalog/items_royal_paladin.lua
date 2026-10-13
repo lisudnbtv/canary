@@ -14,7 +14,7 @@ return {
 			itemtype = 60009,
 			count = 1,
 			movable = true,
-			description = "<i>armor 12, distance +3, life leech 2%, mana leech 1%, critical hit chance 2%, critical extra damage 4%</i>\n\n{character}\n{storeinbox}\n{info} level 100, paladin\n{info} 3 imbuement slots",
+			description = "<i>armor 12, distance +3, life leech 2%, mana leech 1%, critical hit chance 2%, critical extra damage 4%</i>\n\n{character}\n{storeinbox}\n{info} level 100, paladin\n{info} 5 imbuement slots",
 			type = GameStore.OfferTypes.OFFER_TYPE_ITEM,
 		},
 		{
@@ -24,7 +24,7 @@ return {
 			itemtype = 60010,
 			count = 1,
 			movable = true,
-			description = "<i>armor 18, physical protection 6%, distance +4, life leech 2%, mana leech 1%, critical hit chance 2%, critical extra damage 4%</i>\n\n{character}\n{storeinbox}\n{info} level 100, paladin\n{info} 3 imbuement slots",
+			description = "<i>armor 18, physical protection 6%, distance +4, life leech 2%, mana leech 1%, critical hit chance 2%, critical extra damage 4%</i>\n\n{character}\n{storeinbox}\n{info} level 100, paladin\n{info} 5 imbuement slots",
 			type = GameStore.OfferTypes.OFFER_TYPE_ITEM,
 		},
 		{
@@ -34,7 +34,7 @@ return {
 			itemtype = 60011,
 			count = 1,
 			movable = true,
-			description = "<i>armor 11, physical protection 4%, distance +3, life leech 1.5%, mana leech 1%, critical hit chance 2%, critical extra damage 3%</i>\n\n{character}\n{storeinbox}\n{info} level 100, paladin\n{info} 3 imbuement slots",
+			description = "<i>armor 11, physical protection 4%, distance +3, life leech 1.5%, mana leech 1%, critical hit chance 2%, critical extra damage 3%</i>\n\n{character}\n{storeinbox}\n{info} level 100, paladin\n{info} 5 imbuement slots",
 			type = GameStore.OfferTypes.OFFER_TYPE_ITEM,
 		},
 		{
@@ -44,7 +44,7 @@ return {
 			itemtype = 60012,
 			count = 1,
 			movable = true,
-			description = "<i>armor 4, speed 20, distance +2, life leech 1%, mana leech 1%, critical hit chance 1%, critical extra damage 3%</i>\n\n{character}\n{storeinbox}\n{info} level 100, paladin\n{info} 3 imbuement slots",
+			description = "<i>armor 4, speed 20, distance +2, life leech 1%, mana leech 1%, critical hit chance 1%, critical extra damage 3%</i>\n\n{character}\n{storeinbox}\n{info} level 100, paladin\n{info} 5 imbuement slots",
 			type = GameStore.OfferTypes.OFFER_TYPE_ITEM,
 		},
 		{
@@ -54,7 +54,7 @@ return {
 			itemtype = 60013,
 			count = 1,
 			movable = true,
-			description = "<i>attack 12, hitchance 7, distance +6, life leech 5%, mana leech 2%, critical hit chance 10%, critical extra damage 15%</i>\n\n{character}\n{storeinbox}\n{info} level 100, paladin\n{info} 3 imbuement slots",
+			description = "<i>attack 15, hitchance 7, range 7, distance +6, life leech 5%, mana leech 2%, critical hit chance 10%, critical extra damage 15%</i>\n\n{character}\n{storeinbox}\n{info} level 100, paladin\n{info} 5 imbuement slots",
 			type = GameStore.OfferTypes.OFFER_TYPE_ITEM,
 		},
 		{
@@ -64,7 +64,7 @@ return {
 			itemtype = 60014,
 			count = 1,
 			movable = true,
-			description = "<i>attack 13, hitchance 8, distance +6, life leech 5%, mana leech 2%, critical hit chance 10%, critical extra damage 15%</i>\n\n{character}\n{storeinbox}\n{info} level 100, paladin\n{info} 3 imbuement slots",
+			description = "<i>attack 15, hitchance 8, range 7, distance +6, life leech 5%, mana leech 2%, critical hit chance 10%, critical extra damage 15%</i>\n\n{character}\n{storeinbox}\n{info} level 100, paladin\n{info} 5 imbuement slots",
 			type = GameStore.OfferTypes.OFFER_TYPE_ITEM,
 		},
 		{
@@ -74,7 +74,7 @@ return {
 			itemtype = 60015,
 			count = 1,
 			movable = true,
-			description = "<i>perfect shot +25, distance +4, life leech 1%, mana leech 1%, critical hit chance 2%, critical extra damage 3%</i>\n\n{character}\n{storeinbox}\n{info} level 100, paladin\n{info} 3 imbuement slots",
+			description = "<i>defense 50, magic level +10, perfect shot +40, perfect shot range 5, distance +4, life leech 1%, mana leech 1%, critical hit chance 2%, critical extra damage 3%</i>\n\n{character}\n{storeinbox}\n{info} level 100, paladin\n{info} 5 imbuement slots",
 			type = GameStore.OfferTypes.OFFER_TYPE_ITEM,
 		},
 	},

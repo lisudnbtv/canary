@@ -14,7 +14,7 @@ return {
 			itemtype = 60001,
 			count = 1,
 			movable = true,
-			description = "<i>armor 13, sword +3, axe +3, club +3, life leech 2%, mana leech 1%, critical hit chance 2%, critical extra damage 4%</i>\n\n{character}\n{storeinbox}\n{info} level 100, knight\n{info} 3 imbuement slots",
+			description = "<i>armor 13, sword +3, axe +3, club +3, life leech 2%, mana leech 1%, critical hit chance 2%, critical extra damage 4%</i>\n\n{character}\n{storeinbox}\n{info} level 100, knight\n{info} 5 imbuement slots",
 			type = GameStore.OfferTypes.OFFER_TYPE_ITEM,
 		},
 		{
@@ -24,7 +24,7 @@ return {
 			itemtype = 60002,
 			count = 1,
 			movable = true,
-			description = "<i>armor 22, physical protection 10%, sword +4, axe +4, club +4, life leech 2%, mana leech 1%, critical hit chance 2%, critical extra damage 4%</i>\n\n{character}\n{storeinbox}\n{info} level 100, knight\n{info} 3 imbuement slots",
+			description = "<i>armor 22, physical protection 10%, sword +4, axe +4, club +4, life leech 2%, mana leech 1%, critical hit chance 2%, critical extra damage 4%</i>\n\n{character}\n{storeinbox}\n{info} level 100, knight\n{info} 5 imbuement slots",
 			type = GameStore.OfferTypes.OFFER_TYPE_ITEM,
 		},
 		{
@@ -34,7 +34,7 @@ return {
 			itemtype = 60003,
 			count = 1,
 			movable = true,
-			description = "<i>armor 12, physical protection 5%, sword +3, axe +3, club +3, life leech 1.5%, mana leech 1%, critical hit chance 2%, critical extra damage 3%</i>\n\n{character}\n{storeinbox}\n{info} level 100, knight\n{info} 3 imbuement slots",
+			description = "<i>armor 12, physical protection 5%, sword +3, axe +3, club +3, life leech 1.5%, mana leech 1%, critical hit chance 2%, critical extra damage 3%</i>\n\n{character}\n{storeinbox}\n{info} level 100, knight\n{info} 5 imbuement slots",
 			type = GameStore.OfferTypes.OFFER_TYPE_ITEM,
 		},
 		{
@@ -44,7 +44,7 @@ return {
 			itemtype = 60004,
 			count = 1,
 			movable = true,
-			description = "<i>armor 4, speed 20, sword +2, axe +2, club +2, life leech 1%, mana leech 1%, critical hit chance 1%, critical extra damage 3%</i>\n\n{character}\n{storeinbox}\n{info} level 100, knight\n{info} 3 imbuement slots",
+			description = "<i>armor 4, speed 20, sword +2, axe +2, club +2, life leech 1%, mana leech 1%, critical hit chance 1%, critical extra damage 3%</i>\n\n{character}\n{storeinbox}\n{info} level 100, knight\n{info} 5 imbuement slots",
 			type = GameStore.OfferTypes.OFFER_TYPE_ITEM,
 		},
 		{
@@ -54,7 +54,7 @@ return {
 			itemtype = 60005,
 			count = 1,
 			movable = true,
-			description = "<i>attack 10, fire damage 48, defense 34, extradef 4, sword +6, life leech 5%, mana leech 2%, critical hit chance 10%, critical extra damage 15%</i>\n\n{character}\n{storeinbox}\n{info} level 100, knight\n{info} 3 imbuement slots",
+			description = "<i>attack 48, fire damage 40, defense 34, extradef 4, sword +6, life leech 5%, mana leech 2%, critical hit chance 10%, critical extra damage 15%</i>\n\n{character}\n{storeinbox}\n{info} level 100, knight\n{info} 5 imbuement slots",
 			type = GameStore.OfferTypes.OFFER_TYPE_ITEM,
 		},
 		{
@@ -64,7 +64,7 @@ return {
 			itemtype = 60006,
 			count = 1,
 			movable = true,
-			description = "<i>attack 10, energy damage 48, defense 34, extradef 4, axe +6, life leech 5%, mana leech 2%, critical hit chance 10%, critical extra damage 15%</i>\n\n{character}\n{storeinbox}\n{info} level 100, knight\n{info} 3 imbuement slots",
+			description = "<i>attack 48, energy damage 40, defense 34, extradef 4, axe +6, life leech 5%, mana leech 2%, critical hit chance 10%, critical extra damage 15%</i>\n\n{character}\n{storeinbox}\n{info} level 100, knight\n{info} 5 imbuement slots",
 			type = GameStore.OfferTypes.OFFER_TYPE_ITEM,
 		},
 		{
@@ -74,7 +74,7 @@ return {
 			itemtype = 60007,
 			count = 1,
 			movable = true,
-			description = "<i>attack 10, death damage 48, defense 34, extradef 4, club +6, life leech 5%, mana leech 2%, critical hit chance 10%, critical extra damage 15%</i>\n\n{character}\n{storeinbox}\n{info} level 100, knight\n{info} 3 imbuement slots",
+			description = "<i>attack 48, death damage 40, defense 34, extradef 4, club +6, life leech 5%, mana leech 2%, critical hit chance 10%, critical extra damage 15%</i>\n\n{character}\n{storeinbox}\n{info} level 100, knight\n{info} 5 imbuement slots",
 			type = GameStore.OfferTypes.OFFER_TYPE_ITEM,
 		},
 		{
@@ -84,7 +84,7 @@ return {
 			itemtype = 60008,
 			count = 1,
 			movable = true,
-			description = "<i>defense 45, physical protection 6%, shielding +4, life leech 1%, mana leech 1%, critical hit chance 2%, critical extra damage 3%</i>\n\n{character}\n{storeinbox}\n{info} level 100, knight\n{info} 3 imbuement slots",
+			description = "<i>defense 45, physical protection 6%, shielding +4, life leech 1%, mana leech 1%, critical hit chance 2%, critical extra damage 3%</i>\n\n{character}\n{storeinbox}\n{info} level 100, knight\n{info} 5 imbuement slots",
 			type = GameStore.OfferTypes.OFFER_TYPE_ITEM,
 		},
 	},
