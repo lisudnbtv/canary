@@ -9,7 +9,7 @@ PAD_AID = 64992
 SIGN_A = 2016        # stojaca tabliczka (polnoc/zachod)
 SIGN_B = 2014        # stojaca tabliczka (poludnie/wschod)
 PITCH = 3
-BOOTH = 4            # odstep miedzy wnekami z padami na pietrach
+BOOTH = 2            # teleporty co 2 pola, miedzy nimi kosze z ogniem, potwor tuz za teleportem
 RED_CARPET, PILLAR, COAL_BASIN = 2576, 2153, 2110
 WING_GAP = 40
 PZ = 1
@@ -115,8 +115,8 @@ _mid = X0 + lobby_w // 2
 for dx, name, look in ((-12, 'Fale', 134), (-4, 'Outfity', 273), (0, 'Thais', 128), (4, 'Questy', 367), (8, 'Bossy', 289), (12, 'Mounty', 145)):
     floor(_mid + dx + 1, Y0 + 2)
     npcs.append(dict(name=name, outfit={'lookType': look, 'lookHead': 78, 'lookBody': 69, 'lookLegs': 58, 'lookFeet': 76, 'lookAddons': 3}, pos=[_mid + dx + 1, Y0 + 2, Z], south=False))
-FLOOR_N = 24         # pozycji na jednym pietrze (2 rzedy po 12)
-ROW_N = 12
+FLOOR_N = 48         # pozycji na jednym pietrze (2 korytarze, w kazdym 12 po polnocnej i 12 po poludniowej stronie)
+ROW_N = 24
 COL_PITCH = 45       # odstep miedzy kolumnami pieter (osobna kolumna na kazdy poziom)
 FLOOR_PITCH = 26
 
@@ -126,7 +126,7 @@ def build_floors(entries, x0, y_first, step, title, pad_action, sign_text, behin
     chunks = [entries[i:i + FLOOR_N] for i in range(0, len(entries), FLOOR_N)]
     n = len(chunks)
     arrivals = [[x0 - 2, y_first + step * k + 5, Z] for k in range(n)]
-    x_end = x0 + 2 + BOOTH * (ROW_N // 2)
+    x_end = x0 + 4 + BOOTH * (ROW_N // 2)
     for k, chunk in enumerate(chunks):
         yc = y_first + step * k
         name = '%s %d/%d' % (title, k + 1, n)
@@ -146,15 +146,11 @@ def build_floors(entries, x0, y_first, step, title, pad_action, sign_text, behin
             yr = yc + 10 * r
             sign = -1 if side == 0 else 1
             pad(x, yr + 2 * sign, pad_action(k * FLOOR_N + j, e))
-            board(x, yr + 3 * sign, sign_text(e), SIGN_A if sign < 0 else SIGN_B)
-            # wneka: kolumny po bokach padu, kosze z ogniem przy tabliczce
-            for px in ([x - 2] if s_ == 0 else []) + [x + 2]:
+            # przegrody miedzy teleportami: kosze z ogniem (nazwa i opis widac na potworze i po wejsciu)
+            for px in ([x - 1] if s_ == 0 else []) + [x + 1]:
                 floor(px, yr + 2 * sign)
-                tiles[(px, yr + 2 * sign, Z)]['items'].append((PILLAR, 0, None))
-            for bx in (x - 1, x + 1):
-                floor(bx, yr + 3 * sign)
-                tiles[(bx, yr + 3 * sign, Z)]['items'].append((COAL_BASIN, 0, None))
-            behind(e, x, yr + 4 * sign, sign < 0)
+                tiles[(px, yr + 2 * sign, Z)]['items'].append((COAL_BASIN, 0, None))
+            behind(e, x, yr + 3 * sign, sign < 0)
         def nav(y, target, text, who, look):
             if target is None:
                 pad(x0 - 4, y, dict(kind='lobby'))
@@ -172,8 +168,7 @@ def build_floors(entries, x0, y_first, step, title, pad_action, sign_text, behin
 
 for t, (g, (_, label)) in enumerate(zip(groups, tiers)):
     def _behind(h, x, y, north):
-        for dx in (-1, 0, 1):
-            floor(x + dx, y, pz=False)   # zagroda potwora (3 pola trawy), poza PZ
+        floor(x, y, pz=False)   # potwor tuz za teleportem, poza PZ
         spawns.append((h['name'], x, y))
     arr = build_floors(g, X0 + COL_PITCH * t, Y0 + WING_GAP, FLOOR_PITCH, label,
         lambda i, h, t=t: dict(kind='hunt', tier=t, index=i),
