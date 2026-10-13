@@ -42,50 +42,55 @@ def item(x, y, iid, aid=0, text=None, pz=True):
     tiles[(x, y, Z)]['items'].append((iid, aid, text))
 def key(x, y): return '%d:%d:%d' % (x, y, Z)
 
-FLOOR_N, ROW_N, FLOOR_PITCH = 24, 12, 26
-nfloors = (n + FLOOR_N - 1) // FLOOR_N
-x_end = X0 + 2 + PITCH * (ROW_N // 2)
-arrivals = [[X0 - 2, Y0 - FLOOR_PITCH * f + 5, Z] for f in range(nfloors)]
+ROOM_CAP, ROOM_PITCH = 40, 10
+RED_CARPET, COAL_BASIN = 2576, 2110
+nfloors = -(-n // ROOM_CAP)
+_size = -(-n // nfloors)
+hall_rooms = [list(range(i * _size, min(n, (i + 1) * _size))) for i in range(nfloors)]
+arrivals = [[X0, Y0 - ROOM_PITCH * f, Z] for f in range(nfloors)]
 hall = arrivals[0]
 navnpcs = []
-tamer = [X0 - 2, Y0 + 11, Z]          # poludniowy koniec zachodniego korytarza pierwszego pietra
-for f in range(nfloors):
-    yc = Y0 - FLOOR_PITCH * f
-    for x in list(range(X0 - 3, X0)) + list(range(x_end, x_end + 3)):
-        for y in range(yc - 1, yc + 12):
+slot = {}   # numer wierzchowca -> (sala, pad x, pad y, znak strony)
+tamer = [X0 - 1, Y0 + 2, Z]          # przy zachodnim koncu korytarza pierwszej sali
+for f, idx in enumerate(hall_rooms):
+    yc = Y0 - ROOM_PITCH * f
+    half = (len(idx) + 1) // 2
+    xe = X0 + 2 + half
+    for x in range(X0 - 1, xe + 1):
+        for y in (yc - 1, yc, yc + 1):
             floor(x, y)
-    for r in range(2):
-        for x in range(X0, x_end):
-            for y in range(yc + 10 * r - 1, yc + 10 * r + 2):
-                floor(x, y)
-    def nav(y, target, text, who):
+        if X0 <= x <= xe:
+            tiles[(x, yc, Z)]['items'].append((RED_CARPET, 0, None))
+    title = 'Mounty %d/%d\n%s - %s' % (f + 1, nfloors, mounts[idx[0]]['name'], mounts[idx[-1]]['name'])
+    item(X0, yc - 2, SIGN_A, 0, title)
+    item(X0, yc + 2, SIGN_B, 0, title)
+    for bx, by in ((X0 + 1, yc - 2), (X0 + 1, yc + 2), (xe, yc - 2), (xe, yc + 2)):
+        item(bx, by, COAL_BASIN)
+    for j, k in enumerate(idx):
+        north = j < half
+        px = X0 + 2 + (j if north else j - half)
+        slot[k] = (f, px, yc + (-2 if north else 2), -1 if north else 1)
+    def nav(y, target, who):
         if target is None:
-            item(X0 - 4, y, TELEPORT, PAD_AID); pads[key(X0 - 4, y)] = dict(kind='hub')
+            item(X0 - 2, y, TELEPORT, PAD_AID); pads[key(X0 - 2, y)] = dict(kind='hub')
         else:
             t = target % nfloors
-            item(X0 - 4, y, TELEPORT, PAD_AID); pads[key(X0 - 4, y)] = dict(kind='goto', pos=arrivals[t], label='Mounty %d/%d' % (t + 1, nfloors))
-        floor(X0 - 5, y)
-        navnpcs.append((who, X0 - 5, y))
-        item(X0 - 6, y, SIGN_A, 0, text)
+            item(X0 - 2, y, TELEPORT, PAD_AID); pads[key(X0 - 2, y)] = dict(kind='goto', pos=arrivals[t], label='Mounty %d/%d' % (t + 1, nfloors))
+        floor(X0 - 3, y)
+        navnpcs.append((who, X0 - 3, y))
     if nfloors > 1:
-        nav(yc + 3, f - 1, 'Poprzednie pietro\nMounty %d/%d' % ((f - 1) % nfloors + 1, nfloors), 'Poprzednie pomieszczenie')
-        nav(yc + 7, f + 1, 'Nastepne pietro\nMounty %d/%d' % ((f + 1) % nfloors + 1, nfloors), 'Nastepne pomieszczenie')
-    nav(yc + 5, None, 'Lobby hubu\nTu jestes: Mounty %d/%d' % (f + 1, nfloors), 'Lobby')
+        nav(yc - 1, f - 1, 'Poprzednie pomieszczenie')
+        nav(yc + 1, f + 1, 'Nastepne pomieszczenie')
+    nav(yc, None, 'Lobby')
 floor(tamer[0], tamer[1])
 item(tamer[0], tamer[1] + 1, SIGN_B, 0, 'Tamer\nSprzedaje wszystkie przedmioty do oswajania po 1 gp')
 
 rooms = []
 for k, o in enumerate(mounts):
-    f, j = divmod(k, FLOOR_N)
-    r, jj = divmod(j, ROW_N)
-    s, side = divmod(jj, 2)
-    px = X0 + 3 + PITCH * s
-    yr = Y0 - FLOOR_PITCH * f + 10 * r
-    sgn = -1 if side == 0 else 1
-    item(px, yr + 2 * sgn, TELEPORT, PAD_AID); pads[key(px, yr + 2 * sgn)] = dict(kind='room', index=k)
-    item(px, yr + 3 * sgn, SIGN_A if sgn < 0 else SIGN_B, 0, '%s\nOswajanie: %s\nSzansa: %d%%' % (o['name'], o['itemName'], o['chance']))
-    floor(px, yr + 4 * sgn)
-    o['display'] = (px, yr + 4 * sgn, sgn)
+    f, px, py, sgn = slot[k]
+    item(px, py, TELEPORT, PAD_AID); pads[key(px, py)] = dict(kind='room', index=k)
+    floor(px, py + sgn)                     # tuz za padem stworzenie do oswojenia
+    o['display'] = (px, py + sgn, sgn)
     back = dict(kind='goto', pos=arrivals[f], label='Mounty %d/%d' % (f + 1, nfloors))
     # zagroda
     col, row = k % COLS, k // COLS
