@@ -70,3 +70,6 @@ coinImagesURL = "http://127.0.0.1:8080/ots-store/"
 -- oraz czerwonych fiendish (zawsze greater gem). Domyslnie bylo 300 i 4 na cala mape.
 forgeInfluencedLimit = 5000
 forgeFiendishLimit = 50
+
+-- Kuznia: maksymalny limit pylu (domyslnie 225); !dust podnosi limit az do tej wartosci
+forgeMaxDust = 3000
