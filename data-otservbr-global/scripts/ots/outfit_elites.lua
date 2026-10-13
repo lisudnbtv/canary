@@ -1,5 +1,5 @@
 -- OTS: questy na stroje sa trudniejsze - kazdy potwor w sali stroju to elita
--- (czarna czaszka, nazwa "Elite ...", 4x wiecej HP, 2x mocniejsze ataki), a po wejsciu
+-- (czarna czaszka, opis "an elite ..." przy Look, 4x wiecej HP, 2x mocniejsze ataki), a po wejsciu
 -- do sali dochodzi dodatkowa fala 20 elit tych samych gatunkow. Elity z sal strojow nie
 -- daja nagrody z losowych elit (to zwykla czesc questa).
 -- Stan trzyma tylko identyfikatory potworow; kazdy tik sprawdza je od nowa, a dodatkowa
@@ -45,13 +45,13 @@ local function roomCreatures(index, playersOnly)
 end
 
 local function makeElite(monster)
-	if OtsOutfitElite[monster:getId()] or monster:getMaster() or monster:getName():find("^Elite ") then
+	if OtsOutfitElite[monster:getId()] or monster:getMaster() or (OtsRandomElites and OtsRandomElites[monster:getId()]) then
 		return
 	end
 	local health = monster:getMaxHealth() * HEALTH_MULTIPLIER
 	monster:setMaxHealth(health)
 	monster:addHealth(health)
-	monster:setName("Elite " .. monster:getName())
+	monster:setName(monster:getName(), "an elite " .. monster:getName():lower())
 	monster:setSkull(SKULL_BLACK)
 	OtsOutfitElite[monster:getId()] = true
 end

@@ -7,7 +7,7 @@ local CHANCE_PERCENT = 100 -- szansa na ture, ze brakujacy potwor kuzni sie poja
 local FIENDISH_PERCENT = 6 -- z tego: szansa na czerwonego fiendish zamiast zwyklego
 
 local function isElite(monster)
-	return monster:getName():find("^Elite ") ~= nil or (OtsOutfitElite and OtsOutfitElite[monster:getId()])
+	return (OtsRandomElites and OtsRandomElites[monster:getId()]) or (OtsOutfitElite and OtsOutfitElite[monster:getId()])
 end
 
 local tick = GlobalEvent("OtsForgeNearbyTick")

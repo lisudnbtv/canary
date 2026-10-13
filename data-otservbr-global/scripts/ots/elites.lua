@@ -1,5 +1,5 @@
 -- OTS: elitarne potwory. Gdy gracz expi poza PZ, co jakis czas jeden zwykly potwor w poblizu
--- zamienia sie w elite: 4x wiecej HP, 2x mocniejsze ataki, czarna czaszka i nazwa "Elite ...".
+-- zamienia sie w elite: 4x wiecej HP, 2x mocniejsze ataki, czarna czaszka i opis "an elite ..." przy Look.
 -- Za zabicie elity jest nagroda premium: kamienie ulepszen, losowy worek (bag you desire / primal bag /
 -- bag you covet), Tibia Coins i zloto na konto. Naraz zyje najwyzej jedna elita na gracza.
 local STONE_ID = 20139
@@ -13,13 +13,16 @@ local REWARD_STONES = 2
 local REWARD_COINS = 25
 local REWARD_GOLD = 500000
 
-local elites = {} -- id potwora -> guid gracza, przy ktorym powstal
+OtsRandomElites = OtsRandomElites or {} -- id potwora -> guid gracza, przy ktorym powstal
+local elites = OtsRandomElites
 
 local function makeElite(monster, player)
 	local health = monster:getMaxHealth() * HEALTH_MULTIPLIER
 	monster:setMaxHealth(health)
 	monster:addHealth(health)
-	monster:setName("Elite " .. monster:getName())
+	-- nazwa zostaje oryginalna (serwer szuka po niej typu potwora: charmy, bestiariusz, taski);
+	-- elite poznac po czarnej czaszce i opisie przy Look
+	monster:setName(monster:getName(), "an elite " .. monster:getName():lower())
 	monster:setSkull(SKULL_BLACK)
 	monster:getPosition():sendMagicEffect(CONST_ME_MORTAREA)
 	monster:say("ELITE!", TALKTYPE_MONSTER_YELL)
