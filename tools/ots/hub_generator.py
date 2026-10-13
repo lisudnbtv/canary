@@ -74,7 +74,7 @@ board(X0 + lobby_w // 2 + 12, Y0 + 3, 'Mounty\nWierzchowce do oswojenia', SIGN_B
 pad(X0 + lobby_w // 2 - 12, Y0 + 2, dict(kind='survival'))
 board(X0 + lobby_w // 2 - 12, Y0 + 3, 'Fale\nCoraz mocniejsze fale potworow, nagroda za kazda', SIGN_B)
 # Taski: postac po polnocnej stronie lobby (tworzy ja skrypt teleportow), za nia tabliczka
-task_npc = [X0 + lobby_w // 2, Y0 - 2, Z]
+task_npc = [X0 + 11, Y0 - 2, Z]   # miedzy salami bestiariusza a Exp Low
 floor(task_npc[0], task_npc[1])
 board(task_npc[0], Y0 - 3, 'Taski\nPowiedz hi albo wpisz !task')
 # Trener (exercise dummy) stoi w depo w Thais - stawia go skrypt thais_extras.lua
@@ -171,7 +171,7 @@ for t, (g, (_, label)) in enumerate(zip(groups, tiers)):
         lambda ch: (ch[0]['cls'] if ch[0]['cls'] == ch[-1]['cls'] else '%s - %s' % (ch[0]['cls'], ch[-1]['cls'])) if ch[0].get('cls') else 'exp %d-%d' % (min(e['exp'] for e in ch), max(e['exp'] for e in ch)))
     wings.append(dict(label=label, arrival=arr[0], count=len(g), floors=len(arr)))
     # lobby: pad poziomu, za nim tabliczka, obok postac z nazwa poziomu
-    lx = X0 + 4 + 6 * t
+    lx = X0 + (4, 14, 16, 18)[t]   # Bestiariusz osobno, Exp Low/Medium/High obok siebie
     pad(lx, Y0 - 2, dict(kind='wing', wing=t))
     board(lx, Y0 - 3, '%s\n%s\n%d teleportow, %d pieter' % (label, RANGES[t], len(g), len(arr)))
     floor(lx + 1, Y0 - 2)

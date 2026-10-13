@@ -2352,7 +2352,7 @@ local bestiaryClasses = {
 		{ "Yellow Butterfly", 235, 25 },
 	} },
 }
-local taskNpcPosition = Position(30013, 29998, 7)
+local taskNpcPosition = Position(30011, 29998, 7)
 local hubPads = {
 	["29996:29705:7"] = { goto = { 29998, 29733, 7 }, label = "Bossy 8/9 (arena, HP 25000-80000)" },
 	["29996:29707:7"] = { lobby = true },
@@ -2855,7 +2855,6 @@ local hubPads = {
 	["30009:30640:7"] = { hunt = hubHunts[1].list[558] },
 	["30009:30646:7"] = { hunt = hubHunts[1].list[569] },
 	["30009:30650:7"] = { hunt = hubHunts[1].list[570] },
-	["30010:29998:7"] = { wing = 2 },
 	["30012:29700:7"] = { boss = bosses[199] },
 	["30012:29704:7"] = { boss = bosses[200] },
 	["30012:29726:7"] = { boss = bosses[175] },
@@ -2989,6 +2988,7 @@ local hubPads = {
 	["30013:30002:7"] = { thais = true },
 	["30014:29958:7"] = { quest = quests[5] },
 	["30014:29962:7"] = { quest = quests[6] },
+	["30014:29998:7"] = { wing = 2 },
 	["30015:29700:7"] = { boss = bosses[201] },
 	["30015:29704:7"] = { boss = bosses[202] },
 	["30015:29726:7"] = { boss = bosses[177] },
@@ -3154,6 +3154,7 @@ local hubPads = {
 	["30018:29912:7"] = { boss = bosses[12] },
 	["30018:29918:7"] = { boss = bosses[23] },
 	["30018:29922:7"] = { boss = bosses[24] },
+	["30018:29998:7"] = { wing = 4 },
 	["30018:30038:7"] = { hunt = hubHunts[1].list[11] },
 	["30018:30042:7"] = { hunt = hubHunts[1].list[12] },
 	["30018:30048:7"] = { hunt = hubHunts[1].list[23] },
@@ -3251,7 +3252,6 @@ local hubPads = {
 	["30019:29958:7"] = { quest = quests[7] },
 	["30019:29962:7"] = { quest = quests[8] },
 	["30021:30002:7"] = { bosshall = true },
-	["30022:29998:7"] = { wing = 4 },
 	["30024:29958:7"] = { quest = quests[9] },
 	["30024:29962:7"] = { quest = quests[10] },
 	["30025:30002:7"] = { mounts = true },
