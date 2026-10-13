@@ -42,14 +42,32 @@ end
 
 local rune = Spell("rune")
 
-function rune.onCastSpell(creature, var, isHotkey)
-	local hit = false
-	for _, combat in ipairs(combats) do
-		if combat:execute(creature, var) then
-			hit = true
-		end
+-- Zywioly uderzaja jeden po drugim co STEP_MS, zeby kazda liczba obrazen byla widoczna osobno
+-- (naraz klient pokazuje tylko czesc z nich). Odroczone uderzenia trzymaja tylko id gracza
+-- i pozycje celu, a gracza szukaja od nowa; gdy go nie ma, nic nie robia.
+local STEP_MS = 150
+
+local function strike(playerId, position, index)
+	local player = Player(playerId)
+	if not player then
+		return
 	end
-	return hit
+	combats[index]:execute(player, Variant(position))
+end
+
+function rune.onCastSpell(creature, var, isHotkey)
+	if not combats[1]:execute(creature, var) then
+		return false
+	end
+	local position = var:getPosition()
+	if not position or position.x == 0 then
+		return true
+	end
+	local playerId = creature:getId()
+	for index = 2, #combats do
+		addEvent(strike, STEP_MS * (index - 1), playerId, Position(position.x, position.y, position.z), index)
+	end
+	return true
 end
 
 rune:id(16)
