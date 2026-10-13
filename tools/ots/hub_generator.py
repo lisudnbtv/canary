@@ -190,13 +190,14 @@ for _dp, _, _fs in os.walk('/home/claude/canary/data-otservbr-global/monster'):
             continue
         _MON_LOOKS[_nm.group(1).lower()] = _of
 
-def build_rooms(rooms, x0, y_first, wing_index):
-    """rooms: lista (tytul, wpisy). Zwraca pozycje przybycia kazdego pokoju."""
+def build_rooms(rooms, x0, y_first, pad_for, show, step=ROOM_PITCH):
+    """rooms: lista (tytul, wpisy). pad_for(i, e) -> akcja padu, show(e, x, y, north) stawia podobizne.
+    Zwraca pozycje przybycia kazdego pokoju."""
     n = len(rooms)
-    arrivals = [[x0, y_first + ROOM_PITCH * k, Z] for k in range(n)]
+    arrivals = [[x0, y_first + step * k, Z] for k in range(n)]
     index = 0
     for k, (title, ents) in enumerate(rooms):
-        yc = y_first + ROOM_PITCH * k
+        yc = y_first + step * k
         half = (len(ents) + 1) // 2
         xe = x0 + 2 + half          # wschodni koniec korytarza
         for x in range(x0 - 1, xe + 1):
@@ -214,11 +215,10 @@ def build_rooms(rooms, x0, y_first, wing_index):
             north = j < half
             x = x0 + 2 + (j if north else j - half)
             sign = -1 if north else 1
-            pad(x, yc + 2 * sign, dict(kind='hunt', tier=wing_index, index=index))
+            pad(x, yc + 2 * sign, pad_for(index, e))
             index += 1
             floor(x, yc + 3 * sign)
-            look = _MON_LOOKS.get(e['name'].lower(), {'lookType': 128})
-            boss_displays.append(dict(name=e['name'], key='ots hub ' + e['name'], outfit=look, pos=[x, yc + 3 * sign, Z], south=north, raw=True))
+            show(e, x, yc + 3 * sign, north)
         # nawigacja na zachodzie: poprzedni pokoj / lobby / nastepny pokoj
         def nav(y, target, who, look):
             if target is None:
@@ -253,7 +253,10 @@ for t, (g, (_, label)) in enumerate(zip(groups, tiers)):
         HG[t]['entries'] = order
     else:
         rooms = [(label, g)]
-    arr = build_rooms(rooms, X0 + COL_PITCH * t, Y0 + WING_GAP, t)
+    def _show(e, x, y, north):
+        look = _MON_LOOKS.get(e['name'].lower(), {'lookType': 128})
+        boss_displays.append(dict(name=e['name'], key='ots hub ' + e['name'], outfit=look, pos=[x, y, Z], south=north, raw=True))
+    arr = build_rooms(rooms, X0 + COL_PITCH * t, Y0 + WING_GAP, lambda i, e, t=t: dict(kind='hunt', tier=t, index=i), _show)
     wings.append(dict(label=label, arrival=arr[0], count=len(g), floors=len(arr)))
     # lobby: pad poziomu, za nim tabliczka, obok postac z nazwa poziomu
     lx = X0 + (4, 14, 16, 18)[t]   # Bestiariusz osobno, Exp Low/Medium/High obok siebie
@@ -262,29 +265,13 @@ for t, (g, (_, label)) in enumerate(zip(groups, tiers)):
     floor(lx + 1, Y0 - 2)
     npcs.append(dict(name=label, outfit={'lookType': TIER_LOOKS[t], 'lookHead': 78, 'lookBody': 69, 'lookLegs': 58, 'lookFeet': 76, 'lookAddons': 3}, pos=[lx + 1, Y0 - 2, Z], south=True))
 
-# Hala questow: korytarz na polnoc od lobby, pad na quest, za padem tabliczka i nagrody
+# Hala questow: jedna zwarta sala na polnoc od lobby - pad na kazdym polu, za nim podobizna z nazwa
+# questu i wygladem glownej nagrody
 QM = json.load(open('quests_menu.json'))
-QP = 5
-yq = Y0 - 40
-qslots = (len(QM) + 1) // 2
-q_end = X0 + 3 + QP * qslots
-for x in range(X0 + 1, q_end):
-    for y in range(yq - 1, yq + 2):
-        floor(x, y)
-pad(X0, yq, dict(kind='lobby')); board(X0 - 1, yq, 'Lobby\nPowrot do hubu', SIGN_A)
-pad(q_end, yq, dict(kind='lobby')); board(q_end + 1, yq, 'Lobby\nPowrot do hubu', SIGN_B)
-questhall = [X0 + 1 + (q_end - X0) // 2, yq, Z]
-for i, qm in enumerate(QM):
-    s, side = divmod(i, 2)
-    x = X0 + 4 + QP * s
-    sign = -1 if side == 0 else 1
-    pad(x, yq + 2 * sign, dict(kind='quest', index=i))
-    board(x, yq + 3 * sign, qm['name'] + '\nNagrody leza za tabliczka', SIGN_A if sign < 0 else SIGN_B)
-    for j, iid in enumerate(qm['items'][:6]):
-        ix = x - 1 + j % 3
-        iy = yq + (4 + j // 3) * sign
-        floor(ix, iy)
-        tiles[(ix, iy, Z)]['items'].append((iid, 0, None))
+def _qshow(qm, x, y, north):
+    look = {'lookTypeEx': qm['items'][0]} if qm['items'] else {'lookType': 128}
+    boss_displays.append(dict(name=qm['name'], key='ots quest ' + qm['name'], outfit=look, pos=[x, y, Z], south=north, raw=True))
+questhall = build_rooms([('Questy', QM)], X0, Y0 - 40, lambda i, qm: dict(kind='quest', index=i), _qshow)[0]
 
 # Hala bossow: pietra po 24 bossy, kolejne pietra na polnoc
 BL = json.load(open('bosses_all.json'))
@@ -298,7 +285,17 @@ def _bbehind(b, x, y, north):
     boss_displays.append(dict(name=_nice(b), outfit=b['outfit'], pos=[x, y, Z], south=north))
 def _brange(ch):
     return 'bossy z dzwignia' if ch[-1]['pos'] else ('dzwignie i arena' if ch[0]['pos'] else 'arena, HP %d-%d' % (ch[0]['hp'], ch[-1]['hp']))
-_barr = build_floors(BL, X0, Y0 - 90, -FLOOR_PITCH, 'Bossy', lambda i, b: dict(kind='boss', index=i), _bsign, _bbehind, _brange)
+# sale po najwyzej 40 bossow: najpierw bossy z dzwignia, potem arena (wg HP)
+_brooms = []
+for _lab, _lst in (('Bossy: dzwignie', [b for b in BL if b['pos']]), ('Bossy: arena', [b for b in BL if not b['pos']])):
+    _parts = -(-len(_lst) // ROOM_CAP)
+    _size = -(-len(_lst) // _parts) if _parts else 0
+    for _p in range(_parts):
+        _brooms.append(('%s%s' % (_lab, ' %d/%d' % (_p + 1, _parts) if _parts > 1 else ''), _lst[_p * _size:(_p + 1) * _size]))
+assert [b for _, l in _brooms for b in l] == BL, 'kolejnosc bossow musi zostac taka jak w bosses_all.json'
+def _bshow(b, x, y, north):
+    boss_displays.append(dict(name=_nice(b), key='ots boss ' + b['name'], outfit=b['outfit'], pos=[x, y, Z], south=north, raw=True))
+_barr = build_rooms(_brooms, X0, Y0 - 60, lambda i, b: dict(kind='boss', index=i), _bshow, step=-ROOM_PITCH)
 bosshall = _barr[0]
 boss_floors = len(_barr)
 
