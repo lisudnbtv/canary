@@ -1,4 +1,5 @@
--- OTS: sklep > Przedmioty > Exalted Monk (wlasne przedmioty serwera)
+-- OTS: sklep > Przedmioty > Exalted Monk (wlasne przedmioty serwera, set Eternal)
+-- Plik generowany przez tools/ots/eternal_sets.py razem z items.xml i appearances.dat.
 return {
 	icons = { "ots_cat_items_exalted_monk.png" },
 	name = "Exalted Monk",
@@ -6,5 +7,55 @@ return {
 	rookgaard = true,
 	state = GameStore.States.STATE_NONE,
 	offers = {
+		{
+			icons = { "Eternal_Monk_Hood.png" },
+			name = "Eternal Monk Hood",
+			price = 150,
+			itemtype = 60028,
+			count = 1,
+			movable = true,
+			description = "<i>armor 8, mantra 12, fist +3, life leech 2%, mana leech 1%, critical hit chance 2%, critical extra damage 4%</i>\n\n{character}\n{storeinbox}\n{info} level 100, monk\n{info} 3 imbuement slots",
+			type = GameStore.OfferTypes.OFFER_TYPE_ITEM,
+		},
+		{
+			icons = { "Eternal_Monk_Garb.png" },
+			name = "Eternal Monk Garb",
+			price = 200,
+			itemtype = 60029,
+			count = 1,
+			movable = true,
+			description = "<i>armor 14, physical protection 6%, mantra 20, fist +4, life leech 2%, mana leech 1%, critical hit chance 2%, critical extra damage 4%</i>\n\n{character}\n{storeinbox}\n{info} level 100, monk\n{info} 3 imbuement slots",
+			type = GameStore.OfferTypes.OFFER_TYPE_ITEM,
+		},
+		{
+			icons = { "Eternal_Monk_Trousers.png" },
+			name = "Eternal Monk Trousers",
+			price = 150,
+			itemtype = 60030,
+			count = 1,
+			movable = true,
+			description = "<i>armor 10, physical protection 4%, mantra 10, fist +3, life leech 1.5%, mana leech 1%, critical hit chance 2%, critical extra damage 3%</i>\n\n{character}\n{storeinbox}\n{info} level 100, monk\n{info} 3 imbuement slots",
+			type = GameStore.OfferTypes.OFFER_TYPE_ITEM,
+		},
+		{
+			icons = { "Eternal_Monk_Sandals.png" },
+			name = "Eternal Monk Sandals",
+			price = 100,
+			itemtype = 60031,
+			count = 1,
+			movable = true,
+			description = "<i>armor 3, speed 20, fist +2, life leech 1%, mana leech 1%, critical hit chance 1%, critical extra damage 3%</i>\n\n{character}\n{storeinbox}\n{info} level 100, monk\n{info} 3 imbuement slots",
+			type = GameStore.OfferTypes.OFFER_TYPE_ITEM,
+		},
+		{
+			icons = { "Eternal_Claws.png" },
+			name = "Eternal Claws",
+			price = 250,
+			itemtype = 60032,
+			count = 1,
+			movable = true,
+			description = "<i>attack 52, defense 22, fist +6, life leech 5%, mana leech 2%, critical hit chance 10%, critical extra damage 15%</i>\n\n{character}\n{storeinbox}\n{info} level 100, monk\n{info} 3 imbuement slots",
+			type = GameStore.OfferTypes.OFFER_TYPE_ITEM,
+		},
 	},
 }

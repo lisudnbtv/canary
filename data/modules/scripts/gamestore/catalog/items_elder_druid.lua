@@ -1,4 +1,5 @@
--- OTS: sklep > Przedmioty > Elder Druid (wlasne przedmioty serwera)
+-- OTS: sklep > Przedmioty > Elder Druid (wlasne przedmioty serwera, set Eternal)
+-- Plik generowany przez tools/ots/eternal_sets.py razem z items.xml i appearances.dat.
 return {
 	icons = { "ots_cat_items_elder_druid.png" },
 	name = "Elder Druid",
@@ -6,5 +7,65 @@ return {
 	rookgaard = true,
 	state = GameStore.States.STATE_NONE,
 	offers = {
+		{
+			icons = { "Eternal_Nature_Crown.png" },
+			name = "Eternal Nature Crown",
+			price = 150,
+			itemtype = 60022,
+			count = 1,
+			movable = true,
+			description = "<i>armor 10, magic level +3, life leech 2%, mana leech 1%, critical hit chance 2%, critical extra damage 4%</i>\n\n{character}\n{storeinbox}\n{info} level 100, druid\n{info} 3 imbuement slots",
+			type = GameStore.OfferTypes.OFFER_TYPE_ITEM,
+		},
+		{
+			icons = { "Eternal_Nature_Robe.png" },
+			name = "Eternal Nature Robe",
+			price = 200,
+			itemtype = 60023,
+			count = 1,
+			movable = true,
+			description = "<i>armor 17, physical protection 5%, magic level +4, life leech 2%, mana leech 1%, critical hit chance 2%, critical extra damage 4%</i>\n\n{character}\n{storeinbox}\n{info} level 100, druid\n{info} 3 imbuement slots",
+			type = GameStore.OfferTypes.OFFER_TYPE_ITEM,
+		},
+		{
+			icons = { "Eternal_Nature_Legs.png" },
+			name = "Eternal Nature Legs",
+			price = 150,
+			itemtype = 60024,
+			count = 1,
+			movable = true,
+			description = "<i>armor 10, physical protection 3%, magic level +3, life leech 1.5%, mana leech 1%, critical hit chance 2%, critical extra damage 3%</i>\n\n{character}\n{storeinbox}\n{info} level 100, druid\n{info} 3 imbuement slots",
+			type = GameStore.OfferTypes.OFFER_TYPE_ITEM,
+		},
+		{
+			icons = { "Eternal_Nature_Boots.png" },
+			name = "Eternal Nature Boots",
+			price = 100,
+			itemtype = 60025,
+			count = 1,
+			movable = true,
+			description = "<i>armor 3, speed 20, magic level +2, life leech 1%, mana leech 1%, critical hit chance 1%, critical extra damage 3%</i>\n\n{character}\n{storeinbox}\n{info} level 100, druid\n{info} 3 imbuement slots",
+			type = GameStore.OfferTypes.OFFER_TYPE_ITEM,
+		},
+		{
+			icons = { "Eternal_Nature_Rod.png" },
+			name = "Eternal Nature Rod",
+			price = 250,
+			itemtype = 60026,
+			count = 1,
+			movable = true,
+			description = "<i>damage 115-135, magic level +6, life leech 5%, mana leech 2%, critical hit chance 10%, critical extra damage 15%</i>\n\n{character}\n{storeinbox}\n{info} level 100, druid\n{info} 3 imbuement slots",
+			type = GameStore.OfferTypes.OFFER_TYPE_ITEM,
+		},
+		{
+			icons = { "Eternal_Nature_Tome.png" },
+			name = "Eternal Nature Tome",
+			price = 150,
+			itemtype = 60027,
+			count = 1,
+			movable = true,
+			description = "<i>defense 24, physical protection 3%, magic level +4, life leech 1%, mana leech 1%, critical hit chance 2%, critical extra damage 3%</i>\n\n{character}\n{storeinbox}\n{info} level 100, druid\n{info} 3 imbuement slots",
+			type = GameStore.OfferTypes.OFFER_TYPE_ITEM,
+		},
 	},
 }

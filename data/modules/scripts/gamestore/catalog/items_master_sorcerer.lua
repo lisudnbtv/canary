@@ -1,4 +1,5 @@
--- OTS: sklep > Przedmioty > Master Sorcerer (wlasne przedmioty serwera)
+-- OTS: sklep > Przedmioty > Master Sorcerer (wlasne przedmioty serwera, set Eternal)
+-- Plik generowany przez tools/ots/eternal_sets.py razem z items.xml i appearances.dat.
 return {
 	icons = { "ots_cat_items_master_sorcerer.png" },
 	name = "Master Sorcerer",
@@ -6,5 +7,65 @@ return {
 	rookgaard = true,
 	state = GameStore.States.STATE_NONE,
 	offers = {
+		{
+			icons = { "Eternal_Arcane_Hat.png" },
+			name = "Eternal Arcane Hat",
+			price = 150,
+			itemtype = 60016,
+			count = 1,
+			movable = true,
+			description = "<i>armor 10, magic level +3, life leech 2%, mana leech 1%, critical hit chance 2%, critical extra damage 4%</i>\n\n{character}\n{storeinbox}\n{info} level 100, sorcerer\n{info} 3 imbuement slots",
+			type = GameStore.OfferTypes.OFFER_TYPE_ITEM,
+		},
+		{
+			icons = { "Eternal_Arcane_Robe.png" },
+			name = "Eternal Arcane Robe",
+			price = 200,
+			itemtype = 60017,
+			count = 1,
+			movable = true,
+			description = "<i>armor 17, physical protection 5%, magic level +4, life leech 2%, mana leech 1%, critical hit chance 2%, critical extra damage 4%</i>\n\n{character}\n{storeinbox}\n{info} level 100, sorcerer\n{info} 3 imbuement slots",
+			type = GameStore.OfferTypes.OFFER_TYPE_ITEM,
+		},
+		{
+			icons = { "Eternal_Arcane_Legs.png" },
+			name = "Eternal Arcane Legs",
+			price = 150,
+			itemtype = 60018,
+			count = 1,
+			movable = true,
+			description = "<i>armor 10, physical protection 3%, magic level +3, life leech 1.5%, mana leech 1%, critical hit chance 2%, critical extra damage 3%</i>\n\n{character}\n{storeinbox}\n{info} level 100, sorcerer\n{info} 3 imbuement slots",
+			type = GameStore.OfferTypes.OFFER_TYPE_ITEM,
+		},
+		{
+			icons = { "Eternal_Arcane_Boots.png" },
+			name = "Eternal Arcane Boots",
+			price = 100,
+			itemtype = 60019,
+			count = 1,
+			movable = true,
+			description = "<i>armor 3, speed 20, magic level +2, life leech 1%, mana leech 1%, critical hit chance 1%, critical extra damage 3%</i>\n\n{character}\n{storeinbox}\n{info} level 100, sorcerer\n{info} 3 imbuement slots",
+			type = GameStore.OfferTypes.OFFER_TYPE_ITEM,
+		},
+		{
+			icons = { "Eternal_Arcane_Wand.png" },
+			name = "Eternal Arcane Wand",
+			price = 250,
+			itemtype = 60020,
+			count = 1,
+			movable = true,
+			description = "<i>damage 115-135, magic level +6, life leech 5%, mana leech 2%, critical hit chance 10%, critical extra damage 15%</i>\n\n{character}\n{storeinbox}\n{info} level 100, sorcerer\n{info} 3 imbuement slots",
+			type = GameStore.OfferTypes.OFFER_TYPE_ITEM,
+		},
+		{
+			icons = { "Eternal_Arcane_Tome.png" },
+			name = "Eternal Arcane Tome",
+			price = 150,
+			itemtype = 60021,
+			count = 1,
+			movable = true,
+			description = "<i>defense 24, physical protection 3%, magic level +4, life leech 1%, mana leech 1%, critical hit chance 2%, critical extra damage 3%</i>\n\n{character}\n{storeinbox}\n{info} level 100, sorcerer\n{info} 3 imbuement slots",
+			type = GameStore.OfferTypes.OFFER_TYPE_ITEM,
+		},
 	},
 }
