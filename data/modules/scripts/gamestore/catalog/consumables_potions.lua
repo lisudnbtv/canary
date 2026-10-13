@@ -6,6 +6,16 @@ return {
 	state = GameStore.States.STATE_NONE,
 	offers = {
 		{
+			-- OTS: wlasny potion dla sorcererow i druidow (skrypt: data-otservbr-global/scripts/ots/arcane_potion.lua)
+			icons = { "Ultimate_Spirit_Potion.png" },
+			name = "Ultimate Arcane Potion",
+			price = 100,
+			itemtype = 60102,
+			count = 1,
+			description = "<i>Restores 500-700 hit points and 900-1100 mana at once - the spirit potion for sorcerers and druids.</i>\n\n{character}\n{storeinbox}\n{battlesign}\n{capacity}\n{info} sorcerers and druids from level 130\n{info} potions are unlimited on this server - one potion lasts forever",
+			type = GameStore.OfferTypes.OFFER_TYPE_ITEM,
+		},
+		{
 			icons = { "Great_Health_Potion.png" },
 			name = "Great Health Potion",
 			price = 18,
