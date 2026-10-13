@@ -18,10 +18,17 @@ RANGES = ['exp do 300', 'exp 300-1500', 'exp 1500-6000', 'exp 6000+']
 TIER_LOOKS = [128, 131, 335, 541]   # Citizen, Knight, Warmaster, Demon
 ROWCAP = 60          # potworow w jednym rzedzie skrzydla
 ROW_GAP = 10
-lim = [t[0] for t in tiers]
-groups = [[] for _ in tiers]
-for i, h in enumerate(d['hunts']):
-    groups[bisect.bisect_left(lim, h['exp'])].append(h)
+# OTS: cztery skrzydla: Bestiariusz (wszystkie potwory wg klas) i wybrane Exp Low / Medium / High
+# (hubgroups.json z exp2.py + exp2_filter.py)
+HG = json.load(open('hubgroups.json'))
+tiers = [(0, g['label']) for g in HG]
+RANGES = [g['range'] for g in HG]
+TIER_LOOKS = [130, 128, 131, 541]   # Mage, Citizen, Knight, Demon
+groups = [g['entries'] for g in HG]
+def hunt_label(h):
+    if h.get('spots', 1) > 1:
+        return '%s %d' % (h['name'], h['spot'])
+    return h['name']
 
 tiles = {}      # (x,y,z) -> dict(pz=bool, items=[(id, aid)])
 pads = {}       # "x:y:z" -> action
@@ -96,7 +103,7 @@ board(X0 + lobby_w, Y0 - 3, 'Wieza\nPietra coraz silniejszych potworow, boss co 
 wings = []
 npcs = []
 floor(X0 + 8, Y0 - 2)
-npcs.append(dict(name='Bestiariusz', outfit={'lookType': 130, 'lookHead': 0, 'lookBody': 87, 'lookLegs': 87, 'lookFeet': 95, 'lookAddons': 1}, pos=[X0 + 8, Y0 - 2, Z], south=True))
+npcs.append(dict(name='Bestiariusz - fale', outfit={'lookType': 130, 'lookHead': 0, 'lookBody': 87, 'lookLegs': 87, 'lookFeet': 95, 'lookAddons': 1}, pos=[X0 + 8, Y0 - 2, Z], south=True))
 floor(X0 + lobby_w + 1, Y0 - 2)
 npcs.append(dict(name='Wieza', outfit={'lookType': 268, 'lookHead': 78, 'lookBody': 69, 'lookLegs': 58, 'lookFeet': 76, 'lookAddons': 3}, pos=[X0 + lobby_w + 1, Y0 - 2, Z], south=True))
 floor(X0 + 1, Y0 - 2)
@@ -159,16 +166,16 @@ for t, (g, (_, label)) in enumerate(zip(groups, tiers)):
         spawns.append((h['name'], x, y))
     arr = build_floors(g, X0 + COL_PITCH * t, Y0 + WING_GAP, FLOOR_PITCH, label,
         lambda i, h, t=t: dict(kind='hunt', tier=t, index=i),
-        lambda h: '%s\n%d exp, %d potworow w okolicy' % (h['name'], h['exp'], h['n']),
+        lambda h: '%s\n%s%d exp, %d potworow w okolicy' % (hunt_label(h), (h['cls'] + ', ') if h.get('cls') else '', h['exp'], h['n']),
         _behind,
-        lambda ch: 'exp %d-%d' % (ch[0]['exp'], ch[-1]['exp']))
-    wings.append(dict(label='%s (%s)' % (label, RANGES[t]), arrival=arr[0], count=len(g), floors=len(arr)))
+        lambda ch: (ch[0]['cls'] if ch[0]['cls'] == ch[-1]['cls'] else '%s - %s' % (ch[0]['cls'], ch[-1]['cls'])) if ch[0].get('cls') else 'exp %d-%d' % (min(e['exp'] for e in ch), max(e['exp'] for e in ch)))
+    wings.append(dict(label=label, arrival=arr[0], count=len(g), floors=len(arr)))
     # lobby: pad poziomu, za nim tabliczka, obok postac z nazwa poziomu
     lx = X0 + 4 + 6 * t
     pad(lx, Y0 - 2, dict(kind='wing', wing=t))
-    board(lx, Y0 - 3, '%s\n%s\n%d potworow, %d pieter' % (label, RANGES[t], len(g), len(arr)))
+    board(lx, Y0 - 3, '%s\n%s\n%d teleportow, %d pieter' % (label, RANGES[t], len(g), len(arr)))
     floor(lx + 1, Y0 - 2)
-    npcs.append(dict(name='EXP ' + label, outfit={'lookType': TIER_LOOKS[t], 'lookHead': 78, 'lookBody': 69, 'lookLegs': 58, 'lookFeet': 76, 'lookAddons': 3}, pos=[lx + 1, Y0 - 2, Z], south=True))
+    npcs.append(dict(name=label, outfit={'lookType': TIER_LOOKS[t], 'lookHead': 78, 'lookBody': 69, 'lookLegs': 58, 'lookFeet': 76, 'lookAddons': 3}, pos=[lx + 1, Y0 - 2, Z], south=True))
 
 # Hala questow: korytarz na polnoc od lobby, pad na quest, za padem tabliczka i nagrody
 QM = json.load(open('quests_menu.json'))

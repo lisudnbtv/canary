@@ -22,6 +22,17 @@ for (l,label),g in zip(tiers,groups):
     for h in g:
         o.append('\t\t{ %s, %d, %d, %d, mon = %s },'%(q('%s (%d exp, %dx)'%(h['name'],h['exp'],h['n'])),*h['pos'],q(h['name'])))
     o.append('\t} },')
+o.append('}\n')
+# OTS: hub expowisk i menu !tp > Expowiska: Bestiariusz (wszystkie potwory wg klas) + Exp Low/Medium/High.
+# Stara lista "hunts" (wg exp) zostaje dla taskow i fal.
+o.append('-- hub i menu expowisk: Bestiariusz (wg klas bestiariusza) i wybrane Exp Low / Medium / High\nlocal hubHunts = {')
+for _g in json.load(open('hubgroups.json')):
+    o.append('\t{ label = %s, list = {'%q(_g['label']))
+    for h in _g['entries']:
+        _nm=h['name']+(' %d'%h['spot'] if h.get('spots',1)>1 else '')
+        _cls=(', cls = %s'%q(h['cls'])) if h.get('cls') else ''
+        o.append('\t\t{ %s, %d, %d, %d, mon = %s%s },'%(q('%s (%d exp, %dx)'%(_nm,h['exp'],h['n'])),*h['pos'],q(h['name']),_cls))
+    o.append('\t} },')
 o.append('}\n\nlocal bosses = {')
 for b in json.load(open('bosses_all.json')):
     nm=' '.join(w if w in('of','the','and') and i else w[:1].upper()+w[1:] for i,w in enumerate(b['name'].split(' ')))
@@ -122,12 +133,12 @@ o.append('}\n')
 json.dump(QM,open('quests_menu.json','w'))
 P=json.load(open('poi.json'))
 _EXTRA=[b['pos'] for b in json.load(open('bosses_all.json')) if b['pos']]+_AQL+INQ_WARDS+[[33621,31427,10],[32783,31174,10]]  # dzwignie bossow, skrzynie questow z areny, wejscia Soul War i Yalahar
-json.dump(dict(centers=_EXTRA+[h['pos'] for h in d['hunts']]+[x['start'] for x in Q]+P['centers']+[c for x in MAN for c in x['centers']],tiles=[t for x in Q for t in x['pz']]+P['tiles']+[t for x in MAN for t in x['tiles']]+json.load(open('yal_pz.json'))),open('/mnt/user-data/outputs/pz_targets.json','w'))
+json.dump(dict(centers=_EXTRA+[h['pos'] for h in d['hunts']]+[e['pos'] for _g in json.load(open('hubgroups.json'))[1:] for e in _g['entries']]+[x['start'] for x in Q]+P['centers']+[c for x in MAN for c in x['centers']],tiles=[t for x in Q for t in x['pz']]+P['tiles']+[t for x in MAN for t in x['tiles']]+json.load(open('yal_pz.json'))),open('/mnt/user-data/outputs/pz_targets.json','w'))
 print('quests',len(Q))
 HUB=json.load(open('hub.json'))
 HL=['local HUB_ACTION_ID = 64992 -- pady w hubie expowisk','local hubLobby = Position(%d, %d, %d)'%tuple(HUB['lobby']),'local hubWings = {']
 for w in HUB['wings']:
-    HL.append('\t{ label = %s, x = %d, y = %d, z = %d },'%(q('%s (%d potworow)'%(w['label'],w['count'])),*w['arrival']))
+    HL.append('\t{ label = %s, x = %d, y = %d, z = %d },'%(q('%s (%d teleportow)'%(w['label'],w['count'])),*w['arrival']))
 HL.append('}')
 HL.append('local hubQuestHall = Position(%d, %d, %d)'%tuple(HUB['questhall']))
 HL.append('local hubBossHall = Position(%d, %d, %d)'%tuple(HUB['bosshall']))
@@ -169,7 +180,7 @@ HL.append('}')
 HL.append('local taskNpcPosition = Position(%d, %d, %d)'%tuple(HUB.get('taskNpc',[0,0,0])))
 HL.append('local hubPads = {')
 for k,a in sorted(HUB['pads'].items()):
-    if a['kind']=='hunt': v='{ hunt = hunts[%d].list[%d] }'%(a['tier']+1,a['index']+1)
+    if a['kind']=='hunt': v='{ hunt = hubHunts[%d].list[%d] }'%(a['tier']+1,a['index']+1)
     elif a['kind']=='wing': v='{ wing = %d }'%(a['wing']+1)
     elif a['kind']=='quest': v='{ quest = quests[%d] }'%(a['index']+1)
     elif a['kind']=='goto': v='{ goto = { %d, %d, %d }, label = %s }'%(*a['pos'],q(a['label']))
@@ -1384,12 +1395,47 @@ local function openList(player, title, list, back)
 	window:sendToPlayer(player)
 end
 
-local function openHunts(player)
-	local window = ModalWindow({ title = "Expowiska", message = "Wybierz poziom trudnosci." })
-	for i = 1, #hunts do
-		local group = hunts[i]
+local openHunts
+
+-- Bestiariusz w menu: najpierw klasa potworow, potem lista (cala lista ma ponad 255 pozycji).
+local function openHuntClasses(player, group)
+	local classes, byClass = {}, {}
+	for _, entry in ipairs(group.list) do
+		local cls = entry.cls or "Inne"
+		if not byClass[cls] then
+			byClass[cls] = {}
+			classes[#classes + 1] = cls
+		end
+		table.insert(byClass[cls], entry)
+	end
+	local window = ModalWindow({ title = group.label, message = "Wybierz klase potworow." })
+	for _, cls in ipairs(classes) do
+		window:addChoice(cls .. " [" .. #byClass[cls] .. "]", function(target)
+			openList(target, group.label .. " - " .. cls, byClass[cls], function(back)
+				openHuntClasses(back, group)
+			end)
+		end)
+	end
+	window:addButton("Wybierz")
+	window:addButton("Wstecz", function(target)
+		openHunts(target)
+	end)
+	window:setPriority(true)
+	window:setDefaultEnterButton(2)
+	window:setDefaultEscapeButton(1)
+	window:sendToPlayer(player)
+end
+
+openHunts = function(player)
+	local window = ModalWindow({ title = "Expowiska", message = "Bestiariusz: wszystkie potwory wg klas. Exp Low / Medium / High: wybrane expowiska." })
+	for i = 1, #hubHunts do
+		local group = hubHunts[i]
 		window:addChoice(group.label .. " [" .. #group.list .. "]", function(target)
-			openList(target, group.label, group.list, openHunts)
+			if group.list[1] and group.list[1].cls then
+				openHuntClasses(target, group)
+			else
+				openList(target, group.label, group.list, openHunts)
+			end
 		end)
 	end
 	window:addButton("Wybierz")
@@ -1576,7 +1622,7 @@ function hubStep.onStepIn(creature, item, position, fromPosition)
 		travel(player, action.hunt)
 	elseif action.wing then
 		local wing = hubWings[action.wing]
-		hubMove(player, Position(wing.x, wing.y, wing.z), "EXP " .. wing.label .. ", pietro 1")
+		hubMove(player, Position(wing.x, wing.y, wing.z), wing.label .. ", pietro 1")
 	elseif action.goto then
 		hubMove(player, Position(action.goto[1], action.goto[2], action.goto[3]), action.label)
 	elseif action.lobby then
