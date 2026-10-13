@@ -9,6 +9,8 @@ PAD_AID = 64992
 SIGN_A = 2016        # stojaca tabliczka (polnoc/zachod)
 SIGN_B = 2014        # stojaca tabliczka (poludnie/wschod)
 PITCH = 3
+BOOTH = 4            # odstep miedzy wnekami z padami na pietrach
+RED_CARPET, PILLAR, COAL_BASIN = 2576, 2153, 2110
 WING_GAP = 40
 PZ = 1
 
@@ -124,7 +126,7 @@ def build_floors(entries, x0, y_first, step, title, pad_action, sign_text, behin
     chunks = [entries[i:i + FLOOR_N] for i in range(0, len(entries), FLOOR_N)]
     n = len(chunks)
     arrivals = [[x0 - 2, y_first + step * k + 5, Z] for k in range(n)]
-    x_end = x0 + 2 + PITCH * (ROW_N // 2)
+    x_end = x0 + 2 + BOOTH * (ROW_N // 2)
     for k, chunk in enumerate(chunks):
         yc = y_first + step * k
         name = '%s %d/%d' % (title, k + 1, n)
@@ -136,14 +138,22 @@ def build_floors(entries, x0, y_first, step, title, pad_action, sign_text, behin
             for x in range(x0, x_end):
                 for y in range(yr - 1, yr + 2):
                     floor(x, y)
+                tiles[(x, yr, Z)]['items'].append((RED_CARPET, 0, None))   # czerwony dywan srodkiem korytarza
         for j, e in enumerate(chunk):
             r, jj = divmod(j, ROW_N)
             s_, side = divmod(jj, 2)
-            x = x0 + 3 + PITCH * s_
+            x = x0 + 3 + BOOTH * s_
             yr = yc + 10 * r
             sign = -1 if side == 0 else 1
             pad(x, yr + 2 * sign, pad_action(k * FLOOR_N + j, e))
             board(x, yr + 3 * sign, sign_text(e), SIGN_A if sign < 0 else SIGN_B)
+            # wneka: kolumny po bokach padu, kosze z ogniem przy tabliczce
+            for px in ([x - 2] if s_ == 0 else []) + [x + 2]:
+                floor(px, yr + 2 * sign)
+                tiles[(px, yr + 2 * sign, Z)]['items'].append((PILLAR, 0, None))
+            for bx in (x - 1, x + 1):
+                floor(bx, yr + 3 * sign)
+                tiles[(bx, yr + 3 * sign, Z)]['items'].append((COAL_BASIN, 0, None))
             behind(e, x, yr + 4 * sign, sign < 0)
         def nav(y, target, text, who, look):
             if target is None:
@@ -162,7 +172,8 @@ def build_floors(entries, x0, y_first, step, title, pad_action, sign_text, behin
 
 for t, (g, (_, label)) in enumerate(zip(groups, tiers)):
     def _behind(h, x, y, north):
-        floor(x, y, pz=False)       # wysepka potwora, poza PZ
+        for dx in (-1, 0, 1):
+            floor(x + dx, y, pz=False)   # zagroda potwora (3 pola trawy), poza PZ
         spawns.append((h['name'], x, y))
     arr = build_floors(g, X0 + COL_PITCH * t, Y0 + WING_GAP, FLOOR_PITCH, label,
         lambda i, h, t=t: dict(kind='hunt', tier=t, index=i),
