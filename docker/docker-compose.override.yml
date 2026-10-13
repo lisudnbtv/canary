@@ -88,6 +88,9 @@ services:
       - '../data/items/items.xml:/canary/data/items/items.xml:ro'
 
   # Ikony kategorii sklepu (klient pobiera je z coinImagesURL = strona MyAAC)
+  # oraz profesja Monk przy tworzeniu postaci na stronie (docker/ots/myaac)
   myaac:
+    entrypoint: ["bash", "/ots/myaac/entrypoint.sh"]
     volumes:
       - './ots/storeimages:/var/www/html/ots-store:ro'
+      - './ots/myaac:/ots/myaac:ro'
