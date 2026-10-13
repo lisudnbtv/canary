@@ -7,7 +7,8 @@ sys.path.insert(0, sys.path[0])
 from appearance_fields import fields, ev
 
 LEVEL = 100
-SLOTS = 5
+SLOTS = 4
+PRICE = 4500
 FIRST_ID = 60001
 SKILL_KEYS = {'melee': ['skillsword', 'skillaxe', 'skillclub'], 'sword': ['skillsword'], 'axe': ['skillaxe'], 'club': ['skillclub'],
               'dist': ['skilldist'], 'magic': ['magiclevelpoints'], 'fist': ['skillfist'], 'shield': ['skillshield']}
@@ -134,7 +135,7 @@ def build():
             pass
         stats += [('lifeleechamount', lifel), ('manaleechamount', manal), ('criticalhitchance', cc), ('criticalhitdamage', cd)]
         o['stats'] = stats
-        o['price'] = price
+        o['price'] = PRICE
         for k, v in stats:
             ET.SubElement(node, 'attribute', {'key': k, 'value': str(v)})
         imb = ET.SubElement(node, 'attribute', {'key': 'imbuementslot', 'value': str(SLOTS)})
