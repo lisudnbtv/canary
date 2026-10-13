@@ -61,5 +61,16 @@ return {
 			description = "<i>Upgrades an item by one level - always succeeds (also weapons and +6 to +10).</i>\n\n{character}\n{storeinbox}\n{useicon} use it on an item in your backpack or equipment",
 			type = GameStore.OfferTypes.OFFER_TYPE_ITEM,
 		},
+		{
+			-- OTS: blessed upgrade stone (zawsze udane +1)
+			icons = { "Gold_Converter.png" },
+			name = "25x Blessed Upgrade Stone",
+			price = 25000,
+			itemtype = 20138,
+			count = 25,
+			movable = true,
+			description = "<i>Upgrades an item by one level - always succeeds (also weapons and +6 to +10).</i>\n\n{character}\n{storeinbox}\n{useicon} use it on an item in your backpack or equipment",
+			type = GameStore.OfferTypes.OFFER_TYPE_ITEM,
+		},
 	},
 }
