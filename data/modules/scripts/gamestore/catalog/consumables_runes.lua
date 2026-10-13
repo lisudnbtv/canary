@@ -6,16 +6,6 @@ return {
 	state = GameStore.States.STATE_NONE,
 	offers = {
 		{
-			-- OTS: wlasna runa (skrypt: data-otservbr-global/scripts/ots/elemental_rune.lua)
-			icons = { "Elemental_Storm_Rune.png" },
-			name = "Elemental Storm Rune",
-			price = 5000,
-			itemtype = 60101,
-			count = 1,
-			description = "{character}\n{storeinbox}\n{battlesign}\n{capacity}\n\n<i>Used like an avalanche rune, but explodes in a huge area (like an ultimate explosion) and hits every creature with fire, ice, energy, earth, death, holy and physical damage at once - no monster resists it all.</i>\n{info} for every vocation from level 2500\n{info} runes are unlimited on this server - one rune lasts forever",
-			type = GameStore.OfferTypes.OFFER_TYPE_ITEM,
-		},
-		{
 			icons = { "Animate_Dead_Rune.png" },
 			name = "Animate Dead Rune",
 			price = 75,

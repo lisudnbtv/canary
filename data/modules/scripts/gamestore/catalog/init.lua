@@ -8,6 +8,7 @@ local modules = {
 	"items_misc",
 	"items_upgrade",
 	"items_forge",
+	"items_runes_potions",
 	"premium_time",
 	"consumables",
 	"consumables_blessings",
