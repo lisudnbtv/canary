@@ -27,6 +27,16 @@ function playerLogin.onLogin(player)
 		end
 	end
 
+	-- OTS: Dawnport wylaczony - postac z miastem Dawnport (np. nowa ze strony) od razu trafia do swiatyni Thais
+	if table.contains({ TOWNS_LIST.DAWNPORT, TOWNS_LIST.DAWNPORT_TUTORIAL }, player:getTown():getId()) then
+		local thais = Town(TOWNS_LIST.THAIS)
+		if thais then
+			player:setTown(thais)
+			player:teleportTo(thais:getTemplePosition())
+			thais:getTemplePosition():sendMagicEffect(CONST_ME_TELEPORT)
+		end
+	end
+
 	-- Open channels
 	player:openChannel(12) -- OTS: Taski (przed World Chat i Advertising)
 	if table.contains({ TOWNS_LIST.DAWNPORT, TOWNS_LIST.DAWNPORT_TUTORIAL }, player:getTown():getId()) then

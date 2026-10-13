@@ -1,5 +1,6 @@
 <?php
-// OTS: dopisuje profesje Monk do probek postaci MyAAC (Admin Panel -> Settings -> Create Character).
+// OTS: dopisuje profesje Monk do probek postaci MyAAC i ustawia miasto Thais dla nowych postaci
+// (Admin Panel -> Settings -> Create Character).
 // Zostawia reszte ustawienia bez zmian; gdy ustawienia jeszcze nie ma, zaczyna od domyslnych probek.
 
 declare(strict_types=1);
@@ -43,15 +44,27 @@ foreach ($samples as $vocation => $name) {
 	}
 }
 
-if (!$changed) {
-	echo "OTS: character samples already include Monk.\n";
-	return;
+function ots_set(PDO $pdo, string $key, string $value, $row): void
+{
+	if ($row) {
+		$pdo->prepare('UPDATE `myaac_settings` SET `value` = ? WHERE `id` = ?')->execute([$value, $row['id']]);
+	} else {
+		$pdo->prepare('INSERT INTO `myaac_settings` (`name`, `key`, `value`) VALUES (?, ?, ?)')->execute(['core', $key, $value]);
+	}
 }
 
-$newValue = implode("\n", $lines);
-if ($row) {
-	$pdo->prepare('UPDATE `myaac_settings` SET `value` = ? WHERE `id` = ?')->execute([$newValue, $row['id']]);
+if ($changed) {
+	$newValue = implode("\n", $lines);
+	ots_set($pdo, 'character_samples', $newValue, $row);
+	echo "OTS: character samples set to: " . str_replace("\n", ', ', $newValue) . "\n";
 } else {
-	$pdo->prepare('INSERT INTO `myaac_settings` (`name`, `key`, `value`) VALUES (?, ?, ?)')->execute(['core', 'character_samples', $newValue]);
+	echo "OTS: character samples already include Monk.\n";
 }
-echo "OTS: character samples set to: " . str_replace("\n", ', ', $newValue) . "\n";
+
+// Dawnport wylaczony: nowe postacie dostaja miasto Thais (id 8); serwer i tak przenosi Dawnport do Thais.
+$select->execute(['core', 'character_towns']);
+$towns = $select->fetch();
+if (!$towns || trim((string)$towns['value']) !== '8') {
+	ots_set($pdo, 'character_towns', '8', $towns);
+	echo "OTS: character town set to Thais (8).\n";
+}
