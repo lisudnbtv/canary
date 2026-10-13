@@ -65,3 +65,8 @@ rateExerciseTrainingSpeed = rateAttackSpeed * 4
 
 -- Ikony kategorii sklepu: klient pobiera je z tej strony (pliki w docker/ots/storeimages, serwuje je MyAAC)
 coinImagesURL = "http://127.0.0.1:8080/ots-store/"
+
+-- Kuznia: duzo wiecej potworow "kuzni" na mapie (z wykrzyknikiem i liczba 1-5, z nich pyl i gemy)
+-- oraz czerwonych fiendish (zawsze greater gem). Domyslnie bylo 300 i 4 na cala mape.
+forgeInfluencedLimit = 5000
+forgeFiendishLimit = 50
