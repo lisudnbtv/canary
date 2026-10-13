@@ -7,6 +7,7 @@ local modules = {
 	"items_exalted_monk",
 	"items_misc",
 	"items_upgrade",
+	"items_forge",
 	"premium_time",
 	"consumables",
 	"consumables_blessings",

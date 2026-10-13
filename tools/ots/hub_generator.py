@@ -80,7 +80,11 @@ DEPOT_LOCKER, REWARD_CHEST, IMBU_SHRINE = 3499, 19250, 25061
 for _dy, _iid in ((-1, DEPOT_LOCKER), (0, REWARD_CHEST), (1, IMBU_SHRINE)):
     floor(X0 - 1, Y0 + _dy)
     tiles[(X0 - 1, Y0 + _dy, Z)]['items'].append((_iid, 0, None))
-board(X0 - 1, Y0 + 2, 'Depozyt, skrzynia nagrod z bossow i kapliczka imbu', SIGN_B)
+board(X0 - 1, Y0 + 2, 'Depozyt, skrzynia nagrod z bossow i kapliczka imbu.\nNa polnoc: Kuznia Wzniesienia (Exaltation Forge)', SIGN_B)
+# Kuznia Wzniesienia (Exaltation Forge) na polnoc od depozytu; uzycie otwiera okno kuzni
+EXALTATION_FORGE = 37122
+floor(X0 - 1, Y0 - 2)
+tiles[(X0 - 1, Y0 - 2, Z)]['items'].append((EXALTATION_FORGE, 0, None))
 
 # Bestiariusz: pad po polnocnej stronie lobby (miedzy skrzydlami Low i Medium)
 pad(X0 + 7, Y0 - 2, dict(kind='bestiary'))
