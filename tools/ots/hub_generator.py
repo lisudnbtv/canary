@@ -166,20 +166,99 @@ def build_floors(entries, x0, y_first, step, title, pad_action, sign_text, behin
         nav(yc + 5, None, 'Lobby\nTu jestes: %s\n%s' % (name, range_text(chunk)), 'Lobby', 128)
     return arrivals
 
+boss_displays = []
+# ---- sale expowisk: zwarte pokoje jak w klasycznych hubach - krotki korytarz, teleporty na kazdym
+# polu po obu stronach, tuz za teleportem podobizna potwora (NPC z jego wygladem, nie chodzi).
+ROOM_CAP = 40        # teleportow w jednym pokoju (po 20 na strone)
+ROOM_PITCH = 10      # odstep pokojow w pionie
+_MON_LOOKS = {}
+for _dp, _, _fs in os.walk('/home/claude/canary/data-otservbr-global/monster'):
+    for _f in _fs:
+        if not _f.endswith('.lua'):
+            continue
+        _s = open(os.path.join(_dp, _f), encoding='utf-8', errors='ignore').read()
+        _nm = re.search(r'Game\.createMonsterType\("([^"]+)"\)', _s)
+        _ob = re.search(r'monster\.outfit\s*=\s*\{(.*?)\}', _s, re.S)
+        if not _nm or not _ob:
+            continue
+        _of = {k: int(v) for k, v in re.findall(r'(look\w+)\s*=\s*(\d+)', _ob.group(1))}
+        if _of.get('lookType'):
+            _of.pop('lookTypeEx', None)
+        elif _of.get('lookTypeEx'):
+            _of = {'lookTypeEx': _of['lookTypeEx']}
+        else:
+            continue
+        _MON_LOOKS[_nm.group(1).lower()] = _of
+
+def build_rooms(rooms, x0, y_first, wing_index):
+    """rooms: lista (tytul, wpisy). Zwraca pozycje przybycia kazdego pokoju."""
+    n = len(rooms)
+    arrivals = [[x0, y_first + ROOM_PITCH * k, Z] for k in range(n)]
+    index = 0
+    for k, (title, ents) in enumerate(rooms):
+        yc = y_first + ROOM_PITCH * k
+        half = (len(ents) + 1) // 2
+        xe = x0 + 2 + half          # wschodni koniec korytarza
+        for x in range(x0 - 1, xe + 1):
+            for y in (yc - 1, yc, yc + 1):
+                floor(x, y)
+            if x0 <= x <= xe:
+                tiles[(x, yc, Z)]['items'].append((RED_CARPET, 0, None))
+        # tabliczki z nazwa pokoju przy wejsciu i kosze z ogniem na koncach rzedow
+        board(x0, yc - 2, title, SIGN_A)
+        board(x0, yc + 2, '%s\n%d teleportow' % (title, len(ents)), SIGN_B)
+        for bx, by in ((x0 + 1, yc - 2), (x0 + 1, yc + 2), (xe, yc - 2), (xe, yc + 2)):
+            floor(bx, by)
+            tiles[(bx, by, Z)]['items'].append((COAL_BASIN, 0, None))
+        for j, e in enumerate(ents):
+            north = j < half
+            x = x0 + 2 + (j if north else j - half)
+            sign = -1 if north else 1
+            pad(x, yc + 2 * sign, dict(kind='hunt', tier=wing_index, index=index))
+            index += 1
+            floor(x, yc + 3 * sign)
+            look = _MON_LOOKS.get(e['name'].lower(), {'lookType': 128})
+            boss_displays.append(dict(name=e['name'], key='ots hub ' + e['name'], outfit=look, pos=[x, yc + 3 * sign, Z], south=north, raw=True))
+        # nawigacja na zachodzie: poprzedni pokoj / lobby / nastepny pokoj
+        def nav(y, target, who, look):
+            if target is None:
+                pad(x0 - 2, y, dict(kind='lobby'))
+            else:
+                tk = target % n
+                pad(x0 - 2, y, dict(kind='goto', pos=arrivals[tk], label=rooms[tk][0]))
+            floor(x0 - 3, y)
+            npcs.append(dict(name=who, outfit={'lookType': look, 'lookHead': 78, 'lookBody': 69, 'lookLegs': 58, 'lookFeet': 76, 'lookAddons': 3}, pos=[x0 - 3, y, Z], south=False, dir='DIRECTION_EAST'))
+        if n > 1:
+            nav(yc - 1, k - 1, 'Poprzednie pomieszczenie', 129)
+            nav(yc + 1, k + 1, 'Nastepne pomieszczenie', 130)
+        nav(yc, None, 'Lobby', 128)
+    return arrivals
+
 for t, (g, (_, label)) in enumerate(zip(groups, tiers)):
-    def _behind(h, x, y, north):
-        floor(x, y, pz=False)   # potwor tuz za teleportem, poza PZ
-        spawns.append((h['name'], x, y))
-    arr = build_floors(g, X0 + COL_PITCH * t, Y0 + WING_GAP, FLOOR_PITCH, label,
-        lambda i, h, t=t: dict(kind='hunt', tier=t, index=i),
-        lambda h: '%s\n%s%d exp, %d potworow w okolicy' % (hunt_label(h), (h['cls'] + ', ') if h.get('cls') else '', h['exp'], h['n']),
-        _behind,
-        lambda ch: (ch[0]['cls'] if ch[0]['cls'] == ch[-1]['cls'] else '%s - %s' % (ch[0]['cls'], ch[-1]['cls'])) if ch[0].get('cls') else 'exp %d-%d' % (min(e['exp'] for e in ch), max(e['exp'] for e in ch)))
+    if g and g[0].get('cls'):
+        # Bestiariusz: pokoj na klase, duze klasy dzielone na kilka pokoi
+        rooms, order = [], []
+        by = collections.OrderedDict()
+        for e in g:
+            by.setdefault(e['cls'], []).append(e)
+        for cls, lst in by.items():
+            parts = -(-len(lst) // ROOM_CAP)
+            size = -(-len(lst) // parts)
+            for p_ in range(parts):
+                chunk = lst[p_ * size:(p_ + 1) * size]
+                rooms.append(('%s: %s%s' % (label, cls, ' %d/%d' % (p_ + 1, parts) if parts > 1 else ''), chunk))
+                order.extend(chunk)
+        groups[t][:] = order
+        g = groups[t]
+        HG[t]['entries'] = order
+    else:
+        rooms = [(label, g)]
+    arr = build_rooms(rooms, X0 + COL_PITCH * t, Y0 + WING_GAP, t)
     wings.append(dict(label=label, arrival=arr[0], count=len(g), floors=len(arr)))
     # lobby: pad poziomu, za nim tabliczka, obok postac z nazwa poziomu
     lx = X0 + (4, 14, 16, 18)[t]   # Bestiariusz osobno, Exp Low/Medium/High obok siebie
     pad(lx, Y0 - 2, dict(kind='wing', wing=t))
-    board(lx, Y0 - 3, '%s\n%s\n%d teleportow, %d pieter' % (label, RANGES[t], len(g), len(arr)))
+    board(lx, Y0 - 3, '%s\n%s\n%d teleportow, %d %s' % (label, RANGES[t], len(g), len(arr), 'sala' if len(arr) == 1 else 'sal'))
     floor(lx + 1, Y0 - 2)
     npcs.append(dict(name=label, outfit={'lookType': TIER_LOOKS[t], 'lookHead': 78, 'lookBody': 69, 'lookLegs': 58, 'lookFeet': 76, 'lookAddons': 3}, pos=[lx + 1, Y0 - 2, Z], south=True))
 
@@ -209,7 +288,6 @@ for i, qm in enumerate(QM):
 
 # Hala bossow: pietra po 24 bossy, kolejne pietra na polnoc
 BL = json.load(open('bosses_all.json'))
-boss_displays = []
 def _nice(b): return ' '.join(w[:1].upper() + w[1:] for w in b['name'].split(' '))
 def _bsign(b):
     if b['pos']:

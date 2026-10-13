@@ -1799,14 +1799,15 @@ open('ots_teleports.lua','w').write('\n'.join(o))
 BD=['-- OTS: podobizny bossow w hali bossow (plik generowany razem z mapa hubu).','-- Kazda to NPC z wygladem bossa; stoi za padem prowadzacym pod jego dzwignie.','','local displays = {']
 for b in [dict(x,raw=True) for x in HUB['npcs']]+HUB['bossDisplays']:
     of=', '.join('%s = %d'%(k,v) for k,v in b['outfit'].items())
-    BD.append('\t{ name = %s, outfit = { %s }, position = Position(%d, %d, %d), faceSouth = %s%s },'%(q(b['name'] if b.get('raw') else 'Boss '+b['name']),of,*b['pos'],'true' if b['south'] else 'false',', direction = '+b['dir'] if b.get('dir') else ''))
+    BD.append('\t{ name = %s, outfit = { %s }, position = Position(%d, %d, %d), faceSouth = %s%s%s },'%(q(b['name'] if b.get('raw') else 'Boss '+b['name']),of,*b['pos'],'true' if b['south'] else 'false',', direction = '+b['dir'] if b.get('dir') else '',', key = '+q(b['key']) if b.get('key') else ''))
 BD.append('}')
 BD.append(r"""
 local registered = {} -- ta sama nazwa (np. Lobby) stoi w wielu miejscach: typ rejestrujemy raz
 for _, display in ipairs(displays) do
-	if not registered[display.name] then
-		registered[display.name] = true
-		local npcType = Game.createNpcType(display.name)
+	local key = display.key or display.name -- key: osobny typ, gdy nazwa potwora pokrywa sie z prawdziwym NPC
+	if not registered[key] then
+		registered[key] = true
+		local npcType = Game.createNpcType(key)
 		local npcConfig = {}
 		npcConfig.name = display.name
 		npcConfig.description = display.name
@@ -1827,7 +1828,7 @@ local place = GlobalEvent("OtsBossDisplays")
 function place.onStartup()
 	local placed = 0
 	for _, display in ipairs(displays) do
-		local npc = Game.createNpc(display.name, display.position, false, true)
+		local npc = Game.createNpc(display.key or display.name, display.position, false, true)
 		if npc then
 			npc:setMasterPos(display.position)
 			npc:setDirection(display.direction or (display.faceSouth and DIRECTION_SOUTH or DIRECTION_NORTH))
