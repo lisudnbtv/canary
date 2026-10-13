@@ -1,10 +1,10 @@
 -- OTS: potwory kuzni pojawiaja sie tam, gdzie gracz expi. Serwer sam losuje je z calej mapy,
 -- wiec przy jednym graczu rzadko trafiaja na jego expowisko. Ten skrypt co kilka sekund dba,
--- zeby w poblizu gracza (poza PZ) byly zwykle 2 potwory kuzni; czasem zamiast nich fiendish.
-local TICK_MS = 5000
-local TARGET_NEARBY = 2
-local CHANCE_PERCENT = 40 -- szansa na ture, ze brakujacy potwor kuzni sie pojawi
-local FIENDISH_PERCENT = 4 -- z tego: szansa na czerwonego fiendish zamiast zwyklego
+-- zeby w poblizu gracza (poza PZ) bylo do 5 potworow kuzni; czasem zamiast nich fiendish.
+local TICK_MS = 3000
+local TARGET_NEARBY = 5
+local CHANCE_PERCENT = 100 -- szansa na ture, ze brakujacy potwor kuzni sie pojawi
+local FIENDISH_PERCENT = 6 -- z tego: szansa na czerwonego fiendish zamiast zwyklego
 
 local function isElite(monster)
 	return monster:getName():find("^Elite ") ~= nil or (OtsOutfitElite and OtsOutfitElite[monster:getId()])
