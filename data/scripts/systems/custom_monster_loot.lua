@@ -13,9 +13,9 @@ local customLootConfig = {
 	["Grynch Clan Goblin"] = { items = { { id = 6526, chance = 100000, minCount = 1, maxCount = 3 } } },
 }
 
--- OTS: bag you desire z kazdego potwora Soul War. Szansa 1000 na 100000 to 1%, a serwerowy
--- mnoznik lootu x10 robi z tego ok. 10% na zabicie.
-local BAG_YOU_DESIRE_CHANCE = 1000
+-- OTS: bag you desire z kazdego potwora Soul War. Szansa 50 na 100000 to 0,05%, a serwerowy
+-- mnoznik lootu x10 robi z tego ok. 0,5% na zabicie (ok. 1 na 200 potworow).
+local BAG_YOU_DESIRE_CHANCE = 50
 local soulWarMonsters = {
 	"Dreadful Disruptor",
 	"Dreadful Harvester",
@@ -60,7 +60,7 @@ for _, monsterName in ipairs(soulWarMonsters) do
 	customLootConfig[monsterName] = entry
 end
 
--- OTS: primal bag z kazdego potwora Gnomprony / Primal Ordeal, ta sama szansa co bag you desire (~10%).
+-- OTS: primal bag z kazdego potwora Gnomprony / Primal Ordeal, ta sama szansa co bag you desire (~0,5%).
 -- Plunder Patriarch ma primal bag w swoim wlasnym loocie (100%), wiec nie jest na liscie.
 local primalMonsters = {
 	"Hulking Prehemoth",
@@ -87,7 +87,7 @@ for _, monsterName in ipairs(primalMonsters) do
 	customLootConfig[monsterName] = entry
 end
 
--- OTS: bag you covet z kazdego potwora Rotten Blood i z jego bossow, ta sama szansa (~10%).
+-- OTS: bag you covet z kazdego potwora Rotten Blood i z jego bossow, ta sama szansa (~0,5%).
 local rottenBloodMonsters = {
 	"Bloated Man-Maggot",
 	"Converter",
