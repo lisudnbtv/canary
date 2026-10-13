@@ -1,5 +1,5 @@
 -- OTS: automatyczne podnoszenie limitu pylu kuzni (Increase Dust Limit).
--- !autodust on / off / (bez parametru: stan). Gdy wlaczone, co kilka sekund serwer wydaje pyl
+-- !dust on / off / (bez parametru: stan); dziala tez stare !autodust. Gdy wlaczone, co kilka sekund serwer wydaje pyl
 -- na kolejne poziomy limitu, dopoki starcza pylu (koszt jak w kuzni: obecny limit - 75).
 local KEY = "ots-auto-dust"
 local TICK_MS = 5000
@@ -26,20 +26,20 @@ local function raise(player)
 	end
 end
 
-local talk = TalkAction("!autodust")
+local talk = TalkAction("!dust", "!autodust")
 
 function talk.onSay(player, words, param)
 	param = param:lower():gsub("%s", "")
 	if param == "on" then
 		player:kv():set(KEY, true)
-		player:sendTextMessage(MESSAGE_EVENT_ADVANCE, "Auto dust wlaczony: limit pylu bedzie sam rosl, gdy starczy pylu. Wylaczenie: !autodust off")
+		player:sendTextMessage(MESSAGE_EVENT_ADVANCE, "Auto dust wlaczony: limit pylu bedzie sam rosl, gdy starczy pylu. Wylaczenie: !dust off")
 		raise(player)
 	elseif param == "off" then
 		player:kv():remove(KEY)
 		player:sendTextMessage(MESSAGE_EVENT_ADVANCE, "Auto dust wylaczony.")
 	else
 		local level = player:getForgeDustLevel()
-		player:sendTextMessage(MESSAGE_EVENT_ADVANCE, string.format("Auto dust: %s. Pyl %d, limit %d/%d, nastepny poziom kosztuje %d. Uzycie: !autodust on / off", player:kv():get(KEY) and "wlaczony" or "wylaczony", player:getForgeDusts(), level, maxLevel(), math.max(1, level - 75)))
+		player:sendTextMessage(MESSAGE_EVENT_ADVANCE, string.format("Auto dust: %s. Pyl %d, limit %d/%d, nastepny poziom kosztuje %d. Uzycie: !dust on / off", player:kv():get(KEY) and "wlaczony" or "wylaczony", player:getForgeDusts(), level, maxLevel(), math.max(1, level - 75)))
 	end
 	return false
 end
