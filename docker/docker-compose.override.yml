@@ -91,6 +91,7 @@ services:
   # oraz profesja Monk przy tworzeniu postaci na stronie (docker/ots/myaac)
   myaac:
     entrypoint: ["bash", "/ots/myaac/entrypoint.sh"]
+    command: ["apache2-foreground"]   # nadpisany entrypoint kasuje domyslne CMD obrazu
     volumes:
       - './ots/storeimages:/var/www/html/ots-store:ro'
       - './ots/myaac:/ots/myaac:ro'
