@@ -74,7 +74,7 @@ return {
 			itemtype = 60015,
 			count = 1,
 			movable = true,
-			description = "<i>defense 50, magic level +10, perfect shot +40, perfect shot range 5, distance +4, life leech 1%, mana leech 1%, critical hit chance 2%, critical extra damage 3%</i>\n\n{character}\n{storeinbox}\n{info} level 100, paladin\n{info} 4 imbuement slots",
+			description = "<i>physical protection 8%, magic level +10, perfect shot +40, perfect shot range 5, distance +4, life leech 1%, mana leech 1%, critical hit chance 2%, critical extra damage 3%</i>\n\n{character}\n{storeinbox}\n{info} level 100, paladin\n{info} 4 imbuement slots",
 			type = GameStore.OfferTypes.OFFER_TYPE_ITEM,
 		},
 	},

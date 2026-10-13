@@ -49,7 +49,7 @@ SETS = {
         ('eternal hunter boots', 34098, 'boots', 'dist', dict(armor=4, speed=20)),
         ('eternal bow', 43877, 'weapon', 'dist', dict(attack=15, hitchance=7, range=7)),
         ('eternal crossbow', 43879, 'weapon', 'dist', dict(attack=15, hitchance=8, range=7)),
-        ('eternal quiver', 39150, 'offhand', 'dist', dict(_attrs={'weaponType': 'shield'}, defense=50, magiclevelpoints=10, perfectshotdamage=40, perfectshotrange=5)),
+        ('eternal quiver', 39150, 'offhand', 'dist', dict(absorbpercentphysical=8, magiclevelpoints=10, perfectshotdamage=40, perfectshotrange=5)),
     ]),
     'Sorcerer': ('items_master_sorcerer', [
         ('eternal arcane hat', 39151, 'helmet', 'magic', dict(armor=10)),
