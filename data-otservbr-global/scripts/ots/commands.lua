@@ -4,11 +4,13 @@
 
 -- Ceny skupu: te same, ktore ma Loot Seller (LootShopConfigTable z data/scripts/lib/shops.lua).
 local prices = nil
+-- greater gemy (Gem Atelier) nigdy nie ida do !sell ani pod miotelke
+local NEVER_SELL = { [44604] = true, [44607] = true, [44610] = true, [44613] = true, [49373] = true }
 local function loadPrices()
 	prices = {}
 	for _, category in pairs(LootShopConfigTable or {}) do
 		for _, entry in ipairs(category) do
-			if entry.clientId and entry.sell and entry.sell > 0 then
+			if entry.clientId and entry.sell and entry.sell > 0 and not NEVER_SELL[entry.clientId] then
 				prices[entry.clientId] = entry.sell
 			end
 		end
@@ -100,6 +102,12 @@ local KEEP = {
 	[39546] = true, -- primal bag
 	[43895] = true, -- bag you covet
 	[CLEANER_ID] = true,
+	-- kuznia i Gem Atelier: wszystkie gemy (tez Monka, ktorych nie da sie sprzedac), fragmenty,
+	-- exalted core, slivery i kruszarki - miotelka ich nie usuwa
+	[44602] = true, [44603] = true, [44604] = true, [44605] = true, [44606] = true, [44607] = true,
+	[44608] = true, [44609] = true, [44610] = true, [44611] = true, [44612] = true, [44613] = true,
+	[49371] = true, [49372] = true, [49373] = true,
+	[46625] = true, [46626] = true, [37109] = true, [37110] = true, [46627] = true, [46628] = true,
 }
 
 local function junkIn(pouch)
