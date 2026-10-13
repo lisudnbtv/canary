@@ -1,6 +1,6 @@
 -- OTS: sklep > Przedmioty > Kuznia i Gemy
 -- Exalted cores i slivery do Kuzni Wzniesienia (stoi w hubie na polnoc od depozytu)
--- oraz gemy do Gem Atelier (zakladka w oknie Wheel of Destiny), osobno dla kazdej profesji.
+-- oraz gemy, kruszarki (crusher) i fragmenty do Gem Atelier (zakladka w oknie Wheel of Destiny), osobno dla kazdej profesji.
 return {
 	icons = { "Category_Extras.png" },
 	name = "Kuznia i Gemy",
@@ -8,6 +8,46 @@ return {
 	rookgaard = true,
 	state = GameStore.States.STATE_NONE,
 	offers = {
+		{
+			icons = { "Gold_Converter.png" },
+			name = "Crusher",
+			price = 100,
+			itemtype = 46627,
+			charges = 10,
+			movable = true,
+			description = "<i>Use it on a gem in your backpack to break it into fragments (lesser and regular gems give lesser fragments, greater gems give greater fragments).</i>\n\n{character}\n{storeinbox}\n{info} usable 10 times",
+			type = GameStore.OfferTypes.OFFER_TYPE_CHARGES,
+		},
+		{
+			icons = { "Gold_Converter.png" },
+			name = "Amber Crusher",
+			price = 1500,
+			itemtype = 46628,
+			count = 1,
+			movable = true,
+			description = "<i>Unlimited crusher. Breaks up to 10 gems of one kind at once into fragments.</i>\n\n{character}\n{storeinbox}\n{info} never runs out",
+			type = GameStore.OfferTypes.OFFER_TYPE_ITEM,
+		},
+		{
+			icons = { "Gold_Converter.png" },
+			name = "10x Lesser Fragment",
+			price = 100,
+			itemtype = 46625,
+			count = 10,
+			movable = true,
+			description = "<i>Used in the Gem Atelier to improve basic gem modifiers.</i>\n\n{character}\n{storeinbox}",
+			type = GameStore.OfferTypes.OFFER_TYPE_ITEM,
+		},
+		{
+			icons = { "Gold_Converter.png" },
+			name = "10x Greater Fragment",
+			price = 300,
+			itemtype = 46626,
+			count = 10,
+			movable = true,
+			description = "<i>Used in the Gem Atelier to improve supreme gem modifiers.</i>\n\n{character}\n{storeinbox}",
+			type = GameStore.OfferTypes.OFFER_TYPE_ITEM,
+		},
 		{
 			icons = { "Gold_Converter.png" },
 			name = "Exalted Core",
