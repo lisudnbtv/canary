@@ -87,6 +87,7 @@ services:
       - '../data/chatchannels/scripts/ots_tasks.lua:/canary/data/chatchannels/scripts/ots_tasks.lua:ro'
       - '../data-otservbr-global/scripts/creaturescripts/others/login.lua:/canary/data-otservbr-global/scripts/creaturescripts/others/login.lua:ro'
       - '../data/items/items.xml:/canary/data/items/items.xml:ro'
+      - '../data/scripts/spells/healing/heal_friend.lua:/canary/data/scripts/spells/healing/heal_friend.lua:ro'
 
   # Ikony kategorii sklepu (klient pobiera je z coinImagesURL = strona MyAAC)
   # oraz profesja Monk przy tworzeniu postaci na stronie (docker/ots/myaac)

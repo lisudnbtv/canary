@@ -4,9 +4,12 @@ combat:setParameter(COMBAT_PARAM_EFFECT, CONST_ME_MAGIC_GREEN)
 combat:setParameter(COMBAT_PARAM_DISPEL, CONDITION_PARALYZE)
 combat:setParameter(COMBAT_PARAM_AGGRESSIVE, false)
 
+-- OTS: mocniejsze exura sio - rosnie z magic levelem (i troche z poziomem), ale zawsze co najmniej 5000
+local MIN_HEAL = 5000
+
 function onGetFormulaValues(player, level, magicLevel)
-	local min = (level * 0.2 + magicLevel * 10) + 3
-	local max = (level * 0.2 + magicLevel * 14) + 5
+	local min = math.max(MIN_HEAL, level * 0.5 + magicLevel * 40)
+	local max = math.max(math.floor(MIN_HEAL * 1.25), level * 0.5 + magicLevel * 55)
 	return min, max
 end
 
