@@ -10,9 +10,53 @@ local function isElite(monster)
 	return (OtsRandomElites and OtsRandomElites[monster:getId()]) or (OtsOutfitElite and OtsOutfitElite[monster:getId()])
 end
 
+-- Serwer trzyma limit potworow kuzni na mapie (forgeInfluencedLimit) i zwykle ma go pelny.
+-- Zeby dodac potwora przy graczu, zdejmujemy status z jednego dalekiego (poza zasiegiem graczy).
+local FAR = 20
+
+local function farFromPlayers(position, players)
+	for _, pos in ipairs(players) do
+		if pos.z == position.z and math.abs(pos.x - position.x) <= FAR and math.abs(pos.y - position.y) <= FAR then
+			return false
+		end
+	end
+	return true
+end
+
+local function freeSlot(players)
+	local ids = Game.getInfluencedMonsters() or {}
+	for _ = 1, math.min(#ids, 30) do
+		local id = ids[math.random(#ids)]
+		local monster = Monster(id)
+		if not monster then
+			Game.removeInfluencedMonster(id)
+			return true
+		end
+		if farFromPlayers(monster:getPosition(), players) then
+			monster:clearFiendishStatus()
+			Game.removeInfluencedMonster(id)
+			return true
+		end
+	end
+	return false
+end
+
+local function makeInfluenced(monster, players)
+	if Game.addInfluencedMonster(monster) then
+		return
+	end
+	if freeSlot(players) then
+		Game.addInfluencedMonster(monster)
+	end
+end
+
 local tick = GlobalEvent("OtsForgeNearbyTick")
 
 function tick.onThink(interval)
+	local players = {}
+	for _, player in ipairs(Game.getPlayers()) do
+		players[#players + 1] = player:getPosition()
+	end
 	for _, player in ipairs(Game.getPlayers()) do
 		local position = player:getPosition()
 		local tile = Tile(position)
@@ -34,7 +78,7 @@ function tick.onThink(interval)
 				-- pisze ostrzezenie "Failed to remove a Influenced Monster")
 				local fiendish = math.random(100) <= FIENDISH_PERCENT and (tonumber(Game.makeFiendishMonster(monster:getId())) or 0) > 0
 				if not fiendish then
-					Game.addInfluencedMonster(monster)
+					makeInfluenced(monster, players)
 				end
 			end
 		end
