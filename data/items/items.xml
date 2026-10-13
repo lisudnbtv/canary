@@ -91356,4 +91356,13 @@ Granted by TibiaGoals.com"/>
 		</attribute>
 	</item>
 	<!-- /OTS eternal sets -->
+	<!-- OTS runes -->
+	<item id="60101" article="an" name="elemental storm rune">
+		<attribute key="primarytype" value="attack runes"/>
+		<attribute key="type" value="rune"/>
+		<attribute key="runespellname" value="adori mas omnia"/>
+		<attribute key="charges" value="1"/>
+		<attribute key="weight" value="70"/>
+	</item>
+	<!-- /OTS runes -->
 </items>
