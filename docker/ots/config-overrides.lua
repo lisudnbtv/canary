@@ -73,3 +73,7 @@ forgeFiendishLimit = 50
 
 -- Kuznia: maksymalny limit pylu (domyslnie 225); !dust podnosi limit az do tej wartosci
 forgeMaxDust = 3000
+
+-- Multi-client (MC): do 5 postaci z jednego konta naraz, wszystkie moga byc poza strefa ochronna
+maxPlayersOnlinePerAccount = 5
+maxPlayersOutsidePZPerAccount = 5
