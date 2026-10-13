@@ -19,7 +19,7 @@ local elements = {
 }
 
 -- Na kazdy zywiol osobno; razem 7 uderzen.
-function onGetElementalStormValues(player, level, maglevel)
+local function stormValues(player, level, maglevel)
 	local min = (level * 0.25) + (maglevel * 2)
 	local max = (level * 0.4) + (maglevel * 4)
 	return -min, -max
@@ -34,6 +34,8 @@ for _, element in ipairs(elements) do
 		combat:setParameter(COMBAT_PARAM_DISTANCEEFFECT, element[3])
 	end
 	combat:setArea(createCombatArea(AREA_CIRCLE6X6))
+	-- silnik zabiera funkcje o tej nazwie przy kazdym setCallback, wiec ustawiamy ja od nowa dla kazdej walki
+	onGetElementalStormValues = stormValues
 	combat:setCallback(CALLBACK_PARAM_LEVELMAGICVALUE, "onGetElementalStormValues")
 	combats[#combats + 1] = combat
 end
