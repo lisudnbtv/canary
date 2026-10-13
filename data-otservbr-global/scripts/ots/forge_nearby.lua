@@ -30,12 +30,12 @@ function tick.onThink(interval)
 			end
 			if forge < TARGET_NEARBY and #candidates > 0 and math.random(100) <= CHANCE_PERCENT then
 				local monster = candidates[math.random(#candidates)]
-				if math.random(100) <= FIENDISH_PERCENT then
-					monster:setMonsterForgeClassification(FORGE_FIENDISH_MONSTER)
-				else
-					monster:setMonsterForgeClassification(FORGE_INFLUENCED_MONSTER)
+				-- przez funkcje gry, zeby serwer mial je na swojej liscie (inaczej przy smierci
+				-- pisze ostrzezenie "Failed to remove a Influenced Monster")
+				local fiendish = math.random(100) <= FIENDISH_PERCENT and (tonumber(Game.makeFiendishMonster(monster:getId())) or 0) > 0
+				if not fiendish then
+					Game.addInfluencedMonster(monster)
 				end
-				monster:configureForgeSystem()
 			end
 		end
 	end
