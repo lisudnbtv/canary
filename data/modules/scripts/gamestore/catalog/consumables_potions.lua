@@ -16,6 +16,16 @@ return {
 			type = GameStore.OfferTypes.OFFER_TYPE_ITEM,
 		},
 		{
+			-- OTS: wlasny potion dla knightow i monkow (skrypt: data-otservbr-global/scripts/ots/arcane_potion.lua)
+			icons = { "Ultimate_Health_Potion.png" },
+			name = "Ultimate Warrior Potion",
+			price = 100,
+			itemtype = 60103,
+			count = 1,
+			description = "<i>Restores 1100-1400 hit points and 300-400 mana at once - the spirit potion for knights and monks.</i>\n\n{character}\n{storeinbox}\n{battlesign}\n{capacity}\n{info} knights and monks from level 130\n{info} potions are unlimited on this server - one potion lasts forever",
+			type = GameStore.OfferTypes.OFFER_TYPE_ITEM,
+		},
+		{
 			icons = { "Great_Health_Potion.png" },
 			name = "Great Health Potion",
 			price = 18,

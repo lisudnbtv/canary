@@ -1,4 +1,4 @@
-"""OTS: wlasne runy i potiony (Elemental Storm Rune, Ultimate Arcane Potion). Klonuje wyglad istniejacej runy pod nowym id i dopisuje
+"""OTS: wlasne runy i potiony (Elemental Storm Rune, Ultimate Arcane i Warrior Potion). Klonuje wyglad istniejacej runy pod nowym id i dopisuje
 definicje do items.xml. Skrypt czaru: data-otservbr-global/scripts/ots/elemental_rune.lua.
 Uzycie: python3 runes.py <appearances.dat we> <appearances.dat wy> <items.xml we> <items.xml wy>"""
 import sys, re
@@ -10,8 +10,9 @@ RUNES = [
     (60101, 3195, 'elemental storm rune', 'adori mas omnia', 2500),
 ]
 POTIONS = [
-    # id, wyglad z, nazwa, opis, poziom (skrypt: data-otservbr-global/scripts/ots/arcane_potion.lua)
-    (60102, 23374, 'ultimate arcane potion', 'This potion can only be consumed by sorcerers and druids of level 130 or higher', 130),
+    # id, wyglad z, nazwa, opis, poziom, profesje w kliencie (1 knight, 3 sorcerer, 4 druid, 5 monk) (skrypt: data-otservbr-global/scripts/ots/arcane_potion.lua)
+    (60102, 23374, 'ultimate arcane potion', 'This potion can only be consumed by sorcerers and druids of level 130 or higher', 130, [4, 3]),
+    (60103, 7643, 'ultimate warrior potion', 'This potion can only be consumed by knights and monks of level 130 or higher', 130, [1, 5]),
 ]
 
 
@@ -71,7 +72,7 @@ def main():
             for entry in RUNES:
                 out += b'\x0a' + lenp(clone(objs[entry[1]], entry[0], entry[2], entry[4]))
             for entry in POTIONS:
-                out += b'\x0a' + lenp(clone(objs[entry[1]], entry[0], entry[2], entry[4], [4, 3]))
+                out += b'\x0a' + lenp(clone(objs[entry[1]], entry[0], entry[2], entry[4], entry[5]))
     open(a_out, 'wb').write(out)
 
     text = open(x_in, encoding='utf-8').read()
@@ -85,7 +86,7 @@ def main():
                   '\t\t<attribute key="charges" value="1"/>',
                   '\t\t<attribute key="weight" value="70"/>',
                   '\t</item>']
-    for pid, src, name, desc, level in POTIONS:
+    for pid, src, name, desc, level, professions in POTIONS:
         block += ['\t<item id="%d" article="an" name="%s">' % (pid, name),
                   '\t\t<attribute key="primarytype" value="liquids"/>',
                   '\t\t<attribute key="description" value="%s"/>' % desc,

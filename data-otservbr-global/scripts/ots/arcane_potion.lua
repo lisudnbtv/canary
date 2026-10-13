@@ -1,14 +1,25 @@
--- OTS: Ultimate Arcane Potion (sklep) - odpowiednik ultimate spirit potion dla sorcererow i druidow:
--- leczy naraz zycie i mane, z wieksza iloscia many niz ultimate mana potion.
--- Przedmiot: items.xml (id 60102), wyglad w appearances.dat (tools/ots/ots_runes.py).
+-- OTS: wlasne potiony ze sklepu, leczace naraz zycie i mane (jak ultimate spirit potion):
+--  * Ultimate Arcane Potion (60102) - sorcerer i druid, wiecej many,
+--  * Ultimate Warrior Potion (60103) - knight i monk, wiecej zycia.
+-- Przedmioty: items.xml, wyglad w appearances.dat (tools/ots/ots_runes.py).
 -- Potiony na serwerze sie nie zuzywaja (removeChargesFromPotions = false).
 
-local POTION_ID = 60102
-local LEVEL = 130
-local HEALTH = { 500, 700 }
-local MANA = { 900, 1100 }
-local VOCATIONS = { VOCATION.BASE_ID.SORCERER, VOCATION.BASE_ID.DRUID }
-local DESCRIPTION = "Only sorcerers and druids of level 130 or above may drink this fluid."
+local potions = {
+	[60102] = {
+		health = { 500, 700 },
+		mana = { 900, 1100 },
+		level = 130,
+		vocations = { VOCATION.BASE_ID.SORCERER, VOCATION.BASE_ID.DRUID },
+		description = "Only sorcerers and druids of level 130 or above may drink this fluid.",
+	},
+	[60103] = {
+		health = { 1100, 1400 },
+		mana = { 300, 400 },
+		level = 130,
+		vocations = { VOCATION.BASE_ID.KNIGHT, VOCATION.BASE_ID.MONK },
+		description = "Only knights and monks of level 130 or above may drink this fluid.",
+	},
+}
 
 local potion = Action()
 
@@ -17,13 +28,18 @@ function potion.onUse(player, item, fromPosition, target, toPosition, isHotkey)
 		return false
 	end
 
-	if not player:getGroup():getAccess() and (player:getLevel() < LEVEL or not table.contains(VOCATIONS, player:getVocation():getBaseId())) then
-		player:say(DESCRIPTION, MESSAGE_POTION)
+	local config = potions[item:getId()]
+	if not config then
+		return false
+	end
+
+	if not player:getGroup():getAccess() and (player:getLevel() < config.level or not table.contains(config.vocations, player:getVocation():getBaseId())) then
+		player:say(config.description, MESSAGE_POTION)
 		return true
 	end
 
-	doTargetCombatHealth(player, target, COMBAT_HEALING, HEALTH[1], HEALTH[2], CONST_ME_MAGIC_BLUE)
-	doTargetCombatMana(0, target, MANA[1], MANA[2], CONST_ME_MAGIC_BLUE)
+	doTargetCombatHealth(player, target, COMBAT_HEALING, config.health[1], config.health[2], CONST_ME_MAGIC_BLUE)
+	doTargetCombatMana(0, target, config.mana[1], config.mana[2], CONST_ME_MAGIC_BLUE)
 	target:say("Aaaah...", MESSAGE_POTION)
 	player:getPosition():sendSingleSoundEffect(SOUND_EFFECT_TYPE_ITEM_USE_POTION, player:isInGhostMode() and nil or player)
 
@@ -34,5 +50,7 @@ function potion.onUse(player, item, fromPosition, target, toPosition, isHotkey)
 	return true
 end
 
-potion:id(POTION_ID)
+for id in pairs(potions) do
+	potion:id(id)
+end
 potion:register()
