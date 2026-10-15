@@ -38,6 +38,8 @@ for _, config in ipairs(wands) do
 	end
 
 	wand:id(config.id)
+	-- zywiol musi byc ustawiony: klient wyswietla go w statystykach postaci i bez niego sie wywala
+	wand:element(config.combat)
 	wand:level(100)
 	wand:mana(30)
 	wand:damage(MIN_DAMAGE, MAX_DAMAGE)
