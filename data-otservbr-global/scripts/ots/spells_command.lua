@@ -1,5 +1,5 @@
 -- OTS: !spells - lista czarow profesji gracza (slowa, nazwa, poziom, mana), posortowana po poziomie.
--- Czary z poziomem do osiagniecia sa oznaczone "(od X lvl)", juz dostepne bez dopisku.
+-- Czary pogrupowane wedlug wymaganego poziomu (naglowek "Level X").
 
 local BOOK_ID = 3059 -- wyglad okna: spellbook
 
@@ -29,18 +29,21 @@ function talk.onSay(player, words, param)
 
 	local lines = { string.format("Czary: %s (poziom %d, magic level %d)", player:getVocation():getName(), level, magicLevel), "" }
 	local available = 0
+	local currentLevel = nil
 	for _, spell in ipairs(spells) do
-		local missing = {}
-		if spell.level > level then
-			missing[#missing + 1] = "od " .. spell.level .. " lvl"
+		if spell.level ~= currentLevel then
+			currentLevel = spell.level
+			lines[#lines + 1] = ""
+			lines[#lines + 1] = string.format("Level %d%s", currentLevel, currentLevel > level and " (jeszcze niedostepne)" or ":")
 		end
+		local note = ""
 		if spell.mlevel > magicLevel then
-			missing[#missing + 1] = "od " .. spell.mlevel .. " mlvl"
+			note = " (od " .. spell.mlevel .. " mlvl)"
 		end
-		if #missing == 0 then
+		if spell.level <= level and spell.mlevel <= magicLevel then
 			available = available + 1
 		end
-		lines[#lines + 1] = string.format("%s - %s, mana %s%s", spell.words, spell.name, manaText(spell), #missing > 0 and (" (" .. table.concat(missing, ", ") .. ")") or "")
+		lines[#lines + 1] = string.format("  %s - %s, mana %s%s", spell.words, spell.name, manaText(spell), note)
 	end
 	lines[2] = string.format("Dostepne teraz: %d z %d", available, #spells)
 
