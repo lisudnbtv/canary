@@ -77,3 +77,6 @@ forgeMaxDust = 3000
 -- Multi-client (MC): do 5 postaci z jednego konta naraz, wszystkie moga byc poza strefa ochronna
 maxPlayersOnlinePerAccount = 5
 maxPlayersOutsidePZPerAccount = 5
+
+-- Bestiariusz: pelny loot potwora widoczny od razu (bez czekania na kolejne poziomy odblokowania)
+showLootsInBestiary = true

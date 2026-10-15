@@ -58,6 +58,7 @@ services:
       - '../data/modules/scripts/gamestore/catalog/items_forge.lua:/canary/data/modules/scripts/gamestore/catalog/items_forge.lua:ro'
       - '../data/modules/scripts/gamestore/catalog/items_runes_potions.lua:/canary/data/modules/scripts/gamestore/catalog/items_runes_potions.lua:ro'
       - '../data/libs/gamestore/senders.lua:/canary/data/libs/gamestore/senders.lua:ro'
+      - '../data/libs/gamestore/parsers.lua:/canary/data/libs/gamestore/parsers.lua:ro'
       - '../data/scripts/eventcallbacks/player/on_kill_taskboard.lua:/canary/data/scripts/eventcallbacks/player/on_kill_taskboard.lua:ro'
       - '../data/modules/scripts/gamestore/catalog/beds.lua:/canary/data/modules/scripts/gamestore/catalog/beds.lua:ro'
       - '../data/modules/scripts/gamestore/catalog/boost.lua:/canary/data/modules/scripts/gamestore/catalog/boost.lua:ro'
