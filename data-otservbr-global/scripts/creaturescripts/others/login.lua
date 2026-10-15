@@ -37,8 +37,12 @@ function playerLogin.onLogin(player)
 		end
 	end
 
-	-- OTS: !flask zawsze wlaczone - po wypiciu potiona nie zostaja puste fiolki
-	player:kv():set("talkaction.potions.flask", true)
+	-- OTS: !flask domyslnie wlaczone (bez pustych fiolek) - ustawiane tylko raz na postac,
+	-- wiec wybor gracza z "!flask off" zostaje na stale
+	if not player:kv():get("ots.flask-default-set") then
+		player:kv():set("talkaction.potions.flask", true)
+		player:kv():set("ots.flask-default-set", true)
+	end
 
 	-- Open channels
 	player:openChannel(12) -- OTS: Taski (przed World Chat i Advertising)
