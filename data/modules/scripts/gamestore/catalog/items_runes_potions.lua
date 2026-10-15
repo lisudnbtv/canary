@@ -19,7 +19,7 @@ return {
 		},
 		{
 			-- OTS: wlasny potion dla sorcererow i druidow (skrypt: data-otservbr-global/scripts/ots/arcane_potion.lua)
-			icons = { "Ultimate_Spirit_Potion.png" },
+			icons = { "Ultimate_Mana_Potion.png" },
 			name = "Ultimate Arcane Potion",
 			price = 100,
 			itemtype = 60102,
@@ -35,6 +35,16 @@ return {
 			itemtype = 60103,
 			count = 1,
 			description = "<i>Restores 1100-1400 hit points and 300-400 mana at once - the spirit potion for knights and monks.</i>\n\n{character}\n{storeinbox}\n{battlesign}\n{capacity}\n{info} knights and monks from level 130\n{info} potions are unlimited on this server - one potion lasts forever",
+			type = GameStore.OfferTypes.OFFER_TYPE_ITEM,
+		},
+		{
+			-- OTS: wlasny potion dla paladynow (skrypt: data-otservbr-global/scripts/ots/arcane_potion.lua)
+			icons = { "Ultimate_Spirit_Potion.png" },
+			name = "Ultimate Hunter Potion",
+			price = 100,
+			itemtype = 60104,
+			count = 1,
+			description = "<i>Restores 800-1000 hit points and 600-800 mana at once - a stronger spirit potion for paladins.</i>\n\n{character}\n{storeinbox}\n{battlesign}\n{capacity}\n{info} paladins from level 130\n{info} potions are unlimited on this server - one potion lasts forever",
 			type = GameStore.OfferTypes.OFFER_TYPE_ITEM,
 		},
 	},

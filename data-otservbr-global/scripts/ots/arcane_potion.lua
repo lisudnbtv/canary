@@ -1,6 +1,7 @@
 -- OTS: wlasne potiony ze sklepu, leczace naraz zycie i mane (jak ultimate spirit potion):
 --  * Ultimate Arcane Potion (60102) - sorcerer i druid, wiecej many,
---  * Ultimate Warrior Potion (60103) - knight i monk, wiecej zycia.
+--  * Ultimate Warrior Potion (60103) - knight i monk, wiecej zycia,
+--  * Ultimate Hunter Potion (60104) - paladyn, mocniejszy ultimate spirit potion.
 -- Przedmioty: items.xml, wyglad w appearances.dat (tools/ots/ots_runes.py).
 -- Potiony na serwerze sie nie zuzywaja (removeChargesFromPotions = false).
 
@@ -18,6 +19,13 @@ local potions = {
 		level = 130,
 		vocations = { VOCATION.BASE_ID.KNIGHT, VOCATION.BASE_ID.MONK },
 		description = "Only knights and monks of level 130 or above may drink this fluid.",
+	},
+	[60104] = {
+		health = { 800, 1000 },
+		mana = { 600, 800 },
+		level = 130,
+		vocations = { VOCATION.BASE_ID.PALADIN },
+		description = "Only paladins of level 130 or above may drink this fluid.",
 	},
 }
 

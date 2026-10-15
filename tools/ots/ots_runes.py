@@ -1,4 +1,4 @@
-"""OTS: wlasne runy i potiony (Elemental Storm Rune, Ultimate Arcane i Warrior Potion). Klonuje wyglad istniejacej runy pod nowym id i dopisuje
+"""OTS: wlasne runy i potiony (Elemental Storm Rune, Ultimate Arcane, Warrior i Hunter Potion). Klonuje wyglad istniejacej runy pod nowym id i dopisuje
 definicje do items.xml. Skrypt czaru: data-otservbr-global/scripts/ots/elemental_rune.lua.
 Uzycie: python3 runes.py <appearances.dat we> <appearances.dat wy> <items.xml we> <items.xml wy>"""
 import sys, re
@@ -10,9 +10,10 @@ RUNES = [
     (60101, 3195, 'elemental storm rune', 'adori mas omnia', 2500),
 ]
 POTIONS = [
-    # id, wyglad z, nazwa, opis, poziom, profesje w kliencie (1 knight, 3 sorcerer, 4 druid, 5 monk) (skrypt: data-otservbr-global/scripts/ots/arcane_potion.lua)
-    (60102, 23374, 'ultimate arcane potion', 'This potion can only be consumed by sorcerers and druids of level 130 or higher', 130, [4, 3]),
+    # id, wyglad z, nazwa, opis, poziom, profesje w kliencie (1 knight, 2 paladin, 3 sorcerer, 4 druid, 5 monk) (skrypt: data-otservbr-global/scripts/ots/arcane_potion.lua)
+    (60102, 23373, 'ultimate arcane potion', 'This potion can only be consumed by sorcerers and druids of level 130 or higher', 130, [4, 3]),
     (60103, 7643, 'ultimate warrior potion', 'This potion can only be consumed by knights and monks of level 130 or higher', 130, [1, 5]),
+    (60104, 23374, 'ultimate hunter potion', 'This potion can only be consumed by paladins of level 130 or higher', 130, [2]),
 ]
 
 
