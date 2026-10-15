@@ -37,6 +37,9 @@ function playerLogin.onLogin(player)
 		end
 	end
 
+	-- OTS: !flask zawsze wlaczone - po wypiciu potiona nie zostaja puste fiolki
+	player:kv():set("talkaction.potions.flask", true)
+
 	-- Open channels
 	player:openChannel(12) -- OTS: Taski (przed World Chat i Advertising)
 	if table.contains({ TOWNS_LIST.DAWNPORT, TOWNS_LIST.DAWNPORT_TUTORIAL }, player:getTown():getId()) then
