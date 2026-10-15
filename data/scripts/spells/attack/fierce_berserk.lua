@@ -3,15 +3,16 @@ combat:setParameter(COMBAT_PARAM_TYPE, COMBAT_PHYSICALDAMAGE)
 combat:setParameter(COMBAT_PARAM_EFFECT, CONST_ME_HITAREA)
 combat:setParameter(COMBAT_PARAM_BLOCKARMOR, 1)
 combat:setParameter(COMBAT_PARAM_USECHARGES, 1)
-combat:setArea(createCombatArea(AREA_SQUARE1X1))
+-- OTS: obszar jak exevo mas san (kolo 3x3 wokol rycerza) i mocniejsze obrazenia
+combat:setArea(createCombatArea(AREA_CIRCLE3X3))
 
 function onGetFormulaValues(player, skill, attack, factor)
 	local level = player:getLevel()
 
-	local min = (level / 5) + (skill + 2 * attack) * 1.1
-	local max = (level / 5) + (skill + 2 * attack) * 3
+	local min = (level / 3) + (skill + 2 * attack) * 2
+	local max = (level / 3) + (skill + 2 * attack) * 4.5
 
-	return -min * 1.1, -max * 1.1 -- TODO : Use New Real Formula instead of an %
+	return -min, -max
 end
 
 combat:setCallback(CALLBACK_PARAM_SKILLVALUE, "onGetFormulaValues")
@@ -31,7 +32,7 @@ spell:level(90)
 spell:mana(340)
 spell:isPremium(true)
 spell:needWeapon(true)
-spell:cooldown(6 * 1000)
+spell:cooldown(4 * 1000) -- OTS: jak exevo mas san (bylo 6 s)
 spell:groupCooldown(2 * 1000)
 
 spell:vocation("knight;true", "elite knight;true")
