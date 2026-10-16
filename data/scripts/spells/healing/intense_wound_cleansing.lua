@@ -5,8 +5,9 @@ combat:setParameter(COMBAT_PARAM_DISPEL, CONDITION_PARALYZE)
 combat:setParameter(COMBAT_PARAM_AGGRESSIVE, false)
 
 function onGetFormulaValues(player, level, magicLevel)
-	local min = (level * 0.2 + magicLevel * 70) + 438
-	local max = (level * 0.2 + magicLevel * 92) + 544
+	-- OTS: knight ma niski magic level, wiec leczenie liczy sie glownie z poziomu
+	local min = (level * 6 + magicLevel * 70) + 438
+	local max = (level * 8 + magicLevel * 92) + 544
 	return min, max
 end
 

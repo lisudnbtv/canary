@@ -5,8 +5,9 @@ combat:setParameter(COMBAT_PARAM_AGGRESSIVE, false)
 combat:setParameter(COMBAT_PARAM_DISPEL, CONDITION_PARALYZE)
 
 function onGetFormulaValues(_player, level, magicLevel) -- already compared to the official tibia | compared date: 05/07/19(m/d/y)
-	local min = (level * 0.2 + magicLevel * 4 + 25) * 2
-	local max = (level * 0.2 + magicLevel * 7.95 + 51) * 2
+	-- OTS: knight ma niski magic level, wiec leczenie liczy sie glownie z poziomu
+	local min = (level * 2.5 + magicLevel * 20) + 300
+	local max = (level * 3.2 + magicLevel * 30) + 500
 	return min, max
 end
 
