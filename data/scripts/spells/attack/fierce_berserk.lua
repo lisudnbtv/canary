@@ -6,11 +6,15 @@ combat:setParameter(COMBAT_PARAM_USECHARGES, 1)
 -- OTS: obszar jak exevo mas san (kolo 3x3 wokol rycerza) i mocniejsze obrazenia
 combat:setArea(createCombatArea(AREA_CIRCLE3X3))
 
+local DAMAGE_MULTIPLIER = 3.0
+
 function onGetFormulaValues(player, skill, attack, factor)
 	local level = player:getLevel()
 
-	local min = (level / 3) + (skill + 2 * attack) * 2
-	local max = (level / 3) + (skill + 2 * attack) * 4.5
+	-- OTS: sila jak nasze exori mas nia monka (podstawa x 1,3-1,7, potem x 3)
+	local base = (level / 3) + (skill + 2 * attack) * 4
+	local min = base * 1.3 * DAMAGE_MULTIPLIER
+	local max = base * 1.7 * DAMAGE_MULTIPLIER
 
 	return -min, -max
 end
