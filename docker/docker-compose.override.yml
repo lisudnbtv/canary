@@ -90,6 +90,7 @@ services:
       - '../data/items/items.xml:/canary/data/items/items.xml:ro'
       - '../data/scripts/spells/healing/heal_friend.lua:/canary/data/scripts/spells/healing/heal_friend.lua:ro'
       - '../data/scripts/spells/attack/fierce_berserk.lua:/canary/data/scripts/spells/attack/fierce_berserk.lua:ro'
+      - '../data/scripts/spells/attack/sweeping_takedown.lua:/canary/data/scripts/spells/attack/sweeping_takedown.lua:ro'
       - '../data/scripts/spells/healing/wound_cleansing.lua:/canary/data/scripts/spells/healing/wound_cleansing.lua:ro'
       - '../data/scripts/spells/healing/fair_wound_cleansing.lua:/canary/data/scripts/spells/healing/fair_wound_cleansing.lua:ro'
       - '../data/scripts/spells/healing/intense_wound_cleansing.lua:/canary/data/scripts/spells/healing/intense_wound_cleansing.lua:ro'

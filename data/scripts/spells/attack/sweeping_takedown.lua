@@ -1,15 +1,12 @@
 local SPELL_BASE_POWER_CENTER = 48
-local sweepingTakedownCache = {}
 
-local combatInner = Combat()
-combatInner:setParameter(COMBAT_PARAM_TYPE, COMBAT_PHYSICALDAMAGE)
-combatInner:setParameter(COMBAT_PARAM_EFFECT, CONST_ME_BLOW_WHITE)
-combatInner:setArea(createCombatArea(AREA_SWEEPING_CENTER))
+-- OTS: obszar jak exevo mas san (kolo 3x3 wokol monka, bez kierunku) i mocniejsze obrazenia
+local DAMAGE_MULTIPLIER = 1.5
 
-local combatOuter = Combat()
-combatOuter:setParameter(COMBAT_PARAM_TYPE, COMBAT_PHYSICALDAMAGE)
-combatOuter:setParameter(COMBAT_PARAM_EFFECT, CONST_ME_BLOW_WHITE)
-combatOuter:setArea(createCombatArea(AREA_SWEEPING_OUTER))
+local combat = Combat()
+combat:setParameter(COMBAT_PARAM_TYPE, COMBAT_PHYSICALDAMAGE)
+combat:setParameter(COMBAT_PARAM_EFFECT, CONST_ME_BLOW_WHITE)
+combat:setArea(createCombatArea(AREA_CIRCLE3X3))
 
 local function calculateSweepingDamage(player, skill, attack, basePower)
 	local levelBasedDmg = player:calculateFlatDamageHealing()
@@ -43,40 +40,17 @@ local function calculateSweepingDamage(player, skill, attack, basePower)
 	return player:getHarmonyDamage(baseDamage * 1.3, baseDamage * 1.7)
 end
 
--- Callbacks
-function onGetFormulaValuesInner(player, skill, attack, factor)
+function onGetFormulaValuesSweeping(player, skill, attack, factor)
 	local min, max = calculateSweepingDamage(player, skill, attack, SPELL_BASE_POWER_CENTER)
-	sweepingTakedownCache[player:getId()] = { min = min, max = max }
-	return min, max
+	return min * DAMAGE_MULTIPLIER, max * DAMAGE_MULTIPLIER
 end
 
-function onGetFormulaValuesOuter(player, skill, attack, factor)
-	local cached = sweepingTakedownCache[player:getId()]
-	if not cached then
-		logger.debug(string.format("[Sweeping Takedown - Outer] Cache miss for player %s, returning 0 damage", player:getName()))
-		return 0, 0 -- safe fallback
-	end
-
-	local min = cached.min * 0.75
-	local max = cached.max * 0.75
-
-	logger.trace(string.format("[Sweeping Takedown - Outer] Player: %s | Outer scaled to 75%% of Center | Final: %.2f ~ %.2f", player:getName(), min, max))
-
-	return min, max
-end
-
-combatInner:setCallback(CALLBACK_PARAM_SKILLVALUE, "onGetFormulaValuesInner")
-combatOuter:setCallback(CALLBACK_PARAM_SKILLVALUE, "onGetFormulaValuesOuter")
+combat:setCallback(CALLBACK_PARAM_SKILLVALUE, "onGetFormulaValuesSweeping")
 
 local spell = Spell("instant")
 
 function spell.onCastSpell(creature, var)
-	local playerId = creature:getId()
-	combatInner:execute(creature, var)
-	combatOuter:execute(creature, var)
-	-- Clean up cache to prevent memory leak
-	sweepingTakedownCache[playerId] = nil
-	return true
+	return combat:execute(creature, var)
 end
 
 spell:group("attack")
@@ -87,11 +61,9 @@ spell:castSound(SOUND_EFFECT_TYPE_SPELL_BRUTAL_STRIKE)
 spell:level(60)
 spell:mana(210)
 spell:isPremium(true)
-spell:range(1)
 spell:needTarget(false)
-spell:blockWalls(true)
-spell:needDirection(true)
-spell:cooldown(8 * 1000)
+spell:isSelfTarget(true)
+spell:cooldown(4 * 1000) -- OTS: jak exevo mas san (bylo 8 s)
 spell:groupCooldown(2 * 1000)
 
 spell:monkSpellType(MonkSpell_Spender)
