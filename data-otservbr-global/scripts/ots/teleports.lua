@@ -5,7 +5,7 @@
 local ENTRY_ACTION_ID = 64990
 local ENTRY_ITEM_ID = 1949 -- magic forcefield
 local ENTRY_TOWN = "thais"
-local RETURN_ACTION_ID = 64991 -- teleport powrotny do swiatyni
+local RETURN_ACTION_ID = 64991 -- teleport powrotny do hubu expowisk
 
 local hunts = {
 	{ label = "Low (exp do 300)", list = {
@@ -3360,14 +3360,20 @@ local function placeReturn(pos)
 end
 
 -- Strefa 3x3 (raz) i teleport powrotny obok miejsca ladowania.
--- Teleport: najpierw puste pole, a gdy takiego nie ma (wszedzie leza ozdoby,
--- trawa itp.), dowolne pole, po ktorym da sie chodzic. Ponawiane przy kazdym
--- teleporcie, dopoki sie nie uda.
+-- Przy kazdym teleporcie sprawdzamy, czy teleport powrotny nadal stoi na swoim polu;
+-- jesli go nie ma, stawiamy go od nowa. Szukamy najpierw wokol miejsca ladowania (pola 3x3),
+-- a gdy tam sie nie da, dwa pola dalej. Najpierw puste pole, potem dowolne, po ktorym da sie chodzic.
+local function returnAt(pos)
+	local tile = Tile(pos)
+	local item = tile and tile:getItemById(ENTRY_ITEM_ID)
+	return item and item:getActionId() == RETURN_ACTION_ID
+end
+
 local function prepareSpot(center)
 	local id = key(center)
 	local spot = preparedSpots[id]
 	if not spot then
-		spot = { teleport = false }
+		spot = {}
 		preparedSpots[id] = spot
 		for dx = -1, 1 do
 			for dy = -1, 1 do
@@ -3377,40 +3383,41 @@ local function prepareSpot(center)
 		end
 	end
 
-	if spot.teleport or not templePosition then
+	if spot.pos and returnAt(spot.pos) then
 		return
 	end
+	spot.pos = nil
 
-	local fallback = nil
-	for dx = -1, 1 do
-		for dy = -1, 1 do
-			if not (dx == 0 and dy == 0) then
-				local pos = Position(center.x + dx, center.y + dy, center.z)
-				local tile = Tile(pos)
-				if tile then
-					local existing = tile:getItemById(ENTRY_ITEM_ID)
-					if existing and existing:getActionId() == RETURN_ACTION_ID then
-						spot.teleport = true
+	for radius = 1, 2 do
+		local empty, fallback = nil, nil
+		for dx = -radius, radius do
+			for dy = -radius, radius do
+				if math.max(math.abs(dx), math.abs(dy)) == radius then
+					local pos = Position(center.x + dx, center.y + dy, center.z)
+					if returnAt(pos) then
+						spot.pos = pos
 						return
 					end
-					if tile:isWalkable(false, false, true, true, false) then
+					local tile = Tile(pos)
+					if tile and tile:isWalkable(false, false, true, true, false) and not tile:getHouse() then
 						if tile:getItemCount() == 0 then
-							if placeReturn(pos) then
-								spot.teleport = true
-								return
-							end
-						elseif not fallback then
-							fallback = pos
+							empty = empty or pos
+						else
+							fallback = fallback or pos
 						end
 					end
 				end
 			end
 		end
+		for _, pos in ipairs({ empty, fallback }) do
+			if pos and placeReturn(pos) then
+				spot.pos = pos
+				return
+			end
+		end
 	end
 
-	if fallback and placeReturn(fallback) then
-		spot.teleport = true
-	end
+	logger.warn("[OTS teleporty] Brak miejsca na teleport powrotny przy {}, {}, {}", center.x, center.y, center.z)
 end
 
 -- Usuwa potwory stojace w strefie 3x3. Spawn z mapy potrafi postawic potwora na polu PZ
@@ -3511,7 +3518,7 @@ local function travel(player, entry)
 			player:sendTextMessage(MESSAGE_EVENT_ADVANCE, entry.hint)
 		end
 	else
-		player:sendTextMessage(MESSAGE_EVENT_ADVANCE, "Teleport: " .. entry[1] .. ". Stoisz w bezpiecznej strefie 3x3, obok jest teleport powrotny do Thais.")
+		player:sendTextMessage(MESSAGE_EVENT_ADVANCE, "Teleport: " .. entry[1] .. ". Stoisz w bezpiecznej strefie 3x3, obok jest teleport powrotny do hubu.")
 		if entry.hint then
 			player:sendTextMessage(MESSAGE_EVENT_ADVANCE, entry.hint)
 		end
@@ -4717,13 +4724,12 @@ local returnStep = MoveEvent()
 
 function returnStep.onStepIn(creature, item, position, fromPosition)
 	local player = creature:getPlayer()
-	if not player or not templePosition then
+	if not player then
 		return true
 	end
-	player:teleportTo(templePosition)
+	-- OTS: powrot do hubu expowisk (lobby), nie do swiatyni
 	player:removeCondition(CONDITION_INFIGHT, CONDITIONID_DEFAULT)
-	position:sendMagicEffect(CONST_ME_POFF)
-	templePosition:sendMagicEffect(CONST_ME_TELEPORT)
+	hubMove(player, hubLobby, "Hub: lobby")
 	return true
 end
 
