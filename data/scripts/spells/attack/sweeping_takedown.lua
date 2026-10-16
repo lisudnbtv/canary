@@ -1,7 +1,7 @@
 local SPELL_BASE_POWER_CENTER = 48
 
 -- OTS: obszar jak exevo mas san (kolo 3x3 wokol monka, bez kierunku) i mocniejsze obrazenia
-local DAMAGE_MULTIPLIER = 1.5
+local DAMAGE_MULTIPLIER = 1.5 -- razy obrazenia z harmonia
 
 local combat = Combat()
 combat:setParameter(COMBAT_PARAM_TYPE, COMBAT_PHYSICALDAMAGE)
@@ -36,6 +36,8 @@ local function calculateSweepingDamage(player, skill, attack, basePower)
 	end
 
 	local baseDamage = skill * attack * basePower / 1000 + levelBasedDmg + skillBonus
+	-- OTS: dodatek z poziomu, skilla i ataku broni (jak nasze exori gran knighta), zeby czar nie byl za slaby
+	baseDamage = baseDamage + player:getLevel() / 3 + (skill + 2 * attack) * 2.5
 
 	return player:getHarmonyDamage(baseDamage * 1.3, baseDamage * 1.7)
 end
