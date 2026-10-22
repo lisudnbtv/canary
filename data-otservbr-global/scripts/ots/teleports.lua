@@ -4385,8 +4385,40 @@ local RUSH_WAVES = 15
 local RUSH_MAX_BOSSES = 3
 local RUSH_WAVE_TIME = 5 * 60 -- sekundy na jedna fale
 local RUSH_SPOTS = { { 0, -4 }, { -3, -3 }, { 3, -3 } }
-local rush = { token = 0, ids = {}, wave = 0, used = {}, spawnedAt = 0, size = 0, kills = 0 }
+local rush = { token = 0, ids = {}, wave = 0, used = {}, spawnedAt = 0, size = 0, kills = 0, tiers = {} }
 local rushPool = nil
+
+-- Losowa sila kazdego bossa: mnoznik zycia i obrazen; nagroda za niego rosnie razem z sila.
+local RUSH_TIERS = {
+	{ label = "Silny", health = 3, damage = 1.5, reward = 1, weight = 40, skull = SKULL_YELLOW },
+	{ label = "Brutalny", health = 6, damage = 2.5, reward = 2, weight = 35, skull = SKULL_RED },
+	{ label = "Koszmar", health = 12, damage = 4, reward = 4, weight = 25, skull = SKULL_BLACK },
+}
+OtsHardcoreBossDamage = OtsHardcoreBossDamage or {} -- id bossa -> mnoznik obrazen
+
+local function rushTier()
+	local total = 0
+	for _, tier in ipairs(RUSH_TIERS) do
+		total = total + tier.weight
+	end
+	local roll = math.random(total)
+	for _, tier in ipairs(RUSH_TIERS) do
+		roll = roll - tier.weight
+		if roll <= 0 then
+			return tier
+		end
+	end
+	return RUSH_TIERS[1]
+end
+
+local function rushEmpower(monster, tier)
+	local health = math.floor(monster:getMaxHealth() * tier.health)
+	monster:setMaxHealth(health)
+	monster:addHealth(health)
+	monster:setSkull(tier.skull)
+	monster:setName(monster:getName(), string.format("%s (%s, %dx zycia, %.1fx obrazen)", monster:getName(), tier.label, tier.health, tier.damage))
+	OtsHardcoreBossDamage[monster:getId()] = tier.damage
+end
 
 local function buildRushPool()
 	rushPool = {}
@@ -4459,8 +4491,10 @@ local function rushClear()
 		if creature then
 			creature:remove()
 		end
+		OtsHardcoreBossDamage[id] = nil
 	end
 	rush.ids = {}
+	rush.tiers = {}
 end
 
 local function inRush(player)
@@ -4498,8 +4532,11 @@ local function rushNext(playerId, token)
 		local spot = RUSH_SPOTS[#rush.ids + 1]
 		local monster = Game.createMonster(name, Position(rushCenter.x + spot[1], rushCenter.y + spot[2], rushCenter.z), true, true)
 		if monster then
+			local tier = rushTier()
+			rushEmpower(monster, tier)
 			rush.ids[#rush.ids + 1] = monster:getId()
-			names[#names + 1] = name
+			rush.tiers[monster:getId()] = tier
+			names[#names + 1] = name .. " [" .. tier.label .. "]"
 		end
 	end
 	if #rush.ids == 0 then
@@ -4529,11 +4566,21 @@ rushCheck = function(playerId, token)
 		return
 	end
 	local killed = rush.size - #alive
+	local aliveSet = {}
+	for _, id in ipairs(alive) do
+		aliveSet[id] = true
+	end
+	local rewardPoints = 0
+	for _, id in ipairs(rush.ids) do
+		if not aliveSet[id] then
+			rewardPoints = rewardPoints + (rush.tiers[id] and rush.tiers[id].reward or 1)
+		end
+	end
 	rushClear()
 	rush.kills = rush.kills + killed
 	local wave = rush.wave
-	local gold = killed * wave * 50000
-	local coins = killed * wave * 2
+	local gold = rewardPoints * wave * 50000
+	local coins = rewardPoints * wave * 2
 	if killed > 0 then
 		player:setBankBalance(player:getBankBalance() + gold)
 		player:addTibiaCoins(coins)
@@ -4552,6 +4599,26 @@ rushCheck = function(playerId, token)
 	player:sendTextMessage(MESSAGE_EVENT_ADVANCE, text)
 	addEvent(rushNext, 3000, playerId, token)
 end
+
+-- Bossy Hardcore Boss bija mocniej wedlug wylosowanej sily.
+local rushDamage = EventCallback("OtsHardcoreBossDamage")
+
+function rushDamage.creatureOnCombat(caster, target, combatDamage)
+	if not caster or not combatDamage or type(caster.getId) ~= "function" then
+		return
+	end
+	local multiplier = OtsHardcoreBossDamage[caster:getId()]
+	if not multiplier then
+		return
+	end
+	for _, entry in ipairs({ combatDamage.primary, combatDamage.secondary }) do
+		if entry and tonumber(entry.value) and entry.value < 0 then
+			entry.value = math.floor(entry.value * multiplier)
+		end
+	end
+end
+
+rushDamage:register()
 
 local function rushEnter(player)
 	if inFight(player) then
