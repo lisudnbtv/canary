@@ -4373,15 +4373,19 @@ local function towerEnter(player)
 	window:sendToPlayer(player)
 end
 
--- Boss Rush: losowe bossy jeden po drugim. Pula to wszystkie bossy z bosstiary na serwerze,
--- ulozone od najslabszego (wg zycia). Boss nr i jest losowany z i-tego przedzialu tej listy,
--- wiec kazdy bieg ma inne bossy, a trudnosc i tak rosnie. Bossy nie powtarzaja sie w biegu.
--- Boss, ktorego nie da sie pokonac w RUSH_BOSS_TIME (np. wymaga mechaniki), jest pomijany.
--- Po kazdym zabitym nagroda rosnie (zloto na konto i Tibia Coins), a po chwili wchodzi nastepny.
--- Odroczone wywolania niosa tylko id gracza i numer biegu (token).
-local RUSH_LENGTH = 30
-local RUSH_BOSS_TIME = 5 * 60 -- sekundy na jednego bossa
-local rush = { token = 0, bossId = nil, index = 0, used = {}, spawnedAt = 0, name = nil }
+-- Hardcore Boss (dawniej Boss Rush): fale losowych bossow, do 3 naraz w jednym pokoju.
+-- Pula to wszystkie bossy z bosstiary na serwerze, ulozone od najslabszego (wg zycia).
+-- Bossy fali nr i sa losowane z i-tego przedzialu tej listy, wiec kazdy bieg jest inny,
+-- a trudnosc i tak rosnie. Bossy nie powtarzaja sie w biegu.
+-- Fala, ktorej nie da sie wybic w RUSH_WAVE_TIME (np. boss wymaga mechaniki), jest konczona:
+-- pozostale bossy znikaja bez nagrody. Za kazdego zabitego bossa nagroda rosnie z numerem fali
+-- (zloto na konto i Tibia Coins). Odroczone wywolania niosa tylko id gracza i numer biegu (token).
+local RUSH_NAME = "Hardcore Boss"
+local RUSH_WAVES = 15
+local RUSH_MAX_BOSSES = 3
+local RUSH_WAVE_TIME = 5 * 60 -- sekundy na jedna fale
+local RUSH_SPOTS = { { 0, -4 }, { -3, -3 }, { 3, -3 } }
+local rush = { token = 0, ids = {}, wave = 0, used = {}, spawnedAt = 0, size = 0, kills = 0 }
 local rushPool = nil
 
 local function buildRushPool()
@@ -4395,7 +4399,7 @@ local function buildRushPool()
 			rushPool[#rushPool + 1] = { name = name, health = mtype:maxHealth() }
 		end
 	end
-	if #rushPool < RUSH_LENGTH then
+	if #rushPool < RUSH_WAVES * RUSH_MAX_BOSSES then
 		for _, name in ipairs(rushBosses) do
 			if not seen[name:lower()] then
 				seen[name:lower()] = true
@@ -4406,11 +4410,11 @@ local function buildRushPool()
 	table.sort(rushPool, function(x, y)
 		return x.health < y.health
 	end)
-	logger.info("[OTS boss rush] Pula losowych bossow: {}", #rushPool)
+	logger.info("[OTS hardcore boss] Pula losowych bossow: {}", #rushPool)
 end
 
--- Losuje bossa dla kroku index (1..RUSH_LENGTH) z odpowiedniego przedzialu puli.
-local function rushPick(index)
+-- Losuje bossa dla fali wave (1..RUSH_WAVES) z odpowiedniego przedzialu puli.
+local function rushPick(wave)
 	if not rushPool then
 		buildRushPool()
 	end
@@ -4418,8 +4422,8 @@ local function rushPick(index)
 	if total == 0 then
 		return nil
 	end
-	local first = math.floor((index - 1) * total / RUSH_LENGTH) + 1
-	local last = math.max(first, math.floor(index * total / RUSH_LENGTH))
+	local first = math.floor((wave - 1) * total / RUSH_WAVES) + 1
+	local last = math.max(first, math.floor(wave * total / RUSH_WAVES))
 	local choices = {}
 	for i = first, math.min(last, total) do
 		if not rush.used[rushPool[i].name] then
@@ -4439,12 +4443,24 @@ local function rushPick(index)
 	return choices[math.random(#choices)]
 end
 
-local function rushClear()
-	local creature = rush.bossId and Creature(rush.bossId)
-	if creature then
-		creature:remove()
+local function rushAlive()
+	local alive = {}
+	for _, id in ipairs(rush.ids) do
+		if Creature(id) then
+			alive[#alive + 1] = id
+		end
 	end
-	rush.bossId = nil
+	return alive
+end
+
+local function rushClear()
+	for _, id in ipairs(rush.ids) do
+		local creature = Creature(id)
+		if creature then
+			creature:remove()
+		end
+	end
+	rush.ids = {}
 end
 
 local function inRush(player)
@@ -4454,7 +4470,7 @@ end
 
 local rushCheck
 
-local function rushNext(playerId, token, attempts)
+local function rushNext(playerId, token)
 	if token ~= rush.token then
 		return
 	end
@@ -4463,29 +4479,37 @@ local function rushNext(playerId, token, attempts)
 		rushClear()
 		return
 	end
-	if rush.index >= RUSH_LENGTH then
-		player:sendTextMessage(MESSAGE_EVENT_ADVANCE, "Boss Rush ukonczony - wszystkie bossy pokonane!")
+	if rush.wave >= RUSH_WAVES then
+		player:sendTextMessage(MESSAGE_EVENT_ADVANCE, string.format("%s ukonczony - wszystkie fale pokonane! Zabite bossy: %d.", RUSH_NAME, rush.kills))
 		return
 	end
-	local name = rushPick(rush.index + 1)
-	if not name then
-		player:sendTextMessage(MESSAGE_EVENT_ADVANCE, "Boss Rush ukonczony - brak kolejnych bossow.")
-		return
-	end
-	rush.used[name] = true
-	local monster = Game.createMonster(name, Position(rushCenter.x, rushCenter.y - 4, rushCenter.z), true, true)
-	if not monster then
-		-- tego bossa nie da sie postawic, losujemy innego
-		if (attempts or 0) < 20 then
-			addEvent(rushNext, 100, playerId, token, (attempts or 0) + 1)
+	local wave = rush.wave + 1
+	local want = math.random(1, RUSH_MAX_BOSSES)
+	local names = {}
+	rush.ids = {}
+	local attempts = 0
+	while #rush.ids < want and attempts < 30 do
+		attempts = attempts + 1
+		local name = rushPick(wave)
+		if not name then
+			break
 		end
+		rush.used[name] = true
+		local spot = RUSH_SPOTS[#rush.ids + 1]
+		local monster = Game.createMonster(name, Position(rushCenter.x + spot[1], rushCenter.y + spot[2], rushCenter.z), true, true)
+		if monster then
+			rush.ids[#rush.ids + 1] = monster:getId()
+			names[#names + 1] = name
+		end
+	end
+	if #rush.ids == 0 then
+		player:sendTextMessage(MESSAGE_EVENT_ADVANCE, string.format("%s ukonczony - brak kolejnych bossow. Zabite bossy: %d.", RUSH_NAME, rush.kills))
 		return
 	end
-	rush.index = rush.index + 1
-	rush.bossId = monster:getId()
-	rush.name = name
+	rush.wave = wave
+	rush.size = #rush.ids
 	rush.spawnedAt = os.time()
-	player:sendTextMessage(MESSAGE_EVENT_ADVANCE, string.format("Boss Rush %d/%d: %s.", rush.index, RUSH_LENGTH, name))
+	player:sendTextMessage(MESSAGE_EVENT_ADVANCE, string.format("%s - fala %d/%d (%dx): %s.", RUSH_NAME, wave, RUSH_WAVES, #names, table.concat(names, ", ")))
 	addEvent(rushCheck, 1000, playerId, token)
 end
 
@@ -4498,25 +4522,31 @@ rushCheck = function(playerId, token)
 		rushClear()
 		return
 	end
-	if rush.bossId and Creature(rush.bossId) then
-		if os.time() - rush.spawnedAt >= RUSH_BOSS_TIME then
-			rushClear()
-			player:sendTextMessage(MESSAGE_EVENT_ADVANCE, string.format("%s pominiety (nie pokonany w %d min), bez nagrody. Losuje nastepnego.", rush.name or "Boss", RUSH_BOSS_TIME / 60))
-			addEvent(rushNext, 3000, playerId, token)
-			return
-		end
+	local alive = rushAlive()
+	local timedOut = #alive > 0 and os.time() - rush.spawnedAt >= RUSH_WAVE_TIME
+	if #alive > 0 and not timedOut then
 		addEvent(rushCheck, 1000, playerId, token)
 		return
 	end
-	rush.bossId = nil
-	local index = rush.index
-	local gold = index * 50000
-	player:setBankBalance(player:getBankBalance() + gold)
-	player:addTibiaCoins(index * 2)
-	local text = string.format("Boss %d pokonany: +%d gp na konto, +%d Tibia Coins.", index, gold, index * 2)
+	local killed = rush.size - #alive
+	rushClear()
+	rush.kills = rush.kills + killed
+	local wave = rush.wave
+	local gold = killed * wave * 50000
+	local coins = killed * wave * 2
+	if killed > 0 then
+		player:setBankBalance(player:getBankBalance() + gold)
+		player:addTibiaCoins(coins)
+	end
+	local text
+	if timedOut then
+		text = string.format("Fala %d: czas minal (%d min), pozostale bossy zniknely. Zabite: %d/%d, +%d gp na konto, +%d Tibia Coins.", wave, RUSH_WAVE_TIME / 60, killed, rush.size, gold, coins)
+	else
+		text = string.format("Fala %d pokonana (%d bossow): +%d gp na konto, +%d Tibia Coins.", wave, killed, gold, coins)
+	end
 	local store = player:kv():scoped("ots-bossrush")
-	if index > (tonumber(store:get("best")) or 0) then
-		store:set("best", index)
+	if rush.kills > (tonumber(store:get("best")) or 0) then
+		store:set("best", rush.kills)
 		text = text .. " Nowy rekord!"
 	end
 	player:sendTextMessage(MESSAGE_EVENT_ADVANCE, text)
@@ -4529,14 +4559,15 @@ local function rushEnter(player)
 	end
 	rushClear()
 	rush.token = rush.token + 1
-	rush.index = 0
+	rush.wave = 0
+	rush.kills = 0
 	rush.used = {}
-	travel(player, { "Boss Rush", rushLanding.x, rushLanding.y, rushLanding.z })
+	travel(player, { RUSH_NAME, rushLanding.x, rushLanding.y, rushLanding.z })
 	if not inRush(player) then
 		return
 	end
 	local best = tonumber(player:kv():scoped("ots-bossrush"):get("best")) or 0
-	player:sendTextMessage(MESSAGE_EVENT_ADVANCE, string.format("Boss Rush: pierwszy boss za chwile. Twoj rekord: %d. Wyjscie teleportem konczy bieg.", best))
+	player:sendTextMessage(MESSAGE_EVENT_ADVANCE, string.format("%s: pierwsza fala za chwile (do %d bossow naraz). Twoj rekord: %d zabitych. Wyjscie teleportem konczy bieg.", RUSH_NAME, RUSH_MAX_BOSSES, best))
 	addEvent(rushNext, 3000, player:getId(), rush.token)
 end
 
@@ -4729,7 +4760,7 @@ openMain = function(player)
 	window:addChoice("Wieza (pietra, boss co 10)", function(target)
 		towerEnter(target)
 	end)
-	window:addChoice("Boss Rush (bossy jeden po drugim)", function(target)
+	window:addChoice("Hardcore Boss (do 3 losowych bossow naraz)", function(target)
 		rushEnter(target)
 	end)
 	window:addChoice("Losowy Boss (nowy co 10 min po zabiciu)", function(target)
@@ -4915,7 +4946,7 @@ function hubLook.playerOnLook(player, inspectedThing, inspectedPosition, lookDis
 	elseif action.survival then
 		text = "Fale potworow"
 	elseif action.bossrush then
-		text = "Boss Rush"
+		text = "Hardcore Boss"
 	elseif action.tower then
 		text = "Wieza"
 	elseif action.bestiary then
@@ -4984,6 +5015,15 @@ function placeEntry.onStartup()
 		end
 	end
 	templePosition = temple
+
+	-- Tabliczka nad padem w hubie (tekst z mapy) dostaje nowa nazwe trybu.
+	local boardTile = Tile(Position(30000, 29997, 7))
+	for _, item in ipairs(boardTile and boardTile:getItems() or {}) do
+		local text = item:getAttribute(ITEM_ATTRIBUTE_TEXT)
+		if type(text) == "string" and text:find("Boss Rush", 1, true) then
+			item:setAttribute(ITEM_ATTRIBUTE_TEXT, "Hardcore Boss\nDo 3 losowych bossow naraz, fale coraz mocniejsze, nagroda za kazdego zabitego")
+		end
+	end
 	if not temple then
 		logger.warn("[OTS teleporty] Nie znaleziono miasta '{}'. Uzyj komendy !tp.", ENTRY_TOWN)
 		return true
