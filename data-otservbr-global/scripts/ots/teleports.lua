@@ -4373,10 +4373,71 @@ local function towerEnter(player)
 	window:sendToPlayer(player)
 end
 
--- Boss Rush: bossy z pul Losowego Bossa jeden po drugim, od najslabszego. Po kazdym zabitym
--- nagroda rosnie (zloto na konto i Tibia Coins), a po chwili wchodzi nastepny.
+-- Boss Rush: losowe bossy jeden po drugim. Pula to wszystkie bossy z bosstiary na serwerze,
+-- ulozone od najslabszego (wg zycia). Boss nr i jest losowany z i-tego przedzialu tej listy,
+-- wiec kazdy bieg ma inne bossy, a trudnosc i tak rosnie. Bossy nie powtarzaja sie w biegu.
+-- Boss, ktorego nie da sie pokonac w RUSH_BOSS_TIME (np. wymaga mechaniki), jest pomijany.
+-- Po kazdym zabitym nagroda rosnie (zloto na konto i Tibia Coins), a po chwili wchodzi nastepny.
 -- Odroczone wywolania niosa tylko id gracza i numer biegu (token).
-local rush = { token = 0, bossId = nil, index = 0 }
+local RUSH_LENGTH = 30
+local RUSH_BOSS_TIME = 5 * 60 -- sekundy na jednego bossa
+local rush = { token = 0, bossId = nil, index = 0, used = {}, spawnedAt = 0, name = nil }
+local rushPool = nil
+
+local function buildRushPool()
+	rushPool = {}
+	local seen = {}
+	for _, mtype in pairs(Game.getMonsterTypes() or {}) do
+		local name = mtype:name()
+		local isBoss = (tonumber(mtype:bossRaceId()) or 0) > 0 or mtype:isRewardBoss()
+		if isBoss and name and name ~= "" and not seen[name:lower()] and mtype:maxHealth() > 0 then
+			seen[name:lower()] = true
+			rushPool[#rushPool + 1] = { name = name, health = mtype:maxHealth() }
+		end
+	end
+	if #rushPool < RUSH_LENGTH then
+		for _, name in ipairs(rushBosses) do
+			if not seen[name:lower()] then
+				seen[name:lower()] = true
+				rushPool[#rushPool + 1] = { name = name, health = 0 }
+			end
+		end
+	end
+	table.sort(rushPool, function(x, y)
+		return x.health < y.health
+	end)
+	logger.info("[OTS boss rush] Pula losowych bossow: {}", #rushPool)
+end
+
+-- Losuje bossa dla kroku index (1..RUSH_LENGTH) z odpowiedniego przedzialu puli.
+local function rushPick(index)
+	if not rushPool then
+		buildRushPool()
+	end
+	local total = #rushPool
+	if total == 0 then
+		return nil
+	end
+	local first = math.floor((index - 1) * total / RUSH_LENGTH) + 1
+	local last = math.max(first, math.floor(index * total / RUSH_LENGTH))
+	local choices = {}
+	for i = first, math.min(last, total) do
+		if not rush.used[rushPool[i].name] then
+			choices[#choices + 1] = rushPool[i].name
+		end
+	end
+	if #choices == 0 then
+		for i = 1, total do
+			if not rush.used[rushPool[i].name] then
+				choices[#choices + 1] = rushPool[i].name
+			end
+		end
+	end
+	if #choices == 0 then
+		return nil
+	end
+	return choices[math.random(#choices)]
+end
 
 local function rushClear()
 	local creature = rush.bossId and Creature(rush.bossId)
@@ -4393,7 +4454,7 @@ end
 
 local rushCheck
 
-local function rushNext(playerId, token)
+local function rushNext(playerId, token, attempts)
 	if token ~= rush.token then
 		return
 	end
@@ -4402,19 +4463,29 @@ local function rushNext(playerId, token)
 		rushClear()
 		return
 	end
-	if rush.index >= #rushBosses then
+	if rush.index >= RUSH_LENGTH then
 		player:sendTextMessage(MESSAGE_EVENT_ADVANCE, "Boss Rush ukonczony - wszystkie bossy pokonane!")
 		return
 	end
-	rush.index = rush.index + 1
-	local name = rushBosses[rush.index]
-	local monster = Game.createMonster(name, Position(rushCenter.x, rushCenter.y - 4, rushCenter.z), true, true)
-	if not monster then
-		addEvent(rushNext, 500, playerId, token) -- tego bossa nie da sie postawic, bierzemy nastepnego
+	local name = rushPick(rush.index + 1)
+	if not name then
+		player:sendTextMessage(MESSAGE_EVENT_ADVANCE, "Boss Rush ukonczony - brak kolejnych bossow.")
 		return
 	end
+	rush.used[name] = true
+	local monster = Game.createMonster(name, Position(rushCenter.x, rushCenter.y - 4, rushCenter.z), true, true)
+	if not monster then
+		-- tego bossa nie da sie postawic, losujemy innego
+		if (attempts or 0) < 20 then
+			addEvent(rushNext, 100, playerId, token, (attempts or 0) + 1)
+		end
+		return
+	end
+	rush.index = rush.index + 1
 	rush.bossId = monster:getId()
-	player:sendTextMessage(MESSAGE_EVENT_ADVANCE, string.format("Boss Rush %d/%d: %s.", rush.index, #rushBosses, name))
+	rush.name = name
+	rush.spawnedAt = os.time()
+	player:sendTextMessage(MESSAGE_EVENT_ADVANCE, string.format("Boss Rush %d/%d: %s.", rush.index, RUSH_LENGTH, name))
 	addEvent(rushCheck, 1000, playerId, token)
 end
 
@@ -4428,6 +4499,12 @@ rushCheck = function(playerId, token)
 		return
 	end
 	if rush.bossId and Creature(rush.bossId) then
+		if os.time() - rush.spawnedAt >= RUSH_BOSS_TIME then
+			rushClear()
+			player:sendTextMessage(MESSAGE_EVENT_ADVANCE, string.format("%s pominiety (nie pokonany w %d min), bez nagrody. Losuje nastepnego.", rush.name or "Boss", RUSH_BOSS_TIME / 60))
+			addEvent(rushNext, 3000, playerId, token)
+			return
+		end
 		addEvent(rushCheck, 1000, playerId, token)
 		return
 	end
@@ -4453,6 +4530,7 @@ local function rushEnter(player)
 	rushClear()
 	rush.token = rush.token + 1
 	rush.index = 0
+	rush.used = {}
 	travel(player, { "Boss Rush", rushLanding.x, rushLanding.y, rushLanding.z })
 	if not inRush(player) then
 		return
