@@ -1,5 +1,5 @@
 -- OTS: komendy wygody.
---   !sell - sprzedaje caly loot z loot poucha (poza cennymi: worki, gemy, medale), zloto trafia na konto w banku
+--   !sell - sprzedaje caly loot z loot poucha (poza cennymi: worki, gemy, gold i silver medal), zloto trafia na konto w banku
 --   !bp   - plecak z zapasami (runy, potiony, narzedzia); raz na minute
 
 -- Ceny skupu: te same, ktore ma Loot Seller (LootShopConfigTable z data/scripts/lib/shops.lua).
@@ -14,10 +14,8 @@ local NEVER_SELL = {
 	[49371] = true, [49372] = true, [49373] = true,
 	-- fragmenty gemow, exalted core, slivery i kruszarki z kuzni
 	[46625] = true, [46626] = true, [37109] = true, [37110] = true, [46627] = true, [46628] = true,
-	-- medale i trofea: medal of honour, gold/silver/bronze medal, hero's, royal, heavy, sun medal,
-	-- medal of valiance, token of love, Vampire Count's medal
-	[5785] = true, [9215] = true, [9216] = true, [9217] = true, [9220] = true, [9222] = true,
-	[9223] = true, [31573] = true, [31591] = true, [31594] = true, [18936] = true,
+	-- medale: tylko gold medal i silver medal (pozostale sprzedaja sie normalnie)
+	[9215] = true, [9216] = true,
 	-- kamienie ulepszen
 	[20139] = true, [20138] = true,
 }
