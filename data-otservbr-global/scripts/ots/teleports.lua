@@ -4413,6 +4413,13 @@ local function rushTier()
 end
 
 local function rushEmpower(monster, tier)
+	-- Mechaniki questowe (np. The Lily of Night przyjmuje obrazenia tylko po zapachu z questu)
+	-- blokuja obrazenia w zdarzeniach zmiany zycia/many. W tym trybie ich nie ma: kazdego bossa da sie bic.
+	for _, eventType in ipairs({ CREATURE_EVENT_HEALTHCHANGE, CREATURE_EVENT_MANACHANGE }) do
+		for _, eventName in ipairs(monster:getEvents(eventType) or {}) do
+			monster:unregisterEvent(eventName)
+		end
+	end
 	local health = math.floor(monster:getMaxHealth() * tier.health)
 	monster:setMaxHealth(health)
 	monster:addHealth(health)
