@@ -4373,7 +4373,7 @@ local function towerEnter(player)
 	window:sendToPlayer(player)
 end
 
--- Hardcore Boss (dawniej Boss Rush): fale losowych bossow, do 3 naraz w jednym pokoju.
+-- Hardcore Boss (dawniej Boss Rush): fale losowych bossow, 3-5 naraz w jednym pokoju.
 -- Pula to wszystkie bossy z bosstiary na serwerze, ulozone od najslabszego (wg zycia).
 -- Bossy fali nr i sa losowane z i-tego przedzialu tej listy, wiec kazdy bieg jest inny,
 -- a trudnosc i tak rosnie. Bossy nie powtarzaja sie w biegu.
@@ -4382,9 +4382,10 @@ end
 -- (zloto na konto i Tibia Coins). Odroczone wywolania niosa tylko id gracza i numer biegu (token).
 local RUSH_NAME = "Hardcore Boss"
 local RUSH_WAVES = 15
-local RUSH_MAX_BOSSES = 3
+local RUSH_MIN_BOSSES = 3
+local RUSH_MAX_BOSSES = 5
 local RUSH_WAVE_TIME = 5 * 60 -- sekundy na jedna fale
-local RUSH_SPOTS = { { 0, -4 }, { -3, -3 }, { 3, -3 } }
+local RUSH_SPOTS = { { 0, -4 }, { -3, -3 }, { 3, -3 }, { -5, -1 }, { 5, -1 } }
 local rush = { token = 0, ids = {}, wave = 0, used = {}, spawnedAt = 0, size = 0, kills = 0, tiers = {} }
 local rushPool = nil
 
@@ -4518,7 +4519,7 @@ local function rushNext(playerId, token)
 		return
 	end
 	local wave = rush.wave + 1
-	local want = math.random(1, RUSH_MAX_BOSSES)
+	local want = math.random(RUSH_MIN_BOSSES, RUSH_MAX_BOSSES)
 	local names = {}
 	rush.ids = {}
 	local attempts = 0
@@ -4634,7 +4635,7 @@ local function rushEnter(player)
 		return
 	end
 	local best = tonumber(player:kv():scoped("ots-bossrush"):get("best")) or 0
-	player:sendTextMessage(MESSAGE_EVENT_ADVANCE, string.format("%s: pierwsza fala za chwile (do %d bossow naraz). Twoj rekord: %d zabitych. Wyjscie teleportem konczy bieg.", RUSH_NAME, RUSH_MAX_BOSSES, best))
+	player:sendTextMessage(MESSAGE_EVENT_ADVANCE, string.format("%s: pierwsza fala za chwile (%d-%d bossow naraz). Twoj rekord: %d zabitych. Wyjscie teleportem konczy bieg.", RUSH_NAME, RUSH_MIN_BOSSES, RUSH_MAX_BOSSES, best))
 	addEvent(rushNext, 3000, player:getId(), rush.token)
 end
 
@@ -4827,7 +4828,7 @@ openMain = function(player)
 	window:addChoice("Wieza (pietra, boss co 10)", function(target)
 		towerEnter(target)
 	end)
-	window:addChoice("Hardcore Boss (do 3 losowych bossow naraz)", function(target)
+	window:addChoice("Hardcore Boss (3-5 losowych bossow naraz)", function(target)
 		rushEnter(target)
 	end)
 	window:addChoice("Losowy Boss (nowy co 10 min po zabiciu)", function(target)
@@ -5088,7 +5089,7 @@ function placeEntry.onStartup()
 	for _, item in ipairs(boardTile and boardTile:getItems() or {}) do
 		local text = item:getAttribute(ITEM_ATTRIBUTE_TEXT)
 		if type(text) == "string" and text:find("Boss Rush", 1, true) then
-			item:setAttribute(ITEM_ATTRIBUTE_TEXT, "Hardcore Boss\nDo 3 losowych bossow naraz, fale coraz mocniejsze, nagroda za kazdego zabitego")
+			item:setAttribute(ITEM_ATTRIBUTE_TEXT, "Hardcore Boss\n3-5 losowych bossow naraz, fale coraz mocniejsze, nagroda za kazdego zabitego")
 		end
 	end
 	if not temple then
