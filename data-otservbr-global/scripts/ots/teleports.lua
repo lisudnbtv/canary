@@ -4076,7 +4076,9 @@ end
 -- tego potwora sie zapelni albo gracz wyjdzie. Zabojstwa licza sie normalnie (silnik dolicza je sam).
 -- Postep czytany ze storage silnika (STORAGEVALUE_BESTIARYKILLCOUNT + raceId).
 local BESTIARY_KILL_STORAGE = 61305000
-local BESTIARY_WAVE = 14
+local BESTIARY_WAVE = 60 -- tyle potworow naraz w sali
+local BESTIARY_REFILL = 30 -- gdy zostanie mniej, sala od razu sie dopelnia do BESTIARY_WAVE
+local BESTIARY_RANGE = 7 -- jak daleko od postaci moga sie pojawiac
 local bestiaryRun = { token = 0, ids = {}, monster = nil }
 
 local function bestiaryKills(player, race)
@@ -4098,9 +4100,56 @@ local function bestiaryClear()
 	bestiaryRun.ids = {}
 end
 
-local bestiaryCheck
+local function bestiaryAlive()
+	local alive = {}
+	for _, id in ipairs(bestiaryRun.ids) do
+		if Creature(id) then
+			alive[#alive + 1] = id
+		end
+	end
+	bestiaryRun.ids = alive
+	return #alive
+end
 
-local function bestiaryWave(playerId, token)
+-- Dostawia potwory wokol postaci, az w sali bedzie ich BESTIARY_WAVE (albo tyle, ile brakuje do konca).
+local function bestiarySpawn(player, entry, kills)
+	local alive = bestiaryAlive()
+	local amount = math.min(BESTIARY_WAVE - alive, entry[3] - kills - alive)
+	if amount <= 0 then
+		return 0
+	end
+	local here = player:getPosition()
+	local ring = {}
+	for dx = -BESTIARY_RANGE, BESTIARY_RANGE do
+		for dy = -BESTIARY_RANGE, BESTIARY_RANGE do
+			if math.max(math.abs(dx), math.abs(dy)) >= 2 then
+				local pos = Position(here.x + dx, here.y + dy, here.z)
+				if math.abs(pos.x - bestiaryCenter.x) <= ARENA_RADIUS and math.abs(pos.y - bestiaryCenter.y) <= ARENA_RADIUS then
+					local tile = Tile(pos)
+					if tile and tile:isWalkable(true, true, true, true, false) then
+						ring[#ring + 1] = pos
+					end
+				end
+			end
+		end
+	end
+	local spawned = 0
+	for _ = 1, amount do
+		if #ring == 0 then
+			break
+		end
+		local pos = table.remove(ring, math.random(#ring))
+		local monster = Game.createMonster(entry[1], pos, true, true)
+		if monster then
+			bestiaryRun.ids[#bestiaryRun.ids + 1] = monster:getId()
+			spawned = spawned + 1
+		end
+	end
+	return spawned
+end
+
+-- Co sekunde: sprawdza postep i dopelnia sale, gdy potworow zrobi sie malo.
+local function bestiaryTick(playerId, token)
 	if token ~= bestiaryRun.token then
 		return
 	end
@@ -4112,55 +4161,20 @@ local function bestiaryWave(playerId, token)
 	local entry = bestiaryRun.monster
 	local kills = bestiaryKills(player, entry[2])
 	if kills >= entry[3] then
+		bestiaryClear()
 		player:sendTextMessage(MESSAGE_EVENT_ADVANCE, string.format("Bestiariusz: %s ukonczony (%d/%d)! Wybierz kolejnego potwora.", entry[1], kills, entry[3]))
 		return
 	end
-	local here = player:getPosition()
-	local ring = {}
-	for dx = -3, 3 do
-		for dy = -3, 3 do
-			if math.max(math.abs(dx), math.abs(dy)) >= 2 then
-				local pos = Position(here.x + dx, here.y + dy, here.z)
-				local tile = Tile(pos)
-				if math.abs(pos.x - bestiaryCenter.x) <= ARENA_RADIUS and math.abs(pos.y - bestiaryCenter.y) <= ARENA_RADIUS and tile and tile:isWalkable(true, true, true, true, false) then
-					ring[#ring + 1] = pos
-				end
-			end
-		end
-	end
-	bestiaryRun.ids = {}
-	local amount = math.min(BESTIARY_WAVE, entry[3] - kills)
-	for _ = 1, amount do
-		local pos = #ring > 0 and table.remove(ring, math.random(#ring)) or bestiaryCenter
-		local monster = Game.createMonster(entry[1], pos, true, true)
-		if monster then
-			bestiaryRun.ids[#bestiaryRun.ids + 1] = monster:getId()
-		end
-	end
-	if #bestiaryRun.ids == 0 then
-		player:sendCancelMessage("Tego potwora nie da sie przywolac w sali.")
-		return
-	end
-	player:sendTextMessage(MESSAGE_STATUS, string.format("Bestiariusz: %s %d/%d.", entry[1], kills, entry[3]))
-	addEvent(bestiaryCheck, 1000, playerId, token)
-end
-
-bestiaryCheck = function(playerId, token)
-	if token ~= bestiaryRun.token then
-		return
-	end
-	local player = Player(playerId)
-	if not player or not inBestiaryRoom(player) then
-		bestiaryClear()
-		return
-	end
-	for _, id in ipairs(bestiaryRun.ids) do
-		if Creature(id) then
-			addEvent(bestiaryCheck, 1000, playerId, token)
+	local alive = bestiaryAlive()
+	if alive < BESTIARY_REFILL then
+		local spawned = bestiarySpawn(player, entry, kills)
+		if spawned == 0 and alive == 0 then
+			player:sendCancelMessage("Tego potwora nie da sie przywolac w sali.")
 			return
 		end
+		player:sendTextMessage(MESSAGE_STATUS, string.format("Bestiariusz: %s %d/%d.", entry[1], kills, entry[3]))
 	end
-	addEvent(bestiaryWave, 1500, playerId, token)
+	addEvent(bestiaryTick, 1000, playerId, token)
 end
 
 local function bestiaryStart(player, entry)
@@ -4176,8 +4190,8 @@ local function bestiaryStart(player, entry)
 	if not inBestiaryRoom(player) then
 		return
 	end
-	player:sendTextMessage(MESSAGE_EVENT_ADVANCE, string.format("Bestiariusz: %s, %d/%d. Fale wokol ciebie, wyjscie teleportem konczy.", entry[1], bestiaryKills(player, entry[2]), entry[3]))
-	addEvent(bestiaryWave, 2000, player:getId(), bestiaryRun.token)
+	player:sendTextMessage(MESSAGE_EVENT_ADVANCE, string.format("Bestiariusz: %s, %d/%d. Do 60 potworow naraz wokol ciebie, sala sama sie dopelnia. Wyjscie teleportem konczy.", entry[1], bestiaryKills(player, entry[2]), entry[3]))
+	addEvent(bestiaryTick, 1000, player:getId(), bestiaryRun.token)
 end
 
 local openBestiary
