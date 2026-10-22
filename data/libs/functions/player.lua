@@ -259,7 +259,8 @@ function Player:CreateFamiliarSpell(spellId)
 	-- Divide by 2 to get half the time (the default total time is 30 / 2 = 15)
 	local summonDuration = 60 * configManager.getNumber(configKeys.FAMILIAR_TIME) / 2
 	local condition = Condition(CONDITION_SPELLCOOLDOWN, CONDITIONID_DEFAULT, spellId)
-	local cooldown = summonDuration * 2
+	-- OTS: odnowienie rowne czasowi trwania (mozna przywolac od razu po zniknieciu)
+	local cooldown = summonDuration
 	if self:isVip() then
 		local reduction = configManager.getNumber(configKeys.VIP_FAMILIAR_TIME_COOLDOWN_REDUCTION)
 		reduction = (reduction > summonDuration and summonDuration) or reduction
@@ -292,6 +293,10 @@ function Player:createFamiliar(familiarName, timeLeft)
 	end
 
 	myFamiliar:setOutfit({ lookType = self:getFamiliarLooktype() })
+	-- OTS: familiar ma 5x wiecej zycia (+400%)
+	local familiarHealth = myFamiliar:getMaxHealth() * 5
+	myFamiliar:setMaxHealth(familiarHealth)
+	myFamiliar:addHealth(familiarHealth)
 	myFamiliar:registerEvent("FamiliarDeath")
 	myFamiliar:changeSpeed(math.max(self:getSpeed() - myFamiliar:getBaseSpeed(), 0))
 	playerPosition:sendMagicEffect(CONST_ME_MAGIC_BLUE)

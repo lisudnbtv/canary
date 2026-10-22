@@ -80,3 +80,5 @@ maxPlayersOutsidePZPerAccount = 5
 
 -- Bestiariusz: pelny loot potwora widoczny od razu (bez czekania na kolejne poziomy odblokowania)
 showLootsInBestiary = true
+-- familiar (utevo gran res ...): 30 min przywolania (silnik dzieli te wartosc na pol)
+familiarTime = 60
