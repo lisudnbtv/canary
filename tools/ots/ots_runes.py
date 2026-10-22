@@ -15,6 +15,11 @@ POTIONS = [
     (60103, 7643, 'ultimate warrior potion', 'This potion can only be consumed by knights and monks of level 130 or higher', 130, [1, 5]),
     (60104, 23374, 'ultimate hunter potion', 'This potion can only be consumed by paladins of level 130 or higher', 130, [2]),
 ]
+TOOLS = [
+    # id, wyglad z, nazwa, opis, waga - wlasne przedmioty, ktorych nie da sie zdobyc z potworow
+    # (skrypt Clean Loot Pouch: data-otservbr-global/scripts/ots/commands.lua)
+    (60105, 3454, 'clean loot pouch', 'Use it to remove everything from your loot pouch that the Loot Seller does not buy.', 1100),
+]
 
 
 def lenp(b):
@@ -40,7 +45,8 @@ def clone(sub, new_id, name, level, professions=None):
                     fl += r2
             for prof in professions or []:
                 fl += ev(62 << 3) + ev(prof)   # klient: profesje (3 sorcerer, 4 druid)
-            fl += ev(63 << 3) + ev(level)   # klient: wymagany poziom
+            if level:
+                fl += ev(63 << 3) + ev(level)   # klient: wymagany poziom
             out += b'\x1a' + lenp(fl)
         elif ff in (4, 5):
             continue
@@ -52,7 +58,7 @@ def clone(sub, new_id, name, level, professions=None):
 
 def main():
     a_in, a_out, x_in, x_out = sys.argv[1:5]
-    ids = {r[0] for r in RUNES + POTIONS}
+    ids = {r[0] for r in RUNES + POTIONS + TOOLS}
     top = fields(open(a_in, 'rb').read())
     objs, last = {}, -1
     for n, (f, wt, raw, val) in enumerate(top):
@@ -74,6 +80,8 @@ def main():
                 out += b'\x0a' + lenp(clone(objs[entry[1]], entry[0], entry[2], entry[4]))
             for entry in POTIONS:
                 out += b'\x0a' + lenp(clone(objs[entry[1]], entry[0], entry[2], entry[4], entry[5]))
+            for entry in TOOLS:
+                out += b'\x0a' + lenp(clone(objs[entry[1]], entry[0], entry[2], 0))
     open(a_out, 'wb').write(out)
 
     text = open(x_in, encoding='utf-8').read()
@@ -93,11 +101,17 @@ def main():
                   '\t\t<attribute key="description" value="%s"/>' % desc,
                   '\t\t<attribute key="weight" value="310"/>',
                   '\t</item>']
+    for tid, src, name, desc, weight in TOOLS:
+        block += ['\t<item id="%d" article="a" name="%s">' % (tid, name),
+                  '\t\t<attribute key="primarytype" value="tools"/>',
+                  '\t\t<attribute key="description" value="%s"/>' % desc,
+                  '\t\t<attribute key="weight" value="%d"/>' % weight,
+                  '\t</item>']
     block.append('\t<!-- /OTS runes -->')
     i = text.rindex('</items>')
     text = text[:i].rstrip('\n') + '\n' + '\n'.join(block) + '\n' + text[i:]
     open(x_out, 'w', encoding='utf-8').write(text)
-    print('runes', len(RUNES), 'potions', len(POTIONS), 'appearances', len(out))
+    print('runes', len(RUNES), 'potions', len(POTIONS), 'tools', len(TOOLS), 'appearances', len(out))
 
 
 if __name__ == '__main__':

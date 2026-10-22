@@ -103,7 +103,8 @@ bp:register()
 -- Clean Loot Pouch (miotla ze sklepu, wielokrotnego uzytku): usuwa z loot poucha wszystko,
 -- czego nie skupuje Loot Seller. Zostaja: zloto i monety, pojemniki, kamienie ulepszen,
 -- worki z nagrodami, przedmioty ulepszone (+1 i wyzej) i sama miotla.
-local CLEANER_ID = 3454 -- broom
+local CLEANER_ID = 60105 -- clean loot pouch: wlasny przedmiot z wygladem miotly (zwyklej miotly nie da sie juz uzyc)
+local OLD_CLEANER_ID = 3454 -- zwykla miotla, ktora wczesniej sluzyla za Clean Loot Pouch
 local KEEP = {
 	[ITEM_GOLD_COIN] = true,
 	[ITEM_PLATINUM_COIN] = true,
@@ -182,3 +183,23 @@ end
 
 cleaner:id(CLEANER_ID)
 cleaner:register()
+
+-- Jednorazowo dla kazdej postaci: zwykla miotla w plecaku (dawny Clean Loot Pouch ze sklepu)
+-- zamienia sie w nowy Clean Loot Pouch. Kolejne zwykle miotly (np. z potworow) zostaja miotlami.
+local cleanerSwap = CreatureEvent("OtsCleanerSwap")
+
+function cleanerSwap.onLogin(player)
+	local store = player:kv():scoped("ots-cleaner")
+	if store:get("swapped") then
+		return true
+	end
+	store:set("swapped", true)
+	local old = player:getItemById(OLD_CLEANER_ID, true)
+	if old then
+		old:transform(CLEANER_ID)
+		player:sendTextMessage(MESSAGE_EVENT_ADVANCE, "Twoja miotla Clean Loot Pouch zostala zamieniona na nowy przedmiot Clean Loot Pouch.")
+	end
+	return true
+end
+
+cleanerSwap:register()

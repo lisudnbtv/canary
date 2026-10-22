@@ -88,7 +88,7 @@ return {
 			icons = { "Gold_Converter.png" },
 			name = "Clean Loot Pouch",
 			price = 500,
-			itemtype = 3454,
+			itemtype = 60105,
 			count = 1,
 			movable = true,
 			description = "<i>Deletes everything from your loot pouch that the Loot Seller does not buy.</i>\n\n{character}\n{storeinbox}\n{useicon} use it, confirm, done - reusable\n{info} keeps coins, containers, upgrade stones, reward bags and upgraded items",

@@ -91379,5 +91379,10 @@ Granted by TibiaGoals.com"/>
 		<attribute key="description" value="This potion can only be consumed by paladins of level 130 or higher"/>
 		<attribute key="weight" value="310"/>
 	</item>
+	<item id="60105" article="a" name="clean loot pouch">
+		<attribute key="primarytype" value="tools"/>
+		<attribute key="description" value="Use it to remove everything from your loot pouch that the Loot Seller does not buy."/>
+		<attribute key="weight" value="1100"/>
+	</item>
 	<!-- /OTS runes -->
 </items>
