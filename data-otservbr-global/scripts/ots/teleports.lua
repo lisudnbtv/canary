@@ -4178,7 +4178,8 @@ local function bestiaryTick(playerId, token)
 end
 
 local function bestiaryStart(player, entry)
-	if inFight(player) then
+	-- W sali Bestiariusza mozna od razu zmienic potwora mimo walki (bez teleportu, bez PZ).
+	if not inBestiaryRoom(player) and inFight(player) then
 		return
 	end
 	bestiaryClear()
