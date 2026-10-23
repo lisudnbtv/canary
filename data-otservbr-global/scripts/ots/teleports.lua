@@ -4148,6 +4148,30 @@ local function bestiarySpawn(player, entry, kills)
 	return spawned
 end
 
+local bestiaryStart
+
+-- Nastepny nieukonczony potwor z tej samej klasy (po obecnym, potem od poczatku listy).
+local function bestiaryNextInClass(player, class, current)
+	if not class then
+		return nil
+	end
+	local list = class.list
+	local startIndex = 0
+	for index, entry in ipairs(list) do
+		if entry == current then
+			startIndex = index
+			break
+		end
+	end
+	for step = 1, #list do
+		local entry = list[(startIndex + step - 1) % #list + 1]
+		if entry ~= current and bestiaryKills(player, entry[2]) < entry[3] then
+			return entry
+		end
+	end
+	return nil
+end
+
 -- Co sekunde: sprawdza postep i dopelnia sale, gdy potworow zrobi sie malo.
 local function bestiaryTick(playerId, token)
 	if token ~= bestiaryRun.token then
@@ -4162,7 +4186,15 @@ local function bestiaryTick(playerId, token)
 	local kills = bestiaryKills(player, entry[2])
 	if kills >= entry[3] then
 		bestiaryClear()
-		player:sendTextMessage(MESSAGE_EVENT_ADVANCE, string.format("Bestiariusz: %s ukonczony (%d/%d)! Wybierz kolejnego potwora.", entry[1], kills, entry[3]))
+		local nextEntry = bestiaryNextInClass(player, bestiaryRun.class, entry)
+		if nextEntry then
+			player:sendTextMessage(MESSAGE_EVENT_ADVANCE, string.format("Bestiariusz: %s ukonczony (%d/%d)! Dalej: %s.", entry[1], kills, entry[3], nextEntry[1]))
+			bestiaryStart(player, nextEntry, bestiaryRun.class)
+		elseif bestiaryRun.class then
+			player:sendTextMessage(MESSAGE_EVENT_ADVANCE, string.format("Bestiariusz: %s ukonczony! Cala klasa %s jest ukonczona.", entry[1], bestiaryRun.class.name))
+		else
+			player:sendTextMessage(MESSAGE_EVENT_ADVANCE, string.format("Bestiariusz: %s ukonczony (%d/%d)! Wybierz kolejnego potwora.", entry[1], kills, entry[3]))
+		end
 		return
 	end
 	local alive = bestiaryAlive()
@@ -4177,7 +4209,8 @@ local function bestiaryTick(playerId, token)
 	addEvent(bestiaryTick, 1000, playerId, token)
 end
 
-local function bestiaryStart(player, entry)
+-- class: klasa bestiariusza, z ktorej po ukonczeniu potwora automatycznie startuje nastepny.
+bestiaryStart = function(player, entry, class)
 	-- W sali Bestiariusza mozna od razu zmienic potwora mimo walki (bez teleportu, bez PZ).
 	if not inBestiaryRoom(player) and inFight(player) then
 		return
@@ -4185,6 +4218,7 @@ local function bestiaryStart(player, entry)
 	bestiaryClear()
 	bestiaryRun.token = bestiaryRun.token + 1
 	bestiaryRun.monster = entry
+	bestiaryRun.class = class
 	if not inBestiaryRoom(player) then
 		travel(player, { "Bestiariusz", bestiaryLanding.x, bestiaryLanding.y, bestiaryLanding.z })
 	end
@@ -4198,7 +4232,13 @@ end
 local openBestiary
 
 local function openBestiaryClass(player, class)
-	local window = ModalWindow({ title = "Bestiariusz - " .. class.name, message = "Wybierz potwora - fale beda pojawiac sie wokol ciebie.                                        " })
+	local window = ModalWindow({ title = "Bestiariusz - " .. class.name, message = "Wybierz potwora - po jego ukonczeniu sala sama przechodzi do nastepnego nieukonczonego z tej klasy.                                        " })
+	local firstOpen = bestiaryNextInClass(player, class, nil)
+	if firstOpen then
+		window:addChoice(">> Cala klasa po kolei (od: " .. firstOpen[1] .. ")", function(target)
+			bestiaryStart(target, firstOpen, class)
+		end)
+	end
 	for index, entry in ipairs(class.list) do
 		if index > 250 then
 			break
@@ -4206,7 +4246,7 @@ local function openBestiaryClass(player, class)
 		local kills = bestiaryKills(player, entry[2])
 		local label = kills >= entry[3] and ("[Complete] " .. entry[1]) or string.format("%s  %d/%d", entry[1], kills, entry[3])
 		window:addChoice(label, function(target)
-			bestiaryStart(target, entry)
+			bestiaryStart(target, entry, class)
 		end)
 	end
 	window:addButton("Wybierz")
