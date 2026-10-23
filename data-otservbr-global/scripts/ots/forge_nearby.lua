@@ -1,10 +1,13 @@
 -- OTS: potwory kuzni pojawiaja sie tam, gdzie gracz expi. Serwer sam losuje je z calej mapy,
 -- wiec przy jednym graczu rzadko trafiaja na jego expowisko. Ten skrypt co kilka sekund dba,
--- zeby w poblizu gracza (poza PZ) bylo do 5 potworow kuzni; czasem zamiast nich fiendish.
-local TICK_MS = 3000
-local TARGET_NEARBY = 5
+-- zeby w poblizu gracza (poza PZ) bylo do TARGET_NEARBY potworow kuzni; czasem zamiast nich fiendish.
+-- Pyl z jednego potwora: forgeAmountMultiplier w docker/ots/config-overrides.lua.
+local TICK_MS = 1500
+local TARGET_NEARBY = 15
+local PER_TICK = 4 -- ile brakujacych potworow kuzni moze dojsc w jednej turze
+local RANGE_X, RANGE_Y = 11, 11 -- caly pokoj Bestiariusza / Fal
 local CHANCE_PERCENT = 100 -- szansa na ture, ze brakujacy potwor kuzni sie pojawi
-local FIENDISH_PERCENT = 6 -- z tego: szansa na czerwonego fiendish zamiast zwyklego
+local FIENDISH_PERCENT = 15 -- z tego: szansa na czerwonego fiendish zamiast zwyklego
 
 local function isElite(monster)
 	return (OtsRandomElites and OtsRandomElites[monster:getId()]) or (OtsOutfitElite and OtsOutfitElite[monster:getId()])
@@ -62,7 +65,7 @@ function tick.onThink(interval)
 		local tile = Tile(position)
 		if tile and not tile:hasFlag(TILESTATE_PROTECTIONZONE) then
 			local forge, candidates = 0, {}
-			for _, creature in ipairs(Game.getSpectators(position, false, false, 8, 8, 6, 6)) do
+			for _, creature in ipairs(Game.getSpectators(position, false, false, RANGE_X, RANGE_X, RANGE_Y, RANGE_Y)) do
 				local monster = creature:getMonster()
 				if monster and not monster:getMaster() then
 					if monster:getForgeStack() > 0 then
@@ -72,8 +75,15 @@ function tick.onThink(interval)
 					end
 				end
 			end
-			if forge < TARGET_NEARBY and #candidates > 0 and math.random(100) <= CHANCE_PERCENT then
-				local monster = candidates[math.random(#candidates)]
+			local add = math.min(PER_TICK, TARGET_NEARBY - forge)
+			if math.random(100) > CHANCE_PERCENT then
+				add = 0
+			end
+			for _ = 1, add do
+				if #candidates == 0 then
+					break
+				end
+				local monster = table.remove(candidates, math.random(#candidates))
 				-- przez funkcje gry, zeby serwer mial je na swojej liscie (inaczej przy smierci
 				-- pisze ostrzezenie "Failed to remove a Influenced Monster")
 				local fiendish = math.random(100) <= FIENDISH_PERCENT and (tonumber(Game.makeFiendishMonster(monster:getId())) or 0) > 0

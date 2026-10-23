@@ -82,3 +82,5 @@ maxPlayersOutsidePZPerAccount = 5
 showLootsInBestiary = true
 -- familiar (utevo gran res ...): 30 min przywolania (silnik dzieli te wartosc na pol)
 familiarTime = 60
+-- kuznia: pyl z potwora kuzni = losowo od (stack) do (stack x ta wartosc); domyslnie 3
+forgeAmountMultiplier = 10.0
