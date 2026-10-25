@@ -3373,7 +3373,7 @@ local function prepareSpot(center)
 	local id = key(center)
 	local spot = preparedSpots[id]
 	if not spot then
-		spot = {}
+		spot = { center = Position(center.x, center.y, center.z) }
 		preparedSpots[id] = spot
 		for dx = -1, 1 do
 			for dy = -1, 1 do
@@ -3385,6 +3385,9 @@ local function prepareSpot(center)
 
 	if spot.pos and returnAt(spot.pos) then
 		return
+	end
+	if spot.pos then
+		logger.info("[OTS teleporty] Teleport powrotny zniknal przy {}, {}, {} - stawiam go od nowa", center.x, center.y, center.z)
 	end
 	spot.pos = nil
 
@@ -4126,7 +4129,7 @@ local function bestiarySpawn(player, entry, kills)
 				local pos = Position(here.x + dx, here.y + dy, here.z)
 				if math.abs(pos.x - bestiaryCenter.x) <= ARENA_RADIUS and math.abs(pos.y - bestiaryCenter.y) <= ARENA_RADIUS then
 					local tile = Tile(pos)
-					if tile and tile:isWalkable(true, true, true, true, false) then
+					if tile and tile:isWalkable(true, true, true, true, false) and not returnAt(pos) then
 						ring[#ring + 1] = pos
 					end
 				end
@@ -5133,6 +5136,26 @@ local offsets = {
 	{ 0, -3 }, { 3, 0 }, { -3, 0 }, { 0, 3 }, { 1, -1 }, { -1, -1 }, { 1, 1 }, { -1, 1 },
 	{ 0, -1 }, { 1, 0 }, { -1, 0 }, { 0, 1 },
 }
+
+-- Straznik teleportow powrotnych: co kilka sekund sprawdza miejsca ladowania w poblizu graczy
+-- (expowiska, Bestiariusz, sale) i stawia teleport od nowa, jesli zniknal.
+local returnGuard = GlobalEvent("OtsReturnTeleportGuard")
+
+function returnGuard.onThink(interval)
+	for _, player in ipairs(Game.getPlayers()) do
+		local here = player:getPosition()
+		for _, spot in pairs(preparedSpots) do
+			local c = spot.center
+			if c and c.z == here.z and math.abs(c.x - here.x) <= 15 and math.abs(c.y - here.y) <= 15 then
+				prepareSpot(c)
+			end
+		end
+	end
+	return true
+end
+
+returnGuard:interval(5000)
+returnGuard:register()
 
 local placeEntry = GlobalEvent("OtsTeleportEntry")
 
