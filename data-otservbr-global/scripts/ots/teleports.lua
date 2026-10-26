@@ -5157,6 +5157,47 @@ end
 returnGuard:interval(5000)
 returnGuard:register()
 
+-- Po starcie serwera teleporty powrotne nie istnieja, dopoki ktos tam nie przyjdzie przez !tp.
+-- Dlatego: sale (Bestiariusz, Fale, Hardcore Boss, Wieza, Arena, Losowy Boss) dostaja je od razu przy starcie,
+-- a gracz, ktory loguje sie na expowisku, dostaje teleport przy najblizszym miejscu ladowania.
+local roomGuard = GlobalEvent("OtsReturnTeleportRooms")
+
+function roomGuard.onStartup()
+	local landings = { arenaLanding, survivalLanding, rushLanding, towerLanding, bestiaryLanding }
+	for _, room in ipairs(raidRooms) do
+		landings[#landings + 1] = room.landing
+	end
+	for _, landing in ipairs(landings) do
+		prepareSpot(landing)
+	end
+	return true
+end
+
+roomGuard:register()
+
+local loginGuard = CreatureEvent("OtsReturnTeleportLogin")
+
+function loginGuard.onLogin(player)
+	local here = player:getPosition()
+	local best, bestDistance = nil, 16
+	for _, group in ipairs(hubHunts) do
+		for _, entry in ipairs(group.list) do
+			if entry[4] == here.z and not entry.town and not entry.plain then
+				local distance = math.max(math.abs(entry[2] - here.x), math.abs(entry[3] - here.y))
+				if distance < bestDistance then
+					best, bestDistance = entry, distance
+				end
+			end
+		end
+	end
+	if best then
+		prepareSpot(Position(best[2], best[3], best[4]))
+	end
+	return true
+end
+
+loginGuard:register()
+
 local placeEntry = GlobalEvent("OtsTeleportEntry")
 
 function placeEntry.onStartup()
