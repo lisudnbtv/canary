@@ -4082,10 +4082,29 @@ local BESTIARY_KILL_STORAGE = 61305000
 local BESTIARY_WAVE = 60 -- tyle potworow naraz w sali
 local BESTIARY_REFILL = 30 -- gdy zostanie mniej, sala od razu sie dopelnia do BESTIARY_WAVE
 local BESTIARY_RANGE = 7 -- jak daleko od postaci moga sie pojawiac
-local bestiaryRun = { token = 0, ids = {}, monster = nil }
+local bestiaryRun = { token = 0, ids = {}, monster = nil, lastKills = 0, lastProgressAt = 0 }
+
+-- Bosstiariusz (ta sama sala): bossy z bosstiary do poziomu Mastery, z losowa sila jak w Hardcore Boss.
+-- Wpis bossa: { nazwa, 0, wymagane zabojstwa, boss = true, batch = ile naraz }.
+local BOSS_BATCH = { Bane = 10, Archfoe = 3, Nemesis = 3 }
+local BOSS_MASTERY = { Bane = 300, Archfoe = 60, Nemesis = 5 }
+local BOSS_STUCK_SECONDS = 5 * 60 -- boss bez postepu tyle czasu (np. nie da sie go zabic) jest pomijany
+local hardcoreEmpower -- ustawiane nizej, w sekcji Hardcore Boss
 
 local function bestiaryKills(player, race)
 	return math.max(0, player:getStorageValue(BESTIARY_KILL_STORAGE + race))
+end
+
+-- Postep wpisu: bestiariusz potwora albo bosstiary bossa.
+local function entryKills(player, entry)
+	if entry.boss then
+		return tonumber(player:getBosstiaryKills(entry[1])) or 0
+	end
+	return bestiaryKills(player, entry[2])
+end
+
+local function runLabel(entry)
+	return entry and entry.boss and "Bosstiariusz" or "Bestiariusz"
 end
 
 local function inBestiaryRoom(player)
@@ -4099,6 +4118,7 @@ local function bestiaryClear()
 		if creature then
 			creature:remove()
 		end
+		OtsHardcoreBossDamage[id] = nil
 	end
 	bestiaryRun.ids = {}
 end
@@ -4117,7 +4137,7 @@ end
 -- Dostawia potwory wokol postaci, az w sali bedzie ich BESTIARY_WAVE (albo tyle, ile brakuje do konca).
 local function bestiarySpawn(player, entry, kills)
 	local alive = bestiaryAlive()
-	local amount = math.min(BESTIARY_WAVE - alive, entry[3] - kills - alive)
+	local amount = math.min((entry.batch or BESTIARY_WAVE) - alive, entry[3] - kills - alive)
 	if amount <= 0 then
 		return 0
 	end
@@ -4144,6 +4164,9 @@ local function bestiarySpawn(player, entry, kills)
 		local pos = table.remove(ring, math.random(#ring))
 		local monster = Game.createMonster(entry[1], pos, true, true)
 		if monster then
+			if entry.boss and hardcoreEmpower then
+				hardcoreEmpower(monster)
+			end
 			bestiaryRun.ids[#bestiaryRun.ids + 1] = monster:getId()
 			spawned = spawned + 1
 		end
@@ -4168,7 +4191,7 @@ local function bestiaryNextInClass(player, class, current)
 	end
 	for step = 1, #list do
 		local entry = list[(startIndex + step - 1) % #list + 1]
-		if entry ~= current and bestiaryKills(player, entry[2]) < entry[3] then
+		if entry ~= current and entryKills(player, entry) < entry[3] then
 			return entry
 		end
 	end
@@ -4186,28 +4209,41 @@ local function bestiaryTick(playerId, token)
 		return
 	end
 	local entry = bestiaryRun.monster
-	local kills = bestiaryKills(player, entry[2])
-	if kills >= entry[3] then
+	local label = runLabel(entry)
+	local kills = entryKills(player, entry)
+	if kills ~= bestiaryRun.lastKills then
+		bestiaryRun.lastKills = kills
+		bestiaryRun.lastProgressAt = os.time()
+	end
+	local stuck = entry.boss and os.time() - bestiaryRun.lastProgressAt >= BOSS_STUCK_SECONDS
+	if kills >= entry[3] or stuck then
 		bestiaryClear()
 		local nextEntry = bestiaryNextInClass(player, bestiaryRun.class, entry)
+		local head = stuck and string.format("%s: %s pominiety (brak postepu przez %d min).", label, entry[1], BOSS_STUCK_SECONDS / 60) or string.format("%s: %s ukonczony (%d/%d)!", label, entry[1], kills, entry[3])
 		if nextEntry then
-			player:sendTextMessage(MESSAGE_EVENT_ADVANCE, string.format("Bestiariusz: %s ukonczony (%d/%d)! Dalej: %s.", entry[1], kills, entry[3], nextEntry[1]))
+			player:sendTextMessage(MESSAGE_EVENT_ADVANCE, head .. " Dalej: " .. nextEntry[1] .. ".")
 			bestiaryStart(player, nextEntry, bestiaryRun.class)
 		elseif bestiaryRun.class then
-			player:sendTextMessage(MESSAGE_EVENT_ADVANCE, string.format("Bestiariusz: %s ukonczony! Cala klasa %s jest ukonczona.", entry[1], bestiaryRun.class.name))
+			player:sendTextMessage(MESSAGE_EVENT_ADVANCE, head .. " Cala kategoria " .. bestiaryRun.class.name .. " jest ukonczona.")
 		else
-			player:sendTextMessage(MESSAGE_EVENT_ADVANCE, string.format("Bestiariusz: %s ukonczony (%d/%d)! Wybierz kolejnego potwora.", entry[1], kills, entry[3]))
+			player:sendTextMessage(MESSAGE_EVENT_ADVANCE, head .. " Wybierz kolejnego.")
 		end
 		return
 	end
 	local alive = bestiaryAlive()
-	if alive < BESTIARY_REFILL then
+	if alive < (entry.boss and entry.batch or BESTIARY_REFILL) then
 		local spawned = bestiarySpawn(player, entry, kills)
 		if spawned == 0 and alive == 0 then
-			player:sendCancelMessage("Tego potwora nie da sie przywolac w sali.")
+			local nextEntry = bestiaryNextInClass(player, bestiaryRun.class, entry)
+			if nextEntry then
+				player:sendTextMessage(MESSAGE_EVENT_ADVANCE, string.format("%s: %s nie da sie przywolac w sali. Dalej: %s.", label, entry[1], nextEntry[1]))
+				bestiaryStart(player, nextEntry, bestiaryRun.class)
+			else
+				player:sendCancelMessage(entry[1] .. " nie da sie przywolac w sali.")
+			end
 			return
 		end
-		player:sendTextMessage(MESSAGE_STATUS, string.format("Bestiariusz: %s %d/%d.", entry[1], kills, entry[3]))
+		player:sendTextMessage(MESSAGE_STATUS, string.format("%s: %s %d/%d.", label, entry[1], kills, entry[3]))
 	end
 	addEvent(bestiaryTick, 1000, playerId, token)
 end
@@ -4222,20 +4258,26 @@ bestiaryStart = function(player, entry, class)
 	bestiaryRun.token = bestiaryRun.token + 1
 	bestiaryRun.monster = entry
 	bestiaryRun.class = class
+	bestiaryRun.lastKills = entryKills(player, entry)
+	bestiaryRun.lastProgressAt = os.time()
 	if not inBestiaryRoom(player) then
 		travel(player, { "Bestiariusz", bestiaryLanding.x, bestiaryLanding.y, bestiaryLanding.z })
 	end
 	if not inBestiaryRoom(player) then
 		return
 	end
-	player:sendTextMessage(MESSAGE_EVENT_ADVANCE, string.format("Bestiariusz: %s, %d/%d. Do 60 potworow naraz wokol ciebie, sala sama sie dopelnia. Wyjscie teleportem konczy.", entry[1], bestiaryKills(player, entry[2]), entry[3]))
+	if entry.boss then
+		player:sendTextMessage(MESSAGE_EVENT_ADVANCE, string.format("Bosstiariusz: %s, %d/%d (Mastery). %d naraz, losowa sila jak w Hardcore Boss. Wyjscie teleportem konczy.", entry[1], entryKills(player, entry), entry[3], entry.batch))
+	else
+		player:sendTextMessage(MESSAGE_EVENT_ADVANCE, string.format("Bestiariusz: %s, %d/%d. Do 60 potworow naraz wokol ciebie, sala sama sie dopelnia. Wyjscie teleportem konczy.", entry[1], bestiaryKills(player, entry[2]), entry[3]))
+	end
 	addEvent(bestiaryTick, 1000, player:getId(), bestiaryRun.token)
 end
 
 local openBestiary
 
-local function openBestiaryClass(player, class)
-	local window = ModalWindow({ title = "Bestiariusz - " .. class.name, message = "Wybierz potwora - po jego ukonczeniu sala sama przechodzi do nastepnego nieukonczonego z tej klasy.                                        " })
+local function openBestiaryClass(player, class, back)
+	local window = ModalWindow({ title = (class.title or "Bestiariusz") .. " - " .. class.name, message = "Wybierz potwora - po jego ukonczeniu sala sama przechodzi do nastepnego nieukonczonego z tej klasy.                                        " })
 	local firstOpen = bestiaryNextInClass(player, class, nil)
 	if firstOpen then
 		window:addChoice(">> Cala klasa po kolei (od: " .. firstOpen[1] .. ")", function(target)
@@ -4246,7 +4288,7 @@ local function openBestiaryClass(player, class)
 		if index > 250 then
 			break
 		end
-		local kills = bestiaryKills(player, entry[2])
+		local kills = entryKills(player, entry)
 		local label = kills >= entry[3] and ("[Complete] " .. entry[1]) or string.format("%s  %d/%d", entry[1], kills, entry[3])
 		window:addChoice(label, function(target)
 			bestiaryStart(target, entry, class)
@@ -4254,13 +4296,67 @@ local function openBestiaryClass(player, class)
 	end
 	window:addButton("Wybierz")
 	window:addButton("Wstecz", function(target)
-		openBestiary(target)
+		(back or openBestiary)(target)
 	end)
 	window:setPriority(true)
 	window:setDefaultEnterButton(2)
 	window:setDefaultEscapeButton(1)
 	window:sendToPlayer(player)
 end
+
+-- Kategorie bosstiary (Bane, Archfoe, Nemesis), budowane raz z typow potworow na serwerze, od najslabszego.
+local bossClasses = nil
+
+local function buildBossClasses()
+	bossClasses = {}
+	local byName = {}
+	for _, name in ipairs({ "Bane", "Archfoe", "Nemesis" }) do
+		byName[name] = { name = name, title = "Bosstiariusz", list = {} }
+		bossClasses[#bossClasses + 1] = byName[name]
+	end
+	local seen = {}
+	for _, mtype in pairs(Game.getMonsterTypes() or {}) do
+		local rarity = mtype:bossRace()
+		local class = rarity and byName[rarity]
+		local name = mtype:name()
+		if class and name and not seen[name:lower()] and mtype:maxHealth() > 0 then
+			seen[name:lower()] = true
+			class.list[#class.list + 1] = { name, 0, BOSS_MASTERY[rarity], boss = true, batch = BOSS_BATCH[rarity], health = mtype:maxHealth() }
+		end
+	end
+	for _, class in ipairs(bossClasses) do
+		table.sort(class.list, function(x, y)
+			return x.health < y.health
+		end)
+	end
+end
+
+local openBosstiary
+
+openBosstiary = function(player)
+	if not bossClasses then
+		buildBossClasses()
+	end
+	local window = ModalWindow({ title = "Bosstiariusz", message = "Bossy do poziomu Mastery, z losowa sila jak w Hardcore Boss. Bane: 10 naraz, Archfoe i Nemesis: 3 naraz. W nawiasie: ukonczone / wszystkie.                                        " })
+	for _, class in ipairs(bossClasses) do
+		local finished = 0
+		for _, entry in ipairs(class.list) do
+			if entryKills(player, entry) >= entry[3] then
+				finished = finished + 1
+			end
+		end
+		window:addChoice(string.format("%s (%d/%d)", class.name, finished, #class.list), function(target)
+			openBestiaryClass(target, class, openBosstiary)
+		end)
+	end
+	window:addButton("Wybierz")
+	window:addButton("Zamknij", function() end)
+	window:setPriority(true)
+	window:setDefaultEnterButton(2)
+	window:setDefaultEscapeButton(1)
+	window:sendToPlayer(player)
+end
+OtsOpenBosstiary = openBosstiary
 
 openBestiary = function(player)
 	local window = ModalWindow({ title = "Bestiariusz", message = "Wybierz klase potworow. W nawiasie: ukonczone / wszystkie.                                        " })
@@ -4666,6 +4762,10 @@ rushCheck = function(playerId, token)
 	addEvent(rushNext, 3000, playerId, token)
 end
 
+hardcoreEmpower = function(monster)
+	rushEmpower(monster, rushTier())
+end
+
 -- Bossy Hardcore Boss bija mocniej wedlug wylosowanej sily.
 local rushDamage = EventCallback("OtsHardcoreBossDamage")
 
@@ -4889,6 +4989,9 @@ openMain = function(player)
 	end)
 	window:addChoice("Bestiariusz (fale wybranego potwora)", function(target)
 		openBestiary(target)
+	end)
+	window:addChoice("Bosstiariusz (bossy do Mastery, Hardcore)", function(target)
+		OtsOpenBosstiary(target)
 	end)
 	window:addChoice("Wieza (pietra, boss co 10)", function(target)
 		towerEnter(target)
