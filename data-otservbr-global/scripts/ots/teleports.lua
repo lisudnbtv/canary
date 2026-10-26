@@ -4149,7 +4149,7 @@ local function bestiarySpawn(player, entry, kills)
 				local pos = Position(here.x + dx, here.y + dy, here.z)
 				if math.abs(pos.x - bestiaryCenter.x) <= ARENA_RADIUS and math.abs(pos.y - bestiaryCenter.y) <= ARENA_RADIUS then
 					local tile = Tile(pos)
-					if tile and tile:isWalkable(true, true, true, true, false) and not returnAt(pos) then
+					if tile and tile:isWalkable(true, true, true, false, false) and not returnAt(pos) then
 						ring[#ring + 1] = pos
 					end
 				end
@@ -4425,7 +4425,7 @@ local function towerNext(playerId, token)
 			if math.max(math.abs(dx), math.abs(dy)) >= 2 then
 				local pos = Position(here.x + dx, here.y + dy, here.z)
 				local tile = Tile(pos)
-				if math.abs(pos.x - towerCenter.x) <= ARENA_RADIUS and math.abs(pos.y - towerCenter.y) <= ARENA_RADIUS and tile and tile:isWalkable(true, true, true, true, false) then
+				if math.abs(pos.x - towerCenter.x) <= ARENA_RADIUS and math.abs(pos.y - towerCenter.y) <= ARENA_RADIUS and tile and tile:isWalkable(true, true, true, false, false) then
 					ring[#ring + 1] = pos
 				end
 			end
