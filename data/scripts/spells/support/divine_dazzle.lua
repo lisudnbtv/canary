@@ -15,7 +15,7 @@ end
 combat:setCallback(CALLBACK_PARAM_CHAINPICKER, "canChain")
 
 function getChainValue(creature)
-	local targets = 3
+	local targets = 8 -- OTS: 8 potworow (bylo 3)
 	local player = creature:getPlayer()
 	if creature and player then
 		targets = targets + player:getWheelSpellAdditionalTarget("Divine Dazzle")
@@ -26,7 +26,7 @@ end
 combat:setCallback(CALLBACK_PARAM_CHAINVALUE, "getChainValue")
 
 function onChain(creature, target)
-	local duration = 12000
+	local duration = 24 * 60 * 60 * 1000 -- OTS: przyciagniety potwor zostaje przy graczu az do smierci (bylo 12 s)
 	local player = creature:getPlayer()
 	if creature and player then
 		duration = duration + (player:getWheelSpellAdditionalDuration("Divine Dazzle") * 1000)
