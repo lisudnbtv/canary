@@ -98,3 +98,26 @@ end
 
 tick:interval(TICK_MS)
 tick:register()
+
+-- Slivery: silnik daje je tylko z fiendish (forgeMinSlivers-forgeMaxSlivers w config-overrides.lua).
+-- Dodatkowo kazdy zwykly potwor kuzni (influenced) wrzuca do zwlok stack x (1-3) sliverow.
+local SLIVER_ID = 37109
+local SLIVER_PER_STACK_MAX = 3
+
+local sliverDrop = EventCallback("OtsInfluencedSlivers")
+
+function sliverDrop.monsterPostDropLoot(monster, corpse)
+	if not monster or not corpse or not corpse:isContainer() then
+		return
+	end
+	if monster:getMonsterForgeClassification() ~= FORGE_INFLUENCED_MONSTER then
+		return
+	end
+	local stack = monster:getForgeStack()
+	if stack <= 0 then
+		return
+	end
+	corpse:addItem(SLIVER_ID, stack * math.random(1, SLIVER_PER_STACK_MAX))
+end
+
+sliverDrop:register()

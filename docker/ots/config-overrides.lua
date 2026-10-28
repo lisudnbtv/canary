@@ -84,3 +84,6 @@ showLootsInBestiary = true
 familiarTime = 60
 -- kuznia: pyl z potwora kuzni = losowo od (stack) do (stack x ta wartosc); domyslnie 3
 forgeAmountMultiplier = 10.0
+-- kuznia: slivery z potworow fiendish (domyslnie 3-7)
+forgeMinSlivers = 15
+forgeMaxSlivers = 40
