@@ -4091,16 +4091,16 @@ local BOSS_MASTERY = { Bane = 300, Archfoe = 60, Nemesis = 5 }
 local BOSS_STUCK_SECONDS = 5 * 60 -- boss bez postepu tyle czasu (np. nie da sie go zabic) jest pomijany
 local hardcoreEmpower -- ustawiane nizej, w sekcji Hardcore Boss
 
--- Czy bossa da sie w ogole zranic: odrzucamy takich, ktorzy maja 100% odpornosci (albo immunitet)
--- na kazdy rodzaj obrazen, np. Ascending Ferumbras (faza przejsciowa z questu, niezniszczalna).
+-- Czy bossa da sie w ogole zranic: false, gdy ma 100% odpornosci (albo immunitet) na kazdy rodzaj
+-- obrazen, np. Ascending Ferumbras. Takie bossy w Hardcore Boss i Bosstiariuszu dostaja obrazenia
+-- neutralne (patrz OtsHardcoreBossVulnerable nizej), wiec da sie je normalnie zabic.
 local DAMAGE_TYPES = { COMBAT_PHYSICALDAMAGE, COMBAT_ENERGYDAMAGE, COMBAT_EARTHDAMAGE, COMBAT_FIREDAMAGE, COMBAT_ICEDAMAGE, COMBAT_HOLYDAMAGE, COMBAT_DEATHDAMAGE }
 
 local function bossKillable(mtype)
 	local elements = mtype:getElementList() or {}
 	local immune = mtype:combatImmunities()
 	for _, combatType in ipairs(DAMAGE_TYPES) do
-		local index = math.floor(math.log(combatType) / math.log(2) + 0.5)
-		local blocked = (tonumber(elements[combatType]) or 0) >= 100 or (type(immune) == "table" and tonumber(immune[index]) == 1)
+		local blocked = (tonumber(elements[combatType]) or 0) >= 100 or (type(immune) == "table" and tonumber(immune[combatType]) == 1)
 		if not blocked then
 			return true
 		end
@@ -4136,6 +4136,7 @@ local function bestiaryClear()
 			creature:remove()
 		end
 		OtsHardcoreBossDamage[id] = nil
+		OtsHardcoreBossVulnerable[id] = nil
 	end
 	bestiaryRun.ids = {}
 end
@@ -4336,7 +4337,7 @@ local function buildBossClasses()
 		local rarity = mtype:bossRace()
 		local class = rarity and byName[rarity]
 		local name = mtype:name()
-		if class and name and not seen[name:lower()] and mtype:maxHealth() > 0 and bossKillable(mtype) then
+		if class and name and not seen[name:lower()] and mtype:maxHealth() > 0 then
 			seen[name:lower()] = true
 			class.list[#class.list + 1] = { name, 0, BOSS_MASTERY[rarity], boss = true, batch = BOSS_BATCH[rarity], health = mtype:maxHealth() }
 		end
@@ -4567,6 +4568,7 @@ local RUSH_TIERS = {
 	{ label = "Koszmar", health = 12, damage = 4, reward = 4, weight = 25, skull = SKULL_BLACK },
 }
 OtsHardcoreBossDamage = OtsHardcoreBossDamage or {} -- id bossa -> mnoznik obrazen
+OtsHardcoreBossVulnerable = OtsHardcoreBossVulnerable or {} -- id bossa odpornego na wszystko -> obrazenia graczy jako neutralne
 
 local function rushTier()
 	local total = 0
@@ -4597,6 +4599,10 @@ local function rushEmpower(monster, tier)
 	monster:setSkull(tier.skull)
 	monster:setName(monster:getName(), string.format("%s (%s, %dx zycia, %.1fx obrazen)", monster:getName(), tier.label, tier.health, tier.damage))
 	OtsHardcoreBossDamage[monster:getId()] = tier.damage
+	local mtype = monster:getType()
+	if mtype and not bossKillable(mtype) then
+		OtsHardcoreBossVulnerable[monster:getId()] = true
+	end
 end
 
 local function buildRushPool()
@@ -4605,7 +4611,7 @@ local function buildRushPool()
 	for _, mtype in pairs(Game.getMonsterTypes() or {}) do
 		local name = mtype:name()
 		local isBoss = (tonumber(mtype:bossRaceId()) or 0) > 0 or mtype:isRewardBoss()
-		if isBoss and name and name ~= "" and not seen[name:lower()] and mtype:maxHealth() > 0 and bossKillable(mtype) then
+		if isBoss and name and name ~= "" and not seen[name:lower()] and mtype:maxHealth() > 0 then
 			seen[name:lower()] = true
 			rushPool[#rushPool + 1] = { name = name, health = mtype:maxHealth() }
 		end
@@ -4671,6 +4677,7 @@ local function rushClear()
 			creature:remove()
 		end
 		OtsHardcoreBossDamage[id] = nil
+		OtsHardcoreBossVulnerable[id] = nil
 	end
 	rush.ids = {}
 	rush.tiers = {}
@@ -4802,6 +4809,22 @@ function rushDamage.creatureOnCombat(caster, target, combatDamage)
 end
 
 rushDamage:register()
+
+-- Bossy odporne na kazdy zywiol (np. Ascending Ferumbras) przyjmuja w tych trybach obrazenia jako neutralne.
+local rushVulnerable = EventCallback("OtsHardcoreBossVulnerable")
+
+function rushVulnerable.creatureOnCombat(caster, target, combatDamage)
+	if not target or not combatDamage or type(target.getId) ~= "function" or not OtsHardcoreBossVulnerable[target:getId()] then
+		return
+	end
+	for _, entry in ipairs({ combatDamage.primary, combatDamage.secondary }) do
+		if entry and tonumber(entry.value) and entry.value < 0 then
+			entry.type = COMBAT_NEUTRALDAMAGE
+		end
+	end
+end
+
+rushVulnerable:register()
 
 local function rushEnter(player)
 	if inFight(player) then
