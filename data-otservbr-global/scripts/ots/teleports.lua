@@ -4115,7 +4115,7 @@ end
 -- Postep wpisu: bestiariusz potwora albo bosstiary bossa.
 local function entryKills(player, entry)
 	if entry.boss then
-		return tonumber(player:getBosstiaryKills(entry[1])) or 0
+		return tonumber(player:getBosstiaryKills(entry.spawn or entry[1])) or 0
 	end
 	return bestiaryKills(player, entry[2])
 end
@@ -4180,7 +4180,7 @@ local function bestiarySpawn(player, entry, kills)
 			break
 		end
 		local pos = table.remove(ring, math.random(#ring))
-		local monster = Game.createMonster(entry[1], pos, true, true)
+		local monster = Game.createMonster(entry.spawn or entry[1], pos, true, true)
 		if monster then
 			if entry.boss and hardcoreEmpower then
 				hardcoreEmpower(monster)
@@ -4339,7 +4339,8 @@ local function buildBossClasses()
 		local name = mtype:name()
 		if class and name and not seen[name:lower()] and mtype:maxHealth() > 0 then
 			seen[name:lower()] = true
-			class.list[#class.list + 1] = { name, 0, BOSS_MASTERY[rarity], boss = true, batch = BOSS_BATCH[rarity], health = mtype:maxHealth() }
+			-- spawn: nazwa typu (np. "Goshnar's Megalomania Green"), bo wyswietlana nazwa nie zawsze jest typem
+			class.list[#class.list + 1] = { name, 0, BOSS_MASTERY[rarity], boss = true, batch = BOSS_BATCH[rarity], health = mtype:maxHealth(), spawn = mtype:getTypeName() }
 		end
 	end
 	for _, class in ipairs(bossClasses) do
@@ -4614,7 +4615,7 @@ local function buildRushPool()
 		local isBoss = (tonumber(mtype:bossRaceId()) or 0) > 0 or mtype:isRewardBoss()
 		if isBoss and name and name ~= "" and not seen[name:lower()] and mtype:maxHealth() > 0 then
 			seen[name:lower()] = true
-			rushPool[#rushPool + 1] = { name = name, health = mtype:maxHealth() }
+			rushPool[#rushPool + 1] = { name = name, health = mtype:maxHealth(), spawn = mtype:getTypeName() }
 		end
 	end
 	if #rushPool < RUSH_WAVES * RUSH_MAX_BOSSES then
@@ -4644,14 +4645,14 @@ local function rushPick(wave)
 	local last = math.max(first, math.floor(wave * total / RUSH_WAVES))
 	local choices = {}
 	for i = first, math.min(last, total) do
-		if not rush.used[rushPool[i].name] then
-			choices[#choices + 1] = rushPool[i].name
+		if not rush.used[rushPool[i].spawn or rushPool[i].name] then
+			choices[#choices + 1] = rushPool[i].spawn or rushPool[i].name
 		end
 	end
 	if #choices == 0 then
 		for i = 1, total do
-			if not rush.used[rushPool[i].name] then
-				choices[#choices + 1] = rushPool[i].name
+			if not rush.used[rushPool[i].spawn or rushPool[i].name] then
+				choices[#choices + 1] = rushPool[i].spawn or rushPool[i].name
 			end
 		end
 	end
