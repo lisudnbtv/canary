@@ -4091,6 +4091,23 @@ local BOSS_MASTERY = { Bane = 300, Archfoe = 60, Nemesis = 5 }
 local BOSS_STUCK_SECONDS = 5 * 60 -- boss bez postepu tyle czasu (np. nie da sie go zabic) jest pomijany
 local hardcoreEmpower -- ustawiane nizej, w sekcji Hardcore Boss
 
+-- Czy bossa da sie w ogole zranic: odrzucamy takich, ktorzy maja 100% odpornosci (albo immunitet)
+-- na kazdy rodzaj obrazen, np. Ascending Ferumbras (faza przejsciowa z questu, niezniszczalna).
+local DAMAGE_TYPES = { COMBAT_PHYSICALDAMAGE, COMBAT_ENERGYDAMAGE, COMBAT_EARTHDAMAGE, COMBAT_FIREDAMAGE, COMBAT_ICEDAMAGE, COMBAT_HOLYDAMAGE, COMBAT_DEATHDAMAGE }
+
+local function bossKillable(mtype)
+	local elements = mtype:getElementList() or {}
+	local immune = mtype:combatImmunities()
+	for _, combatType in ipairs(DAMAGE_TYPES) do
+		local index = math.floor(math.log(combatType) / math.log(2) + 0.5)
+		local blocked = (tonumber(elements[combatType]) or 0) >= 100 or (type(immune) == "table" and tonumber(immune[index]) == 1)
+		if not blocked then
+			return true
+		end
+	end
+	return false
+end
+
 local function bestiaryKills(player, race)
 	return math.max(0, player:getStorageValue(BESTIARY_KILL_STORAGE + race))
 end
@@ -4319,7 +4336,7 @@ local function buildBossClasses()
 		local rarity = mtype:bossRace()
 		local class = rarity and byName[rarity]
 		local name = mtype:name()
-		if class and name and not seen[name:lower()] and mtype:maxHealth() > 0 then
+		if class and name and not seen[name:lower()] and mtype:maxHealth() > 0 and bossKillable(mtype) then
 			seen[name:lower()] = true
 			class.list[#class.list + 1] = { name, 0, BOSS_MASTERY[rarity], boss = true, batch = BOSS_BATCH[rarity], health = mtype:maxHealth() }
 		end
@@ -4588,7 +4605,7 @@ local function buildRushPool()
 	for _, mtype in pairs(Game.getMonsterTypes() or {}) do
 		local name = mtype:name()
 		local isBoss = (tonumber(mtype:bossRaceId()) or 0) > 0 or mtype:isRewardBoss()
-		if isBoss and name and name ~= "" and not seen[name:lower()] and mtype:maxHealth() > 0 then
+		if isBoss and name and name ~= "" and not seen[name:lower()] and mtype:maxHealth() > 0 and bossKillable(mtype) then
 			seen[name:lower()] = true
 			rushPool[#rushPool + 1] = { name = name, health = mtype:maxHealth() }
 		end
