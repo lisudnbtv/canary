@@ -124,6 +124,20 @@ local KEEP = {
 	[46625] = true, [46626] = true, [37109] = true, [37110] = true, [46627] = true, [46628] = true,
 }
 
+-- Miotla nigdy nie usuwa przedmiotow, ktorych nazwa zawiera te slowa (gemy, tokeny jak gold/silver token,
+-- medale, fragmenty, slivery, core) - nawet jesli Loot Seller ich nie skupuje.
+local KEEP_WORDS = { "gem", "token", "medal", "fragment", "sliver", "core" }
+
+local function keepByName(id)
+	local name = ItemType(id):getName():lower()
+	for _, word in ipairs(KEEP_WORDS) do
+		if name:find(word, 1, true) then
+			return true
+		end
+	end
+	return false
+end
+
 local function junkIn(pouch)
 	if not prices then
 		loadPrices()
@@ -131,7 +145,7 @@ local function junkIn(pouch)
 	local junk = {}
 	for _, item in ipairs(pouch:getItems(true)) do
 		local id = item:getId()
-		if not item:isContainer() and not KEEP[id] and not NEVER_SELL[id] and not prices[id] and not item:getCustomAttribute("ots-upgrade") then
+		if not item:isContainer() and not KEEP[id] and not NEVER_SELL[id] and not prices[id] and not item:getCustomAttribute("ots-upgrade") and not keepByName(id) then
 			junk[#junk + 1] = item
 		end
 	end
