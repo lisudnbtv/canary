@@ -4557,6 +4557,7 @@ local RUSH_WAVES = 15
 local RUSH_MIN_BOSSES = 3
 local RUSH_MAX_BOSSES = 5
 local RUSH_WAVE_TIME = 5 * 60 -- sekundy na jedna fale
+local RUSH_MAX_HIT_PERCENT = 25 -- jeden cios bossa (Hardcore Boss i Bosstiariusz) zabiera najwyzej tyle % max zycia
 local RUSH_SPOTS = { { 0, -4 }, { -3, -3 }, { 3, -3 }, { -5, -1 }, { 5, -1 } }
 local rush = { token = 0, ids = {}, wave = 0, used = {}, spawnedAt = 0, size = 0, kills = 0, tiers = {} }
 local rushPool = nil
@@ -4804,6 +4805,25 @@ function rushDamage.creatureOnCombat(caster, target, combatDamage)
 	for _, entry in ipairs({ combatDamage.primary, combatDamage.secondary }) do
 		if entry and tonumber(entry.value) and entry.value < 0 then
 			entry.value = math.floor(entry.value * multiplier)
+		end
+	end
+	-- Limit jednego ciosu w gracza: najwyzej RUSH_MAX_HIT_PERCENT jego maksymalnego zycia
+	-- (zeby kilka mocnych bossow naraz nie zabijalo na jednego hita).
+	if target and type(target.isPlayer) == "function" and target:isPlayer() then
+		local total = 0
+		for _, entry in ipairs({ combatDamage.primary, combatDamage.secondary }) do
+			if entry and tonumber(entry.value) and entry.value < 0 then
+				total = total - entry.value
+			end
+		end
+		local cap = math.floor(target:getMaxHealth() * RUSH_MAX_HIT_PERCENT / 100)
+		if total > cap and cap > 0 then
+			local scale = cap / total
+			for _, entry in ipairs({ combatDamage.primary, combatDamage.secondary }) do
+				if entry and tonumber(entry.value) and entry.value < 0 then
+					entry.value = math.floor(entry.value * scale)
+				end
+			end
 		end
 	end
 end
