@@ -63,6 +63,7 @@ services:
       - '../data/libs/gamestore/parsers.lua:/canary/data/libs/gamestore/parsers.lua:ro'
       - '../data/libs/functions/player.lua:/canary/data/libs/functions/player.lua:ro'
       - '../data/scripts/spells/support/divine_dazzle.lua:/canary/data/scripts/spells/support/divine_dazzle.lua:ro'
+      - '../data/scripts/spells/healing/salvation.lua:/canary/data/scripts/spells/healing/salvation.lua:ro'
       - '../data/scripts/eventcallbacks/player/on_kill_taskboard.lua:/canary/data/scripts/eventcallbacks/player/on_kill_taskboard.lua:ro'
       - '../data/modules/scripts/gamestore/catalog/beds.lua:/canary/data/modules/scripts/gamestore/catalog/beds.lua:ro'
       - '../data/modules/scripts/gamestore/catalog/boost.lua:/canary/data/modules/scripts/gamestore/catalog/boost.lua:ro'
