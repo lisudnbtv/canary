@@ -1564,7 +1564,7 @@ local towerCenter = Position(30150, 29900, 7)
 local towerLanding = Position(30150, 29909, 7)
 local bestiaryCenter = Position(30180, 29900, 7)
 -- Sala Bestiariusza/Bosstiariusza zmniejszona przy starcie serwera do kwadratu 11x11 (promien 5)
--- wokol tego srodka; pola poza nim traca podloge. Miejsce ladowania (y+9) jest na jej poludniowym brzegu.
+-- wokol tego srodka; dookola zywoplot i ogrod jak przy innych salach huba. Miejsce ladowania (y+9) jest na jej poludniowym brzegu.
 local BESTIARY_ROOM_CENTER = Position(30180, 29904, 7)
 local BESTIARY_ROOM_RADIUS = 5
 local bestiaryLanding = Position(30180, 29909, 7)
@@ -5334,25 +5334,41 @@ returnGuard:register()
 local roomGuard = GlobalEvent("OtsReturnTeleportRooms")
 
 function roomGuard.onStartup()
-	-- Zmniejszenie sali Bestiariusza: zdejmujemy podloge ze wszystkich pol poza kwadratem BESTIARY_ROOM_RADIUS.
-	local removed = 0
+	-- Zmniejszenie sali Bestiariusza do kwadratu BESTIARY_ROOM_RADIUS: dookola zywoplot z krzakow (blokuje
+	-- przejscie), a dalej trawa z kwiatami i drzewami - tak jak brzegi pozostalych sal huba.
+	local bushes = { 3681, 3682, 3699 }
+	local flowers = { 3654, 3655, 3656, 3657, 3658, 3659 }
+	local trees = { 3614, 3615, 3617, 3618, 3620, 3621 }
+	local function hash(x, y, salt)
+		local v = bit.bxor(bit.bxor(x * 73856093, y * 19349663), salt * 83492791)
+		return bit.band(bit.bxor(v, bit.rshift(v, 13)), 0xFFFF)
+	end
+	local changed = 0
 	for x = bestiaryCenter.x - ARENA_RADIUS, bestiaryCenter.x + ARENA_RADIUS do
 		for y = bestiaryCenter.y - ARENA_RADIUS, bestiaryCenter.y + ARENA_RADIUS do
-			if math.abs(x - BESTIARY_ROOM_CENTER.x) > BESTIARY_ROOM_RADIUS or math.abs(y - BESTIARY_ROOM_CENTER.y) > BESTIARY_ROOM_RADIUS then
-				local tile = Tile(Position(x, y, bestiaryCenter.z))
-				local ground = tile and tile:getGround()
-				if ground and not tile:getTopCreature() then
+			local d = math.max(math.abs(x - BESTIARY_ROOM_CENTER.x) - BESTIARY_ROOM_RADIUS, math.abs(y - BESTIARY_ROOM_CENTER.y) - BESTIARY_ROOM_RADIUS)
+			if d >= 1 then
+				local pos = Position(x, y, bestiaryCenter.z)
+				local tile = Tile(pos)
+				if tile and tile:getGround() and not tile:getTopCreature() then
 					local items = tile:getItems() or {}
 					for index = #items, 1, -1 do
 						items[index]:remove()
 					end
-					ground:remove()
-					removed = removed + 1
+					local r = hash(x, y, 0)
+					if d == 1 then
+						Game.createItem(bushes[r % #bushes + 1], 1, pos)
+					elseif r % 100 < 22 then
+						Game.createItem(flowers[hash(x, y, 1) % #flowers + 1], 1, pos)
+					elseif d >= 3 and r % 100 < 34 then
+						Game.createItem(trees[hash(x, y, 2) % #trees + 1], 1, pos)
+					end
+					changed = changed + 1
 				end
 			end
 		end
 	end
-	logger.info("[OTS teleporty] Sala Bestiariusza zmniejszona do {}x{} (usuniete pola: {})", BESTIARY_ROOM_RADIUS * 2 + 1, BESTIARY_ROOM_RADIUS * 2 + 1, removed)
+	logger.info("[OTS teleporty] Sala Bestiariusza: {}x{} z zywoplotem (zmienione pola: {})", BESTIARY_ROOM_RADIUS * 2 + 1, BESTIARY_ROOM_RADIUS * 2 + 1, changed)
 
 	local landings = { arenaLanding, survivalLanding, rushLanding, towerLanding, bestiaryLanding }
 	for _, room in ipairs(raidRooms) do
