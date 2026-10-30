@@ -4081,7 +4081,8 @@ end
 local BESTIARY_KILL_STORAGE = 61305000
 local BESTIARY_WAVE = 60 -- tyle potworow naraz w sali
 local BESTIARY_REFILL = 30 -- gdy zostanie mniej, sala od razu sie dopelnia do BESTIARY_WAVE
-local BESTIARY_RANGE = 7 -- jak daleko od postaci moga sie pojawiac
+local BESTIARY_RANGE = 4 -- jak daleko od postaci moga sie pojawiac potwory (bylo 7)
+local BOSS_RANGE = 3 -- to samo dla bossow w Bosstiariuszu
 local bestiaryRun = { token = 0, ids = {}, monster = nil, lastKills = 0, lastProgressAt = 0 }
 
 -- Bosstiariusz (ta sama sala): bossy z bosstiary do poziomu Mastery, z losowa sila jak w Hardcore Boss.
@@ -4161,8 +4162,9 @@ local function bestiarySpawn(player, entry, kills)
 	end
 	local here = player:getPosition()
 	local ring = {}
-	for dx = -BESTIARY_RANGE, BESTIARY_RANGE do
-		for dy = -BESTIARY_RANGE, BESTIARY_RANGE do
+	local range = entry.boss and BOSS_RANGE or BESTIARY_RANGE
+	for dx = -range, range do
+		for dy = -range, range do
 			if math.max(math.abs(dx), math.abs(dy)) >= 2 then
 				local pos = Position(here.x + dx, here.y + dy, here.z)
 				if math.abs(pos.x - bestiaryCenter.x) <= ARENA_RADIUS and math.abs(pos.y - bestiaryCenter.y) <= ARENA_RADIUS then
