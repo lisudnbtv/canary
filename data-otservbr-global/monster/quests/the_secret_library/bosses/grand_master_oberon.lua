@@ -127,36 +127,7 @@ mType.onSpawn = function(monster, spawnPosition)
 	monster:setStorageValue(GrandMasterOberonConfig.Storage.Life, 1)
 end
 
-mType.onThink = function(monster, interval)
-	if monster:getStorageValue(GrandMasterOberonConfig.Storage.Life) <= GrandMasterOberonConfig.AmountLife then
-		local percentageHealth = (monster:getHealth() * 100) / monster:getMaxHealth()
-		if percentageHealth <= 20 then
-			SendOberonAsking(monster)
-		end
-	end
-end
-
-mType.onSay = function(monster, creature, type, message)
-	if type ~= TALKTYPE_SAY then
-		return false
-	end
-	local exhaust = GrandMasterOberonConfig.Storage.Exhaust
-	if creature:isPlayer() and monster:getStorageValue(exhaust) <= os.time() then
-		message = message:lower()
-
-		monster:setStorageValue(exhaust, os.time() + 1)
-		local asking_storage = monster:getStorageValue(GrandMasterOberonConfig.Storage.Asking)
-		local oberonMessagesTable = GrandMasterOberonResponses[asking_storage]
-
-		if oberonMessagesTable then
-			if message == oberonMessagesTable.msg:lower() or message == oberonMessagesTable.msg2:lower() then
-				monster:say("GRRRAAANNGH!", TALKTYPE_MONSTER_SAY)
-				monster:unregisterEvent("OberonImmunity")
-			else
-				monster:say("HAHAHAHA!", TALKTYPE_MONSTER_SAY)
-			end
-		end
-	end
-end
+-- OTS: bez rozmowy z Oberonem. W oryginale przy 20% zycia leczy sie do pelna (3 razy), pyta gracza
+-- i jest niesmiertelny, dopoki ten nie odpowie wlasciwym zdaniem. Tu walczy sie z nim normalnie.
 
 mType:register(monster)

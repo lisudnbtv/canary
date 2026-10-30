@@ -17,6 +17,7 @@ services:
       - '../data-otservbr-global/scripts/quests/the_annihilator/lever.lua:/canary/data-otservbr-global/scripts/quests/the_annihilator/lever.lua:ro'
       - '../data-otservbr-global/scripts/quests/the_inquisition_quest/movements_teleport_main.lua:/canary/data-otservbr-global/scripts/quests/the_inquisition_quest/movements_teleport_main.lua:ro'
       - '../data-otservbr-global/monster/quests/the_inquisition/hellgorak.lua:/canary/data-otservbr-global/monster/quests/the_inquisition/hellgorak.lua:ro'
+      - '../data-otservbr-global/monster/quests/the_secret_library/bosses/grand_master_oberon.lua:/canary/data-otservbr-global/monster/quests/the_secret_library/bosses/grand_master_oberon.lua:ro'
       # Monk's Apparition: w obrazie serwera ma numer bestiariusza Druid's Apparition (1946), wiec zabojstwa nie liczyly sie do niego
       - "../data-otservbr-global/monster/quests/soul_war/normal_monsters/monk's_apparition.lua:/canary/data-otservbr-global/monster/quests/soul_war/normal_monsters/monk's_apparition.lua:ro"
       - '../data-otservbr-global/scripts/quests/in_service_of_yalahar/actions_reward.lua:/canary/data-otservbr-global/scripts/quests/in_service_of_yalahar/actions_reward.lua:ro'
