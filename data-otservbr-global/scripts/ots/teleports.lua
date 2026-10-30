@@ -1563,6 +1563,10 @@ local rushBosses = { "The Imperor", "Zushuka", "Chizzoron the Distorter", "Draco
 local towerCenter = Position(30150, 29900, 7)
 local towerLanding = Position(30150, 29909, 7)
 local bestiaryCenter = Position(30180, 29900, 7)
+-- Sala Bestiariusza/Bosstiariusza zmniejszona przy starcie serwera do kwadratu 11x11 (promien 5)
+-- wokol tego srodka; pola poza nim traca podloge. Miejsce ladowania (y+9) jest na jej poludniowym brzegu.
+local BESTIARY_ROOM_CENTER = Position(30180, 29904, 7)
+local BESTIARY_ROOM_RADIUS = 5
 local bestiaryLanding = Position(30180, 29909, 7)
 local bestiaryClasses = {
 	{ name = "Amphibic", list = {
@@ -4167,7 +4171,7 @@ local function bestiarySpawn(player, entry, kills)
 		for dy = -range, range do
 			if math.max(math.abs(dx), math.abs(dy)) >= 2 then
 				local pos = Position(here.x + dx, here.y + dy, here.z)
-				if math.abs(pos.x - bestiaryCenter.x) <= ARENA_RADIUS and math.abs(pos.y - bestiaryCenter.y) <= ARENA_RADIUS then
+				if math.abs(pos.x - BESTIARY_ROOM_CENTER.x) <= BESTIARY_ROOM_RADIUS and math.abs(pos.y - BESTIARY_ROOM_CENTER.y) <= BESTIARY_ROOM_RADIUS then
 					local tile = Tile(pos)
 					if tile and tile:isWalkable(true, true, true, false, false) and not returnAt(pos) then
 						ring[#ring + 1] = pos
@@ -5330,6 +5334,26 @@ returnGuard:register()
 local roomGuard = GlobalEvent("OtsReturnTeleportRooms")
 
 function roomGuard.onStartup()
+	-- Zmniejszenie sali Bestiariusza: zdejmujemy podloge ze wszystkich pol poza kwadratem BESTIARY_ROOM_RADIUS.
+	local removed = 0
+	for x = bestiaryCenter.x - ARENA_RADIUS, bestiaryCenter.x + ARENA_RADIUS do
+		for y = bestiaryCenter.y - ARENA_RADIUS, bestiaryCenter.y + ARENA_RADIUS do
+			if math.abs(x - BESTIARY_ROOM_CENTER.x) > BESTIARY_ROOM_RADIUS or math.abs(y - BESTIARY_ROOM_CENTER.y) > BESTIARY_ROOM_RADIUS then
+				local tile = Tile(Position(x, y, bestiaryCenter.z))
+				local ground = tile and tile:getGround()
+				if ground and not tile:getTopCreature() then
+					local items = tile:getItems() or {}
+					for index = #items, 1, -1 do
+						items[index]:remove()
+					end
+					ground:remove()
+					removed = removed + 1
+				end
+			end
+		end
+	end
+	logger.info("[OTS teleporty] Sala Bestiariusza zmniejszona do {}x{} (usuniete pola: {})", BESTIARY_ROOM_RADIUS * 2 + 1, BESTIARY_ROOM_RADIUS * 2 + 1, removed)
+
 	local landings = { arenaLanding, survivalLanding, rushLanding, towerLanding, bestiaryLanding }
 	for _, room in ipairs(raidRooms) do
 		landings[#landings + 1] = room.landing
