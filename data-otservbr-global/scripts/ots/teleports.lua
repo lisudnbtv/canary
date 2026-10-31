@@ -4630,7 +4630,9 @@ local function rushEmpower(monster, tier)
 	-- Mechaniki questowe (np. The Lily of Night przyjmuje obrazenia tylko po zapachu z questu,
 	-- Faceless Bane przy 20% zycia leczy sie do pelna i staje sie niesmiertelny) siedza w zdarzeniach
 	-- zmiany zycia/many i "think". W tym trybie ich nie ma: kazdego bossa da sie bic.
-	for _, eventType in ipairs({ CREATURE_EVENT_HEALTHCHANGE, CREATURE_EVENT_MANACHANGE, CREATURE_EVENT_THINK }) do
+	-- Zdarzenia smierci tez znikaja: questy ustawiaja w nich czasowki na ponowna walke (np. Zamulosh,
+	-- Zalesh: 44 h) i przenosza do kolejnych faz. Zabojstwo do bosstiary i loot licza sie bez nich.
+	for _, eventType in ipairs({ CREATURE_EVENT_HEALTHCHANGE, CREATURE_EVENT_MANACHANGE, CREATURE_EVENT_THINK, CREATURE_EVENT_DEATH }) do
 		for _, eventName in ipairs(monster:getEvents(eventType) or {}) do
 			monster:unregisterEvent(eventName)
 		end
