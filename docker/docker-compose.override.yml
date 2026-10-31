@@ -90,6 +90,7 @@ services:
       - '../data/scripts/globalevents/save_interval.lua:/canary/data/scripts/globalevents/save_interval.lua:ro'
       - '../data/scripts/talkactions/player/reward.lua:/canary/data/scripts/talkactions/player/reward.lua:ro'
       - '../data/scripts/talkactions/player/bank.lua:/canary/data/scripts/talkactions/player/bank.lua:ro'
+      - '../data/scripts/actions/tools/crushers.lua:/canary/data/scripts/actions/tools/crushers.lua:ro'
       - '../data/chatchannels/chatchannels.xml:/canary/data/chatchannels/chatchannels.xml:ro'
       - '../data/items/appearances.dat:/canary/data/items/appearances.dat:ro'
       - '../data-otservbr-global/scripts/quests/demon_oak/movements_entrance.lua:/canary/data-otservbr-global/scripts/quests/demon_oak/movements_entrance.lua:ro'

@@ -30,14 +30,21 @@ function amberCrusher.onUse(player, item, fromPosition, target, toPosition, isHo
 		return true
 	end
 
-	local breakAmount = (target:getCount() >= config.maxGemBreak) and config.maxGemBreak or 1
-	target:remove(breakAmount)
-
-	for _ = 1, breakAmount do
-		player:addItem(fragmentType, math.random(fragmentRange[1], fragmentRange[2]))
+	-- OTS: amber crusher kruszy naraz wszystkie gemy tego rodzaju z plecaka (nie po 1 albo po 10)
+	local gemId = target:getId()
+	local breakAmount = player:getItemCount(gemId)
+	if breakAmount <= 0 or not player:removeItem(gemId, breakAmount) then
+		player:sendTextMessage(MESSAGE_EVENT_ADVANCE, "You can only use the crusher on a valid gem in your inventory.")
+		return true
 	end
 
-	player:sendTextMessage(MESSAGE_EVENT_ADVANCE, "You have broken the gem into fragments.")
+	local fragments = 0
+	for _ = 1, breakAmount do
+		fragments = fragments + math.random(fragmentRange[1], fragmentRange[2])
+	end
+	player:addItem(fragmentType, fragments)
+
+	player:sendTextMessage(MESSAGE_EVENT_ADVANCE, string.format("Rozkruszono %d gemow (%s) na %d fragmentow.", breakAmount, ItemType(gemId):getName(), fragments))
 	return true
 end
 
