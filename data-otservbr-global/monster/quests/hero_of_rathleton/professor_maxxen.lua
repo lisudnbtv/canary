@@ -71,7 +71,6 @@ monster.summon = {
 	summons = {
 		{ name = "walker", chance = 10, interval = 2000, count = 2 },
 		{ name = "glooth trasher", chance = 10, interval = 2000, count = 2 },
-		{ name = "glooth smasher", chance = 10, interval = 2000, count = 2 },
 		{ name = "glooth slasher", chance = 10, interval = 2000, count = 2 },
 	},
 }

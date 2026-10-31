@@ -87,3 +87,5 @@ forgeAmountMultiplier = 10.0
 -- kuznia: slivery z potworow fiendish (domyslnie 3-7)
 forgeMinSlivers = 15
 forgeMaxSlivers = 40
+-- limit pakietow od klienta na sekunde (domyslnie 25): przy szybkim leczeniu/atakach klient byl rozlaczany
+maxPacketsPerSecond = 200
