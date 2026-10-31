@@ -4239,11 +4239,24 @@ local function bestiaryTick(playerId, token)
 		bestiaryRun.lastKills = kills
 		bestiaryRun.lastProgressAt = os.time()
 	end
+	-- Postep to tez zadawane obrazenia: suma zycia zywych bossow spadla od poprzedniej sekundy
+	-- (silne bossy potrafia zyc dluzej niz BOSS_STUCK_SECONDS, a to nie znaczy, ze sa nie do zabicia).
+	local hp, count = 0, 0
+	for _, id in ipairs(bestiaryRun.ids) do
+		local creature = Creature(id)
+		if creature then
+			hp = hp + creature:getHealth()
+			count = count + 1
+		end
+	end
+	if bestiaryRun.lastHp and (hp < bestiaryRun.lastHp or count < (bestiaryRun.lastCount or 0)) then
+		bestiaryRun.lastProgressAt = os.time()
+	end
 	local stuck = entry.boss and os.time() - bestiaryRun.lastProgressAt >= BOSS_STUCK_SECONDS
 	if kills >= entry[3] or stuck then
 		bestiaryClear()
 		local nextEntry = bestiaryNextInClass(player, bestiaryRun.class, entry)
-		local head = stuck and string.format("%s: %s pominiety (brak postepu przez %d min).", label, entry[1], BOSS_STUCK_SECONDS / 60) or string.format("%s: %s ukonczony (%d/%d)!", label, entry[1], kills, entry[3])
+		local head = stuck and string.format("%s: %s pominiety (przez %d min zadnych obrazen ani zabojstw).", label, entry[1], BOSS_STUCK_SECONDS / 60) or string.format("%s: %s ukonczony (%d/%d)!", label, entry[1], kills, entry[3])
 		if nextEntry then
 			player:sendTextMessage(MESSAGE_EVENT_ADVANCE, head .. " Dalej: " .. nextEntry[1] .. ".")
 			bestiaryStart(player, nextEntry, bestiaryRun.class)
@@ -4269,6 +4282,16 @@ local function bestiaryTick(playerId, token)
 		end
 		player:sendTextMessage(MESSAGE_STATUS, string.format("%s: %s %d/%d.", label, entry[1], kills, entry[3]))
 	end
+	-- stan po dopelnieniu: punkt odniesienia dla nastepnej sekundy
+	local hpAfter, countAfter = 0, 0
+	for _, id in ipairs(bestiaryRun.ids) do
+		local creature = Creature(id)
+		if creature then
+			hpAfter = hpAfter + creature:getHealth()
+			countAfter = countAfter + 1
+		end
+	end
+	bestiaryRun.lastHp, bestiaryRun.lastCount = hpAfter, countAfter
 	addEvent(bestiaryTick, 1000, playerId, token)
 end
 
@@ -4284,6 +4307,7 @@ bestiaryStart = function(player, entry, class)
 	bestiaryRun.class = class
 	bestiaryRun.lastKills = entryKills(player, entry)
 	bestiaryRun.lastProgressAt = os.time()
+	bestiaryRun.lastHp, bestiaryRun.lastCount = nil, nil
 	if not inBestiaryRoom(player) then
 		travel(player, { "Bestiariusz", bestiaryLanding.x, bestiaryLanding.y, bestiaryLanding.z })
 	end
