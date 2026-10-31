@@ -4248,6 +4248,14 @@ local function bestiaryTick(playerId, token)
 		if creature then
 			hp = hp + creature:getHealth()
 			count = count + 1
+			-- Niektore bossy maja czar teleportu do swojej sali z questu (np. Zamulosh) - wracaja do nas.
+			local cpos = creature:getPosition()
+			local cdx, cdy = cpos.x - bestiaryLanding.x, cpos.y - bestiaryLanding.y
+			if cpos.z ~= bestiaryLanding.z or cdx < BESTIARY_ROOM_MIN_DX or cdx > BESTIARY_ROOM_MAX_DX or cdy < BESTIARY_ROOM_MIN_DY or cdy > BESTIARY_ROOM_MAX_DY then
+				local back = Position(bestiaryLanding.x + math.random(-5, 5), bestiaryLanding.y + math.random(-8, -3), bestiaryLanding.z)
+				creature:teleportTo(back, true)
+				back:sendMagicEffect(CONST_ME_TELEPORT)
+			end
 			-- Klony bossa (np. Zamulosh przywoluje kopie z ta sama nazwa i zyciem, ktore nie licza sie
 			-- do bosstiary) od razu znikaja, zeby gracz bil prawdziwego bossa.
 			if entry.boss then
@@ -4711,6 +4719,13 @@ local function rushAlive()
 		local creature = Creature(id)
 		if creature then
 			alive[#alive + 1] = id
+			-- boss, ktory sam sie przeniosl (np. czar teleportu Zamulosha), wraca do sali
+			local cpos = creature:getPosition()
+			if cpos.z ~= rushCenter.z or math.abs(cpos.x - rushCenter.x) > ARENA_RADIUS or math.abs(cpos.y - rushCenter.y) > ARENA_RADIUS then
+				local back = Position(rushCenter.x + math.random(-4, 4), rushCenter.y + math.random(-4, 2), rushCenter.z)
+				creature:teleportTo(back, true)
+				back:sendMagicEffect(CONST_ME_TELEPORT)
+			end
 			-- klony bossa z ta sama nazwa (np. Zamulosh) znikaja - liczy sie tylko prawdziwy boss
 			for _, summon in ipairs(creature:getSummons() or {}) do
 				if summon:getName() == creature:getName() then
