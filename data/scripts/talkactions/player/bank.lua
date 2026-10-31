@@ -32,7 +32,23 @@ function deposit.onSay(player, words, param)
 		end
 	end
 
-	if not Bank.deposit(player, amount) then
+	-- OTS: BatchUpdate na wszystkich pojemnikach gracza - jedno odswiezenie klienta zamiast osobnego
+	-- za kazdy usuniety stos monet (przy wielu stosach w pouchu zacinalo serwer)
+	local batch = BatchUpdate(player)
+	for slot = CONST_SLOT_FIRST, CONST_SLOT_LAST do
+		local slotItem = player:getSlotItem(slot)
+		if slotItem and slotItem:isContainer() then
+			batch:add(slotItem)
+			for _, inner in ipairs(slotItem:getItems(true)) do
+				if inner:isContainer() then
+					batch:add(inner)
+				end
+			end
+		end
+	end
+	local ok = Bank.deposit(player, amount)
+	batch:delete()
+	if not ok then
 		player:sendTextMessage(config.messageStyle, "You don't have enough money.")
 		return true
 	end

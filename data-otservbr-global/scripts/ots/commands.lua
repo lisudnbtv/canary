@@ -43,6 +43,15 @@ function sell.onSay(player, words, param)
 	end
 	local total, sold = 0, 0
 	local items = pouch:getItems(true)
+	-- BatchUpdate: klient dostaje jedno odswiezenie po wszystkim zamiast osobnego za kazdy przedmiot
+	-- (przy tysiacach rzeczy w pouchu pojedyncze odswiezenia zacinaly serwer)
+	local batch = BatchUpdate(player)
+	batch:add(pouch)
+	for _, item in ipairs(items) do
+		if item:isContainer() then
+			batch:add(item)
+		end
+	end
 	for index = #items, 1, -1 do
 		local item = items[index]
 		local price = prices[item:getId()]
@@ -53,6 +62,7 @@ function sell.onSay(player, words, param)
 			item:remove()
 		end
 	end
+	batch:delete()
 	if sold == 0 then
 		player:sendTextMessage(MESSAGE_EVENT_ADVANCE, "W loot pouchu nie ma nic na sprzedaz.")
 		return true
@@ -178,10 +188,18 @@ function cleaner.onUse(player, item, fromPosition, target, toPosition, isHotkey)
 		end
 		local removed = 0
 		local list = junkIn(bag)
+		local batch = BatchUpdate(target)
+		batch:add(bag)
+		for _, inner in ipairs(bag:getItems(true)) do
+			if inner:isContainer() then
+				batch:add(inner)
+			end
+		end
 		for index = #list, 1, -1 do
 			removed = removed + list[index]:getCount()
 			list[index]:remove()
 		end
+		batch:delete()
 		if target.sendUpdateContainer then
 			target:sendUpdateContainer(bag)
 		end
