@@ -4641,9 +4641,13 @@ local function rushEmpower(monster, tier)
 	-- zmiany zycia/many i "think". W tym trybie ich nie ma: kazdego bossa da sie bic.
 	-- Zdarzenia smierci tez znikaja: questy ustawiaja w nich czasowki na ponowna walke (np. Zamulosh,
 	-- Zalesh: 44 h) i przenosza do kolejnych faz. Zabojstwo do bosstiary i loot licza sie bez nich.
+	-- Zostaja tylko zdarzenia systemowe: loot bossow z nagroda (skrzynia nagrod) i kuznia.
+	local keep = { BossDeath = true, BossThink = true, BossParticipation = true, ForgeSystemMonster = true }
 	for _, eventType in ipairs({ CREATURE_EVENT_HEALTHCHANGE, CREATURE_EVENT_MANACHANGE, CREATURE_EVENT_THINK, CREATURE_EVENT_DEATH }) do
 		for _, eventName in ipairs(monster:getEvents(eventType) or {}) do
-			monster:unregisterEvent(eventName)
+			if not keep[eventName] then
+				monster:unregisterEvent(eventName)
+			end
 		end
 	end
 	local health = math.floor(monster:getMaxHealth() * tier.health)
