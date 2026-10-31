@@ -1563,10 +1563,10 @@ local rushBosses = { "The Imperor", "Zushuka", "Chizzoron the Distorter", "Draco
 local towerCenter = Position(30150, 29900, 7)
 local towerLanding = Position(30150, 29909, 7)
 local bestiaryCenter = Position(30180, 29900, 7)
--- Sala Bestiariusza/Bosstiariusza zmniejszona przy starcie serwera do kwadratu 11x11 (promien 5)
--- wokol tego srodka; dookola zywoplot i ogrod jak przy innych salach huba. Miejsce ladowania (y+9) jest na jej poludniowym brzegu.
-local BESTIARY_ROOM_CENTER = Position(30180, 29904, 7)
-local BESTIARY_ROOM_RADIUS = 5
+-- Sala Bestiariusza/Bosstiariusza przy starcie serwera dostaje wyglad sali Grand Mastera Obrona
+-- (bestiary_room_layout.lua). Potwory pojawiaja sie tylko w jej srodku (prostokat wzgledem ladowania).
+local BESTIARY_ROOM_MIN_DX, BESTIARY_ROOM_MAX_DX = -8, 7
+local BESTIARY_ROOM_MIN_DY, BESTIARY_ROOM_MAX_DY = -11, 2
 local bestiaryLanding = Position(30180, 29909, 7)
 local bestiaryClasses = {
 	{ name = "Amphibic", list = {
@@ -4171,7 +4171,8 @@ local function bestiarySpawn(player, entry, kills)
 		for dy = -range, range do
 			if math.max(math.abs(dx), math.abs(dy)) >= 2 then
 				local pos = Position(here.x + dx, here.y + dy, here.z)
-				if math.abs(pos.x - BESTIARY_ROOM_CENTER.x) <= BESTIARY_ROOM_RADIUS and math.abs(pos.y - BESTIARY_ROOM_CENTER.y) <= BESTIARY_ROOM_RADIUS then
+				local rdx, rdy = pos.x - bestiaryLanding.x, pos.y - bestiaryLanding.y
+				if rdx >= BESTIARY_ROOM_MIN_DX and rdx <= BESTIARY_ROOM_MAX_DX and rdy >= BESTIARY_ROOM_MIN_DY and rdy <= BESTIARY_ROOM_MAX_DY then
 					local tile = Tile(pos)
 					if tile and tile:isWalkable(true, true, true, false, false) and not returnAt(pos) then
 						ring[#ring + 1] = pos
@@ -5376,41 +5377,46 @@ returnGuard:register()
 local roomGuard = GlobalEvent("OtsReturnTeleportRooms")
 
 function roomGuard.onStartup()
-	-- Zmniejszenie sali Bestiariusza do kwadratu BESTIARY_ROOM_RADIUS: dookola zywoplot z krzakow (blokuje
-	-- przejscie), a dalej trawa z kwiatami i drzewami - tak jak brzegi pozostalych sal huba.
-	local bushes = { 3681, 3682, 3699 }
-	local flowers = { 3654, 3655, 3656, 3657, 3658, 3659 }
-	local trees = { 3614, 3615, 3617, 3618, 3620, 3621 }
-	local function hash(x, y, salt)
-		local v = bit.bxor(bit.bxor(x * 73856093, y * 19349663), salt * 83492791)
-		return bit.band(bit.bxor(v, bit.rshift(v, 13)), 0xFFFF)
+	-- Sala Bestiariusza w stylu sali Grand Mastera Obrona: podloga, sciany i ozdoby z bestiary_room_layout.lua,
+	-- a wszystko dookola (dawna trawa i ogrod) staje sie czarna pustka, jak poza scianami lochu.
+	local layout = {}
+	for _, entry in ipairs(OtsBestiaryRoomLayout or {}) do
+		layout[(bestiaryLanding.x + entry[1]) .. ":" .. (bestiaryLanding.y + entry[2])] = entry
 	end
 	local changed = 0
-	for x = bestiaryCenter.x - ARENA_RADIUS, bestiaryCenter.x + ARENA_RADIUS do
-		for y = bestiaryCenter.y - ARENA_RADIUS, bestiaryCenter.y + ARENA_RADIUS do
-			local d = math.max(math.abs(x - BESTIARY_ROOM_CENTER.x) - BESTIARY_ROOM_RADIUS, math.abs(y - BESTIARY_ROOM_CENTER.y) - BESTIARY_ROOM_RADIUS)
-			if d >= 1 then
-				local pos = Position(x, y, bestiaryCenter.z)
-				local tile = Tile(pos)
-				if tile and tile:getGround() and not tile:getTopCreature() then
-					local items = tile:getItems() or {}
-					for index = #items, 1, -1 do
-						items[index]:remove()
-					end
-					local r = hash(x, y, 0)
-					if d == 1 then
-						Game.createItem(bushes[r % #bushes + 1], 1, pos)
-					elseif r % 100 < 22 then
-						Game.createItem(flowers[hash(x, y, 1) % #flowers + 1], 1, pos)
-					elseif d >= 3 and r % 100 < 34 then
-						Game.createItem(trees[hash(x, y, 2) % #trees + 1], 1, pos)
-					end
-					changed = changed + 1
+	local span = ARENA_RADIUS + 5
+	for x = bestiaryCenter.x - span, bestiaryCenter.x + span do
+		for y = bestiaryCenter.y - span, bestiaryCenter.y + span do
+			local pos = Position(x, y, bestiaryCenter.z)
+			local tile = Tile(pos)
+			if tile and not tile:getTopCreature() then
+				local entry = layout[x .. ":" .. y]
+				local items = tile:getItems() or {}
+				for index = #items, 1, -1 do
+					items[index]:remove()
 				end
+				local ground = tile:getGround()
+				if not entry or entry[3] == 0 then
+					if ground then
+						ground:remove()
+					end
+				else
+					if ground then
+						if ground:getId() ~= entry[3] then
+							ground:transform(entry[3])
+						end
+					else
+						Game.createItem(entry[3], 1, pos)
+					end
+					for _, itemId in ipairs(entry[4]) do
+						Game.createItem(itemId, 1, pos)
+					end
+				end
+				changed = changed + 1
 			end
 		end
 	end
-	logger.info("[OTS teleporty] Sala Bestiariusza: {}x{} z zywoplotem (zmienione pola: {})", BESTIARY_ROOM_RADIUS * 2 + 1, BESTIARY_ROOM_RADIUS * 2 + 1, changed)
+	logger.info("[OTS teleporty] Sala Bestiariusza w stylu sali Obrona (zmienione pola: {}, wzor: {})", changed, #(OtsBestiaryRoomLayout or {}))
 
 	local landings = { arenaLanding, survivalLanding, rushLanding, towerLanding, bestiaryLanding }
 	for _, room in ipairs(raidRooms) do
