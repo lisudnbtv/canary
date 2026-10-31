@@ -4247,6 +4247,15 @@ local function bestiaryTick(playerId, token)
 		if creature then
 			hp = hp + creature:getHealth()
 			count = count + 1
+			-- Klony bossa (np. Zamulosh przywoluje kopie z ta sama nazwa i zyciem, ktore nie licza sie
+			-- do bosstiary) od razu znikaja, zeby gracz bil prawdziwego bossa.
+			if entry.boss then
+				for _, summon in ipairs(creature:getSummons() or {}) do
+					if summon:getName() == creature:getName() then
+						summon:remove()
+					end
+				end
+			end
 		end
 	end
 	if bestiaryRun.lastHp and (hp < bestiaryRun.lastHp or count < (bestiaryRun.lastCount or 0)) then
@@ -4696,8 +4705,15 @@ end
 local function rushAlive()
 	local alive = {}
 	for _, id in ipairs(rush.ids) do
-		if Creature(id) then
+		local creature = Creature(id)
+		if creature then
 			alive[#alive + 1] = id
+			-- klony bossa z ta sama nazwa (np. Zamulosh) znikaja - liczy sie tylko prawdziwy boss
+			for _, summon in ipairs(creature:getSummons() or {}) do
+				if summon:getName() == creature:getName() then
+					summon:remove()
+				end
+			end
 		end
 	end
 	return alive
