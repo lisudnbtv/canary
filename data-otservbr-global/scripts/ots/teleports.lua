@@ -4882,22 +4882,27 @@ end
 FAST_EXP_TOKEN = 60106
 local FAST_COUNT = 45 -- tyle potworow naraz w sali
 local FAST_MAX_HIT_PERCENT = 6
-local FAST_BAGS = { [34109] = true, [39546] = true, [43895] = true }
-local FAST_SKIP = { ["soul cage"] = true } -- nieruchome/zbedne
 local fastLanding = Position(30230, 29909, 7)
 local fast = { token = 0, ids = {} }
 local fastPool = nil
 
+-- Najbardziej oplacalne potwory z workami (exp wzgledem zycia, wszystkie maja ok. 0,05-0,065% na worek):
+-- bag you desire (Soul War), bag you covet (Rotten Blood) i primal bag (Primal Ordeal).
+local FAST_MONSTERS = {
+	"Hazardous Phantom", -- 66000 exp
+	"Knight's Apparition", "Paladin's Apparition", "Sorcerer's Apparition", "Druid's Apparition", "Monk's Apparition", -- 28600 exp
+	"Dreadful Harvester", "Malicious Soul", "Spiteful Spitter", -- ok. 25000 exp
+	"Walking Pillar", "Sopping Carcass", "Rotten Man-Maggot", "Darklight Source", -- 22-24 tys. exp, bag you covet
+	"Gorerilla", "Shrieking Cry-Stal", -- najlepsze z primal bag
+}
+
 local function buildFastPool()
 	fastPool = {}
-	for _, mtype in pairs(Game.getMonsterTypes() or {}) do
-		if not mtype:isRewardBoss() and not mtype:bossRace() and mtype:maxHealth() > 0 and not FAST_SKIP[mtype:getTypeName():lower()] then
-			for _, loot in ipairs(mtype:getLoot() or {}) do
-				if FAST_BAGS[loot.itemId] then
-					fastPool[#fastPool + 1] = mtype:getTypeName()
-					break
-				end
-			end
+	for _, name in ipairs(FAST_MONSTERS) do
+		if MonsterType(name) then
+			fastPool[#fastPool + 1] = name
+		else
+			logger.warn("[OTS fast exp] Brak potwora: {}", name)
 		end
 	end
 	logger.info("[OTS fast exp] Potwory z workami: {}", #fastPool)
