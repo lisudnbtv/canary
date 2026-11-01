@@ -4893,14 +4893,19 @@ local FAST_MONSTERS = {
 	"Knight's Apparition", "Paladin's Apparition", "Sorcerer's Apparition", "Druid's Apparition", "Monk's Apparition", -- 28600 exp
 	"Dreadful Harvester", "Malicious Soul", "Spiteful Spitter", -- ok. 25000 exp
 	"Walking Pillar", "Sopping Carcass", "Rotten Man-Maggot", "Darklight Source", -- 22-24 tys. exp, bag you covet
-	"Gorerilla", "Shrieking Cry-Stal", -- najlepsze z primal bag
+	"Gorerilla", "Shrieking Cry-Stal", -- najlepsze z primal bag (rzadziej, patrz FAST_RARE)
 }
+-- potwory pojawiajace sie rzadko (waga 1 zamiast FAST_WEIGHT) - primal bag daje malo expa, ok. 4% sali
+local FAST_RARE = { ["Gorerilla"] = true, ["Shrieking Cry-Stal"] = true }
+local FAST_WEIGHT = 4
 
 local function buildFastPool()
 	fastPool = {}
 	for _, name in ipairs(FAST_MONSTERS) do
 		if MonsterType(name) then
-			fastPool[#fastPool + 1] = name
+			for _ = 1, FAST_RARE[name] and 1 or FAST_WEIGHT do
+				fastPool[#fastPool + 1] = name
+			end
 		else
 			logger.warn("[OTS fast exp] Brak potwora: {}", name)
 		end
