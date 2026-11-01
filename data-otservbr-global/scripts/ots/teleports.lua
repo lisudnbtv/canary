@@ -4480,39 +4480,6 @@ local function openEntryList(player, title, list, back)
 	window:sendToPlayer(player)
 end
 
-local function openAlphabet(player)
-	local byLetter, letters = {}, {}
-	for _, entry in ipairs(allBestiaryEntries()) do
-		local letter = entry[1]:sub(1, 1):upper()
-		if not byLetter[letter] then
-			byLetter[letter] = {}
-			letters[#letters + 1] = letter
-		end
-		table.insert(byLetter[letter], entry)
-	end
-	local window = ModalWindow({ title = "Bestiariusz od A do Z", message = "Wybierz pierwsza litere nazwy potwora.                                        " })
-	for _, letter in ipairs(letters) do
-		window:addChoice(string.format("%s  (%d)", letter, #byLetter[letter]), function(target)
-			openEntryList(target, "Bestiariusz - " .. letter, byLetter[letter], openAlphabet)
-		end)
-	end
-	window:addButton("Wybierz")
-	window:addButton("Wstecz", function(target)
-		openBestiary(target)
-	end)
-	window:setPriority(true)
-	window:setDefaultEnterButton(2)
-	window:setDefaultEscapeButton(1)
-	window:sendToPlayer(player)
-end
-
-local function openNameInput(player)
-	OtsBestiaryAwaiting[player:getId()] = true
-	player:registerEvent("OtsBestiaryInput")
-	player:sendTextMessage(MESSAGE_EVENT_ADVANCE, "Bestiariusz: wpisz nazwe potwora (albo jej czesc) w okienku i zatwierdz OK.")
-	player:showTextDialog(BESTIARY_INPUT_ITEM, "", true, 40)
-end
-
 local bestiaryInput = CreatureEvent("OtsBestiaryInput")
 
 function bestiaryInput.onTextEdit(player, item, text)
@@ -4563,12 +4530,6 @@ bestiaryInput:register()
 
 openBestiary = function(player)
 	local window = ModalWindow({ title = "Bestiariusz", message = "Wybierz klase potworow. W nawiasie: ukonczone / wszystkie.                                        " })
-	window:addChoice(">> Wpisz nazwe potwora", function(target)
-		openNameInput(target)
-	end)
-	window:addChoice(">> Wszystkie potwory od A do Z", function(target)
-		openAlphabet(target)
-	end)
 	for _, class in ipairs(bestiaryClasses) do
 		local finished = 0
 		for _, entry in ipairs(class.list) do
