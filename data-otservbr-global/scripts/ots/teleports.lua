@@ -4436,8 +4436,133 @@ openBosstiary = function(player)
 end
 OtsOpenBosstiary = openBosstiary
 
+-- Wyszukiwanie potwora po nazwie (wpisanej w okienku) i lista wszystkich od A do Z.
+local BESTIARY_INPUT_ITEM = 173 -- pergamin: okno z miejscem do wpisania tekstu
+OtsBestiaryAwaiting = OtsBestiaryAwaiting or {} -- id gracza -> czeka na wpisanie nazwy
+
+local function allBestiaryEntries()
+	local all = {}
+	for _, class in ipairs(bestiaryClasses) do
+		for _, entry in ipairs(class.list) do
+			all[#all + 1] = entry
+		end
+	end
+	table.sort(all, function(a, b)
+		return a[1]:lower() < b[1]:lower()
+	end)
+	return all
+end
+
+local function entryLabel(player, entry)
+	local kills = bestiaryKills(player, entry[2])
+	return kills >= entry[3] and ("[Complete] " .. entry[1]) or string.format("%s  %d/%d", entry[1], kills, entry[3])
+end
+
+-- Okno z lista wpisow; po wyborze startuje sala (auto kontynuacja po tej samej liscie).
+local function openEntryList(player, title, list, back)
+	local window = ModalWindow({ title = title, message = "Wybierz potwora - po jego ukonczeniu sala sama przechodzi do nastepnego nieukonczonego z tej listy.                                        " })
+	local class = { name = title, list = list }
+	for index, entry in ipairs(list) do
+		if index > 250 then
+			break
+		end
+		window:addChoice(entryLabel(player, entry), function(target)
+			bestiaryStart(target, entry, class)
+		end)
+	end
+	window:addButton("Wybierz")
+	window:addButton("Wstecz", function(target)
+		back(target)
+	end)
+	window:setPriority(true)
+	window:setDefaultEnterButton(2)
+	window:setDefaultEscapeButton(1)
+	window:sendToPlayer(player)
+end
+
+local function openAlphabet(player)
+	local byLetter, letters = {}, {}
+	for _, entry in ipairs(allBestiaryEntries()) do
+		local letter = entry[1]:sub(1, 1):upper()
+		if not byLetter[letter] then
+			byLetter[letter] = {}
+			letters[#letters + 1] = letter
+		end
+		table.insert(byLetter[letter], entry)
+	end
+	local window = ModalWindow({ title = "Bestiariusz od A do Z", message = "Wybierz pierwsza litere nazwy potwora.                                        " })
+	for _, letter in ipairs(letters) do
+		window:addChoice(string.format("%s  (%d)", letter, #byLetter[letter]), function(target)
+			openEntryList(target, "Bestiariusz - " .. letter, byLetter[letter], openAlphabet)
+		end)
+	end
+	window:addButton("Wybierz")
+	window:addButton("Wstecz", function(target)
+		openBestiary(target)
+	end)
+	window:setPriority(true)
+	window:setDefaultEnterButton(2)
+	window:setDefaultEscapeButton(1)
+	window:sendToPlayer(player)
+end
+
+local function openNameInput(player)
+	OtsBestiaryAwaiting[player:getId()] = true
+	player:registerEvent("OtsBestiaryInput")
+	player:sendTextMessage(MESSAGE_EVENT_ADVANCE, "Bestiariusz: wpisz nazwe potwora (albo jej czesc) w okienku i zatwierdz OK.")
+	player:showTextDialog(BESTIARY_INPUT_ITEM, "", true, 40)
+end
+
+local bestiaryInput = CreatureEvent("OtsBestiaryInput")
+
+function bestiaryInput.onTextEdit(player, item, text)
+	if not OtsBestiaryAwaiting[player:getId()] then
+		return true
+	end
+	OtsBestiaryAwaiting[player:getId()] = nil
+	local wanted = (text or ""):lower():gsub("^%s+", ""):gsub("%s+$", "")
+	if wanted == "" then
+		return false
+	end
+	local exact, matches = nil, {}
+	for _, entry in ipairs(allBestiaryEntries()) do
+		local name = entry[1]:lower()
+		if name == wanted then
+			exact = entry
+		elseif name:find(wanted, 1, true) then
+			matches[#matches + 1] = entry
+		end
+	end
+	if exact then
+		local class = nil
+		for _, c in ipairs(bestiaryClasses) do
+			for _, e in ipairs(c.list) do
+				if e == exact then
+					class = c
+				end
+			end
+		end
+		bestiaryStart(player, exact, class)
+	elseif #matches == 1 then
+		bestiaryStart(player, matches[1], nil)
+	elseif #matches > 1 then
+		openEntryList(player, "Bestiariusz - \"" .. wanted .. "\"", matches, openBestiary)
+	else
+		player:sendCancelMessage("Bestiariusz: nie ma potwora o nazwie \"" .. wanted .. "\".")
+	end
+	return false -- nic nie zapisujemy na pergaminie
+end
+
+bestiaryInput:register()
+
 openBestiary = function(player)
 	local window = ModalWindow({ title = "Bestiariusz", message = "Wybierz klase potworow. W nawiasie: ukonczone / wszystkie.                                        " })
+	window:addChoice(">> Wpisz nazwe potwora", function(target)
+		openNameInput(target)
+	end)
+	window:addChoice(">> Wszystkie potwory od A do Z", function(target)
+		openAlphabet(target)
+	end)
 	for _, class in ipairs(bestiaryClasses) do
 		local finished = 0
 		for _, entry in ipairs(class.list) do
