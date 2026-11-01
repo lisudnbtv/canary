@@ -5014,9 +5014,9 @@ OtsFastExpBuild = function()
 			end
 		end
 	end
-	-- pad w lobby: polnocny rzad padow, obok padu Hardcore Boss (pole tworzone, bo na mapie go nie ma),
-	-- nad nim tabliczka jak przy innych padach
-	local padSpot = Position(30002, 29998, 7)
+	-- pad w lobby: polnocny rzad padow, posrodku miedzy Exp High a Wieza (pole tworzone, bo na mapie
+	-- go nie ma), nad nim tabliczka jak przy innych padach
+	local padSpot = Position(30022, 29998, 7)
 	-- pole moze byc brzegiem ogrodu huba (trawa, krzak) - czyscimy je i kladziemy marmur
 	local function prepareFloor(pos)
 		local t = Tile(pos) or Game.createTile(pos.x, pos.y, pos.z)
