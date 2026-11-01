@@ -5014,21 +5014,40 @@ OtsFastExpBuild = function()
 			end
 		end
 	end
-	-- pad w lobby: pierwsze wolne pole z listy (polnocny rzad padow)
-	local padSpot = nil
-	for _, c in ipairs({ { 30022, 29998 }, { 30011, 29998 }, { 30023, 29998 }, { 30029, 30002 }, { 30030, 29998 } }) do
-		local pos = Position(c[1], c[2], 7)
-		local tile = Tile(pos)
-		if tile and tile:getGround() and tile:getItemCount() == 0 and not tile:getTopCreature() and not hubPads[key(pos)] then
-			padSpot = pos
-			break
+	-- pad w lobby: polnocny rzad padow, obok padu Hardcore Boss (pole tworzone, bo na mapie go nie ma),
+	-- nad nim tabliczka jak przy innych padach
+	local padSpot = Position(30002, 29998, 7)
+	-- pole moze byc brzegiem ogrodu huba (trawa, krzak) - czyscimy je i kladziemy marmur
+	local function prepareFloor(pos)
+		local t = Tile(pos) or Game.createTile(pos.x, pos.y, pos.z)
+		if not t then
+			return nil
 		end
+		local items = t:getItems() or {}
+		for index = #items, 1, -1 do
+			items[index]:remove()
+		end
+		local ground = t:getGround()
+		if ground then
+			if ground:getId() ~= 410 then
+				ground:transform(410)
+			end
+		else
+			Game.createItem(410, 1, pos) -- czarny marmur jak podloga huba
+		end
+		return t
 	end
-	if padSpot then
-		local pad = Game.createItem(ENTRY_ITEM_ID, 1, padSpot)
-		if pad then
-			pad:setActionId(HUB_ACTION_ID)
-			hubPads[key(padSpot)] = { fastexp = true }
+	prepareFloor(padSpot)
+	local pad = Game.createItem(ENTRY_ITEM_ID, 1, padSpot)
+	if pad then
+		pad:setActionId(HUB_ACTION_ID)
+		hubPads[key(padSpot)] = { fastexp = true }
+	end
+	local boardPos = Position(padSpot.x, padSpot.y - 1, padSpot.z)
+	if prepareFloor(boardPos) then
+		local board = Game.createItem(2016, 1, boardPos)
+		if board then
+			board:setAttribute(ITEM_ATTRIBUTE_TEXT, "FAST EXP\nPotwory z workami (desire, primal, covet), duzo naraz.\nWejscie tylko z fast exp token w plecaku.")
 		end
 	end
 	logger.info("[OTS fast exp] Sala: {} pol, pad w hubie: {}", made, padSpot and (padSpot.x .. ", " .. padSpot.y) or "brak miejsca")
