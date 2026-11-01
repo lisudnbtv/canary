@@ -1566,7 +1566,7 @@ local bestiaryCenter = Position(30180, 29900, 7)
 -- Sala Bestiariusza/Bosstiariusza przy starcie serwera dostaje wyglad sali Grand Mastera Obrona
 -- (bestiary_room_layout.lua). Potwory pojawiaja sie tylko w jej srodku (prostokat wzgledem ladowania).
 local BESTIARY_ROOM_MIN_DX, BESTIARY_ROOM_MAX_DX = -8, 7
-local BESTIARY_ROOM_MIN_DY, BESTIARY_ROOM_MAX_DY = -11, 2
+local BESTIARY_ROOM_MIN_DY, BESTIARY_ROOM_MAX_DY = -8, 2 -- bez wneki za sciana na polnocy (potwory tam utykaly)
 local bestiaryLanding = Position(30180, 29909, 7)
 local bestiaryClasses = {
 	{ name = "Amphibic", list = {
@@ -4883,6 +4883,7 @@ FAST_EXP_TOKEN = 60106
 local FAST_COUNT = 45 -- tyle potworow naraz w sali
 local FAST_MAX_HIT_PERCENT = 6
 local FAST_BAGS = { [34109] = true, [39546] = true, [43895] = true }
+local FAST_SKIP = { ["soul cage"] = true } -- nieruchome/zbedne
 local fastLanding = Position(30230, 29909, 7)
 local fast = { token = 0, ids = {} }
 local fastPool = nil
@@ -4890,7 +4891,7 @@ local fastPool = nil
 local function buildFastPool()
 	fastPool = {}
 	for _, mtype in pairs(Game.getMonsterTypes() or {}) do
-		if not mtype:isRewardBoss() and not mtype:bossRace() and mtype:maxHealth() > 0 then
+		if not mtype:isRewardBoss() and not mtype:bossRace() and mtype:maxHealth() > 0 and not FAST_SKIP[mtype:getTypeName():lower()] then
 			for _, loot in ipairs(mtype:getLoot() or {}) do
 				if FAST_BAGS[loot.itemId] then
 					fastPool[#fastPool + 1] = mtype:getTypeName()
