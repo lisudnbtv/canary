@@ -4516,12 +4516,18 @@ end
 local bestiaryInput = CreatureEvent("OtsBestiaryInput")
 
 function bestiaryInput.onTextEdit(player, item, text)
-	if not OtsBestiaryAwaiting[player:getId()] then
+	local state = OtsBestiaryAwaiting[player:getId()]
+	if not state then
 		return true
 	end
 	OtsBestiaryAwaiting[player:getId()] = nil
 	local wanted = (text or ""):lower():gsub("^%s+", ""):gsub("%s+$", "")
 	if wanted == "" then
+		return false
+	end
+	-- wyszukiwanie expowiska (Expowiska > Bestiariusz), a nie sali bestiariusza
+	if type(state) == "table" and state.mode == "hunt" and OtsHuntSearch then
+		OtsHuntSearch(player, state.group, wanted)
 		return false
 	end
 	local exact, matches = nil, {}
@@ -5375,7 +5381,16 @@ local function openHuntClasses(player, group)
 		end
 		table.insert(byClass[cls], entry)
 	end
-	local window = ModalWindow({ title = group.label, message = "Wybierz klase potworow." })
+	local window = ModalWindow({ title = group.label, message = "Wybierz klase potworow albo wyszukaj expowisko po nazwie potwora." })
+	window:addChoice(">> Wpisz nazwe potwora", function(target)
+		OtsBestiaryAwaiting[target:getId()] = { mode = "hunt", group = group }
+		target:registerEvent("OtsBestiaryInput")
+		target:sendTextMessage(MESSAGE_EVENT_ADVANCE, "Expowiska: wpisz nazwe potwora (albo jej czesc) w okienku i zatwierdz OK.")
+		target:showTextDialog(BESTIARY_INPUT_ITEM, "", true, 40)
+	end)
+	window:addChoice(">> Wszystkie expowiska od A do Z", function(target)
+		OtsHuntAlphabet(target, group)
+	end)
 	for _, cls in ipairs(classes) do
 		window:addChoice(cls .. " [" .. #byClass[cls] .. "]", function(target)
 			openList(target, group.label .. " - " .. cls, byClass[cls], function(back)
@@ -5386,6 +5401,69 @@ local function openHuntClasses(player, group)
 	window:addButton("Wybierz")
 	window:addButton("Wstecz", function(target)
 		openHunts(target)
+	end)
+	window:setPriority(true)
+	window:setDefaultEnterButton(2)
+	window:setDefaultEscapeButton(1)
+	window:sendToPlayer(player)
+end
+
+-- Expowiska wg nazwy potwora: wyszukiwanie z okienka i lista od A do Z (po pierwszej literze).
+local function huntSorted(list)
+	local sorted = {}
+	for _, entry in ipairs(list) do
+		sorted[#sorted + 1] = entry
+	end
+	table.sort(sorted, function(a, b)
+		return a[1]:lower() < b[1]:lower()
+	end)
+	return sorted
+end
+
+OtsHuntSearch = function(player, group, wanted)
+	local exact, matches = {}, {}
+	for _, entry in ipairs(huntSorted(group.list)) do
+		local name = (entry.mon or entry[1]):lower()
+		if name == wanted then
+			exact[#exact + 1] = entry
+		elseif name:find(wanted, 1, true) or entry[1]:lower():find(wanted, 1, true) then
+			matches[#matches + 1] = entry
+		end
+	end
+	local found = #exact > 0 and exact or matches
+	local back = function(target)
+		openHuntClasses(target, group)
+	end
+	if #found == 1 then
+		startEntry(player, found[1])
+	elseif #found > 1 then
+		openList(player, "Expowiska - \"" .. wanted .. "\"", found, back)
+	else
+		player:sendCancelMessage("Expowiska: nie ma potwora o nazwie \"" .. wanted .. "\".")
+	end
+end
+
+OtsHuntAlphabet = function(player, group)
+	local byLetter, letters = {}, {}
+	for _, entry in ipairs(huntSorted(group.list)) do
+		local letter = entry[1]:sub(1, 1):upper()
+		if not byLetter[letter] then
+			byLetter[letter] = {}
+			letters[#letters + 1] = letter
+		end
+		table.insert(byLetter[letter], entry)
+	end
+	local window = ModalWindow({ title = group.label .. " od A do Z", message = "Wybierz pierwsza litere nazwy potwora." })
+	for _, letter in ipairs(letters) do
+		window:addChoice(string.format("%s  (%d)", letter, #byLetter[letter]), function(target)
+			openList(target, group.label .. " - " .. letter, byLetter[letter], function(back)
+				OtsHuntAlphabet(back, group)
+			end)
+		end)
+	end
+	window:addButton("Wybierz")
+	window:addButton("Wstecz", function(target)
+		openHuntClasses(target, group)
 	end)
 	window:setPriority(true)
 	window:setDefaultEnterButton(2)
