@@ -4245,6 +4245,7 @@ local function bestiaryTick(playerId, token)
 	end
 	local entry = bestiaryRun.monster
 	local label = runLabel(entry)
+	player:removeCondition(CONDITION_FEARED) -- strach (np. z Soul War) nie rozbiega postaci po sali
 	local kills = entryKills(player, entry)
 	if kills ~= bestiaryRun.lastKills then
 		bestiaryRun.lastKills = kills
@@ -4927,6 +4928,16 @@ local function fastTick(playerId, token)
 	if not player or not inFastRoom(player:getPosition()) then
 		fastClear()
 		return
+	end
+	-- strach z Soul War (soulwars fear) kaze postaci biegac po sali - w tej sali zdejmujemy go co 1/4 s
+	player:removeCondition(CONDITION_FEARED)
+	for step = 1, 3 do
+		addEvent(function(id)
+			local target = Player(id)
+			if target then
+				target:removeCondition(CONDITION_FEARED)
+			end
+		end, step * 250, playerId)
 	end
 	local alive = {}
 	for _, id in ipairs(fast.ids) do
