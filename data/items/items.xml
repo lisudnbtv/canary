@@ -91384,5 +91384,10 @@ Granted by TibiaGoals.com"/>
 		<attribute key="description" value="Use it to remove everything from your loot pouch that the Loot Seller does not buy."/>
 		<attribute key="weight" value="1100"/>
 	</item>
+	<item id="60106" article="a" name="fast exp token">
+		<attribute key="primarytype" value="tools"/>
+		<attribute key="description" value="Keep it in your backpack to use the FAST EXP teleport in the hub."/>
+		<attribute key="weight" value="10"/>
+	</item>
 	<!-- /OTS runes -->
 </items>

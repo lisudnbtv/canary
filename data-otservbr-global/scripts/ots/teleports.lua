@@ -3681,6 +3681,16 @@ function raidTick.onThink(interval)
 		if room.bossId then
 			if not Creature(room.bossId) then
 				Game.broadcastMessage("Losowy Boss pokonany: " .. (room.bossName or "?") .. " (" .. room.label .. "). Nastepny za 10 minut.", MESSAGE_EVENT_ADVANCE)
+				-- Legendarny: 0,01% szansy na fast exp token dla kazdego gracza w salce
+				if room.label == "Legendarny" then
+					for _, online in ipairs(Game.getPlayers()) do
+						local p = online:getPosition()
+						if p.z == room.center.z and math.abs(p.x - room.center.x) <= ARENA_RADIUS + 1 and math.abs(p.y - room.center.y) <= ARENA_RADIUS + 1 and math.random(10000) == 1 then
+							online:addItem(60106, 1)
+							online:sendTextMessage(MESSAGE_EVENT_ADVANCE, "Niesamowite! Legendarny boss zostawil fast exp token - wstep do sali FAST EXP w hubie.")
+						end
+					end
+				end
 				room.bossId = nil
 				room.nextAt = os.time() + RAID_RESPAWN_SECONDS
 			end
@@ -4619,6 +4629,7 @@ local RUSH_TIERS = {
 }
 OtsHardcoreBossDamage = OtsHardcoreBossDamage or {} -- id bossa -> mnoznik obrazen
 OtsHardcoreBossVulnerable = OtsHardcoreBossVulnerable or {} -- id bossa odpornego na wszystko -> obrazenia graczy jako neutralne
+OtsHardcoreHitCap = OtsHardcoreHitCap or {} -- id potwora -> wlasny limit jednego ciosu (% max zycia gracza)
 
 local function rushTier()
 	local total = 0
@@ -4861,6 +4872,168 @@ hardcoreEmpower = function(monster)
 	rushEmpower(monster, rushTier())
 end
 
+-- FAST EXP: osobna sala (wyglad sali Grand Mastera Obrona, budowana przy starcie serwera) z mieszanka
+-- potworow, z ktorych leca worki (bag you desire, primal bag, bag you covet). Jak w Bestiariuszu: duzo
+-- potworow naraz i od razu nowe w miejsce zabitych; sila losowana jak u bossow Hardcore Boss
+-- (Silny / Brutalny / Koszmar), ale jeden cios zabiera najwyzej FAST_MAX_HIT_PERCENT zycia gracza.
+-- Wejscie tylko z przedmiotem "fast exp token" w plecaku (nie ma go w sklepach ani w lootach potworow;
+-- 0,01% z Legendarnego Losowego Bossa). Pad w lobby huba stawiany przy starcie serwera.
+FAST_EXP_TOKEN = 60106
+local FAST_COUNT = 45 -- tyle potworow naraz w sali
+local FAST_MAX_HIT_PERCENT = 6
+local FAST_BAGS = { [34109] = true, [39546] = true, [43895] = true }
+local fastLanding = Position(30230, 29909, 7)
+local fast = { token = 0, ids = {} }
+local fastPool = nil
+
+local function buildFastPool()
+	fastPool = {}
+	for _, mtype in pairs(Game.getMonsterTypes() or {}) do
+		if not mtype:isRewardBoss() and not mtype:bossRace() and mtype:maxHealth() > 0 then
+			for _, loot in ipairs(mtype:getLoot() or {}) do
+				if FAST_BAGS[loot.itemId] then
+					fastPool[#fastPool + 1] = mtype:getTypeName()
+					break
+				end
+			end
+		end
+	end
+	logger.info("[OTS fast exp] Potwory z workami: {}", #fastPool)
+end
+
+local function inFastRoom(position)
+	local dx, dy = position.x - fastLanding.x, position.y - fastLanding.y
+	return position.z == fastLanding.z and dx >= BESTIARY_ROOM_MIN_DX - 1 and dx <= BESTIARY_ROOM_MAX_DX + 1 and dy >= BESTIARY_ROOM_MIN_DY - 3 and dy <= BESTIARY_ROOM_MAX_DY + 2
+end
+
+local function fastClear()
+	for _, id in ipairs(fast.ids) do
+		local creature = Creature(id)
+		if creature then
+			creature:remove()
+		end
+		OtsHardcoreBossDamage[id] = nil
+		OtsHardcoreBossVulnerable[id] = nil
+		OtsHardcoreHitCap[id] = nil
+	end
+	fast.ids = {}
+end
+
+local function fastTick(playerId, token)
+	if token ~= fast.token then
+		return
+	end
+	local player = Player(playerId)
+	if not player or not inFastRoom(player:getPosition()) then
+		fastClear()
+		return
+	end
+	local alive = {}
+	for _, id in ipairs(fast.ids) do
+		local creature = Creature(id)
+		if creature then
+			if inFastRoom(creature:getPosition()) then
+				alive[#alive + 1] = id
+			else
+				creature:remove()
+			end
+		else
+			OtsHardcoreBossDamage[id] = nil
+			OtsHardcoreHitCap[id] = nil
+		end
+	end
+	fast.ids = alive
+	local missing = FAST_COUNT - #alive
+	if missing > 0 and #fastPool > 0 then
+		local spots = {}
+		for dx = BESTIARY_ROOM_MIN_DX, BESTIARY_ROOM_MAX_DX do
+			for dy = BESTIARY_ROOM_MIN_DY, BESTIARY_ROOM_MAX_DY do
+				local pos = Position(fastLanding.x + dx, fastLanding.y + dy, fastLanding.z)
+				local tile = Tile(pos)
+				if tile and tile:isWalkable(true, true, true, false, false) and not returnAt(pos) and not safeTiles[key(pos)] then
+					spots[#spots + 1] = pos
+				end
+			end
+		end
+		for _ = 1, missing do
+			if #spots == 0 then
+				break
+			end
+			local pos = table.remove(spots, math.random(#spots))
+			local monster = Game.createMonster(fastPool[math.random(#fastPool)], pos, true, true)
+			if monster then
+				rushEmpower(monster, rushTier())
+				OtsHardcoreHitCap[monster:getId()] = FAST_MAX_HIT_PERCENT
+				fast.ids[#fast.ids + 1] = monster:getId()
+			end
+		end
+	end
+	addEvent(fastTick, 1000, playerId, token)
+end
+
+OtsFastExpEnter = function(player)
+	if player:getItemCount(FAST_EXP_TOKEN) <= 0 then
+		player:sendCancelMessage("FAST EXP: potrzebujesz przedmiotu fast exp token w plecaku.")
+		player:getPosition():sendMagicEffect(CONST_ME_POFF)
+		return
+	end
+	if inFight(player) then
+		return
+	end
+	if not fastPool then
+		buildFastPool()
+	end
+	fastClear()
+	fast.token = fast.token + 1
+	travel(player, { "FAST EXP", fastLanding.x, fastLanding.y, fastLanding.z })
+	if not inFastRoom(player:getPosition()) then
+		return
+	end
+	player:sendTextMessage(MESSAGE_EVENT_ADVANCE, string.format("FAST EXP: %d potworow z workami naraz, od razu nowe w miejsce zabitych. Sila losowa (Silny / Brutalny / Koszmar), jeden cios zabiera najwyzej %d%% zycia. Wyjscie teleportem konczy.", FAST_COUNT, FAST_MAX_HIT_PERCENT))
+	addEvent(fastTick, 1000, player:getId(), fast.token)
+end
+
+-- Budowa sali FAST EXP (pola nie istnieja na mapie - tworzymy je) i padu w lobby huba.
+OtsFastExpBuild = function()
+	local made = 0
+	for _, entry in ipairs(OtsBestiaryRoomLayout or {}) do
+		if entry[3] ~= 0 then
+			local pos = Position(fastLanding.x + entry[1], fastLanding.y + entry[2], fastLanding.z)
+			if not Tile(pos) then
+				Game.createTile(pos.x, pos.y, pos.z)
+			end
+			local tile = Tile(pos)
+			if tile then
+				if not tile:getGround() then
+					Game.createItem(entry[3], 1, pos)
+				end
+				for _, itemId in ipairs(entry[4]) do
+					Game.createItem(itemId, 1, pos)
+				end
+				made = made + 1
+			end
+		end
+	end
+	-- pad w lobby: pierwsze wolne pole z listy (polnocny rzad padow)
+	local padSpot = nil
+	for _, c in ipairs({ { 30022, 29998 }, { 30011, 29998 }, { 30023, 29998 }, { 30029, 30002 }, { 30030, 29998 } }) do
+		local pos = Position(c[1], c[2], 7)
+		local tile = Tile(pos)
+		if tile and tile:getGround() and tile:getItemCount() == 0 and not tile:getTopCreature() and not hubPads[key(pos)] then
+			padSpot = pos
+			break
+		end
+	end
+	if padSpot then
+		local pad = Game.createItem(ENTRY_ITEM_ID, 1, padSpot)
+		if pad then
+			pad:setActionId(HUB_ACTION_ID)
+			hubPads[key(padSpot)] = { fastexp = true }
+		end
+	end
+	logger.info("[OTS fast exp] Sala: {} pol, pad w hubie: {}", made, padSpot and (padSpot.x .. ", " .. padSpot.y) or "brak miejsca")
+end
+
 -- Bossy Hardcore Boss bija mocniej wedlug wylosowanej sily.
 local rushDamage = EventCallback("OtsHardcoreBossDamage")
 
@@ -4886,7 +5059,7 @@ function rushDamage.creatureOnCombat(caster, target, combatDamage)
 				total = total - entry.value
 			end
 		end
-		local cap = math.floor(target:getMaxHealth() * RUSH_MAX_HIT_PERCENT / 100)
+		local cap = math.floor(target:getMaxHealth() * (OtsHardcoreHitCap[caster:getId()] or RUSH_MAX_HIT_PERCENT) / 100)
 		if total > cap and cap > 0 then
 			local scale = cap / total
 			for _, entry in ipairs({ combatDamage.primary, combatDamage.secondary }) do
@@ -5263,6 +5436,8 @@ function hubStep.onStepIn(creature, item, position, fromPosition)
 		survivalEnter(player)
 	elseif action.bossrush then
 		rushEnter(player)
+	elseif action.fastexp then
+		OtsFastExpEnter(player)
 	elseif action.tower then
 		towerEnter(player)
 	elseif action.bestiary then
@@ -5313,6 +5488,8 @@ function hubLook.playerOnLook(player, inspectedThing, inspectedPosition, lookDis
 		text = "Fale potworow"
 	elseif action.bossrush then
 		text = "Hardcore Boss"
+	elseif action.fastexp then
+		text = "FAST EXP (potrzebny fast exp token w plecaku)"
 	elseif action.tower then
 		text = "Wieza"
 	elseif action.bestiary then
@@ -5437,7 +5614,8 @@ function roomGuard.onStartup()
 	end
 	logger.info("[OTS teleporty] Sala Bestiariusza w stylu sali Obrona (zmienione pola: {}, wzor: {})", changed, #(OtsBestiaryRoomLayout or {}))
 
-	local landings = { arenaLanding, survivalLanding, rushLanding, towerLanding, bestiaryLanding }
+	OtsFastExpBuild()
+	local landings = { arenaLanding, survivalLanding, rushLanding, towerLanding, bestiaryLanding, Position(30230, 29909, 7) }
 	for _, room in ipairs(raidRooms) do
 		landings[#landings + 1] = room.landing
 	end

@@ -19,6 +19,8 @@ TOOLS = [
     # id, wyglad z, nazwa, opis, waga - wlasne przedmioty, ktorych nie da sie zdobyc z potworow
     # (skrypt Clean Loot Pouch: data-otservbr-global/scripts/ots/commands.lua)
     (60105, 3454, 'clean loot pouch', 'Use it to remove everything from your loot pouch that the Loot Seller does not buy.', 1100),
+    # klucz do sali FAST EXP w hubie (wystarczy miec go w plecaku); tylko 0,01% z Legendarnego Losowego Bossa
+    (60106, 19082, 'fast exp token', 'Keep it in your backpack to use the FAST EXP teleport in the hub.', 10),
 ]
 
 
