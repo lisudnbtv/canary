@@ -5,7 +5,7 @@
 -- zeby klient pokazywal ikone i odliczanie bez nieznanych numerow.
 local LEVEL = 4500
 local MANA = 2000
-local COOLDOWN = 8 * 1000
+local COOLDOWN = 1000 -- jak inne czary na serwerze (spell_cooldown.lua: najwyzej 1 s)
 
 local spells = {
 	{ words = "exevo ultima san", name = "Ultimate Holy Storm", id = 124, type = COMBAT_HOLYDAMAGE, effect = CONST_ME_HOLYAREA, vocations = { "paladin;true", "royal paladin;true" } },
@@ -46,7 +46,7 @@ for index, config in ipairs(spells) do
 	spell:isPremium(true)
 	spell:isSelfTarget(true)
 	spell:cooldown(COOLDOWN)
-	spell:groupCooldown(2 * 1000)
+	spell:groupCooldown(COOLDOWN)
 	spell:needLearn(false)
 	for _, vocation in ipairs(config.vocations) do
 		spell:vocation(vocation)
