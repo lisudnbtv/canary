@@ -3955,7 +3955,10 @@ local TASK_NPC_NAME = "Taski"
 local taskNpcType = Game.createNpcType(TASK_NPC_NAME)
 taskNpcType.onSay = function(npc, creature, type, message)
 	local player = creature and creature:getPlayer()
-	if player and player:getPosition():getDistance(npc:getPosition()) <= 4 then
+	-- tylko gdy gracz zagada do postaci (hi, hello, task, zadanie) - nie przy kazdym czarze w lobby
+	local text = (message or ""):lower()
+	local greeting = text == "hi" or text == "hello" or text == "witaj" or text:find("task", 1, true) or text:find("zadani", 1, true)
+	if player and greeting and player:getPosition():getDistance(npc:getPosition()) <= 4 then
 		openTasks(player)
 	end
 end
