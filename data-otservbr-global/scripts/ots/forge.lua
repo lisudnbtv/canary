@@ -28,16 +28,16 @@ function mergeForge.onSay(player, words, param)
 	local make = math.floor(have / cost)
 	if make == 0 then
 		player:sendCancelMessage(string.format("Potrzebujesz %d sliverow na 1 exalted core (masz %d).", cost, have))
-		return false
+		return true
 	end
 	if not player:removeItem(ITEM_FORGE_SLIVER, make * cost) then
 		player:sendCancelMessage("Nie udalo sie zabrac sliverow.")
-		return false
+		return true
 	end
 	player:addItem(ITEM_FORGE_CORE, make)
 	player:getPosition():sendMagicEffect(CONST_ME_MAGIC_GREEN)
 	player:sendTextMessage(MESSAGE_EVENT_ADVANCE, string.format("Polaczono %d sliverow w %d exalted core. Zostalo %d sliverow.", make * cost, make, have - make * cost))
-	return false
+	return true
 end
 
 mergeForge:groupType("normal")
