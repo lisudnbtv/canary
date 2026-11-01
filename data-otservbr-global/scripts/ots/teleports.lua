@@ -4986,6 +4986,8 @@ local function fastTick(playerId, token)
 			if monster then
 				rushEmpower(monster, rushTier())
 				OtsHardcoreHitCap[monster:getId()] = FAST_MAX_HIT_PERCENT
+				-- kazdy potwor podchodzi wrecz (jak po exana amp res), zamiast trzymac sie na dystans
+				monster:changeTargetDistance(1, 24 * 60 * 60 * 1000)
 				fast.ids[#fast.ids + 1] = monster:getId()
 			end
 		end
