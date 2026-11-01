@@ -4437,7 +4437,7 @@ end
 OtsOpenBosstiary = openBosstiary
 
 -- Wyszukiwanie potwora po nazwie (wpisanej w okienku) i lista wszystkich od A do Z.
-local BESTIARY_INPUT_ITEM = 173 -- pergamin: okno z miejscem do wpisania tekstu
+local BESTIARY_INPUT_ITEM = 2814 -- pergamin, ktory klient pozwala zapisac (okno z miejscem do wpisania tekstu)
 OtsBestiaryAwaiting = OtsBestiaryAwaiting or {} -- id gracza -> czeka na wpisanie nazwy
 
 local function allBestiaryEntries()
