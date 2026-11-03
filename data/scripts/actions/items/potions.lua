@@ -79,6 +79,11 @@ function flaskPotion.onUse(player, item, fromPosition, target, toPosition, isHot
 		return false
 	end
 
+	if OtsNoPotions and OtsNoPotions[player:getId()] then
+		player:sendCancelMessage("W Wiezy Upadku potiony nie dzialaja.")
+		return true
+	end
+
 	local potion = potions[item:getId()]
 	if not player:getGroup():getAccess() and (potion.level and player:getLevel() < potion.level or potion.vocations and not table.contains(potion.vocations, player:getVocation():getBaseId())) then
 		player:say(potion.description, MESSAGE_POTION)

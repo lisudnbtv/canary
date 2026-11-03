@@ -91389,5 +91389,13 @@ Granted by TibiaGoals.com"/>
 		<attribute key="description" value="Keep it in your backpack to use the FAST EXP teleport in the hub."/>
 		<attribute key="weight" value="10"/>
 	</item>
+	<item id="60107" article="an" name="elemental champion amulet">
+		<attribute key="primarytype" value="amulets and necklaces"/>
+		<attribute key="description" value="Reward for the Champion of Elements: +30% protection against every kind of damage."/>
+		<attribute key="weight" value="420"/>
+		<attribute key="slotType" value="necklace"/>
+		<attribute key="showattributes" value="1"/>
+		<attribute key="absorbpercentall" value="30"/>
+	</item>
 	<!-- /OTS runes -->
 </items>

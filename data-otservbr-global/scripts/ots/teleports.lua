@@ -5113,6 +5113,49 @@ OtsFastExpEnter = function(player)
 end
 
 -- Budowa sali FAST EXP (pola nie istnieja na mapie - tworzymy je) i padu w lobby huba.
+-- Wspolne narzedzia dla innych skryptow (hardcore_quests.lua): teleport z bezpieczna strefa,
+-- losowa sila jak w Hardcore Boss, budowa sali w stylu Obrona i sprawdzanie wolnych pol.
+OtsTravel = function(player, label, position)
+	travel(player, { label, position.x, position.y, position.z })
+end
+OtsInFight = function(player)
+	return inFight(player)
+end
+OtsEmpowerRandom = function(monster)
+	rushEmpower(monster, rushTier())
+end
+OtsEmpowerStrongest = function(monster)
+	rushEmpower(monster, RUSH_TIERS[#RUSH_TIERS])
+end
+OtsHubLobby = hubLobby
+OtsRoomBounds = { minDx = BESTIARY_ROOM_MIN_DX, maxDx = BESTIARY_ROOM_MAX_DX, minDy = BESTIARY_ROOM_MIN_DY, maxDy = BESTIARY_ROOM_MAX_DY }
+OtsIsSpotFree = function(pos)
+	local tile = Tile(pos)
+	return tile and tile:isWalkable(true, true, true, false, false) and not returnAt(pos) and not safeTiles[key(pos)]
+end
+OtsBuildRoom = function(landing)
+	local made = 0
+	for _, entry in ipairs(OtsBestiaryRoomLayout or {}) do
+		if entry[3] ~= 0 then
+			local pos = Position(landing.x + entry[1], landing.y + entry[2], landing.z)
+			if not Tile(pos) then
+				Game.createTile(pos.x, pos.y, pos.z)
+			end
+			local tile = Tile(pos)
+			if tile then
+				if not tile:getGround() then
+					Game.createItem(entry[3], 1, pos)
+				end
+				for _, itemId in ipairs(entry[4]) do
+					Game.createItem(itemId, 1, pos)
+				end
+				made = made + 1
+			end
+		end
+	end
+	return made
+end
+
 OtsFastExpBuild = function()
 	local made = 0
 	for _, entry in ipairs(OtsBestiaryRoomLayout or {}) do
@@ -5508,6 +5551,11 @@ openMain = function(player)
 	end)
 	window:addChoice("Wieza (pietra, boss co 10)", function(target)
 		towerEnter(target)
+	end)
+	window:addChoice("Hardcore Questy (5 trudnych wyzwan)", function(target)
+		if OtsHardcoreMenu then
+			OtsHardcoreMenu(target)
+		end
 	end)
 	window:addChoice("Hardcore Boss (3-5 losowych bossow naraz)", function(target)
 		rushEnter(target)

@@ -23,6 +23,11 @@ TOOLS = [
     (60106, 19082, 'fast exp token', 'Keep it in your backpack to use the FAST EXP teleport in the hub.', 10),
 ]
 
+AMULETS = [
+    # id, wyglad z, nazwa, opis, ochrona przed wszystkimi zywiolami (%) - nagroda z Hardcore Questow
+    (60107, 22746, 'elemental champion amulet', 'Reward for the Champion of Elements: +30% protection against every kind of damage.', 30),
+]
+
 
 def lenp(b):
     return ev(len(b)) + bytes(b)
@@ -60,7 +65,7 @@ def clone(sub, new_id, name, level, professions=None):
 
 def main():
     a_in, a_out, x_in, x_out = sys.argv[1:5]
-    ids = {r[0] for r in RUNES + POTIONS + TOOLS}
+    ids = {r[0] for r in RUNES + POTIONS + TOOLS + AMULETS}
     top = fields(open(a_in, 'rb').read())
     objs, last = {}, -1
     for n, (f, wt, raw, val) in enumerate(top):
@@ -83,6 +88,8 @@ def main():
             for entry in POTIONS:
                 out += b'\x0a' + lenp(clone(objs[entry[1]], entry[0], entry[2], entry[4], entry[5]))
             for entry in TOOLS:
+                out += b'\x0a' + lenp(clone(objs[entry[1]], entry[0], entry[2], 0))
+            for entry in AMULETS:
                 out += b'\x0a' + lenp(clone(objs[entry[1]], entry[0], entry[2], 0))
     open(a_out, 'wb').write(out)
 
@@ -109,11 +116,20 @@ def main():
                   '\t\t<attribute key="description" value="%s"/>' % desc,
                   '\t\t<attribute key="weight" value="%d"/>' % weight,
                   '\t</item>']
+    for aid, src, name, desc, absorb in AMULETS:
+        block += ['\t<item id="%d" article="an" name="%s">' % (aid, name),
+                  '\t\t<attribute key="primarytype" value="amulets and necklaces"/>',
+                  '\t\t<attribute key="description" value="%s"/>' % desc,
+                  '\t\t<attribute key="weight" value="420"/>',
+                  '\t\t<attribute key="slotType" value="necklace"/>',
+                  '\t\t<attribute key="showattributes" value="1"/>',
+                  '\t\t<attribute key="absorbpercentall" value="%d"/>' % absorb,
+                  '\t</item>']
     block.append('\t<!-- /OTS runes -->')
     i = text.rindex('</items>')
     text = text[:i].rstrip('\n') + '\n' + '\n'.join(block) + '\n' + text[i:]
     open(x_out, 'w', encoding='utf-8').write(text)
-    print('runes', len(RUNES), 'potions', len(POTIONS), 'tools', len(TOOLS), 'appearances', len(out))
+    print('runes', len(RUNES), 'potions', len(POTIONS), 'tools', len(TOOLS), 'amulets', len(AMULETS), 'appearances', len(out))
 
 
 if __name__ == '__main__':

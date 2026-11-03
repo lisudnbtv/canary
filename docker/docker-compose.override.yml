@@ -93,6 +93,8 @@ services:
       - '../data/scripts/actions/tools/crushers.lua:/canary/data/scripts/actions/tools/crushers.lua:ro'
       - '../data-otservbr-global/lib/core/quests/catalog/init.lua:/canary/data-otservbr-global/lib/core/quests/catalog/init.lua:ro'
       - '../data-otservbr-global/lib/core/quests/catalog/052_the_pits_of_inferno.lua:/canary/data-otservbr-global/lib/core/quests/catalog/052_the_pits_of_inferno.lua:ro'
+      - '../data-otservbr-global/lib/core/quests/catalog/053_ots_hardcore_quests.lua:/canary/data-otservbr-global/lib/core/quests/catalog/053_ots_hardcore_quests.lua:ro'
+      - '../data/scripts/actions/items/potions.lua:/canary/data/scripts/actions/items/potions.lua:ro'
       - '../data/chatchannels/chatchannels.xml:/canary/data/chatchannels/chatchannels.xml:ro'
       - '../data/items/appearances.dat:/canary/data/items/appearances.dat:ro'
       - '../data-otservbr-global/scripts/quests/demon_oak/movements_entrance.lua:/canary/data-otservbr-global/scripts/quests/demon_oak/movements_entrance.lua:ro'
