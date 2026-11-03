@@ -51,10 +51,12 @@ local function buildPools()
 end
 
 -- losowa pozycja z przedzialu lo..hi (0..1) listy posortowanej od najslabszego
-local function pick(pool, lo, hi)
+-- kind: "monster" albo "boss" (pule buduja sie przy pierwszym uzyciu)
+local function pick(kind, lo, hi)
 	if not monsterPool then
 		buildPools()
 	end
+	local pool = kind == "boss" and bossPool or monsterPool
 	local total = #pool
 	if total == 0 then
 		return nil
@@ -204,13 +206,13 @@ local function towerFloor(playerId, token)
 	local f = tower.floor
 	local level = f / 50
 	if f % 10 == 0 then
-		spawn(tower.ids, ROOMS.tower, pick(bossPool, level * 0.8 - 0.1, level * 0.8 + 0.05), 1)
-		spawn(tower.ids, ROOMS.tower, pick(monsterPool, 0.35 + level * 0.6 - 0.05, 0.35 + level * 0.6 + 0.05), 4)
+		spawn(tower.ids, ROOMS.tower, pick("boss", level * 0.8 - 0.1, level * 0.8 + 0.05), 1)
+		spawn(tower.ids, ROOMS.tower, pick("monster", 0.35 + level * 0.6 - 0.05, 0.35 + level * 0.6 + 0.05), 4)
 		player:sendTextMessage(MESSAGE_EVENT_ADVANCE, string.format("Wieza Upadku - pietro %d/50: BOSS!", f))
 	else
 		local count = 5 + math.floor(f / 5)
 		for _ = 1, count do
-			spawn(tower.ids, ROOMS.tower, pick(monsterPool, 0.35 + level * 0.6 - 0.05, 0.35 + level * 0.6 + 0.05), 1)
+			spawn(tower.ids, ROOMS.tower, pick("monster", 0.35 + level * 0.6 - 0.05, 0.35 + level * 0.6 + 0.05), 1)
 		end
 		player:sendTextMessage(MESSAGE_EVENT_ADVANCE, string.format("Wieza Upadku - pietro %d/50 (%d potworow).", f, count))
 	end
@@ -302,9 +304,9 @@ local function elementsStage(playerId, token)
 	local stage = ELEMENT_STAGES[elements.stage]
 	local ids = {}
 	for _ = 1, 10 do
-		spawn(ids, ROOMS.elements, pick(monsterPool, 0.6, 0.9), 1)
+		spawn(ids, ROOMS.elements, pick("monster", 0.6, 0.9), 1)
 	end
-	spawn(ids, ROOMS.elements, pick(bossPool, 0.3, 0.6), 1)
+	spawn(ids, ROOMS.elements, pick("boss", 0.3, 0.6), 1)
 	for _, id in ipairs(ids) do
 		OtsElementOnly[id] = stage.type
 		OtsHardcoreBossVulnerable[id] = nil
@@ -411,7 +413,7 @@ local function raceNext(playerId, token)
 	race.count = race.count + 1
 	local name
 	for _ = 1, 10 do
-		name = pick(bossPool, 0.2, 0.7)
+		name = pick("boss", 0.2, 0.7)
 		if not race.used[name] then
 			break
 		end
@@ -553,7 +555,7 @@ local function survivalTick(playerId, token)
 		local level = minute / 20
 		local count = 4 + minute * 2
 		for _ = 1, count do
-			spawn(survival.ids, ROOMS.survival, pick(monsterPool, 0.3 + level * 0.6 - 0.05, 0.3 + level * 0.6 + 0.05), 1)
+			spawn(survival.ids, ROOMS.survival, pick("monster", 0.3 + level * 0.6 - 0.05, 0.3 + level * 0.6 + 0.05), 1)
 		end
 		player:sendTextMessage(MESSAGE_STATUS, string.format("Survival: %s / 20:00, nowa fala (%d).", fmtTime(elapsed), count))
 	end
@@ -725,6 +727,7 @@ function build.onStartup()
 	for _, landing in pairs(ROOMS) do
 		made = made + OtsBuildRoom(landing)
 	end
+	buildPools()
 	logger.info("[OTS hardcore questy] Sale gotowe (pol: {})", made)
 	return true
 end
