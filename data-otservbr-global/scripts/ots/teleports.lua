@@ -3373,14 +3373,16 @@ local function returnAt(pos)
 	return item and item:getActionId() == RETURN_ACTION_ID
 end
 
-local function prepareSpot(center)
+-- single: bezpieczne jest tylko pole ladowania (sale Hardcore Questow, z prawdziwym PZ w mapie).
+local function prepareSpot(center, single)
 	local id = key(center)
 	local spot = preparedSpots[id]
 	if not spot then
 		spot = { center = Position(center.x, center.y, center.z) }
 		preparedSpots[id] = spot
-		for dx = -1, 1 do
-			for dy = -1, 1 do
+		local r = single and 0 or 1
+		for dx = -r, r do
+			for dy = -r, r do
 				safeTiles[key(Position(center.x + dx, center.y + dy, center.z))] = true
 				safeCenters[key(Position(center.x + dx, center.y + dy, center.z))] = center
 			end
@@ -3510,7 +3512,7 @@ local function travel(player, entry)
 	local from = player:getPosition()
 	local bare = entry.town or entry.plain
 	if not bare then
-		prepareSpot(destination)
+		prepareSpot(destination, entry.single)
 		clearSpot(destination)
 	end
 	if entry.unlock then
@@ -3525,7 +3527,8 @@ local function travel(player, entry)
 			player:sendTextMessage(MESSAGE_EVENT_ADVANCE, entry.hint)
 		end
 	else
-		player:sendTextMessage(MESSAGE_EVENT_ADVANCE, "Teleport: " .. entry[1] .. ". Stoisz w bezpiecznej strefie 3x3, obok jest teleport powrotny do hubu.")
+		local zone = entry.single and "na bezpiecznym polu (PZ)" or "w bezpiecznej strefie 3x3"
+		player:sendTextMessage(MESSAGE_EVENT_ADVANCE, "Teleport: " .. entry[1] .. ". Stoisz " .. zone .. ", obok jest teleport powrotny do hubu.")
 		if entry.hint then
 			player:sendTextMessage(MESSAGE_EVENT_ADVANCE, entry.hint)
 		end
@@ -5116,7 +5119,7 @@ end
 -- Wspolne narzedzia dla innych skryptow (hardcore_quests.lua): teleport z bezpieczna strefa,
 -- losowa sila jak w Hardcore Boss, budowa sali w stylu Obrona i sprawdzanie wolnych pol.
 OtsTravel = function(player, label, position)
-	travel(player, { label, position.x, position.y, position.z })
+	travel(player, { label, position.x, position.y, position.z, single = true })
 end
 OtsInFight = function(player)
 	return inFight(player)
