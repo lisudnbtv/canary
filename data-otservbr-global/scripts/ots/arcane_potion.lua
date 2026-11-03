@@ -36,6 +36,11 @@ function potion.onUse(player, item, fromPosition, target, toPosition, isHotkey)
 		return false
 	end
 
+	if OtsNoPotions and OtsNoPotions[player:getId()] then
+		player:sendCancelMessage("W Wiezy Upadku potiony nie dzialaja.")
+		return true
+	end
+
 	local config = potions[item:getId()]
 	if not config then
 		return false
