@@ -143,6 +143,9 @@ local function spawn(ids, landing, name, count, strongest)
 			monster:addHealth(extraHealth)
 			OtsHardcoreBossDamage[monster:getId()] = (OtsHardcoreBossDamage[monster:getId()] or 1) * EXTRA_POWER
 			OtsHardcoreHitCap[monster:getId()] = HIT_CAP
+			if OtsNoElite then
+				OtsNoElite[monster:getId()] = true
+			end
 			ids[#ids + 1] = monster:getId()
 			made = made + 1
 		end

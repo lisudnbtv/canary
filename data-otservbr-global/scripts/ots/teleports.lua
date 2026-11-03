@@ -5131,6 +5131,10 @@ OtsEmpowerStrongest = function(monster)
 	rushEmpower(monster, RUSH_TIERS[#RUSH_TIERS])
 end
 OtsHubLobby = hubLobby
+-- expowiska "Very Hard" (legendarny boss na mapie swiata pojawia sie przy jednym z nich)
+OtsLegendWorldSpots = function()
+	return hunts[4] and hunts[4].list or {}
+end
 OtsRoomBounds = { minDx = BESTIARY_ROOM_MIN_DX, maxDx = BESTIARY_ROOM_MAX_DX, minDy = BESTIARY_ROOM_MIN_DY, maxDy = BESTIARY_ROOM_MAX_DY }
 OtsIsSpotFree = function(pos)
 	local tile = Tile(pos)
@@ -5555,6 +5559,11 @@ openMain = function(player)
 	window:addChoice("Wieza (pietra, boss co 10)", function(target)
 		towerEnter(target)
 	end)
+	window:addChoice("Legendarne Bossy (10 legend, boss na mapie)", function(target)
+		if OtsLegendMenu then
+			OtsLegendMenu(target)
+		end
+	end)
 	window:addChoice("Hardcore Questy (5 trudnych wyzwan)", function(target)
 		if OtsHardcoreMenu then
 			OtsHardcoreMenu(target)
@@ -5600,6 +5609,9 @@ end
 local command = TalkAction("!tp")
 
 function command.onSay(player, words, param)
+	if OtsTpBlocked and OtsTpBlocked(player) then
+		return true
+	end
 	openMain(player)
 	return true
 end

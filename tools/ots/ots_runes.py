@@ -21,12 +21,84 @@ TOOLS = [
     (60105, 3454, 'clean loot pouch', 'Use it to remove everything from your loot pouch that the Loot Seller does not buy.', 1100),
     # klucz do sali FAST EXP w hubie (wystarczy miec go w plecaku); tylko 0,01% z Legendarnego Losowego Bossa
     (60106, 19082, 'fast exp token', 'Keep it in your backpack to use the FAST EXP teleport in the hub.', 10),
+    # legendarne bossy (skrypt: data-otservbr-global/scripts/ots/legendary_items.lua)
+    (60117, 9636, "morgaroth's heart", 'Use it on a melee or distance weapon: +3 attack, up to +15.', 500),
 ]
 
 AMULETS = [
     # id, wyglad z, nazwa, opis, ochrona przed wszystkimi zywiolami (%) - nagroda z Hardcore Questow
     (60107, 22746, 'elemental champion amulet', 'Reward for the Champion of Elements: +30% protection against every kind of damage.', 30),
 ]
+
+
+# Ekwipunek z legendarnych bossow (data-otservbr-global/scripts/ots/legendary_bosses.lua):
+# kopia definicji przedmiotu bazowego z items.xml pod nowym id i nazwa, bez ograniczen profesji,
+# z wymaganym poziomem LEGEND_LEVEL; 'set' nadpisuje/dodaje atrybuty, 'scale' mnozy obrazenia i atak.
+LEGEND_LEVEL = 4000
+ALL = 'absorbpercentall'
+EQUIP = [
+    # id, baza, nazwa, opis, set, scale
+    (60108, 28715, 'apocalypse helmet', 'Apocalypse Set (1/4). Dropped by Apocalypse Reborn.', {ALL: 5, 'armor': 16, 'skillshield': 4, 'magiclevelpoints': 3, 'skillsword': 3, 'skillaxe': 3, 'skillclub': 3, 'skilldist': 3}, 1),
+    (60109, 34094, 'apocalypse armor', 'Apocalypse Set (2/4). Dropped by Apocalypse Reborn.', {ALL: 6, 'armor': 26, 'magiclevelpoints': 4, 'skillsword': 4, 'skillaxe': 4, 'skillclub': 4, 'skilldist': 4}, 1),
+    (60110, 34092, 'apocalypse legs', 'Apocalypse Set (3/4). Dropped by Apocalypse Reborn.', {ALL: 5, 'armor': 16, 'magiclevelpoints': 3, 'skillsword': 3, 'skillaxe': 3, 'skillclub': 3, 'skilldist': 3}, 1),
+    (60111, 34097, 'pair of apocalypse boots', 'Apocalypse Set (4/4). Dropped by Apocalypse Reborn.', {ALL: 4, 'armor': 8, 'speed': 60}, 1),
+    (60112, 34090, 'inferno wand', 'Burns with the flames of Infernatil.', {'shootType': 'fire', 'wandType': 'fire', 'magiclevelpoints': 6, 'absorbpercentfire': 15}, 4),
+    (60113, 34091, 'inferno rod', 'Burns with the flames of Infernatil.', {'shootType': 'fire', 'wandType': 'fire', 'magiclevelpoints': 6, 'absorbpercentfire': 15}, 4),
+    (60114, 8864, "bazir's mask", 'Nobody knows the real face of Bazir.', {ALL: 12, 'armor': 14, 'magiclevelpoints': 3}, 1),
+    (60115, 30401, 'death amulet', 'Torn from Ashfalor of Death.', {'primarytype': 'amulets and necklaces', 'absorbpercentdeath': 40, ALL: 8, 'armor': 4}, 1),
+    (60116, 5903, "ferumbras' absolute hat", 'Ferumbras has fallen. Forever?', {ALL: 6, 'armor': 12, 'magiclevelpoints': 8}, 1),
+    (60118, 829, 'frozen crown', 'Cold as the heart of Zushuka.', {'absorbpercentice': 30, 'absorbpercentenergy': 30, ALL: 4, 'armor': 14}, 1),
+    (60119, 34082, "ghazbaran's sword", 'The blade of Ghazbaran the Warrior.', {'skillsword': 10, 'attack': 30}, 2.5),
+    (60120, 34084, "ghazbaran's axe", 'The axe of Ghazbaran the Warrior.', {'skillaxe': 10, 'attack': 30}, 2.5),
+    (60121, 34086, "ghazbaran's club", 'The club of Ghazbaran the Warrior.', {'skillclub': 10, 'attack': 30}, 2.5),
+    (60122, 34098, 'pair of plague boots', 'They spread regeneration instead of plague.', {'absorbpercentearth': 20, ALL: 4, 'armor': 8, 'speed': 50, 'healthgain': 3000, 'healthticks': 2000, 'managain': 2000, 'manaticks': 2000}, 1),
+    (60123, 27565, "void lord's sigil", 'Reward from the Void Lord. The best amulet in the world.', {ALL: 35, 'armor': 8, 'magiclevelpoints': 6, 'skillsword': 6, 'skillaxe': 6, 'skillclub': 6, 'skilldist': 6, 'skillshield': 6, 'speed': 40}, 1),
+]
+SCALE_KEYS = re.compile(r'^(attack|defense|extradef|fromDamage|toDamage|element\w+)$')
+DROP_KEYS = {'vocation', 'description', 'charges', 'duration', 'decayTo', 'transformEquipTo', 'transformDeEquipTo', 'showduration', 'showcharges', 'stopduration'}
+
+
+def equip_xml(text, entry):
+    nid, src, name, desc, sets, scale = entry
+    m = re.search(r'\t<item id="%d"[^>]*>.*?\n\t</item>' % src, text, flags=re.S)
+    lines = m.group(0).split('\n')
+    out = ['\t<item id="%d" article="a" name="%s">' % (nid, name),
+           '\t\t<attribute key="description" value="%s"/>' % desc]
+    pending = dict(sets)
+    level_done = False
+    for line in lines[1:-1]:
+        k = re.search(r'key="([^"]+)" value="([^"]*)"', line)
+        key = k.group(1) if k else None
+        if key in DROP_KEYS:
+            continue
+        top = line.startswith('\t\t<') and not line.startswith('\t\t\t')
+        if key and (top or key == 'wandType') and key in pending:
+            line = line[:k.start(2)] + str(pending.pop(key)) + line[k.end(2):]
+        elif key and SCALE_KEYS.match(key) and scale != 1:
+            try:
+                line = line[:k.start(2)] + str(int(round(int(k.group(2)) * scale))) + line[k.end(2):]
+            except ValueError:
+                pass
+        if key == 'level':
+            continue
+        if key == 'weight' and top:
+            for pk, pv in list(pending.items()):
+                if pk != 'wandType':
+                    out.append('\t\t<attribute key="%s" value="%s"/>' % (pk, pv))
+                    pending.pop(pk)
+        if key == 'script' and not level_done:
+            out.append(line)
+            out.append('\t\t\t<attribute key="level" value="%d"/>' % LEGEND_LEVEL)
+            level_done = True
+            continue
+        out.append(line)
+    for pk, pv in pending.items():
+        if pk == 'wandType':
+            continue
+        out.insert(2, '\t\t<attribute key="%s" value="%s"/>' % (pk, pv))
+    out.append('\t\t<attribute key="showattributes" value="1"/>') if 'showattributes' not in m.group(0) else None
+    out.append('\t</item>')
+    return out
 
 
 def lenp(b):
@@ -65,7 +137,7 @@ def clone(sub, new_id, name, level, professions=None):
 
 def main():
     a_in, a_out, x_in, x_out = sys.argv[1:5]
-    ids = {r[0] for r in RUNES + POTIONS + TOOLS + AMULETS}
+    ids = {r[0] for r in RUNES + POTIONS + TOOLS + AMULETS + EQUIP}
     top = fields(open(a_in, 'rb').read())
     objs, last = {}, -1
     for n, (f, wt, raw, val) in enumerate(top):
@@ -91,6 +163,8 @@ def main():
                 out += b'\x0a' + lenp(clone(objs[entry[1]], entry[0], entry[2], 0))
             for entry in AMULETS:
                 out += b'\x0a' + lenp(clone(objs[entry[1]], entry[0], entry[2], 0))
+            for entry in EQUIP:
+                out += b'\x0a' + lenp(clone(objs[entry[1]], entry[0], entry[2], LEGEND_LEVEL, []))
     open(a_out, 'wb').write(out)
 
     text = open(x_in, encoding='utf-8').read()
@@ -125,11 +199,13 @@ def main():
                   '\t\t<attribute key="showattributes" value="1"/>',
                   '\t\t<attribute key="absorbpercentall" value="%d"/>' % absorb,
                   '\t</item>']
+    for entry in EQUIP:
+        block += equip_xml(text, entry)
     block.append('\t<!-- /OTS runes -->')
     i = text.rindex('</items>')
     text = text[:i].rstrip('\n') + '\n' + '\n'.join(block) + '\n' + text[i:]
     open(x_out, 'w', encoding='utf-8').write(text)
-    print('runes', len(RUNES), 'potions', len(POTIONS), 'tools', len(TOOLS), 'amulets', len(AMULETS), 'appearances', len(out))
+    print('runes', len(RUNES), 'potions', len(POTIONS), 'tools', len(TOOLS), 'amulets', len(AMULETS), 'equip', len(EQUIP), 'appearances', len(out))
 
 
 if __name__ == '__main__':
