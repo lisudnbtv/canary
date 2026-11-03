@@ -8,7 +8,8 @@
 -- Potwory maja losowa sile jak w Hardcore Boss; jeden cios zabiera najwyzej HIT_CAP % zycia gracza.
 -- Postep w Quest Logu: linia "Hardcore Questy" (053_ots_hardcore_quests.lua).
 
-local HIT_CAP = 15
+local HIT_CAP = 17 -- limit jednego ciosu (% max zycia gracza)
+local EXTRA_POWER = 1.15 -- dodatkowe +15% zycia i obrazen ponad losowa sile
 local STORAGE_START = 65100000
 local STORAGE = { tower = 65100001, elements = 65100002, race = 65100003, survival = 65100004, oberon = 65100005 }
 local BLESSED_STONE, UPGRADE_STONE = 20138, 20139
@@ -137,6 +138,10 @@ local function spawn(ids, landing, name, count, strongest)
 			else
 				OtsEmpowerRandom(monster)
 			end
+			local extraHealth = math.floor(monster:getMaxHealth() * EXTRA_POWER)
+			monster:setMaxHealth(extraHealth)
+			monster:addHealth(extraHealth)
+			OtsHardcoreBossDamage[monster:getId()] = (OtsHardcoreBossDamage[monster:getId()] or 1) * EXTRA_POWER
 			OtsHardcoreHitCap[monster:getId()] = HIT_CAP
 			ids[#ids + 1] = monster:getId()
 			made = made + 1
@@ -708,7 +713,7 @@ OtsHardcoreMenu = function(player)
 		return player:getStorageValue(STORAGE[key]) >= 2 and "[Complete] " or ""
 	end
 	local kv = player:kv()
-	local window = ModalWindow({ title = "Hardcore Questy", message = "Piec trudnych wyzwan. Potwory maja losowa sile, jeden cios zabiera najwyzej 15% zycia.                                        " })
+	local window = ModalWindow({ title = "Hardcore Questy", message = "Piec trudnych wyzwan. Potwory maja losowa sile, jeden cios zabiera najwyzej 17% zycia.                                        " })
 	window:addChoice(string.format("%sWieza Upadku (rekord: pietro %d/50)", status("tower"), tonumber(kv:get("ots-hq-tower-best")) or 0), towerEnter)
 	window:addChoice(status("elements") .. "Czempion Zywiolow (7 etapow, amulet)", elementsEnter)
 	local raceBest = tonumber(kv:get("ots-hq-race-best")) or 0
