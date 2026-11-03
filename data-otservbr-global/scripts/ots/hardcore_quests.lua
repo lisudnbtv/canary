@@ -62,6 +62,9 @@ local function pick(kind, lo, hi)
 		return nil
 	end
 	lo, hi = math.max(0, math.min(1, lo)), math.max(0, math.min(1, hi))
+	-- hardcore: tylko gorna czesc listy (potwory: najmocniejsze 15%, bossy: mocniejsza polowa)
+	local base = kind == "boss" and 0.5 or 0.85
+	lo, hi = base + lo * (1 - base), base + hi * (1 - base)
 	local first = math.max(1, math.floor(lo * total))
 	local last = math.max(first, math.min(total, math.ceil(hi * total)))
 	return pool[math.random(first, last)].name
@@ -210,7 +213,7 @@ local function towerFloor(playerId, token)
 		spawn(tower.ids, ROOMS.tower, pick("monster", 0.35 + level * 0.6 - 0.05, 0.35 + level * 0.6 + 0.05), 4)
 		player:sendTextMessage(MESSAGE_EVENT_ADVANCE, string.format("Wieza Upadku - pietro %d/50: BOSS!", f))
 	else
-		local count = 5 + math.floor(f / 5)
+		local count = 12 + math.floor(f / 2)
 		for _ = 1, count do
 			spawn(tower.ids, ROOMS.tower, pick("monster", 0.35 + level * 0.6 - 0.05, 0.35 + level * 0.6 + 0.05), 1)
 		end
@@ -303,8 +306,8 @@ local function elementsStage(playerId, token)
 	elements.startedAt = os.time()
 	local stage = ELEMENT_STAGES[elements.stage]
 	local ids = {}
-	for _ = 1, 10 do
-		spawn(ids, ROOMS.elements, pick("monster", 0.6, 0.9), 1)
+	for _ = 1, 15 do
+		spawn(ids, ROOMS.elements, pick("monster", 0.5, 1), 1)
 	end
 	spawn(ids, ROOMS.elements, pick("boss", 0.3, 0.6), 1)
 	for _, id in ipairs(ids) do
@@ -553,7 +556,7 @@ local function survivalTick(playerId, token)
 		survival.lastWave = os.time()
 		local minute = math.floor(elapsed / 60)
 		local level = minute / 20
-		local count = 4 + minute * 2
+		local count = 8 + minute * 3
 		for _ = 1, count do
 			spawn(survival.ids, ROOMS.survival, pick("monster", 0.3 + level * 0.6 - 0.05, 0.3 + level * 0.6 + 0.05), 1)
 		end
