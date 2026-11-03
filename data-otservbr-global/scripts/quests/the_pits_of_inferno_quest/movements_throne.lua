@@ -157,6 +157,12 @@ function OtsPoiStart(player)
 	enterRoom(player, saved)
 end
 
+-- Trony z zagadkami w oryginale; tu dzialaja od razu po wejsciu (nie przenosza dalej).
+local extraThrones = {
+	[2080] = { name = "Infernatil", storage = Storage.Quest.U7_9.ThePitsOfInferno.ThroneInfernatil, effect = CONST_ME_FIREAREA },
+	[2084] = { name = "Bazir", storage = Storage.Quest.U7_9.ThePitsOfInferno.ThroneBazir, effect = CONST_ME_MAGIC_GREEN },
+}
+
 local throne = MoveEvent()
 
 function throne.onStepIn(creature, item, position, fromPosition)
@@ -167,6 +173,13 @@ function throne.onStepIn(creature, item, position, fromPosition)
 
 	local index = byUid[item.uid]
 	if not index then
+		-- Trony poza lancuchem sal (Infernatil, Bazir): po prostu zaliczaja tron
+		local extra = extraThrones[item.uid]
+		if extra then
+			player:setStorageValue(extra.storage, 1)
+			position:sendMagicEffect(extra.effect)
+			player:say("You have touched " .. extra.name .. "'s throne and absorbed some of his spirit.", TALKTYPE_MONSTER_SAY)
+		end
 		return true
 	end
 	local room = rooms[index]
@@ -215,6 +228,9 @@ throne:type("stepin")
 
 for _, room in ipairs(rooms) do
 	throne:uid(room.uid)
+end
+for uid in pairs(extraThrones) do
+	throne:uid(uid)
 end
 
 throne:register()
