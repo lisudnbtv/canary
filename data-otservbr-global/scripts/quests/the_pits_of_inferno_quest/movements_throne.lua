@@ -179,21 +179,11 @@ function throne.onStepIn(creature, item, position, fromPosition)
 			player:setStorageValue(extra.storage, 1)
 			position:sendMagicEffect(extra.effect)
 			player:say("You have touched " .. extra.name .. "'s throne and absorbed some of his spirit.", TALKTYPE_MONSTER_SAY)
-			-- dalej: jesli wszystkie trony z kolejki sa zaliczone - pokoj nagrod, inaczej nastepna sala kolejki
-			local allDone = true
-			for _, room in ipairs(rooms) do
-				if player:getStorageValue(room.storage) < room.value then
-					allDone = false
-					break
-				end
-			end
-			if allDone then
-				player:teleportTo(rewardRoom)
-				rewardRoom:sendMagicEffect(CONST_ME_TELEPORT)
-				player:sendTextMessage(MESSAGE_EVENT_ADVANCE, "Pits of Inferno ukonczone. Jestes w pokoju nagrod (strefa PZ).")
-			else
-				OtsPoiStart(player)
-			end
+			-- powrot do hubu PoI (sala z teleportami do wszystkich tronow)
+			local hub = Position(32824, 32241, 12)
+			player:teleportTo(hub)
+			hub:sendMagicEffect(CONST_ME_TELEPORT)
+			player:sendTextMessage(MESSAGE_EVENT_ADVANCE, "Tron zaliczony. Jestes w hubie Pits of Inferno.")
 		end
 		return true
 	end
