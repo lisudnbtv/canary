@@ -63,6 +63,9 @@ local rooms = {
 
 local rewardRoom = Position(32814, 32233, 11)
 local PROGRESS_KEY = "ots-poi-room"
+local KILLS_KEY = "ots-poi-kills" -- licznik zapisany na postaci (przetrwa restart serwera i wylogowanie)
+local REQUIRED_PERCENT = 60 -- tron dziala po pokonaniu tylu % potworow sali (potwory sie odradzaja)
+local ALIVE_OK = 3 -- albo gdy w sali zostalo najwyzej tylu zywych
 
 local byUid = {}
 for index, room in ipairs(rooms) do
@@ -100,16 +103,34 @@ local function inRoom(room, pos)
 	return false
 end
 
+-- Stan gracza: z pamieci albo odtworzony z zapisu na postaci.
+local function getState(player)
+	local state = progress[player:getGuid()]
+	if not state then
+		local saved = tonumber(player:kv():get(PROGRESS_KEY))
+		if saved and rooms[saved] then
+			state = { room = saved, kills = tonumber(player:kv():get(KILLS_KEY)) or 0 }
+			progress[player:getGuid()] = state
+		end
+	end
+	return state
+end
+
+local function required(room)
+	return math.ceil(room.kills * REQUIRED_PERCENT / 100)
+end
+
 local function enterRoom(player, index)
 	local room = rooms[index]
 	progress[player:getGuid()] = { room = index, kills = 0 }
 	player:kv():set(PROGRESS_KEY, index)
+	player:kv():set(KILLS_KEY, 0)
 	local from = player:getPosition()
 	player:teleportTo(room.entry)
 	from:sendMagicEffect(CONST_ME_POFF)
 	room.entry:sendMagicEffect(CONST_ME_TELEPORT)
 	if room.kills > 0 then
-		player:sendTextMessage(MESSAGE_EVENT_ADVANCE, string.format("Pits of Inferno, sala %d/%d: %s. Pokonaj %d potworow, potem wejdz na tron.", index, #rooms, room.name, room.kills))
+		player:sendTextMessage(MESSAGE_EVENT_ADVANCE, string.format("Pits of Inferno, sala %d/%d: %s. Pokonaj %d potworow, potem wejdz na tron.", index, #rooms, room.name, required(room)))
 	else
 		player:sendTextMessage(MESSAGE_EVENT_ADVANCE, string.format("Pits of Inferno, sala %d/%d: %s. Ta sala jest pusta, wejdz na tron.", index, #rooms, room.name))
 	end
@@ -150,19 +171,19 @@ function throne.onStepIn(creature, item, position, fromPosition)
 	end
 	local room = rooms[index]
 
-	local state = progress[player:getGuid()]
+	local state = getState(player)
 	if not state or state.room ~= index then
 		state = { room = index, kills = 0 }
 		progress[player:getGuid()] = state
 	end
 
-	-- Tron dziala po pokonaniu wymaganej liczby potworow albo gdy w sali nie zostal zaden zywy
-	-- (czesc spawnow bywa pusta lub nieosiagalna, a licznik ginie po wylogowaniu).
-	if state.kills < room.kills then
+	-- Tron dziala po pokonaniu REQUIRED_PERCENT potworow sali albo gdy zostalo w niej najwyzej ALIVE_OK zywych
+	-- (potwory sie odradzaja, wiec pelne wybicie sali bywa niemozliwe).
+	if state.kills < required(room) then
 		local alive = aliveInRoom(room)
-		if alive > 0 then
+		if alive > ALIVE_OK then
 			player:teleportTo(fromPosition, true)
-			player:sendTextMessage(MESSAGE_EVENT_ADVANCE, string.format("Tron jeszcze nie dziala. Pokonane: %d/%d, w sali zostalo jeszcze %d potworow.", state.kills, room.kills, alive))
+			player:sendTextMessage(MESSAGE_EVENT_ADVANCE, string.format("Tron jeszcze nie dziala. Pokonane: %d/%d, w sali zostalo jeszcze %d potworow.", state.kills, required(room), alive))
 			return true
 		end
 	end
@@ -204,20 +225,21 @@ function kills.playerOnKill(player, monster)
 	if not player or not monster then
 		return
 	end
-	local state = progress[player:getGuid()]
+	local state = getState(player)
 	if not state then
 		return
 	end
 	local room = rooms[state.room]
-	if state.kills >= room.kills or monster:getMaster() or not inRoom(room, monster:getPosition()) then
+	if state.kills >= required(room) or monster:getMaster() or not inRoom(room, monster:getPosition()) then
 		return
 	end
 
 	state.kills = state.kills + 1
-	if state.kills >= room.kills then
+	player:kv():set(KILLS_KEY, state.kills)
+	if state.kills >= required(room) then
 		player:sendTextMessage(MESSAGE_EVENT_ADVANCE, "Sala oczyszczona. Wejdz na tron, zeby przejsc dalej.")
 	elseif state.kills % 5 == 0 then
-		player:sendTextMessage(MESSAGE_EVENT_ADVANCE, string.format("Pits of Inferno: %d/%d potworow.", state.kills, room.kills))
+		player:sendTextMessage(MESSAGE_EVENT_ADVANCE, string.format("Pits of Inferno: %d/%d potworow.", state.kills, required(room)))
 	end
 end
 
