@@ -22,7 +22,7 @@ TOOLS = [
     # klucz do sali FAST EXP w hubie (wystarczy miec go w plecaku); tylko 0,01% z Legendarnego Losowego Bossa
     (60106, 19082, 'fast exp token', 'Keep it in your backpack to use the FAST EXP teleport in the hub.', 10),
     # legendarne bossy (skrypt: data-otservbr-global/scripts/ots/legendary_items.lua)
-    (60117, 9636, "morgaroth's heart", 'Use it on a melee or distance weapon: +3 attack, up to +15.', 500),
+    (60117, 9636, 'heart of morgaroth', 'Use it on a melee or distance weapon: +3 attack, up to +15.', 500),
 ]
 
 AMULETS = [

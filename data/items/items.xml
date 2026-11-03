@@ -91389,7 +91389,7 @@ Granted by TibiaGoals.com"/>
 		<attribute key="description" value="Keep it in your backpack to use the FAST EXP teleport in the hub."/>
 		<attribute key="weight" value="10"/>
 	</item>
-	<item id="60117" article="a" name="morgaroth's heart">
+	<item id="60117" article="a" name="heart of morgaroth">
 		<attribute key="primarytype" value="tools"/>
 		<attribute key="description" value="Use it on a melee or distance weapon: +3 attack, up to +15."/>
 		<attribute key="weight" value="500"/>

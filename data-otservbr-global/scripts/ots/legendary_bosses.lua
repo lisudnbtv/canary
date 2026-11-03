@@ -954,10 +954,11 @@ local function placeTempleTrap()
 	if not temple then
 		return nil
 	end
-	for _, offset in ipairs({ { -3, 2 }, { 3, 2 }, { -3, -2 }, { 3, -2 }, { -2, 3 }, { 2, 3 }, { -4, 0 }, { 4, 0 }, { 0, 4 }, { -4, 3 }, { 4, 3 } }) do
+	-- rzad nad swiatynia (y - 2) zajmuja NPC (Supplier, Token Trader), wiec szukamy nizej i po bokach
+	for _, offset in ipairs({ { -3, 2 }, { 3, 2 }, { -2, 3 }, { 2, 3 }, { -4, 0 }, { 4, 0 }, { 0, 4 }, { -4, 3 }, { 4, 3 } }) do
 		local pos = Position(temple.x + offset[1], temple.y + offset[2], temple.z)
 		local tile = Tile(pos)
-		if tile and tile:getGround() and tile:isWalkable(false, false, true, true, false) and tile:getItemCount() == 0 and not tile:getHouse() then
+		if tile and tile:getGround() and tile:isWalkable(false, false, true, true, false) and tile:getItemCount() == 0 and not tile:getHouse() and not tile:getTopCreature() then
 			local tp = Game.createItem(ENTRY_ITEM_ID, 1, pos)
 			if tp then
 				tp:setActionId(PRISON_ENTRY_AID)

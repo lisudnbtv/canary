@@ -1,5 +1,5 @@
 -- OTS: przedmioty z Legendarnych Bossow (legendary_bosses.lua):
---  * Morgaroth's Heart (60117) - uzyte na broni do walki wrecz / dystansowej: +3 ataku, najwyzej 5 razy (+15),
+--  * Heart of Morgaroth (60117) - uzyte na broni do walki wrecz / dystansowej: +3 ataku, najwyzej 5 razy (+15),
 --  * Void Lord's Sigil (60123) - aura wokol postaci, ktora go nosi.
 local HEART_ID = 60117
 local SIGIL_ID = 60123
