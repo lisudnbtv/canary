@@ -5,8 +5,8 @@
 --  B. Co 3 godziny losowy legendarny boss pojawia sie na mapie swiata (przy jednym z trudnych expowisk),
 --     zostaje godzine; dojscie: !tp > Legendarne Bossy > Idz do bossa na mapie.
 --  C. Wiezienie: ukryty teleport w swiatyni w Thais (bez opisu). Wszystkie 10 bossow naraz, wyjscie jest
---     po drugiej stronie korytarza (3 pola) i dziala dopiero, gdy padna wszystkie bossy (kazdy 2 razy). Droge
---     blokuja dwie sciany Straznikow (150 mln HP, nie atakuja, bez lootu). !tp w wiezieniu nie dziala.
+--     po drugiej stronie korytarza (3 pola) i dziala dopiero, gdy padna wszystkie bossy (kazdy 3 razy). Droge
+--     blokuja trzy sciany Straznikow (150 mln HP, nie atakuja, bez lootu). !tp w wiezieniu nie dziala.
 -- Przedmioty: tools/ots/ots_runes.py (EQUIP, 60108-60123), serce Morgarotha: legendary_items.lua.
 -- Kazdy cios bossa zabiera najwyzej CAP % zycia gracza (mechanika w teleports.lua, jak w Hardcore Boss);
 -- mechaniki specjalne (Armagedon, plagi, pierscien) licza sie osobno i sa celowo mocne.
@@ -21,7 +21,7 @@ local BAGS = { 34109, 39546, 43895 }
 local BLESSED_STONE = 20138
 
 local LEGEND_ROOM_Y = 29939 -- sale w rzedzie 30260 + 30 * (n - 1), 29939, 7 (pole PZ w ots-hub.otbm)
-local PRISON = { x = 30260, y = 29975, z = 7, length = 60, half = 1, walls = { 20, 40 }, perLegend = 2 } -- korytarz 3 pola szerokosci: od x do x + length - 1, y +- half
+local PRISON = { x = 30260, y = 29975, z = 7, length = 45, half = 1, walls = { 12, 23, 34 }, perLegend = 3 } -- korytarz 3 pola szerokosci: od x do x + length - 1, y +- half
 local PRISON_EXIT_AID = 64981
 local PRISON_ENTRY_AID = 64980
 local ENTRY_ITEM_ID = 1949
@@ -858,7 +858,7 @@ local function prisonFill()
 	if prisonAlive() > 0 then
 		return
 	end
-	-- dwie sciany Straznikow (po 3 w pionie, przez cala szerokosc korytarza)
+	-- sciany Straznikow (po 3 w pionie, przez cala szerokosc korytarza)
 	for _, guardId in ipairs(prison.guards or {}) do
 		local guard = Creature(guardId)
 		if guard then
@@ -914,7 +914,7 @@ function prisonEntry.onStepIn(creature, item, position, fromPosition)
 	prisonFill()
 	player:teleportTo(prison.entrance)
 	prison.entrance:sendMagicEffect(CONST_ME_MORTAREA)
-	player:sendTextMessage(MESSAGE_EVENT_ADVANCE, "Kraty zatrzasnely sie za toba. To WIEZIENIE legendarnych bossow - wyjscie jest po drugiej stronie sali, ale otworzy sie dopiero, gdy padna wszystkie legendarne bossy. Droge blokuja dwie sciany Straznikow - trzeba sie przez nie przebic.")
+	player:sendTextMessage(MESSAGE_EVENT_ADVANCE, "Kraty zatrzasnely sie za toba. To WIEZIENIE legendarnych bossow - wyjscie jest po drugiej stronie sali, ale otworzy sie dopiero, gdy padna wszystkie legendarne bossy. Droge blokuja trzy sciany Straznikow - trzeba sie przez nie przebic.")
 	return true
 end
 
