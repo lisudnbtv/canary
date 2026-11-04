@@ -5,7 +5,8 @@
 --  B. Co 3 godziny losowy legendarny boss pojawia sie na mapie swiata (przy jednym z trudnych expowisk),
 --     zostaje godzine; dojscie: !tp > Legendarne Bossy > Idz do bossa na mapie.
 --  C. Wiezienie: ukryty teleport w swiatyni w Thais (bez opisu). Wszystkie 10 bossow naraz, wyjscie jest
---     po drugiej stronie sali i dziala dopiero, gdy wszyscy straznicy padna. !tp w wiezieniu nie dziala.
+--     po drugiej stronie korytarza (3 pola) i dziala dopiero, gdy padna wszystkie bossy (kazdy 2 razy). Droge
+--     blokuja dwie sciany Straznikow (150 mln HP, nie atakuja, bez lootu). !tp w wiezieniu nie dziala.
 -- Przedmioty: tools/ots/ots_runes.py (EQUIP, 60108-60123), serce Morgarotha: legendary_items.lua.
 -- Kazdy cios bossa zabiera najwyzej CAP % zycia gracza (mechanika w teleports.lua, jak w Hardcore Boss);
 -- mechaniki specjalne (Armagedon, plagi, pierscien) licza sie osobno i sa celowo mocne.
@@ -20,7 +21,7 @@ local BAGS = { 34109, 39546, 43895 }
 local BLESSED_STONE = 20138
 
 local LEGEND_ROOM_Y = 29939 -- sale w rzedzie 30260 + 30 * (n - 1), 29939, 7 (pole PZ w ots-hub.otbm)
-local PRISON = { x = 30260, y = 29975, z = 7, length = 45, half = 1 } -- korytarz 3 pola szerokosci: od x do x + length - 1, y +- half
+local PRISON = { x = 30260, y = 29975, z = 7, length = 60, half = 1, walls = { 20, 40 }, perLegend = 2 } -- korytarz 3 pola szerokosci: od x do x + length - 1, y +- half
 local PRISON_EXIT_AID = 64981
 local PRISON_ENTRY_AID = 64980
 local ENTRY_ITEM_ID = 1949
@@ -213,6 +214,8 @@ for _, cfg in ipairs(LEGENDS) do
 end
 -- pomocnicy: iluzje Bazira (1 cios = wybuch) i cienie Ferumbrasa
 register("Bazir Illusion", { hp = 1, exp = 0, outfit = LEGEND_BY_KEY.bazir.outfit, corpse = 0, attacks = attacks(COMBAT_ENERGYDAMAGE, 1500, 3000, CONST_ME_PURPLEENERGY, CONST_ANI_ENERGY), events = { "OtsLegendIllusionDeath" } })
+-- Straznik wiezienia: nie atakuje, nie chodzi, nie ma lootu - tylko blokuje korytarz (2 sciany po 3).
+register("Straznik", { hp = 150000000, exp = 0, outfit = outfit(244, 114, 114, 114, 114), corpse = 0, speed = 0, attacks = {}, loot = {}, elements = elements(-1, -1), events = {}, voice = "NIE PRZEJDZIESZ." })
 register("Ferumbras Shadow", { hp = 3000000, exp = 0, outfit = outfit(229, 114, 114, 114, 114), corpse = 0, attacks = attacks(COMBAT_DEATHDAMAGE, 4000, 9000, CONST_ME_MORTAREA, CONST_ANI_DEATH), elements = elements(-1, -1), events = {} })
 
 -- ---------------------------------------------------------------------------------------------
@@ -275,8 +278,8 @@ local function clearState(id)
 	forget(id)
 end
 
-local function spawnLegend(cfg, pos, mode, owner)
-	local monster = Game.createMonster(cfg.name, pos, true, true)
+local function spawnLegend(cfg, pos, mode, owner, exact)
+	local monster = Game.createMonster(cfg.name, pos, not exact, true)
 	if not monster then
 		return nil
 	end
@@ -855,10 +858,46 @@ local function prisonFill()
 	if prisonAlive() > 0 then
 		return
 	end
-	local step = math.floor((PRISON.length - 12) / #LEGENDS)
-	for index, cfg in ipairs(LEGENDS) do
-		local pos = Position(PRISON.x + 8 + (index - 1) * step, PRISON.y + (index % 3) - 1, PRISON.z)
-		local monster = spawnLegend(cfg, pos, "prison")
+	-- dwie sciany Straznikow (po 3 w pionie, przez cala szerokosc korytarza)
+	for _, guardId in ipairs(prison.guards or {}) do
+		local guard = Creature(guardId)
+		if guard then
+			guard:remove()
+		end
+		OtsNoElite[guardId] = nil
+	end
+	prison.guards = {}
+	local wall = {}
+	for _, dx in ipairs(PRISON.walls) do
+		wall[dx] = true
+		for dy = -PRISON.half, PRISON.half do
+			local guard = Game.createMonster("Straznik", Position(PRISON.x + dx, PRISON.y + dy, PRISON.z), false, true)
+			if guard then
+				OtsNoElite[guard:getId()] = true
+				guard:setSkull(SKULL_BLACK)
+				prison.guards[#prison.guards + 1] = guard:getId()
+			end
+		end
+	end
+	-- bossy: kazda legenda PRISON.perLegend razy, rozlozone po calej dlugosci (poza scianami)
+	local list = {}
+	for _ = 1, PRISON.perLegend do
+		for _, cfg in ipairs(LEGENDS) do
+			list[#list + 1] = cfg
+		end
+	end
+	local spots = {}
+	for dx = 5, PRISON.length - 5 do
+		if not wall[dx] and not wall[dx - 1] and not wall[dx + 1] then
+			for dy = -PRISON.half, PRISON.half do
+				spots[#spots + 1] = Position(PRISON.x + dx, PRISON.y + dy, PRISON.z)
+			end
+		end
+	end
+	local step = #spots / #list
+	for index, cfg in ipairs(list) do
+		local pos = spots[math.max(1, math.min(#spots, math.floor((index - 1) * step + math.random(0, math.max(0, math.floor(step) - 1))) + 1))]
+		local monster = spawnLegend(cfg, pos, "prison", nil, true) or spawnLegend(cfg, pos, "prison")
 		if monster then
 			prison.ids[#prison.ids + 1] = monster:getId()
 		end
@@ -875,7 +914,7 @@ function prisonEntry.onStepIn(creature, item, position, fromPosition)
 	prisonFill()
 	player:teleportTo(prison.entrance)
 	prison.entrance:sendMagicEffect(CONST_ME_MORTAREA)
-	player:sendTextMessage(MESSAGE_EVENT_ADVANCE, "Kraty zatrzasnely sie za toba. To WIEZIENIE legendarnych bossow - wyjscie jest po drugiej stronie sali, ale otworzy sie dopiero, gdy padna wszyscy straznicy.")
+	player:sendTextMessage(MESSAGE_EVENT_ADVANCE, "Kraty zatrzasnely sie za toba. To WIEZIENIE legendarnych bossow - wyjscie jest po drugiej stronie sali, ale otworzy sie dopiero, gdy padna wszystkie legendarne bossy. Droge blokuja dwie sciany Straznikow - trzeba sie przez nie przebic.")
 	return true
 end
 
@@ -892,7 +931,7 @@ function prisonExit.onStepIn(creature, item, position, fromPosition)
 	local alive = prisonAlive()
 	if alive > 0 then
 		player:teleportTo(Position(position.x - 2, position.y, position.z), true)
-		player:sendTextMessage(MESSAGE_EVENT_ADVANCE, string.format("Wyjscie jest zamkniete. Straznicy przy zyciu: %d/%d.", alive, #LEGENDS))
+		player:sendTextMessage(MESSAGE_EVENT_ADVANCE, string.format("Wyjscie jest zamkniete. Legendarne bossy przy zyciu: %d/%d.", alive, #LEGENDS * PRISON.perLegend))
 		return true
 	end
 	local first = (tonumber(player:kv():get("ots-legend-prison")) or 0) == 0
