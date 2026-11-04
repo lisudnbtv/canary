@@ -20,7 +20,7 @@ local BAGS = { 34109, 39546, 43895 }
 local BLESSED_STONE = 20138
 
 local LEGEND_ROOM_Y = 29939 -- sale w rzedzie 30260 + 30 * (n - 1), 29939, 7 (pole PZ w ots-hub.otbm)
-local PRISON = { x = 30260, y = 29975, z = 7, length = 45, half = 5 } -- hala od x do x + length - 1, y +- half
+local PRISON = { x = 30260, y = 29975, z = 7, length = 45, half = 1 } -- korytarz 3 pola szerokosci: od x do x + length - 1, y +- half
 local PRISON_EXIT_AID = 64981
 local PRISON_ENTRY_AID = 64980
 local ENTRY_ITEM_ID = 1949
@@ -475,9 +475,10 @@ M.lastbreath = function(boss, st, players)
 end
 
 -- Ferumbras: faza 1 - przenosi graczy po sali, faza 2 (66%) - 3 cienie, faza 3 (33%) - szybszy i pole antymagii.
+-- (w waskim korytarzu wiezienia nie przenosi; w salach co 20 s i tylko w 1. fazie)
 M.blink = function(boss, st, players)
-	if hpRatio(boss) > 0.66 or st.cfg.key == "void" then
-		if every(st, "blink", 8) then
+	if st.mode ~= "prison" and hpRatio(boss) > 0.66 then
+		if every(st, "blink", 20) then
 			for _, player in ipairs(players) do
 				local pos = freeSpotNear(boss:getPosition(), 6)
 				if pos then
@@ -856,7 +857,7 @@ local function prisonFill()
 	end
 	local step = math.floor((PRISON.length - 12) / #LEGENDS)
 	for index, cfg in ipairs(LEGENDS) do
-		local pos = Position(PRISON.x + 8 + (index - 1) * step, PRISON.y + (index % 2 == 0 and 2 or -2), PRISON.z)
+		local pos = Position(PRISON.x + 8 + (index - 1) * step, PRISON.y + (index % 3) - 1, PRISON.z)
 		local monster = spawnLegend(cfg, pos, "prison")
 		if monster then
 			prison.ids[#prison.ids + 1] = monster:getId()
