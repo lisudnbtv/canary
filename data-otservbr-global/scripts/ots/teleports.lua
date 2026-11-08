@@ -5130,6 +5130,10 @@ end
 OtsEmpowerStrongest = function(monster)
 	rushEmpower(monster, RUSH_TIERS[#RUSH_TIERS])
 end
+-- index: 1 Silny, 2 Brutalny, 3 Koszmar
+OtsEmpowerTier = function(monster, index)
+	rushEmpower(monster, RUSH_TIERS[math.max(1, math.min(#RUSH_TIERS, index))])
+end
 OtsHubLobby = hubLobby
 -- expowiska "Very Hard" (legendarny boss na mapie swiata pojawia sie przy jednym z nich)
 OtsLegendWorldSpots = function()
@@ -5562,6 +5566,11 @@ openMain = function(player)
 	window:addChoice("Legendarne Bossy (10 legend, boss na mapie)", function(target)
 		if OtsLegendMenu then
 			OtsLegendMenu(target)
+		end
+	end)
+	window:addChoice("Expowisko Party (Mega Hardcore)", function(target)
+		if OtsPartyHuntMenu then
+			OtsPartyHuntMenu(target)
 		end
 	end)
 	window:addChoice("Hardcore Questy (5 trudnych wyzwan)", function(target)
