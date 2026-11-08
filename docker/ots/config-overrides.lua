@@ -89,3 +89,8 @@ forgeMinSlivers = 15
 forgeMaxSlivers = 40
 -- limit pakietow od klienta na sekunde (domyslnie 25): przy szybkim leczeniu/atakach klient byl rozlaczany
 maxPacketsPerSecond = 200
+-- codzienny zapis serwera (07:00 czasu polskiego) nie wylacza juz serwera - wczesniej wyrzucalo wtedy z gry
+-- ("The remote host closed the connection"); zapis, zmiana dnia nagrod i reset raidow dalej dzialaja
+globalServerSaveShutdown = false
+-- wyrzucanie za brak aktywnosci: po 24 h zamiast 15 minut (serwer solo, nikomu nie przeszkadza)
+kickIdlePlayerAfterMinutes = 1440
