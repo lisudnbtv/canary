@@ -899,3 +899,6 @@ function Player.findItemInInbox(self, itemId, name)
 	end
 	return nil
 end
+
+-- OTS: bot (scripts/ots/bot.lua) - przechwytywanie czarow, run i akcji przedmiotow
+dofile(CORE_DIRECTORY .. "/libs/functions/ots_bot_hooks.lua")

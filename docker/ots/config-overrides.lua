@@ -93,4 +93,4 @@ maxPacketsPerSecond = 200
 -- ("The remote host closed the connection"); zapis, zmiana dnia nagrod i reset raidow dalej dzialaja
 globalServerSaveShutdown = false
 -- wyrzucanie za brak aktywnosci: po 24 h zamiast 15 minut (serwer solo, nikomu nie przeszkadza)
-kickIdlePlayerAfterMinutes = 1440
+kickIdlePlayerAfterMinutes = 30000 -- ok. 20 dni; wylogowanie za bezczynnosc obsluguje bot (!bot > Tools > Anty-AFK, bez niego 24 h)
