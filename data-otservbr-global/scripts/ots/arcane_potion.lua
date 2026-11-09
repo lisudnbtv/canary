@@ -4,6 +4,8 @@
 --  * Ultimate Hunter Potion (60104) - paladyn, mocniejszy ultimate spirit potion.
 -- Przedmioty: items.xml, wyglad w appearances.dat (tools/ots/ots_runes.py).
 -- Potiony na serwerze sie nie zuzywaja (removeChargesFromPotions = false).
+-- Leczenie: wieksza z wartosci - stala (health/mana) albo % maksymalnego zycia/many pijacego
+-- (healthPercent/manaPercent), zeby potiony nie slably na wysokich poziomach.
 
 local potions = {
 	[60102] = {
@@ -19,6 +21,8 @@ local potions = {
 	[60103] = {
 		health = { 1100, 1400 },
 		mana = { 300, 400 },
+		healthPercent = { 10, 13 },
+		manaPercent = { 3, 5 },
 		level = 130,
 		vocations = { VOCATION.BASE_ID.KNIGHT, VOCATION.BASE_ID.MONK },
 		description = "Only knights and monks of level 130 or above may drink this fluid.",
@@ -26,6 +30,8 @@ local potions = {
 	[60104] = {
 		health = { 800, 1000 },
 		mana = { 600, 800 },
+		healthPercent = { 7, 9 },
+		manaPercent = { 7, 9 },
 		level = 130,
 		vocations = { VOCATION.BASE_ID.PALADIN },
 		description = "Only paladins of level 130 or above may drink this fluid.",
