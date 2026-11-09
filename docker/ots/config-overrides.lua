@@ -94,3 +94,6 @@ maxPacketsPerSecond = 200
 globalServerSaveShutdown = false
 -- wyrzucanie za brak aktywnosci: po 24 h zamiast 15 minut (serwer solo, nikomu nie przeszkadza)
 kickIdlePlayerAfterMinutes = 30000 -- ok. 20 dni; wylogowanie za bezczynnosc obsluguje bot (!bot > Tools > Anty-AFK, bez niego 24 h)
+-- swiat bez PvP: postacie przechodza przez siebie wszedzie (wazne przy party z botem i podazaniu
+-- za liderem), czary obszarowe nie ranią innych graczy, nie ma czaszek
+worldType = "no-pvp"
