@@ -603,7 +603,18 @@ function Player:onGainExperience(target, exp, rawExp)
 	-- EventCallback playerOnGainExperience w tej wersji Canary nie zmienia expa (zwracana wartosc jest pomijana),
 	-- dlatego skrypty dopisuja tu funkcje: OtsExpModifiers[nazwa] = function(player, target, exp) return exp end
 	if OtsExpModifiers then
+		-- "botParty" (podzial expa w druzynie) zawsze pierwszy, potem osobiste bonusy
+		local ordered = {}
+		if OtsExpModifiers.botParty then
+			ordered[1] = { "botParty", OtsExpModifiers.botParty }
+		end
 		for name, modifier in pairs(OtsExpModifiers) do
+			if name ~= "botParty" then
+				ordered[#ordered + 1] = { name, modifier }
+			end
+		end
+		for _, entry in ipairs(ordered) do
+			local name, modifier = entry[1], entry[2]
 			local ok, result = pcall(modifier, self, target, exp)
 			if ok and type(result) == "number" then
 				exp = result

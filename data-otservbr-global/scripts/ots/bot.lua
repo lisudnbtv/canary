@@ -1105,9 +1105,33 @@ local function owningPlayer(creature)
 	return nil
 end
 
--- Exp w party bota: x10 i dzielony rowno na cala druzyne (jak shared exp).
+-- Exp w party bota: exp z kazdego zabicia dzielony rowno na cala druzyne (jak shared exp) z bonusem,
+-- ktory maleje z poziomem (PARTY_BONUS). Kazdy czlonek dostaje exp wedlug WLASNEGO exp stage i wlasnego
+-- bonusu party, wiec w sumie zarabia (1 + bonus) razy tyle, co solo. Do tego jego osobiste bonusy
+-- (seria nagrod dziennych, sala Expowisko Party) - OtsExpModifiers poza "botParty".
 -- Dotyczy postaci z wlaczonym trybem party (lider online) i lidera, za ktorym ktos chodzi.
-local PARTY_EXP_MULTIPLIER = 10
+local PARTY_BONUS = { -- { od poziomu, bonus }
+	{ 1, 2.00 },
+	{ 2501, 1.50 },
+	{ 3501, 1.20 },
+	{ 4501, 0.80 },
+	{ 5001, 0.60 },
+	{ 6001, 0.40 },
+	{ 7001, 0.30 },
+	{ 8001, 0.20 },
+	{ 9001, 0.15 },
+	{ 10001, 0.10 },
+}
+
+local function partyBonus(level)
+	local bonus = PARTY_BONUS[1][2]
+	for _, row in ipairs(PARTY_BONUS) do
+		if level >= row[1] then
+			bonus = row[2]
+		end
+	end
+	return bonus
+end
 
 local function inBotParty(player)
 	local st = OtsBotState[player:getId()]
@@ -1126,20 +1150,43 @@ local function inBotParty(player)
 	return false
 end
 
+-- osobiste bonusy czlonka (wszystkie OtsExpModifiers poza tym)
+local function personalExp(member, target, amount)
+	for name, modifier in pairs(OtsExpModifiers) do
+		if name ~= "botParty" then
+			local ok, result = pcall(modifier, member, target, amount)
+			if ok and type(result) == "number" then
+				amount = result
+			end
+		end
+	end
+	return amount
+end
+
 OtsExpModifiers = OtsExpModifiers or {}
+-- (data/events/scripts/player.lua wywoluje "botParty" jako pierwszy, przed pozostalymi mnoznikami)
 OtsExpModifiers.botParty = function(player, target, exp)
 	if exp <= 0 or not target or not inBotParty(player) then
 		return exp
 	end
 	local members = partyMembers(player)
-	local share = math.floor(exp * PARTY_EXP_MULTIPLIER / #members + 0.5)
+	-- exp bez exp stage zabojcy; kazdy dostaje go wedlug swojego stage
+	local rate = math.max(1, player:getFinalBaseRateExperience())
+	local base = exp / rate / #members
+	local mine = exp
 	for _, member in ipairs(members) do
-		if member:getId() ~= player:getId() then
-			-- addExperience bez celu: Player:onGainExperience zwraca exp bez mnoznikow, wiec nic sie nie dubluje
-			member:addExperience(share, true)
+		local amount = base * member:getFinalBaseRateExperience() * (1 + partyBonus(member:getLevel()))
+		if member:getId() == player:getId() then
+			mine = amount
+		else
+			-- addExperience bez celu: Player:onGainExperience nie liczy mnoznikow drugi raz
+			amount = math.floor(personalExp(member, target, amount) + 0.5)
+			if amount > 0 then
+				member:addExperience(amount, true)
+			end
 		end
 	end
-	return share
+	return mine
 end
 
 local noFriendlyFire = EventCallback("OtsBotPartyNoFriendlyFire")
