@@ -1040,7 +1040,9 @@ local function runParty(player, st, now)
 	local dist = distance(ppos, lpos)
 	if party.teleport and now >= (st.nextPartyTp or 0) then
 		local stuck = false
-		if dist > 2 and st.lastPos and st.lastPos.x == ppos.x and st.lastPos.y == ppos.y and st.lastPos.z == ppos.z then
+		-- "zablokowany" tylko, gdy postac naprawde idzie za liderem (na "Stand" stoi celowo)
+		local standing = st.cfg.hunt.mode == "stand" and dist <= 3
+		if not standing and dist > 2 and st.lastPos and st.lastPos.x == ppos.x and st.lastPos.y == ppos.y and st.lastPos.z == ppos.z then
 			stuck = now - (st.lastMove or now) >= 3000
 		else
 			st.lastMove = now

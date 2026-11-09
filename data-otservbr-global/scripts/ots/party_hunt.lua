@@ -278,6 +278,44 @@ local function tick(token)
 end
 
 -- bonus expa w sali
+-- Bez "latania po sali": strach zdejmowany co 1/4 s, a gdy potwor przyciagnie, odepchnie albo przeniesie
+-- postac o wiecej niz 1 pole, wraca ona na poprzednie miejsce. Wyjatek: przeniesienie tuz obok lidera
+-- (bot party dociaga postac, gdy jest za daleko) i wyjscie teleportem.
+local lastPos = {}
+
+local function guardTick(token)
+	if token ~= run.token or not run.leader then
+		lastPos = {}
+		return
+	end
+	local leader = Player(run.leader)
+	local present = {}
+	for _, member in ipairs(inRoomMembers()) do
+		present[member:getId()] = true
+	end
+	for id in pairs(lastPos) do
+		if not present[id] then
+			lastPos[id] = nil -- wyszedl z sali: po powrocie zaczynamy od nowa
+		end
+	end
+	for _, member in ipairs(inRoomMembers()) do
+		member:removeCondition(CONDITION_FEARED)
+		local id = member:getId()
+		local pos = member:getPosition()
+		local prev = lastPos[id]
+		if prev and prev.z == pos.z and math.max(math.abs(pos.x - prev.x), math.abs(pos.y - prev.y)) > 1 then
+			local lpos = leader and leader:getPosition()
+			local nearLeader = lpos and id ~= run.leader and math.max(math.abs(pos.x - lpos.x), math.abs(pos.y - lpos.y)) <= 1
+			if not nearLeader and inRoom(prev) and Tile(prev) and Tile(prev):isWalkable(true, false, false, false, false) then
+				member:teleportTo(prev, true)
+				pos = prev
+			end
+		end
+		lastPos[id] = Position(pos.x, pos.y, pos.z)
+	end
+	addEvent(guardTick, 250, token)
+end
+
 -- (przez OtsExpModifiers w data/events/scripts/player.lua - EventCallback nie zmienia expa)
 OtsExpModifiers = OtsExpModifiers or {}
 OtsExpModifiers.partyHunt = function(player, target, exp)
@@ -341,6 +379,8 @@ local function enter(player)
 		member:sendTextMessage(MESSAGE_EVENT_ADVANCE, string.format("EXPOWISKO PARTY (Mega Hardcore): %d os., %d profesji - do %d potworow naraz, bonus expa +%d%%. Co 4 minuty boss. Wyjscie: teleport przy wejsciu.", #inRoomMembers(), unique, target, math.floor(bonus * 100 + 0.5)))
 	end
 	addEvent(tick, 3000, run.token)
+	lastPos = {}
+	addEvent(guardTick, 3000, run.token)
 end
 
 OtsPartyHuntMenu = function(player)
