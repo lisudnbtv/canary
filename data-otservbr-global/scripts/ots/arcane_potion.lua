@@ -9,6 +9,9 @@ local potions = {
 	[60102] = {
 		health = { 500, 700 },
 		mana = { 900, 1100 },
+		-- rosnie z postacia: co najmniej tyle % maksymalnego zycia / many pijacego
+		healthPercent = { 5, 7 },
+		manaPercent = { 10, 13 },
 		level = 130,
 		vocations = { VOCATION.BASE_ID.SORCERER, VOCATION.BASE_ID.DRUID },
 		description = "Only sorcerers and druids of level 130 or above may drink this fluid.",
@@ -51,8 +54,17 @@ function potion.onUse(player, item, fromPosition, target, toPosition, isHotkey)
 		return true
 	end
 
-	doTargetCombatHealth(player, target, COMBAT_HEALING, config.health[1], config.health[2], CONST_ME_MAGIC_BLUE)
-	doTargetCombatMana(0, target, config.mana[1], config.mana[2], CONST_ME_MAGIC_BLUE)
+	local hMin, hMax, mMin, mMax = config.health[1], config.health[2], config.mana[1], config.mana[2]
+	if config.healthPercent then
+		hMin = math.max(hMin, math.floor(target:getMaxHealth() * config.healthPercent[1] / 100))
+		hMax = math.max(hMax, math.floor(target:getMaxHealth() * config.healthPercent[2] / 100))
+	end
+	if config.manaPercent then
+		mMin = math.max(mMin, math.floor(target:getMaxMana() * config.manaPercent[1] / 100))
+		mMax = math.max(mMax, math.floor(target:getMaxMana() * config.manaPercent[2] / 100))
+	end
+	doTargetCombatHealth(player, target, COMBAT_HEALING, hMin, hMax, CONST_ME_MAGIC_BLUE)
+	doTargetCombatMana(0, target, mMin, mMax, CONST_ME_MAGIC_BLUE)
 	target:say("Aaaah...", MESSAGE_POTION)
 	player:getPosition():sendSingleSoundEffect(SOUND_EFFECT_TYPE_ITEM_USE_POTION, player:isInGhostMode() and nil or player)
 
