@@ -79,6 +79,7 @@ local function defaults()
 			list = {}, -- { on, kind = "spell"|"rune", value, min, mana, hp }
 		},
 		haste = { on = false, words = "utani hur", noPz = true },
+		utamo = { on = false, noPz = true }, -- auto utamo vita (magic shield), odnawiany po zniknieciu
 		food = { on = false, item = 0 },
 		timers = {}, -- { on, kind = "item"|"say", value, every = sekundy }
 		party = {
@@ -783,6 +784,12 @@ local function runTools(player, st, now, vocSet)
 		end
 	end
 
+	if cfg.utamo and cfg.utamo.on and not player:hasCondition(CONDITION_MANASHIELD) then
+		if not (cfg.utamo.noPz and inPz(player:getPosition())) then
+			castWords(player, "utamo vita", nil, vocSet)
+		end
+	end
+
 	if cfg.food.on and now >= st.nextFood then
 		st.nextFood = now + 5000
 		local condition = player:getCondition(CONDITION_REGENERATION, CONDITIONID_DEFAULT)
@@ -939,6 +946,8 @@ local function partyMembers(player)
 	return members
 end
 
+local lowestPartyPercent
+
 local function runPartyHeal(player, st, vocSet)
 	local party = st.cfg.party
 	if not party.healOn or #party.heal == 0 then
@@ -979,6 +988,21 @@ local function runPartyHeal(player, st, vocSet)
 			end
 		end
 	end
+end
+
+-- najnizszy % zycia wsrod pozostalych czlonkow druzyny w zasiegu (100, gdy nikogo nie ma)
+lowestPartyPercent = function(player)
+	local ppos = player:getPosition()
+	local lowest = 100
+	for _, m in ipairs(partyMembers(player)) do
+		if m:getId() ~= player:getId() and m:getHealth() > 0 then
+			local mpos = m:getPosition()
+			if mpos.z == ppos.z and distance(ppos, mpos) <= 7 then
+				lowest = math.min(lowest, percent(m:getHealth(), m:getMaxHealth()))
+			end
+		end
+	end
+	return lowest
 end
 
 -- wolne pole obok lidera (albo pole lidera, gdy wokol nie ma miejsca)
@@ -1145,10 +1169,18 @@ local function tickPlayer(player, now)
 	local vocSet = vocationSpells(player)
 	-- healing, tools i timery dzialaja zawsze (maja wlasne wlaczniki);
 	-- glowny wlacznik bota steruje tylko auto atakiem i czarami/runami ataku
+	-- leczenie druzyny ma pierwszenstwo, gdy ktos z party ma mniej % zycia niz sam leczacy
+	-- (oba korzystaja ze wspolnego czasu odnowienia czarow leczacych)
+	local partyFirst = lowestPartyPercent(player) < percent(player:getHealth(), player:getMaxHealth())
+	if partyFirst then
+		runPartyHeal(player, st, vocSet)
+	end
 	if cfg.healOn ~= false then
 		runHealing(player, st, now, vocSet)
 	end
-	runPartyHeal(player, st, vocSet)
+	if not partyFirst then
+		runPartyHeal(player, st, vocSet)
+	end
 	runTools(player, st, now, vocSet)
 	-- party: chodzenie za liderem i atak jego celu (niezaleznie od wlacznika ataku)
 	local partyActive, partyTarget = runParty(player, st, now)
@@ -1713,6 +1745,14 @@ openTools = function(player)
 			cfg.haste.noPz = not cfg.haste.noPz
 			changed(p, reopen)
 		end },
+		{ onOff(cfg.utamo.on) .. "Auto utamo vita (magic shield, sorcerer/druid)", function(p)
+			cfg.utamo.on = not cfg.utamo.on
+			changed(p, reopen)
+		end },
+		{ onOff(cfg.utamo.noPz) .. "Utamo vita tylko poza strefa ochronna (PZ)", function(p)
+			cfg.utamo.noPz = not cfg.utamo.noPz
+			changed(p, reopen)
+		end },
 		{ onOff(cfg.food.on) .. "Auto jedzenie", function(p)
 			cfg.food.on = not cfg.food.on
 			changed(p, reopen)
@@ -1986,7 +2026,7 @@ openMain = function(player)
 		{ string.format("Hunting (auto atak %s, %s) >", cfg.hunt.on and "ON" or "OFF", cfg.hunt.mode == "chase" and "Chase" or "Stand"), function(p)
 			openHunting(p)
 		end },
-		{ "Tools (haste, jedzenie, anty-AFK) >", function(p)
+		{ "Tools (haste, utamo vita, jedzenie, anty-AFK) >", function(p)
 			openTools(p)
 		end },
 		{ "Timery (" .. #cfg.timers .. ") >", function(p)

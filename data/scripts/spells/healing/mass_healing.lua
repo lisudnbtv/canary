@@ -11,6 +11,11 @@ local function targetFunction(creature, target)
 		end
 	end
 
+	-- OTS: graczom co najmniej 15-22% ich maksymalnego zycia (leczenie calej druzyny na wysokich poziomach)
+	if target:isPlayer() then
+		min = math.max(min, math.floor(target:getMaxHealth() * 0.15))
+		max = math.max(max, math.floor(target:getMaxHealth() * 0.22))
+	end
 	doTargetCombatHealth(creature, target, COMBAT_HEALING, min, max, CONST_ME_NONE, ORIGIN_SPELL, "Mass Healing")
 end
 
