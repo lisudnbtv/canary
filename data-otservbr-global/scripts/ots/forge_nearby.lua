@@ -117,7 +117,13 @@ function sliverDrop.monsterPostDropLoot(monster, corpse)
 	if stack <= 0 then
 		return
 	end
-	corpse:addItem(SLIVER_ID, stack * math.random(1, SLIVER_PER_STACK_MAX))
+	local count = stack * math.random(1, SLIVER_PER_STACK_MAX)
+	-- pelne zwloki (duzo lootu): slivery na ziemie obok zamiast bledu w logu przy kazdym zabiciu
+	if corpse:getEmptySlots(false) > 0 then
+		corpse:addItem(SLIVER_ID, count)
+	else
+		Game.createItem(SLIVER_ID, count, corpse:getPosition())
+	end
 end
 
 sliverDrop:register()
