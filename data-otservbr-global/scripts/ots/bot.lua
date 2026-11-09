@@ -11,7 +11,7 @@ local TICK_MS = 200
 local KV_SCOPE = "ots-bot"
 local INPUT_ITEM = 2814 -- pergamin z miejscem do wpisania tekstu (jak w wyszukiwarce expowisk)
 local PARTY_CAKE = 6279 -- Infinite Food
-local IDLE_KICK_MINUTES = 15 -- bez anty-AFK: wylogowanie po tylu minutach bezczynnosci (jak domyslnie w Canary)
+local IDLE_KICK_MINUTES = 1440 -- bez anty-AFK: wylogowanie po 24 h bezczynnosci (jak bylo ustawione w configu)
 local PAD = "                                        " -- poszerza okno, zeby dlugie pozycje sie miescily
 
 OtsBotState = OtsBotState or {}
@@ -61,7 +61,8 @@ end
 
 local function defaults()
 	return {
-		on = false,
+		on = false, -- auto atak i czary ataku
+		healOn = true, -- healing (dziala niezaleznie od "on")
 		autostart = true,
 		antiAfk = true,
 		heal = {}, -- { on, kind = "spell"|"potion", value = slowa|id, below = % }
@@ -80,6 +81,14 @@ local function defaults()
 		haste = { on = false, words = "utani hur", noPz = true },
 		food = { on = false, item = 0 },
 		timers = {}, -- { on, kind = "item"|"say", value, every = sekundy }
+		party = {
+			on = false, -- chodz za liderem i atakuj jego cel
+			leader = "",
+			teleport = true, -- przenos do lidera (inne pietro, za daleko, zablokowana droga)
+			tpDist = 10,
+			healOn = false,
+			heal = {}, -- { on, words, below = %, min = ilu czlonkow (czary obszarowe) }
+		},
 	}
 end
 
@@ -300,6 +309,30 @@ local function canCast(player, entry, vocSet)
 		return false
 	end
 	return true
+end
+
+-- powod, dla ktorego czaru nie da sie teraz rzucic (do komunikatow)
+local function castProblem(player, entry, vocSet)
+	local spell = entry.spell
+	if vocSet and entry.words and not vocSet[entry.words:lower()] then
+		return "Twoja profesja nie zna czaru " .. entry.words
+	end
+	if player:getLevel() < (spell:level() or 0) then
+		return "za niski poziom (wymagany " .. spell:level() .. ")"
+	end
+	if player:getMagicLevel() < (spell:magicLevel() or 0) then
+		return "za niski magic level (wymagany " .. spell:magicLevel() .. ")"
+	end
+	if manaCost(player, spell) > player:getMana() then
+		return "za malo many"
+	end
+	if spell:isAggressive() and inPz(player:getPosition()) then
+		return "czar ataku nie dziala w PZ"
+	end
+	if onCooldown(player, spell) then
+		return "czar ma cooldown"
+	end
+	return nil
 end
 
 local function doCast(player, entry, variant)
@@ -550,15 +583,17 @@ local function runTargeting(player, st, now, list, grid)
 		end
 	end
 
-	if target then
-		if hunt.mode == "chase" then
+	if hunt.mode == "chase" then
+		if target then
 			local follow = player:getFollowCreature()
 			if not follow or follow:getId() ~= target:getId() then
 				player:setFollowCreature(target)
 			end
-		elseif player:getFollowCreature() then
-			player:setFollowCreature(nil)
 		end
+	elseif player:getFollowCreature() then
+		-- Stand: nigdy nie idzie za potworem, nawet gdy w kliencie jest wlaczone "Chase opponent"
+		-- (silnik ustawia wtedy podazanie przy kazdej zmianie celu, takze bez bota)
+		player:setFollowCreature(nil)
 	end
 	setMark(player, st, target)
 	return target
@@ -777,21 +812,53 @@ local function runTools(player, st, now, vocSet)
 	for index, timer in ipairs(cfg.timers) do
 		if timer.on and (timer.every or 0) > 0 then
 			local due = st.timers[index]
-			if not due then
-				st.timers[index] = now + timer.every * 1000
-			elseif now >= due then
-				local done
+			if not due or now >= due then
+				local done, reason
 				if timer.kind == "item" then
-					done = useItem(player, timer.value)
+					done, reason = useItem(player, tonumber(timer.value) or timer.value)
+					if not done then
+						reason = (reason or "nie udalo sie uzyc") .. " (" .. itemName(timer.value) .. ")"
+					end
 				else
-					done = castWords(player, timer.value, player:getTarget(), vocSet)
-					if not done and not spellEntry(timer.value) then
-						player:say(timer.value, TALKTYPE_SAY)
-						done = true
+					local entry = spellEntry(timer.value)
+					if entry then
+						done = castWords(player, timer.value, player:getTarget(), vocSet)
+						if not done then
+							reason = castProblem(player, entry, vocSet) or "czar sie nie udal"
+						end
+					else
+						-- komenda (np. !polaczforge): wywolana tak, jakby gracz ja wpisal
+						local text = trim(timer.value)
+						local words, param = text:match("^(%S+)%s*(.-)$")
+						local talk = words and H.talkactions and H.talkactions[words:lower()]
+						if talk then
+							local ok, err = pcall(talk.cb, player, talk.words, param or "")
+							done = ok
+							if not ok then
+								logger.error("[OTS bot] Blad komendy {}: {}", talk.words, tostring(err))
+								reason = "blad komendy " .. talk.words
+							end
+						elseif text:sub(1, 1) == "!" or text:sub(1, 1) == "/" then
+							done, reason = false, "nie ma komendy " .. tostring(words)
+						else
+							player:say(timer.value, TALKTYPE_SAY)
+							done = true
+						end
 					end
 				end
-				-- nieudane (np. cooldown, brak many) probuje ponownie za sekunde
-				st.timers[index] = done and (now + timer.every * 1000) or (now + 1000)
+				if done then
+					st.timers[index] = now + timer.every * 1000
+					st.timerWarned = st.timerWarned or {}
+					st.timerWarned[index] = nil
+				else
+					-- nieudane (np. cooldown, brak many) probuje ponownie za sekunde; powod pokazuje raz
+					st.timers[index] = now + 1000
+					st.timerWarned = st.timerWarned or {}
+					if st.timerWarned[index] ~= reason then
+						st.timerWarned[index] = reason
+						player:sendTextMessage(MESSAGE_EVENT_ADVANCE, "Bot - timer " .. index .. ": " .. tostring(reason) .. ". Probuje dalej co sekunde.")
+					end
+				end
 			end
 		end
 	end
@@ -804,6 +871,7 @@ local function runIdle(player, st)
 	end
 	local idle = player:getIdleTime()
 	if idle >= (IDLE_KICK_MINUTES + 1) * 60000 then
+		logger.info("[OTS] {} wylogowany przez bota za bezczynnosc ({} min, Anty-AFK wylaczony)", player:getName(), math.floor(idle / 60000))
 		player:remove()
 	elseif idle >= IDLE_KICK_MINUTES * 60000 and not st.idleWarned then
 		st.idleWarned = true
@@ -814,6 +882,259 @@ local function runIdle(player, st)
 end
 
 ---------------------------------------------------------------------------
+-- Party: chodzenie za liderem, atak celu lidera, leczenie czlonkow
+---------------------------------------------------------------------------
+
+local HEALING_GROUP = rawget(_G, "SPELLGROUP_HEALING") or 2 -- SpellGroup_t::SPELLGROUP_HEALING
+
+-- czar leczacy innych: na cel (exura sio, exura gran sio, exura tio sio) albo obszarowy (exura gran mas res)
+local function partyHealType(entry)
+	local spell = entry.spell
+	if entry.rune or spell:isAggressive() or spell:group() ~= HEALING_GROUP then
+		return nil
+	end
+	if spell:needTarget() and spell:hasPlayerNameParam() then
+		return "target"
+	end
+	if entry.offsets and not spell:isSelfTarget() then
+		return "area"
+	end
+	return nil
+end
+
+local function leaderName(cfg)
+	return trim(cfg.party and cfg.party.leader or ""):lower()
+end
+
+-- wszyscy z tej samej druzyny: party w grze + lider i postacie z botem ustawionym na tego samego lidera
+local function partyMembers(player)
+	local members, seen = {}, {}
+	local function add(p)
+		if p and not seen[p:getId()] then
+			seen[p:getId()] = true
+			members[#members + 1] = p
+		end
+	end
+	add(player)
+	local party = player:getParty()
+	if party then
+		add(party:getLeader())
+		for _, m in ipairs(party:getMembers()) do
+			add(m)
+		end
+	end
+	local cfg = state(player).cfg
+	local mine = cfg.party.on and leaderName(cfg) or ""
+	local group = mine ~= "" and mine or player:getName():lower()
+	for _, other in ipairs(Game.getPlayers()) do
+		if other:getName():lower() == group then
+			add(other)
+		else
+			local ost = OtsBotState[other:getId()]
+			if ost and ost.cfg.party.on and leaderName(ost.cfg) == group then
+				add(other)
+			end
+		end
+	end
+	return members
+end
+
+local function runPartyHeal(player, st, vocSet)
+	local party = st.cfg.party
+	if not party.healOn or #party.heal == 0 then
+		return
+	end
+	local ppos = player:getPosition()
+	local members = partyMembers(player)
+	for _, rule in ipairs(party.heal) do
+		local entry = rule.on and spellEntry(rule.words)
+		local kind = entry and partyHealType(entry)
+		if kind and canCast(player, entry, vocSet) then
+			if kind == "target" then
+				local best, bestPct = nil, nil
+				for _, m in ipairs(members) do
+					if m:getId() ~= player:getId() and m:getHealth() > 0 then
+						local mpos = m:getPosition()
+						local pct = percent(m:getHealth(), m:getMaxHealth())
+						if pct < rule.below and mpos.z == ppos.z and distance(ppos, mpos) <= 7 and ppos:isSightClear(mpos, true) and (not bestPct or pct < bestPct) then
+							best, bestPct = m, pct
+						end
+					end
+				end
+				if best and doCast(player, entry, Variant(best:getId())) then
+					return
+				end
+			else
+				local grid = {}
+				for _, m in ipairs(members) do
+					local mpos = m:getPosition()
+					if m:getHealth() > 0 and mpos.z == ppos.z and percent(m:getHealth(), m:getMaxHealth()) < rule.below then
+						local key = posKey(mpos.x, mpos.y)
+						grid[key] = (grid[key] or 0) + 1
+					end
+				end
+				if countHits(entry.offsets, ppos.x, ppos.y, grid) >= math.max(1, rule.min or 2) and doCast(player, entry, Variant(ppos)) then
+					return
+				end
+			end
+		end
+	end
+end
+
+-- wolne pole obok lidera (albo pole lidera, gdy wokol nie ma miejsca)
+local function teleportNear(player, leader)
+	local lpos = leader:getPosition()
+	local offsets = { { 0, 1 }, { 1, 0 }, { -1, 0 }, { 0, -1 }, { 1, 1 }, { -1, 1 }, { 1, -1 }, { -1, -1 } }
+	for _, o in ipairs(offsets) do
+		local pos = Position(lpos.x + o[1], lpos.y + o[2], lpos.z)
+		local tile = Tile(pos)
+		if tile and tile:getGround() and tile:getCreatureCount() == 0 and tile:queryAdd(player) == RETURNVALUE_NOERROR then
+			player:teleportTo(pos)
+			pos:sendMagicEffect(CONST_ME_TELEPORT)
+			return true
+		end
+	end
+	if player:teleportTo(lpos) then
+		lpos:sendMagicEffect(CONST_ME_TELEPORT)
+		return true
+	end
+	return false
+end
+
+-- zwraca: aktywny (true, gdy postac jest w trybie party z liderem online) oraz cel lidera
+local function runParty(player, st, now)
+	local party = st.cfg.party
+	if not party.on or leaderName(st.cfg) == "" then
+		return false, nil
+	end
+	local leader = Player(trim(party.leader))
+	if not leader or leader:getId() == player:getId() then
+		return false, nil
+	end
+
+	local ppos, lpos = player:getPosition(), leader:getPosition()
+	local dist = distance(ppos, lpos)
+	if party.teleport and now >= (st.nextPartyTp or 0) then
+		local stuck = false
+		if dist > 2 and st.lastPos and st.lastPos.x == ppos.x and st.lastPos.y == ppos.y and st.lastPos.z == ppos.z then
+			stuck = now - (st.lastMove or now) >= 3000
+		else
+			st.lastMove = now
+		end
+		if lpos.z ~= ppos.z or dist > (party.tpDist or 10) or stuck then
+			st.nextPartyTp = now + 1000
+			if teleportNear(player, leader) then
+				st.lastMove = now
+				ppos = player:getPosition()
+			end
+		end
+	end
+	st.lastPos = ppos
+
+	local target = leader:getTarget()
+	if target and target:isMonster() and target:getHealth() > 0 then
+		local current = player:getTarget()
+		if not current or current:getId() ~= target:getId() then
+			if player:setTarget(target) then
+				st.botTarget = target:getId()
+			end
+		end
+		-- w party postac idzie za liderem takze w trakcie ataku; na "Stand" stoi w miejscu,
+		-- dopoki lider jest blisko (do 3 pol), i rusza dopiero, gdy sie oddali
+		local follow = player:getFollowCreature()
+		if st.cfg.hunt.mode == "stand" and lpos.z == ppos.z and dist <= 3 then
+			if follow then
+				player:setFollowCreature(nil)
+			end
+		elseif not follow or follow:getId() ~= leader:getId() then
+			player:setFollowCreature(leader)
+		end
+		setMark(player, st, target)
+		return true, target
+	end
+
+	-- lider nic nie atakuje: czekamy na jego sygnal i idziemy za nim
+	if player:getTarget() then
+		player:setTarget(nil)
+	end
+	setMark(player, st, nil)
+	local follow = player:getFollowCreature()
+	if not follow or follow:getId() ~= leader:getId() then
+		player:setFollowCreature(leader)
+	end
+	return true, nil
+end
+
+-- Bez friendly fire w party: czary, runy i ataki nie raniac czlonkow tej samej druzyny
+-- (party w grze albo postacie z botem ustawionym na tego samego lidera). Leczenie dziala dalej.
+local function owningPlayer(creature)
+	if not creature then
+		return nil
+	end
+	if creature:isPlayer() then
+		return creature
+	end
+	local master = creature:getMaster()
+	if master and master:isPlayer() then
+		return master
+	end
+	return nil
+end
+
+-- Exp w party bota: x10 i dzielony rowno na cala druzyne (jak shared exp).
+-- Dotyczy postaci z wlaczonym trybem party (lider online) i lidera, za ktorym ktos chodzi.
+local PARTY_EXP_MULTIPLIER = 10
+
+local function inBotParty(player)
+	local st = OtsBotState[player:getId()]
+	if st and st.cfg.party.on and leaderName(st.cfg) ~= "" then
+		local leader = Player(trim(st.cfg.party.leader))
+		if leader and leader:getId() ~= player:getId() then
+			return true
+		end
+	end
+	local me = player:getName():lower()
+	for id, other in pairs(OtsBotState) do
+		if id ~= player:getId() and other.cfg.party.on and leaderName(other.cfg) == me and Player(id) then
+			return true
+		end
+	end
+	return false
+end
+
+OtsExpModifiers = OtsExpModifiers or {}
+OtsExpModifiers.botParty = function(player, target, exp)
+	if exp <= 0 or not target or not inBotParty(player) then
+		return exp
+	end
+	local members = partyMembers(player)
+	local share = math.floor(exp * PARTY_EXP_MULTIPLIER / #members + 0.5)
+	for _, member in ipairs(members) do
+		if member:getId() ~= player:getId() then
+			-- addExperience bez celu: Player:onGainExperience zwraca exp bez mnoznikow, wiec nic sie nie dubluje
+			member:addExperience(share, true)
+		end
+	end
+	return share
+end
+
+local noFriendlyFire = EventCallback("OtsBotPartyNoFriendlyFire")
+function noFriendlyFire.creatureOnTargetCombat(creature, target)
+	local attacker, victim = owningPlayer(creature), owningPlayer(target)
+	if attacker and victim and attacker:getId() ~= victim:getId() then
+		for _, member in ipairs(partyMembers(attacker)) do
+			if member:getId() == victim:getId() then
+				-- w tej wersji Canary callback zwraca true/false (false = trafienie zablokowane);
+				-- liczba (np. RETURNVALUE_...) jest traktowana jak true i niczego nie blokuje
+				return false
+			end
+		end
+	end
+	return true
+end
+noFriendlyFire:register()
+
+---------------------------------------------------------------------------
 -- Petla bota
 ---------------------------------------------------------------------------
 
@@ -821,15 +1142,29 @@ local function tickPlayer(player, now)
 	local st = state(player)
 	runIdle(player, st)
 	local cfg = st.cfg
+	local vocSet = vocationSpells(player)
+	-- healing, tools i timery dzialaja zawsze (maja wlasne wlaczniki);
+	-- glowny wlacznik bota steruje tylko auto atakiem i czarami/runami ataku
+	if cfg.healOn ~= false then
+		runHealing(player, st, now, vocSet)
+	end
+	runPartyHeal(player, st, vocSet)
+	runTools(player, st, now, vocSet)
+	-- party: chodzenie za liderem i atak jego celu (niezaleznie od wlacznika ataku)
+	local partyActive, partyTarget = runParty(player, st, now)
+	if partyActive then
+		if cfg.on and cfg.hunt.spellsOn and partyTarget then
+			local list, grid = monstersAround(player, cfg)
+			runAttackSpells(player, st, partyTarget, list, grid, vocSet)
+		end
+		return
+	end
 	if not cfg.on then
 		if st.markedId then
 			setMark(player, st, nil)
 		end
 		return
 	end
-	local vocSet = vocationSpells(player)
-	runHealing(player, st, now, vocSet)
-	runTools(player, st, now, vocSet)
 	if cfg.hunt.on or cfg.hunt.spellsOn then
 		local list, grid = monstersAround(player, cfg)
 		local target = nil
@@ -864,6 +1199,13 @@ local function loop(loopId)
 			OtsBotAwaiting[id] = nil
 		end
 	end
+	-- diagnostyka rozlaczen: co 5 min w logu serwera kto jest online i jak dlugo bez aktywnosci
+	if now >= (OtsBotNextHeartbeat or 0) then
+		OtsBotNextHeartbeat = now + 5 * 60000
+		for _, player in ipairs(Game.getPlayers()) do
+			logger.info("[OTS] Online: {} (bez aktywnosci {} min, bot atak {})", player:getName(), math.floor(player:getIdleTime() / 60000), state(player).cfg.on and "ON" or "OFF")
+		end
+	end
 	addEvent(loop, TICK_MS, loopId)
 end
 
@@ -885,7 +1227,7 @@ startup:register()
 -- Okna (menu)
 ---------------------------------------------------------------------------
 
-local openMain, openHealing, openHunting, openAttackList, openTools, openTimers
+local openMain, openHealing, openHunting, openAttackList, openTools, openTimers, openParty
 
 local function menu(player, title, message, choices, back)
 	local window = ModalWindow({ title = title, message = message .. PAD })
@@ -1014,7 +1356,9 @@ end
 local function potionIds()
 	local ids = {}
 	for id, action in pairs(H.actions) do
-		if (action.source or ""):find("items/potions.lua", 1, true) then
+		-- zwykle potiony (items/potions.lua) i wlasne potiony OTS (np. arcane_potion.lua)
+		local src = (action.source or ""):lower()
+		if src:find("items/potions.lua", 1, true) or src:find("scripts/ots/", 1, true) and src:find("potion", 1, true) then
 			ids[#ids + 1] = id
 		end
 	end
@@ -1122,7 +1466,12 @@ end
 
 openHealing = function(player)
 	local cfg = state(player).cfg
-	local choices = {}
+	local choices = {
+		{ onOff(cfg.healOn ~= false) .. "Healing wlaczony (dziala zawsze, niezaleznie od ataku)", function(p)
+			cfg.healOn = cfg.healOn == false
+			changed(p, openHealing)
+		end },
+	}
 	for i, rule in ipairs(cfg.heal) do
 		choices[#choices + 1] = { i .. ". " .. ruleLabel(rule, "HP"), function(p)
 			openRule(p, "heal", i)
@@ -1483,8 +1832,8 @@ openTimers = function(player)
 			add(p2, "item", id)
 		end)
 	end }
-	choices[#choices + 1] = { ">> Dodaj: powiedz tekst / czar", function(p)
-		ask(p, "tekst albo slowa czaru (czar zostanie rzucony).", "", function(p2, text)
+	choices[#choices + 1] = { ">> Dodaj: czar / komenda / tekst", function(p)
+		ask(p, "tekst, slowa czaru albo komenda, np. !polaczforge.", "", function(p2, text)
 			if text == "" then
 				return openTimers(p2)
 			end
@@ -1494,13 +1843,137 @@ openTimers = function(player)
 	menu(player, "Bot - Timery", "Kazdy timer dziala co ustalony czas, liczac od wlaczenia bota. Nieudana proba (cooldown, brak many) jest powtarzana co sekunde.", choices, openMain)
 end
 
+-- Party ---------------------------------------------------------------------
+
+local function partyHealLabel(rule)
+	local entry = spellEntry(rule.words)
+	local kind = entry and partyHealType(entry)
+	local extra = kind == "area" and (", min " .. (rule.min or 2) .. " os.") or ""
+	return string.format("%s%s - czlonek party < %d%% HP%s", onOff(rule.on), rule.words, rule.below, extra)
+end
+
+local function openPartyHeal(player, index)
+	local party = state(player).cfg.party
+	local rule = party.heal[index]
+	if not rule then
+		return openParty(player)
+	end
+	local reopen = function(p)
+		openPartyHeal(p, index)
+	end
+	local entry = spellEntry(rule.words)
+	local choices = {
+		{ onOff(rule.on) .. "Czar wlaczony", function(p)
+			rule.on = not rule.on
+			changed(p, reopen)
+		end },
+		{ "Prog: czlonek ponizej " .. rule.below .. "% HP (zmien)", function(p)
+			askNumber(p, "prog HP czlonka party w %", rule.below, 1, 100, function(n)
+				rule.below = n
+			end, reopen)
+		end },
+	}
+	if entry and partyHealType(entry) == "area" then
+		choices[#choices + 1] = { "Minimum rannych w zasiegu: " .. (rule.min or 2) .. " (zmien)", function(p)
+			askNumber(p, "ilu rannych (z Toba) musi byc w zasiegu czaru", rule.min or 2, 1, 10, function(n)
+				rule.min = n
+			end, reopen)
+		end }
+	end
+	choices[#choices + 1] = { "Przesun wyzej (wyzszy priorytet)", function(p)
+		index = moveInList(party.heal, index, -1)
+		changed(p, reopen)
+	end }
+	choices[#choices + 1] = { "Przesun nizej", function(p)
+		index = moveInList(party.heal, index, 1)
+		changed(p, reopen)
+	end }
+	choices[#choices + 1] = { "Usun", function(p)
+		table.remove(party.heal, index)
+		changed(p, openParty)
+	end }
+	menu(player, "Leczenie party", partyHealLabel(rule), choices, openParty)
+end
+
+openParty = function(player)
+	local cfg = state(player).cfg
+	local party = cfg.party
+	local reopen = openParty
+	local names = {}
+	for _, m in ipairs(partyMembers(player)) do
+		names[#names + 1] = m:getName()
+	end
+	local choices = {
+		{ onOff(party.on) .. "Tryb party: chodz za liderem i atakuj jego cel", function(p)
+			party.on = not party.on
+			if not party.on and p:getFollowCreature() and p:getFollowCreature():isPlayer() then
+				p:setFollowCreature(nil)
+			end
+			changed(p, reopen)
+		end },
+		{ "Lider: " .. (trim(party.leader) ~= "" and party.leader or "brak") .. " (zmien)", function(p)
+			local list = {
+				{ ">> Wpisz nick recznie", function(p2)
+					ask(p2, "nick lidera (puste = brak).", party.leader, function(p3, text)
+						party.leader = text
+						changed(p3, reopen)
+					end)
+				end },
+				{ ">> Brak lidera (ta postac jest liderem albo gra sama)", function(p2)
+					party.leader = ""
+					changed(p2, reopen)
+				end },
+			}
+			for _, other in ipairs(Game.getPlayers()) do
+				if other:getId() ~= p:getId() then
+					list[#list + 1] = { other:getName() .. " (online)", function(p2)
+						party.leader = other:getName()
+						changed(p2, reopen)
+					end }
+				end
+			end
+			menu(p, "Lider party", "Wybierz postac, za ktora ma chodzic ta postac.", list, reopen)
+		end },
+		{ onOff(party.teleport) .. "Przenos do lidera (inne pietro, za daleko, zablokowana droga)", function(p)
+			party.teleport = not party.teleport
+			changed(p, reopen)
+		end },
+		{ "Przenos, gdy lider dalej niz: " .. (party.tpDist or 10) .. " kratek (zmien)", function(p)
+			askNumber(p, "odleglosc od lidera, po ktorej postac zostaje przeniesiona", party.tpDist or 10, 3, 30, function(n)
+				party.tpDist = n
+			end, reopen)
+		end },
+		{ onOff(party.healOn) .. "Leczenie czlonkow party", function(p)
+			party.healOn = not party.healOn
+			changed(p, reopen)
+		end },
+	}
+	for i, rule in ipairs(party.heal) do
+		choices[#choices + 1] = { i .. ". " .. partyHealLabel(rule), function(p)
+			openPartyHeal(p, i)
+		end }
+	end
+	choices[#choices + 1] = { ">> Dodaj czar leczacy party", function(p)
+		pickSpell(p, "Czar leczacy party", function(entry)
+			return partyHealType(entry) ~= nil
+		end, function(p2, words)
+			local list = state(p2).cfg.party.heal
+			list[#list + 1] = { on = true, words = words, below = 70, min = 2 }
+			save(p2)
+			openPartyHeal(p2, #list)
+		end, reopen)
+	end }
+	local msg = "Party teraz: " .. table.concat(names, ", ") .. ". Lider atakuje -> ta postac atakuje ten sam cel (swoimi czarami z Hunting, gdy atak jest wlaczony). Lider nic nie atakuje -> postac idzie za nim."
+	menu(player, "Bot - Party", msg, choices, openMain)
+end
+
 -- Menu glowne -----------------------------------------------------------------
 
 openMain = function(player)
 	local cfg = state(player).cfg
 	local reopen = openMain
 	local choices = {
-		{ onOff(cfg.on) .. "Bot " .. (cfg.on and "wlaczony" or "wylaczony"), function(p)
+		{ onOff(cfg.on) .. "Atak " .. (cfg.on and "wlaczony" or "wylaczony") .. " (auto atak + czary i runy; healing i tools dzialaja zawsze)", function(p)
 			cfg.on = not cfg.on
 			if not cfg.on then
 				setMark(p, state(p), nil)
@@ -1519,12 +1992,15 @@ openMain = function(player)
 		{ "Timery (" .. #cfg.timers .. ") >", function(p)
 			openTimers(p)
 		end },
-		{ onOff(cfg.autostart) .. "Wlaczaj bota automatycznie po zalogowaniu", function(p)
+		{ string.format("Party (%s%s) >", cfg.party.on and "za liderem " or "wylaczone", cfg.party.on and (trim(cfg.party.leader) ~= "" and cfg.party.leader or "?") or ""), function(p)
+			openParty(p)
+		end },
+		{ onOff(cfg.autostart) .. "Wlaczaj atak automatycznie po zalogowaniu", function(p)
 			cfg.autostart = not cfg.autostart
 			changed(p, reopen)
 		end },
 	}
-	menu(player, "Bot - " .. player:getName(), "Ustawienia zapisuja sie dla tej postaci. Komendy: !bot, !bot on, !bot off.", choices, nil)
+	menu(player, "Bot - " .. player:getName(), "Ustawienia zapisuja sie dla tej postaci. Komendy: !bot (menu), !bot on / !bot off (atak).", choices, nil)
 end
 
 ---------------------------------------------------------------------------
@@ -1542,7 +2018,7 @@ function talk.onSay(player, words, param)
 			setMark(player, state(player), nil)
 		end
 		save(player)
-		player:sendTextMessage(MESSAGE_EVENT_ADVANCE, "Bot " .. (cfg.on and "WLACZONY." or "WYLACZONY."))
+		player:sendTextMessage(MESSAGE_EVENT_ADVANCE, "Bot: atak " .. (cfg.on and "WLACZONY." or "WYLACZONY.") .. " Healing i tools dzialaja zawsze.")
 		return true
 	end
 	openMain(player)
@@ -1555,12 +2031,20 @@ talk:register()
 local login = CreatureEvent("OtsBotLogin")
 function login.onLogin(player)
 	ensureLoop()
+	logger.info("[OTS] Zalogowano: {}", player:getName())
 	OtsBotState[player:getId()] = nil
 	local st = state(player)
 	st.cfg.on = st.cfg.autostart == true
-	if st.cfg.on then
-		player:sendTextMessage(MESSAGE_EVENT_ADVANCE, "Bot: wczytano ustawienia postaci, bot WLACZONY (!bot - menu, !bot off - wylacz).")
-	end
+	player:sendTextMessage(MESSAGE_EVENT_ADVANCE, "Bot: healing " .. (st.cfg.healOn ~= false and "ON" or "OFF") .. ", atak " .. (st.cfg.on and "ON" or "OFF") .. " (!bot - menu, !bot on/off - atak).")
 	return true
 end
 login:register()
+
+-- diagnostyka rozlaczen: wpis w logu serwera przy kazdym wylogowaniu
+local logout = CreatureEvent("OtsBotLogout")
+function logout.onLogout(player)
+	local pos = player:getPosition()
+	logger.info("[OTS] Wylogowanie: {} (bez aktywnosci {} min, HP {}/{}, pozycja {}, {}, {})", player:getName(), math.floor(player:getIdleTime() / 60000), player:getHealth(), player:getMaxHealth(), pos.x, pos.y, pos.z)
+	return true
+end
+logout:register()

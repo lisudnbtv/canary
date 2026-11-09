@@ -111,17 +111,16 @@ think:interval(5 * 60 * 1000)
 think:register()
 
 -- ---------- bonus expa ----------
-local gain = EventCallback("OtsDailyStreakExp")
-
-function gain.playerOnGainExperience(player, target, exp, rawExp)
+-- (EventCallback playerOnGainExperience w tej wersji Canary nie zmienia expa - mnozniki ida przez
+-- OtsExpModifiers w data/events/scripts/player.lua)
+OtsExpModifiers = OtsExpModifiers or {}
+OtsExpModifiers.dailyStreak = function(player, target, exp)
 	local bonus = expBonus(streakOf(player))
-	if bonus > 0 and exp > 0 then
-		exp = math.floor(exp * (1 + bonus) + 0.5)
+	if bonus > 0 and exp > 0 and target then
+		exp = exp * (1 + bonus)
 	end
 	return exp
 end
-
-gain:register()
 
 local login = CreatureEvent("OtsDailyStreakLogin")
 

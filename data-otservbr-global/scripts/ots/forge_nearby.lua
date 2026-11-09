@@ -118,11 +118,16 @@ function sliverDrop.monsterPostDropLoot(monster, corpse)
 		return
 	end
 	local count = stack * math.random(1, SLIVER_PER_STACK_MAX)
-	-- pelne zwloki (duzo lootu): slivery na ziemie obok zamiast bledu w logu przy kazdym zabiciu
+	-- najpierw dokladamy do sliverow, ktore juz leza w zwlokach; nowy stos tylko, gdy jest wolne miejsce
+	-- (nic nie laduje na ziemi - bot nie zbiera lootu z podlogi; zwloki maja 5x wiecej miejsca, items.xml)
+	for _, item in ipairs(corpse:getItems(false) or {}) do
+		if item:getId() == SLIVER_ID and item:getCount() + count <= 100 then
+			item:transform(SLIVER_ID, item:getCount() + count)
+			return
+		end
+	end
 	if corpse:getEmptySlots(false) > 0 then
 		corpse:addItem(SLIVER_ID, count)
-	else
-		Game.createItem(SLIVER_ID, count, corpse:getPosition())
 	end
 end
 

@@ -597,7 +597,22 @@ function Player:onGainExperience(target, exp, rawExp)
 	local baseRateExp = self:getFinalBaseRateExperience()
 
 	-- Return final experience value
-	return (exp * (1 + xpBoostPercent / 100 + lowLevelBonusExp / 100)) * staminaBonusXp * baseRateExp
+	exp = (exp * (1 + xpBoostPercent / 100 + lowLevelBonusExp / 100)) * staminaBonusXp * baseRateExp
+
+	-- OTS: dodatkowe mnozniki expa ze skryptow OTS (np. bot party x3).
+	-- EventCallback playerOnGainExperience w tej wersji Canary nie zmienia expa (zwracana wartosc jest pomijana),
+	-- dlatego skrypty dopisuja tu funkcje: OtsExpModifiers[nazwa] = function(player, target, exp) return exp end
+	if OtsExpModifiers then
+		for name, modifier in pairs(OtsExpModifiers) do
+			local ok, result = pcall(modifier, self, target, exp)
+			if ok and type(result) == "number" then
+				exp = result
+			elseif not ok then
+				logger.error("[OTS exp] {}: {}", name, tostring(result))
+			end
+		end
+	end
+	return exp
 end
 
 function Player:onLoseExperience(exp)

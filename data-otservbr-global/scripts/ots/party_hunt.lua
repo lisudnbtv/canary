@@ -1,5 +1,5 @@
 -- OTS: Expowisko Party (Mega Hardcore) - !tp > Expowisko Party.
--- Duza sala (31 x 21) obok huba dla calej druzyny (np. 5 postaci na multi-kliencie z botem).
+-- Sala jak FAST EXP (wyglad sali Grand Mastera Obrona, 16 x 11) dla calej druzyny (np. 5 postaci z botem).
 --  * Lider party wchodzi z menu, a wszyscy czlonkowie party, ktorzy sa online, lecza razem z nim
 --    (pozostali moga dolaczyc pozniej z tego samego menu). Przy wejsciu jest PZ 3x3 i teleport powrotny.
 --  * Potwory: tylko najmocniejsze ~6% potworow w grze, sila Brutalny albo Koszmar (jak Hardcore Boss),
@@ -11,17 +11,16 @@
 --  * Exp: bonus za kazda rozna profesje w sali, plus dodatek za pelny sklad 5 profesji.
 
 local LANDING = Position(30280, 30018, 7) -- pole wejscia; PZ 3x3 wokol niego w ots-hub.otbm (patch_party_pz.py)
-local ROOM = { minX = 30265, maxX = 30295, minY = 30000, maxY = 30020, z = 7 }
-local SAFE_RADIUS = 2 -- potwory nie pojawiaja sie blizej niz tyle pol od wejscia (poza PZ)
-local BASE_COUNT = 12
+local ROOM -- granice sali (z OtsRoomBounds, jak FAST EXP), ustawiane przy starcie
+local SAFE_RADIUS = 1 -- potwory nie pojawiaja sie w PZ 3x3 przy wejsciu
+local BASE_COUNT = 15
 local MAX_COUNT = 60
-local REFILL_AT = 0.6 -- dopelnianie, gdy zostanie mniej niz 60% potworow
+local REFILL_AT = 1.0 -- jak FAST EXP: od razu nowe w miejsce zabitych
 local HIT_CAP = 15
 local TIER_KOSZMAR_CHANCE = 50 -- reszta: Brutalny
 local BOSS_EVERY = 4 * 60
 local FULL_SET_BONUS = 0.25
 local POOL_TOP = 0.06
-local FLOORS = { 11278, 11279, 11281, 11282, 11283, 11280 }
 
 local VOCATIONS = {
 	knight = { label = "Knight", count = 10, exp = 0.15, elements = { COMBAT_PHYSICALDAMAGE } },
@@ -48,7 +47,10 @@ local function vocKey(player)
 end
 
 local function inRoom(pos)
-	return pos.z == ROOM.z and pos.x >= ROOM.minX - 1 and pos.x <= ROOM.maxX + 1 and pos.y >= ROOM.minY - 1 and pos.y <= ROOM.maxY + 1
+	if not ROOM then
+		return false
+	end
+	return pos.z == ROOM.z and pos.x >= ROOM.minX - 1 and pos.x <= ROOM.maxX + 1 and pos.y >= ROOM.minY - 3 and pos.y <= ROOM.maxY + 2
 end
 
 -- ---------- pule potworow ----------
@@ -182,7 +184,7 @@ local function aliveMonsters()
 		if creature then
 			alive[#alive + 1] = id
 			if not inRoom(creature:getPosition()) then
-				creature:teleportTo(Position(LANDING.x + math.random(-8, 8), LANDING.y - math.random(6, 12), LANDING.z), true)
+				creature:teleportTo(Position(LANDING.x + math.random(-6, 6), LANDING.y - math.random(3, 7), LANDING.z), true)
 			end
 		else
 			OtsHardcoreBossDamage[id] = nil
@@ -195,11 +197,11 @@ local function aliveMonsters()
 end
 
 local function spotNear(center)
-	for _ = 1, 20 do
-		local pos = Position(center.x + math.random(-6, 6), center.y + math.random(-6, 6), ROOM.z)
+	for _ = 1, 30 do
+		local pos = Position(math.random(ROOM.minX, ROOM.maxX), math.random(ROOM.minY, ROOM.maxY), ROOM.z)
 		if pos.x >= ROOM.minX and pos.x <= ROOM.maxX and pos.y >= ROOM.minY and pos.y <= ROOM.maxY
 			and math.max(math.abs(pos.x - LANDING.x), math.abs(pos.y - LANDING.y)) > SAFE_RADIUS + 1
-			and math.max(math.abs(pos.x - center.x), math.abs(pos.y - center.y)) >= 2
+			and math.max(math.abs(pos.x - center.x), math.abs(pos.y - center.y)) >= 1
 			and OtsIsSpotFree(pos) then
 			return pos
 		end
@@ -219,6 +221,8 @@ local function spawnOne(name, near, tier)
 	OtsEmpowerTier(monster, tier or (math.random(100) <= TIER_KOSZMAR_CHANCE and 3 or 2))
 	OtsHardcoreHitCap[monster:getId()] = HIT_CAP
 	OtsNoElite[monster:getId()] = true
+	-- kazdy potwor podchodzi wrecz (jak w FAST EXP), wiec postacie na "Stand" maja cele obok siebie
+	monster:changeTargetDistance(1, 24 * 60 * 60 * 1000)
 	run.ids[#run.ids + 1] = monster:getId()
 	return true
 end
@@ -274,16 +278,14 @@ local function tick(token)
 end
 
 -- bonus expa w sali
-local gain = EventCallback("OtsPartyHuntExp")
-
-function gain.playerOnGainExperience(player, target, exp, rawExp)
-	if run.leader and run.expBonus > 0 and exp > 0 and inRoom(player:getPosition()) then
-		exp = math.floor(exp * (1 + run.expBonus) + 0.5)
+-- (przez OtsExpModifiers w data/events/scripts/player.lua - EventCallback nie zmienia expa)
+OtsExpModifiers = OtsExpModifiers or {}
+OtsExpModifiers.partyHunt = function(player, target, exp)
+	if run.leader and run.expBonus > 0 and exp > 0 and target and inRoom(player:getPosition()) then
+		exp = exp * (1 + run.expBonus)
 	end
 	return exp
 end
-
-gain:register()
 
 -- ---------- wejscie ----------
 local function enterSpot(index)
@@ -366,20 +368,9 @@ end
 local startup = GlobalEvent("OtsPartyHuntStartup")
 
 function startup.onStartup()
-	local made = 0
-	for x = ROOM.minX, ROOM.maxX do
-		for y = ROOM.minY, ROOM.maxY do
-			local pos = Position(x, y, ROOM.z)
-			if not Tile(pos) then
-				Game.createTile(x, y, ROOM.z)
-			end
-			local tile = Tile(pos)
-			if tile and not tile:getGround() then
-				Game.createItem(FLOORS[math.random(#FLOORS)], 1, pos)
-				made = made + 1
-			end
-		end
-	end
+	local b = OtsRoomBounds
+	ROOM = { minX = LANDING.x + b.minDx, maxX = LANDING.x + b.maxDx, minY = LANDING.y + b.minDy, maxY = LANDING.y + b.maxDy, z = LANDING.z }
+	local made = OtsBuildRoom(LANDING)
 	buildPools()
 	logger.info("[OTS party] Sala gotowa (pol: {})", made)
 	return true
