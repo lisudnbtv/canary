@@ -8,16 +8,12 @@ experienceStages = {
 	{ minlevel = 1001, maxlevel = 1500, multiplier = 2000 },
 	{ minlevel = 1501, maxlevel = 2000, multiplier = 800 },
 	{ minlevel = 2001, maxlevel = 2500, multiplier = 500 },
-	{ minlevel = 2501, maxlevel = 3500, multiplier = 250 },
-	{ minlevel = 3501, maxlevel = 4500, multiplier = 200 },
-	-- od 4500 (mocne czary "ultima") exp mocno zwalnia
-	{ minlevel = 4501, maxlevel = 5000, multiplier = 120 },
-	{ minlevel = 5001, maxlevel = 6000, multiplier = 80 },
-	{ minlevel = 6001, maxlevel = 7000, multiplier = 50 },
-	{ minlevel = 7001, maxlevel = 8000, multiplier = 30 },
-	{ minlevel = 8001, maxlevel = 9000, multiplier = 20 },
-	{ minlevel = 9001, maxlevel = 10000, multiplier = 12 },
-	{ minlevel = 10001, multiplier = 8 },
+	{ minlevel = 2501, maxlevel = 4000, multiplier = 250 },
+	{ minlevel = 4001, maxlevel = 4500, multiplier = 200 },
+	-- od 4500 (mocne czary "ultima") exp mocno zwalnia, od 7000 stala wartosc
+	{ minlevel = 4501, maxlevel = 6000, multiplier = 100 },
+	{ minlevel = 6001, maxlevel = 7000, multiplier = 60 },
+	{ minlevel = 7001, multiplier = 40 },
 }
 
 -- Skille: x250 na kazdym poziomie umiejetnosci

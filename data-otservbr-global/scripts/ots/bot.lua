@@ -1110,17 +1110,13 @@ end
 -- bonusu party, wiec w sumie zarabia (1 + bonus) razy tyle, co solo. Do tego jego osobiste bonusy
 -- (seria nagrod dziennych, sala Expowisko Party) - OtsExpModifiers poza "botParty".
 -- Dotyczy postaci z wlaczonym trybem party (lider online) i lidera, za ktorym ktos chodzi.
-local PARTY_BONUS = { -- { od poziomu, bonus }
+local PARTY_BONUS = { -- { od poziomu, bonus } - te same progi co exp stages (stages.lua)
 	{ 1, 2.00 },
 	{ 2501, 1.50 },
-	{ 3501, 1.20 },
-	{ 4501, 0.80 },
-	{ 5001, 0.60 },
+	{ 4001, 1.00 },
+	{ 4501, 0.60 },
 	{ 6001, 0.40 },
 	{ 7001, 0.30 },
-	{ 8001, 0.20 },
-	{ 9001, 0.15 },
-	{ 10001, 0.10 },
 }
 
 local function partyBonus(level)
