@@ -5119,12 +5119,12 @@ end
 -- Wspolne narzedzia dla innych skryptow (hardcore_quests.lua): teleport z bezpieczna strefa,
 -- losowa sila jak w Hardcore Boss, budowa sali w stylu Obrona i sprawdzanie wolnych pol.
 OtsTravel = function(player, label, position)
-	travel(player, { label, position.x, position.y, position.z, single = true })
+	travel(player, { label, position.x, position.y, position.z })
 end
--- teleport powrotny przy sali (pole bezpieczne tylko na ladowaniu), takze zaraz po starcie serwera,
+-- teleport powrotny przy sali (bezpieczne 3x3 wokol ladowania, jak w mapie), takze zaraz po starcie serwera,
 -- zeby po ponownym zalogowaniu w sali bylo jak wyjsc
 OtsReturnSpot = function(position)
-	prepareSpot(Position(position.x, position.y, position.z), true)
+	prepareSpot(Position(position.x, position.y, position.z))
 end
 OtsInFight = function(player)
 	return inFight(player)
