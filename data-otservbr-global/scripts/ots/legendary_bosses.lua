@@ -1046,6 +1046,7 @@ function startup.onStartup()
 	local made = 0
 	for _, cfg in ipairs(LEGENDS) do
 		made = made + OtsBuildRoom(cfg.room)
+		OtsReturnSpot(cfg.room)
 	end
 	local prisonTiles = buildPrison()
 	local trap = placeTempleTrap()

@@ -735,8 +735,11 @@ local build = GlobalEvent("OtsHardcoreRooms")
 
 function build.onStartup()
 	local made = 0
-	for _, landing in pairs(ROOMS) do
+	for key, landing in pairs(ROOMS) do
 		made = made + OtsBuildRoom(landing)
+		if key ~= "survival" then -- Survival celowo bez wyjscia
+			OtsReturnSpot(landing)
+		end
 	end
 	buildPools()
 	logger.info("[OTS hardcore questy] Sale gotowe (pol: {})", made)

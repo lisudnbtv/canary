@@ -411,6 +411,7 @@ function startup.onStartup()
 	local b = OtsRoomBounds
 	ROOM = { minX = LANDING.x + b.minDx, maxX = LANDING.x + b.maxDx, minY = LANDING.y + b.minDy, maxY = LANDING.y + b.maxDy, z = LANDING.z }
 	local made = OtsBuildRoom(LANDING)
+	OtsReturnSpot(LANDING)
 	buildPools()
 	logger.info("[OTS party] Sala gotowa (pol: {})", made)
 	return true

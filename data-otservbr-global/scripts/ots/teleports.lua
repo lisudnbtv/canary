@@ -5121,6 +5121,11 @@ end
 OtsTravel = function(player, label, position)
 	travel(player, { label, position.x, position.y, position.z, single = true })
 end
+-- teleport powrotny przy sali (pole bezpieczne tylko na ladowaniu), takze zaraz po starcie serwera,
+-- zeby po ponownym zalogowaniu w sali bylo jak wyjsc
+OtsReturnSpot = function(position)
+	prepareSpot(Position(position.x, position.y, position.z), true)
+end
 OtsInFight = function(player)
 	return inFight(player)
 end
