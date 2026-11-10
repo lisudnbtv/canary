@@ -42,8 +42,8 @@ function buyHouse.onSay(player, words, param)
 			owned = owned + 1
 		end
 	end
-	if owned >= 10 then
-		player:sendCancelMessage("Masz juz 10 domow - to limit.")
+	if owned >= 50 then
+		player:sendCancelMessage("Masz juz 50 domow - to limit.")
 		return true
 	end
 
