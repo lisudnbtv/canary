@@ -3380,11 +3380,14 @@ local function prepareSpot(center, single)
 	if not spot then
 		spot = { center = Position(center.x, center.y, center.z) }
 		preparedSpots[id] = spot
+		-- single == "none": bez zadnej strefy bezpiecznej, sam teleport powrotny (Open PvP)
 		local r = single and 0 or 1
 		for dx = -r, r do
 			for dy = -r, r do
-				safeTiles[key(Position(center.x + dx, center.y + dy, center.z))] = true
-				safeCenters[key(Position(center.x + dx, center.y + dy, center.z))] = center
+				if single ~= "none" then
+					safeTiles[key(Position(center.x + dx, center.y + dy, center.z))] = true
+					safeCenters[key(Position(center.x + dx, center.y + dy, center.z))] = center
+				end
 			end
 		end
 	end
@@ -5129,8 +5132,8 @@ OtsTravel = function(player, label, position)
 end
 -- teleport powrotny przy sali (bezpieczne 3x3 wokol ladowania, jak w mapie), takze zaraz po starcie serwera,
 -- zeby po ponownym zalogowaniu w sali bylo jak wyjsc
-OtsReturnSpot = function(position)
-	prepareSpot(Position(position.x, position.y, position.z))
+OtsReturnSpot = function(position, single)
+	prepareSpot(Position(position.x, position.y, position.z), single)
 end
 OtsInFight = function(player)
 	return inFight(player)

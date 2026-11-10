@@ -1738,7 +1738,7 @@ function startup.onStartup()
 		if mode ~= "open" then
 			made = made + OtsBuildRoom(landing)
 		end
-		OtsReturnSpot(landing)
+		OtsReturnSpot(landing, mode == "open" and "none" or nil)
 		-- przeszkody: filary (zaslaniaja strzaly i droge), kosze z ogniem i posagi
 		for _, o in ipairs(mode == "open" and {} or OBSTACLES) do
 			local pos = Position(landing.x + o[1], landing.y + o[2], landing.z)
