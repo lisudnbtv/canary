@@ -2129,8 +2129,22 @@ end
 login:register()
 
 -- diagnostyka rozlaczen: wpis w logu serwera przy kazdym wylogowaniu
+-- Postac z wlaczonym botem zostaje w grze, gdy zerwie sie polaczenie klienta (silnik wylogowuje ja
+-- po 60 s bez odpowiedzi klienta, gdy akurat nie walczy - "kicked due to ping timeout").
+-- Zwykle wylogowanie z klienta (jest polaczenie) dziala normalnie.
+local keptLogged = {}
 local logout = CreatureEvent("OtsBotLogout")
 function logout.onLogout(player)
+	local st = OtsBotState[player:getId()]
+	if st and (st.cfg.on or st.cfg.healOn ~= false) and player:getIp() == 0 then
+		local now = os.time()
+		if (keptLogged[player:getId()] or 0) + 600 <= now then
+			keptLogged[player:getId()] = now
+			logger.info("[OTS] {}: klient rozlaczony, postac zostaje w grze (bot dziala dalej)", player:getName())
+		end
+		return false
+	end
+	keptLogged[player:getId()] = nil
 	local pos = player:getPosition()
 	logger.info("[OTS] Wylogowanie: {} (bez aktywnosci {} min, HP {}/{}, pozycja {}, {}, {})", player:getName(), math.floor(player:getIdleTime() / 60000), player:getHealth(), player:getMaxHealth(), pos.x, pos.y, pos.z)
 	return true
