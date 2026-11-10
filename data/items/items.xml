@@ -91396,7 +91396,7 @@ Granted by TibiaGoals.com"/>
 	</item>
 	<item id="60124" article="a" name="experience stone">
 		<attribute key="primarytype" value="tools"/>
-		<attribute key="description" value="Use it: 500% experience (x5) for 1 hour. Using it again adds another hour."/>
+		<attribute key="description" value="Use it: experience x500 for 1 hour. Using it again adds another hour."/>
 		<attribute key="weight" value="10"/>
 	</item>
 	<item id="60107" article="an" name="elemental champion amulet">

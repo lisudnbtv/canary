@@ -24,7 +24,7 @@ TOOLS = [
     # legendarne bossy (skrypt: data-otservbr-global/scripts/ots/legendary_items.lua)
     (60117, 9636, 'heart of morgaroth', 'Use it on a melee or distance weapon: +3 attack, up to +15.', 500),
     # kamien expa (skrypt: data-otservbr-global/scripts/ots/exp_stone.lua), nigdzie nie do zdobycia
-    (60124, 3062, 'experience stone', 'Use it: 500% experience (x5) for 1 hour. Using it again adds another hour.', 10),
+    (60124, 3062, 'experience stone', 'Use it: experience x500 for 1 hour. Using it again adds another hour.', 10),
 ]
 
 AMULETS = [
