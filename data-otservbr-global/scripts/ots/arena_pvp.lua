@@ -6,7 +6,7 @@
 --  * Turniej - drabinka 8 zawodnikow: cwiercfinal, polfinal, final z Mistrzem Areny.
 -- Przeciwnicy to LUSTRO postaci: tyle samo zycia, bija sila jej najmocniejszego czaru (polowa jak w PvP,
 -- gracz tez zadaje im polowe), lecza sie potionami i czarami co sekunde jak gracz.
--- Lecza sie (exura, potiony - z ograniczonym zapasem), uzywaja utamo vita, czarow i run swojej profesji,
+-- Lecza sie (exura, potiony - z ograniczonym zapasem), MS i ED walcza pod utamo vita (mana jak u postaci),
 -- uciekaja przy niskim zyciu. Przegrana nic nie kosztuje: przy smiertelnym ciosie postac wraca do wejscia
 -- z pelnym zyciem. Za wygrane: punkty areny (sklep areny) i ranking.
 
@@ -400,9 +400,17 @@ local function spawnFighter(run, spec, index)
 	OtsNoElite[id] = true
 	local data = {
 		id = id, voc = spec.voc, mode = run.mode, token = run.token, dmg = spec.dmg or 1, prefer = spec.prefer,
-		base = spec.base or 100, level = spec.level or 0, cds = {}, nextSpell = 0, nextAttack = 0, nextHeal = 0, healLeft = hp * 3, utamoUntil = 0, utamoReady = 0,
+		base = spec.base or 100, level = spec.level or 0, cds = {}, nextSpell = 0, nextAttack = 0, nextHeal = 0, healLeft = hp * 3, utamoUntil = 0, utamoReady = 0, mana = 0, maxMana = 0, shield = false,
 		fleeUntil = 0, fleeReady = 0, name = name,
 	}
+	if voc.utamo then
+		-- mana jak u postaci-lustra (w proporcji do zycia, np. slabsze NPC w falach maja mniej)
+		local mirror = Player(spec.prefer or run.starter)
+		local ratio = mirror and mirror:getMaxHealth() > 0 and hp / mirror:getMaxHealth() or 1
+		data.maxMana = math.floor((mirror and mirror:getMaxMana() or hp) * ratio)
+		data.mana = data.maxMana
+		data.shield = true
+	end
 	fighters[id] = data
 	run.fighters[id] = true
 	monster:teleportTo(spawnSpot(run.mode, index or 1), true)
@@ -577,6 +585,16 @@ local function think(run, monster, data, now)
 				end
 			end
 		end
+		-- mag z utamo pije mana potiony (jego "zycie" to mana), a health potiony dopiero przy niskim zyciu
+		if not healed and voc.utamo and data.maxMana > 0 and data.healLeft > 0 and data.mana < data.maxMana * 0.7 and hpPct >= 50 then
+			local amount = math.min(data.healLeft, math.floor(data.maxMana * 0.11), data.maxMana - data.mana)
+			if amount > 0 then
+				data.healLeft = data.healLeft - amount
+				data.mana = data.mana + amount
+				monster:getPosition():sendMagicEffect(CONST_ME_MAGIC_BLUE)
+				healed = true
+			end
+		end
 		if not healed and voc.potion and hpPct < voc.potion.below then
 			healed = heal(monster, data, voc.potion.pct, nil, CONST_ME_MAGIC_RED)
 		end
@@ -585,10 +603,10 @@ local function think(run, monster, data, now)
 		end
 	end
 
-	-- utamo vita
-	if voc.utamo and hpPct < 45 and now >= data.utamoReady then
-		data.utamoUntil = now + 12000
-		data.utamoReady = now + 30000
+	-- utamo vita (MS i ED): wlaczona od poczatku, a gdy mana spadnie do zera - wlaczana znowu po manie z potionow
+	if voc.utamo and not data.shield and data.mana >= data.maxMana * 0.3 and now >= data.utamoReady then
+		data.shield = true
+		data.utamoReady = now + 2000
 		monster:say("utamo vita", TALKTYPE_MONSTER_SAY)
 		monster:getPosition():sendMagicEffect(CONST_ME_MAGIC_BLUE)
 	end
@@ -1080,10 +1098,6 @@ function fighterHealth.onHealthChange(creature, attacker, primaryDamage, primary
 		primaryDamage = math.floor(primaryDamage * factor)
 		secondaryDamage = math.floor(secondaryDamage * factor)
 	end
-	if data.utamoUntil > now then
-		primaryDamage = math.floor(primaryDamage * 0.65)
-		secondaryDamage = math.floor(secondaryDamage * 0.65)
-	end
 	-- lustrzany limit: jeden cios postaci zabiera NPC najwyzej MAX_HIT % zycia (tak samo jak cios NPC postaci);
 	-- krytyki i bonusy postaci potrafily zdjac lustro jednym strzalem
 	do
@@ -1094,6 +1108,20 @@ function fighterHealth.onHealthChange(creature, attacker, primaryDamage, primary
 			primaryDamage = math.floor(primaryDamage * k)
 			secondaryDamage = math.floor(secondaryDamage * k)
 		end
+	end
+	-- utamo vita: obrazenia najpierw schodza z many
+	if data.shield and data.mana > 0 then
+		local total = math.abs(primaryDamage) + math.abs(secondaryDamage)
+		local absorbed = math.min(total, data.mana)
+		data.mana = data.mana - absorbed
+		creature:getPosition():sendMagicEffect(CONST_ME_LOSEENERGY)
+		if data.mana <= 0 then
+			data.shield = false
+			data.mana = 0
+		end
+		local k = total > 0 and (total - absorbed) / total or 0
+		primaryDamage = math.floor(primaryDamage * k)
+		secondaryDamage = math.floor(secondaryDamage * k)
 	end
 	-- diagnostyka: kazdy cios, ktory zabiera NPC co najmniej 25% zycia
 	local after = math.abs(primaryDamage) + math.abs(secondaryDamage)
