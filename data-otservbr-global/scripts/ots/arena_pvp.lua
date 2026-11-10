@@ -422,6 +422,11 @@ local function pickTarget(run, monster, data)
 	return best
 end
 
+-- Ochrona postaci (absorb z ekwipunku) zmniejszalaby ciosy NPC, a jej ciosy w NPC nie sa niczym zmniejszane.
+-- Zeby lustro bilo tak samo mocno jak postac, mierzymy, ile z ciosu NPC naprawde dochodzi, i NPC to nadrabia.
+local pendingHit = {} -- id gracza -> obrazenia ciosu NPC przed ochrona (na czas jednego ciosu)
+local protection = {} -- id gracza -> jaka czesc ciosu dochodzi (1 = brak ochrony)
+
 local function hit(monster, target, data, spell)
 	local max = target:getMaxHealth()
 	-- wartosci w tabelach profesji: 12 = jeden sredni cios najmocniejszego czaru postaci-lustra
@@ -432,7 +437,16 @@ local function hit(monster, target, data, spell)
 	if spell.shoot then
 		monster:getPosition():sendDistanceEffect(target:getPosition(), spell.shoot)
 	end
-	doTargetCombatHealth(monster:getId(), target, spell.type, -low, -high, spell.effect or CONST_ME_NONE, ORIGIN_SPELL)
+	local tid = target:getId()
+	local value = math.random(math.max(1, low), math.max(1, high))
+	value = math.floor(math.min(cap / math.max(0.05, protection[tid] or 1), value / math.max(0.05, protection[tid] or 1)))
+	pendingHit[tid] = value
+	local run = runs[data.mode]
+	if run and run.stats then
+		run.stats.nominal = run.stats.nominal + value
+	end
+	doTargetCombatHealth(monster:getId(), target, spell.type, -value, -value, spell.effect or CONST_ME_NONE, ORIGIN_SPELL)
+	pendingHit[tid] = nil
 end
 
 local function castSpell(run, monster, target, data, spell)
@@ -480,6 +494,10 @@ local function heal(monster, data, pct, words, effect)
 		return false
 	end
 	data.healLeft = data.healLeft - amount
+	local run = runs[data.mode]
+	if run and run.stats then
+		run.stats.healed = run.stats.healed + amount
+	end
 	if words then
 		monster:say(words, TALKTYPE_MONSTER_SAY)
 	end
@@ -606,6 +624,7 @@ end
 local function prepareSegment(run)
 	run.alive = {}
 	run.dealt = {}
+	run.stats = { nominal = 0, got = 0, healed = 0 }
 	run.left = false
 	for pid in pairs(run.players) do
 		local player = Player(pid)
@@ -863,6 +882,16 @@ MODES.tour = {
 }
 
 -- ---------- petla ----------
+local function logFight(run, result)
+	local st = run.stats or { nominal = 0, got = 0, healed = 0 }
+	local dealt = 0
+	for _, v in pairs(run.dealt) do
+		dealt = dealt + v
+	end
+	local starter = Player(run.starter)
+	logger.info("[OTS arena] {} {} ({}): {} s, ciosy NPC {} -> doszlo {} ({}%), postac zadala NPC {}, NPC wyleczyl {}", run.mode, starter and starter:getName() or "?", result, os.time() - (run.fightStart or os.time()), math.floor(st.nominal), math.floor(st.got), st.nominal > 0 and math.floor(st.got * 100 / st.nominal) or 0, math.floor(dealt), math.floor(st.healed))
+end
+
 loop = function(mode, token)
 	local run = runs[mode]
 	if not run or run.token ~= token or run.phase ~= "fight" then
@@ -890,6 +919,7 @@ loop = function(mode, token)
 	if alive == 0 then
 		clearFighters(run)
 		calibrate(run)
+		logFight(run, "przegrana")
 		MODES[mode].lose(run, run.left and next(run.knocked or {}) == nil and "opusciles sale" or "wszyscy powaleni")
 		run.knocked = {}
 		return
@@ -897,6 +927,7 @@ loop = function(mode, token)
 	if remaining == 0 then
 		calibrate(run)
 		run.knocked = {}
+		logFight(run, "wygrana")
 		MODES[mode].win(run)
 		return
 	end
@@ -904,6 +935,7 @@ loop = function(mode, token)
 		clearFighters(run)
 		calibrate(run)
 		run.knocked = {}
+		logFight(run, "czas")
 		MODES[mode].lose(run, "minal czas")
 		return
 	end
@@ -944,6 +976,14 @@ function guard.onHealthChange(creature, attacker, primaryDamage, primaryType, se
 		return primaryDamage, primaryType, secondaryDamage, secondaryType
 	end
 	local total = math.abs(primaryDamage) + math.abs(secondaryDamage)
+	local nominal = pendingHit[pid]
+	if nominal and nominal > 0 then
+		local ratio = math.max(0.05, math.min(1, total / nominal))
+		protection[pid] = protection[pid] and (protection[pid] * 0.7 + ratio * 0.3) or ratio
+		if run.stats then
+			run.stats.got = run.stats.got + total
+		end
+	end
 	local health = creature:getHealth()
 	if total >= health then
 		local keep = math.max(0, health - 1)
@@ -966,8 +1006,9 @@ function fighterHealth.onHealthChange(creature, attacker, primaryDamage, primary
 	local run = runs[data.mode]
 	local now = run and run.clock or 0
 	if attacker and attacker:isPlayer() then
-		primaryDamage = math.floor(primaryDamage * PVP)
-		secondaryDamage = math.floor(secondaryDamage * PVP)
+		local factor = PVP
+		primaryDamage = math.floor(primaryDamage * factor)
+		secondaryDamage = math.floor(secondaryDamage * factor)
 	end
 	if data.utamoUntil > now then
 		primaryDamage = math.floor(primaryDamage * 0.65)
