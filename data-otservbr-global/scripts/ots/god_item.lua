@@ -24,6 +24,14 @@ local function createOne(player, line)
 	local what, amount = line:match("^%s*(.-)%s*,%s*(%d+)%s*$")
 	if not what then
 		what, amount = line:match("^%s*(.-)%s*$"), "1"
+		-- "experience stone 2" / "60124 5" - ilosc po spacji, o ile cala linijka nie jest nazwa przedmiotu
+		local name, count = what:match("^(.-)%s+(%d+)$")
+		if name and name ~= "" then
+			local whole = ItemType(tonumber(what) or what)
+			if not whole or whole:getId() < 100 then
+				what, amount = name, count
+			end
+		end
 	end
 	if what == "" then
 		return nil
@@ -98,7 +106,7 @@ function command.onSay(player, words, param)
 	awaiting[player:getId()] = true
 	player:registerEvent("OtsGodItemInput")
 	player:showTextDialog(INPUT_ITEM, "", true, 400)
-	player:sendTextMessage(MESSAGE_EVENT_ADVANCE, "!i: wpisz w okno id albo nazwe przedmiotu i ilosc, np. 60124, 5 (kilka przedmiotow - kazdy w nowej linijce) i kliknij OK.")
+	player:sendTextMessage(MESSAGE_EVENT_ADVANCE, "!i: wpisz w okno id albo nazwe przedmiotu i ilosc, np. 60124, 5 albo experience stone 5 (kilka przedmiotow - kazdy w nowej linijce) i kliknij OK.")
 	return true
 end
 
