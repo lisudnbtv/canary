@@ -17,6 +17,10 @@ local TICK = 200 -- co tyle ms NPC sprawdza sytuacje (szybka reakcja na leczenie
 -- LUSTRO: NPC ma tyle zycia, co postac, i bije jej wlasna sila (sredni cios najmocniejszego czaru jak w !czary).
 -- Jak w prawdziwym PvP obie strony zadaja sobie polowe obrazen (PVP).
 local PVP = 0.5
+-- POKRETLA TRUDNOSCI (lustro jest silniejsze niz "czysta kopia", bo gracz ma bota/autoleczenie i bonusy)
+local NPC_POWER = 1.3 -- mnoznik ciosow NPC
+local NPC_HEAL = 1.4 -- mnoznik leczenia NPC (czary, potiony, mana potiony)
+local HEAL_BUDGET = 6 -- zapas leczenia NPC w paskach zycia (jak plecak potionow)
 local MAX_HIT = 25 -- jeden cios NPC zabiera najwyzej tyle % zycia celu
 local SPELL_EXHAUST = 1000 -- jak czary graczy na serwerze (spell_cooldown.lua: 1 s)
 
@@ -418,7 +422,7 @@ local function spawnFighter(run, spec, index)
 	OtsNoElite[id] = true
 	local data = {
 		id = id, voc = spec.voc, mode = run.mode, token = run.token, dmg = spec.dmg or 1, prefer = spec.prefer,
-		base = spec.base or 100, level = spec.level or 0, cds = {}, nextSpell = 0, nextAttack = 0, nextHeal = 0, healLeft = hp * 3, utamoUntil = 0, utamoReady = 0, mana = 0, maxMana = 0, shield = false,
+		base = spec.base or 100, level = spec.level or 0, cds = {}, nextSpell = 0, nextAttack = 0, nextHeal = 0, healLeft = hp * HEAL_BUDGET, utamoUntil = 0, utamoReady = 0, mana = 0, maxMana = 0, shield = false,
 		fleeUntil = 0, fleeReady = 0, name = name,
 	}
 	if voc.utamo then
@@ -513,7 +517,7 @@ local function hit(monster, target, data, spell)
 	-- wartosci w tabelach profesji: 12 = jeden sredni cios najmocniejszego czaru postaci-lustra
 	local run0 = runs[data.mode]
 	local buffed = data.buffUntil and run0 and (run0.clock or 0) < data.buffUntil
-	local unit = base * PVP * data.dmg / 12 * (buffed and 1.2 or 1)
+	local unit = base * PVP * data.dmg / 12 * (buffed and 1.2 or 1) * NPC_POWER
 	local cap = max * MAX_HIT / 100
 	local low = math.floor(math.min(cap, unit * spell.min))
 	local high = math.floor(math.min(cap, unit * spell.max))
@@ -685,7 +689,7 @@ local function castSpell(run, monster, target, data, spell)
 end
 
 local function heal(monster, data, pct, words, effect)
-	local amount = math.min(data.healLeft, math.floor(monster:getMaxHealth() * pct / 100))
+	local amount = math.min(data.healLeft, math.floor(monster:getMaxHealth() * pct * NPC_HEAL / 100))
 	if amount <= 0 then
 		return false
 	end
@@ -713,7 +717,7 @@ local function think(run, monster, data, now)
 			for otherId in pairs(run.fighters) do
 				local other = Creature(otherId)
 				if other and otherId ~= data.id and other:getHealth() * 100 / other:getMaxHealth() < voc.allyHeal.below and dist(other:getPosition(), monster:getPosition()) <= 6 then
-					local amount = math.min(data.healLeft, math.floor(other:getMaxHealth() * voc.allyHeal.pct / 100))
+					local amount = math.min(data.healLeft, math.floor(other:getMaxHealth() * voc.allyHeal.pct * NPC_HEAL / 100))
 					if amount > 0 then
 						data.healLeft = data.healLeft - amount
 						monster:say(voc.allyHeal.words .. ' "' .. other:getName() .. '"', TALKTYPE_MONSTER_SAY)
@@ -728,7 +732,7 @@ local function think(run, monster, data, now)
 		-- mag z utamo pije mana potiony (jego "zycie" to mana), a health potiony dopiero przy niskim zyciu
 		local mp = voc.manaPotion
 		if not healed and mp and data.maxMana > 0 and data.healLeft > 0 and data.mana < data.maxMana * mp.below / 100 and hpPct >= 50 then
-			local amount = math.min(data.healLeft, math.floor(data.maxMana * mp.pct / 100), data.maxMana - data.mana)
+			local amount = math.min(data.healLeft, math.floor(data.maxMana * mp.pct * NPC_HEAL / 100), data.maxMana - data.mana)
 			if amount > 0 then
 				data.healLeft = data.healLeft - amount
 				data.mana = data.mana + amount
@@ -955,7 +959,7 @@ MODES.duel = {
 		local s = math.min(2.5, 1 + 0.05 * streak)
 		run.strength = s
 		local voc = run.duelVoc or VOC_ORDER[math.random(#VOC_ORDER)]
-		local f = spawnFighter(run, { voc = voc, base = mirrorHit(player), level = player:getLevel(), hp = player:getMaxHealth(), dmg = 0.6 + 0.4 * s, prefer = player:getId() }, 1)
+		local f = spawnFighter(run, { voc = voc, base = mirrorHit(player), level = player:getLevel(), hp = player:getMaxHealth(), dmg = s, prefer = player:getId() }, 1)
 		if f then
 			tell(run, string.format("Pojedynek: %s (sila %d%%, seria wygranych: %d).", f:getName(), math.floor(s * 100 + 0.5), streak))
 		end
@@ -1040,7 +1044,7 @@ MODES.team = {
 		local index = 0
 		for _, member in ipairs(members) do
 			index = index + 1
-			spawnFighter(run, { voc = vocKey(member), base = mirrorHit(member), level = member:getLevel(), hp = member:getMaxHealth(), dmg = 0.6 + 0.4 * s, prefer = member:getId() }, index)
+			spawnFighter(run, { voc = vocKey(member), base = mirrorHit(member), level = member:getLevel(), hp = member:getMaxHealth(), dmg = s, prefer = member:getId() }, index)
 		end
 		if #members == 1 then
 			-- sam: druzyna 2 slabszych przeciwnikow
@@ -1095,7 +1099,7 @@ MODES.tour = {
 		local round = TOUR_ROUNDS[run.round]
 		local opponent = run.bracket[run.round]
 		local s = round.strength
-		spawnFighter(run, { voc = opponent.voc, fullName = opponent.name, base = mirrorHit(player), level = player:getLevel(), hp = player:getMaxHealth(), dmg = 0.6 + 0.4 * s, prefer = player:getId(), skull = round.skull }, 1)
+		spawnFighter(run, { voc = opponent.voc, fullName = opponent.name, base = mirrorHit(player), level = player:getLevel(), hp = player:getMaxHealth(), dmg = s, prefer = player:getId(), skull = round.skull }, 1)
 		tell(run, string.format("TURNIEJ - %s: %s vs %s.", round.label, player:getName(), opponent.name))
 	end,
 	win = function(run)
@@ -1146,7 +1150,7 @@ local function logFight(run, result)
 		dealt = dealt + v
 	end
 	local starter = Player(run.starter)
-	logger.info("[OTS arena] {} {} ({}): {} s, ciosy NPC {} -> doszlo {} ({}%), postac zadala NPC {}, NPC wyleczyl {}, sredni mocny cios postaci {}", run.mode, starter and starter:getName() or "?", result, os.time() - (run.fightStart or os.time()), math.floor(st.nominal), math.floor(st.got), st.nominal > 0 and math.floor(st.got * 100 / st.nominal) or 0, math.floor(dealt), math.floor(st.healed), starter and math.floor(realHit(starter)) or 0)
+	logger.info("[OTS arena] {} {} ({}): {} s, ciosy NPC {} -> doszlo {} ({}%), postac zadala NPC {}, NPC wyleczyl {}, sredni mocny cios postaci {}, najnizsze zycie postaci {}%", run.mode, starter and starter:getName() or "?", result, os.time() - (run.fightStart or os.time()), math.floor(st.nominal), math.floor(st.got), st.nominal > 0 and math.floor(st.got * 100 / st.nominal) or 0, math.floor(dealt), math.floor(st.healed), starter and math.floor(realHit(starter)) or 0, math.floor((st.minPct or 1) * 100))
 end
 
 loop = function(mode, token)
@@ -1313,6 +1317,10 @@ function guard.onHealthChange(creature, attacker, primaryDamage, primaryType, se
 		end
 	end
 	local health = creature:getHealth()
+	if run.stats then
+		local left = math.max(0, health - total) / math.max(1, creature:getMaxHealth())
+		run.stats.minPct = math.min(run.stats.minPct or 1, left)
+	end
 	if total >= health then
 		local keep = math.max(0, health - 1)
 		primaryDamage = primaryDamage < 0 and -keep or keep
