@@ -10,7 +10,8 @@ function createItem.onSay(player, words, param)
 	if itemType:getId() == 0 then
 		itemType = ItemType(tonumber(split[1]))
 		if not tonumber(split[1]) or itemType:getId() == 0 then
-			player:sendCancelMessage("There is no item with that id or name.")
+			player:sendTextMessage(MESSAGE_EVENT_ADVANCE, "/i: nie ma przedmiotu o takiej nazwie albo id: " .. tostring(split[1]))
+			logger.info("[OTS /i] {}: {} -> nie ma takiego przedmiotu", player:getName(), param)
 			return true
 		end
 	end
@@ -84,6 +85,19 @@ function createItem.onSay(player, words, param)
 			result = player:addItem(itemType:getId(), count, true, 0, CONST_SLOT_WHEREEVER, tier)
 		end
 	end
+
+	-- OTS: gdy nie ma miejsca (pelne plecaki, za malo capu), przedmiot laduje pod postacia zamiast przepasc
+	if not result then
+		result = Game.createItem(itemType:getId(), math.max(1, count), player:getPosition())
+		if result then
+			player:sendTextMessage(MESSAGE_EVENT_ADVANCE, string.format("/i: brak miejsca w ekwipunku - %s lezy pod postacia.", itemType:getName()))
+		else
+			player:sendTextMessage(MESSAGE_EVENT_ADVANCE, string.format("/i: nie udalo sie utworzyc %s (id %d).", itemType:getName(), itemType:getId()))
+		end
+	else
+		player:sendTextMessage(MESSAGE_EVENT_ADVANCE, string.format("/i: %dx %s (id %d).", math.max(1, count), itemType:getName(), itemType:getId()))
+	end
+	logger.info("[OTS /i] {}: {} -> id {} x{}, {}", player:getName(), param, itemType:getId(), count, result and "ok" or "blad")
 
 	if result then
 		if not itemType:isStackable() then

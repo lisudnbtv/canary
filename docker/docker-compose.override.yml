@@ -95,6 +95,7 @@ services:
       - '../data/scripts/globalevents/save_interval.lua:/canary/data/scripts/globalevents/save_interval.lua:ro'
       - '../data/scripts/talkactions/player/reward.lua:/canary/data/scripts/talkactions/player/reward.lua:ro'
       - '../data/scripts/talkactions/player/bank.lua:/canary/data/scripts/talkactions/player/bank.lua:ro'
+      - '../data/scripts/talkactions/god/create_item.lua:/canary/data/scripts/talkactions/god/create_item.lua:ro'
       - '../data/scripts/actions/tools/crushers.lua:/canary/data/scripts/actions/tools/crushers.lua:ro'
       - '../data-otservbr-global/lib/core/quests/catalog/init.lua:/canary/data-otservbr-global/lib/core/quests/catalog/init.lua:ro'
       - '../data-otservbr-global/lib/core/quests/catalog/052_the_pits_of_inferno.lua:/canary/data-otservbr-global/lib/core/quests/catalog/052_the_pits_of_inferno.lua:ro'

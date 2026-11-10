@@ -37,6 +37,7 @@ function gift.onLogin(player)
 		player:addItemEx(backpack, true)
 	end
 	player:kv():set(KV_KEY, true)
+	logger.info("[OTS] {}: prezent GOD - plecak z {} przedmiotami (w plecaku: {})", player:getName(), #ITEMS, backpack:getSize())
 	player:sendTextMessage(MESSAGE_EVENT_ADVANCE, string.format("Otrzymujesz Imbued Backpack z %d wlasnymi przedmiotami OTS.", #ITEMS))
 	return true
 end
