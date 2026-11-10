@@ -444,7 +444,7 @@ local function spawnFighter(run, spec, index)
 	local ref = spec.prefer and Player(spec.prefer)
 	if ref then
 		-- utani gran hur: szybkosc jak postac z haste (albo jej aktualna, jesli wieksza)
-		local speed = math.max(ref:getSpeed(), math.floor(ref:getBaseSpeed() * 1.7))
+		local speed = ref:getSpeed() -- tyle samo co postac (z haste postaci, jesli go ma)
 		monster:changeSpeed(speed - monster:getSpeed())
 	end
 	return monster
@@ -795,8 +795,10 @@ local function think(run, monster, data, now)
 	local d = dist(mpos, tpos)
 	local sight = mpos.z == tpos.z and mpos:isSightClear(tpos)
 	-- szukanie postaci po duzej sali: gdy jest daleko albo za przeszkoda, NPC sam idzie w jej strone
-	if (d > 6 or not sight) and now >= (data.nextStep or 0) then
-		data.nextStep = now + 250
+	-- (blizej silnik sam prowadzi potwora do celu - podwojne kroki robily z nich sprinterow)
+	if (d > 8 or not sight) and now >= (data.nextStep or 0) then
+		-- krok co tyle, ile trwa krok przy szybkosci NPC (jak chodzenie gracza)
+		data.nextStep = now + math.max(150, math.floor(1000 * 150 / math.max(100, monster:getSpeed())))
 		if not data.path or #data.path == 0 or now >= (data.pathAt or 0) then
 			local path = monster:getPathTo(tpos, voc.range == 1 and 1 or 3, voc.range == 1 and 1 or 4, true, voc.range > 1, 60)
 			data.path = type(path) == "table" and path or nil
@@ -969,12 +971,10 @@ local MODES = {}
 -- OPEN PVP: 10 przeciwnikow w 3 grupach, ktore ruszaja po kolei i szukaja postaci po calej sali
 local OPEN_KILL_PTS = 4
 local OPEN_WIN_PTS = 40
-local OPEN_GROUPS = {
-	-- { start po sekundach, punkty startowe (przesuniecie od lewego gornego rogu sali) }
-	{ 0, { { 4, 3 }, { 6, 3 }, { 5, 5 }, { 3, 5 } } },
-	{ 8, { { 40, 3 }, { 38, 3 }, { 39, 5 } } },
-	{ 16, { { 22, 2 }, { 20, 3 }, { 24, 3 } } },
-}
+-- grupy: { start po sekundach, punkty startowe } - z open_pvp_layout.lua (wolne pola na mapie)
+local function openGroups()
+	return OtsOpenPvpGroups or { { 0, { { 4, 3 }, { 6, 3 } } } }
+end
 -- wiecej magow i paladynow, jak na wojnie
 local OPEN_VOCS = { "sorcerer", "sorcerer", "druid", "druid", "paladin", "paladin", "knight", "knight", "monk", "sorcerer" }
 
@@ -997,7 +997,7 @@ MODES.open = {
 			vocs[i], vocs[j] = vocs[j], vocs[i]
 		end
 		local n = 0
-		for _, group in ipairs(OPEN_GROUPS) do
+		for _, group in ipairs(openGroups()) do
 			for _, off in ipairs(group[2]) do
 				n = n + 1
 				local f = spawnFighter(run, { voc = vocs[n], base = mirrorHit(player), level = player:getLevel(), hp = player:getMaxHealth() * 0.5 * scale, dmg = 0.35 * scale, budget = 2, pos = Position(b.minX + off[1], b.minY + off[2], b.z) }, n)
@@ -1704,53 +1704,25 @@ local OBSTACLES = {
 	{ -7, -2, BASIN }, { 6, -2, BASIN }, { -6, 1, PILLAR }, { 5, 1, PILLAR },
 }
 
--- Open PvP: pustynia 45x35 z palmami, filarami, posagami, kamieniami i kawalkami murow (oslony)
-local SAND, PALM, SPILLAR, SSTATUE, ROCKS, SBLOCK = 231, 3639, 2188, 2034, 18629, 1316
-
+-- Open PvP: kopia prawdziwej pustyni z mapy Tibii (oaza z rzeka, palmy, ruiny) - open_pvp_layout.lua
 local function buildOpenRoom()
 	local b = ROOMS.open.bounds
 	local landing = ROOMS.open.landing
 	local made = 0
-	for x = b.minX, b.maxX do
-		for y = b.minY, b.maxY do
-			local tile = Tile(x, y, b.z) or Game.createTile(x, y, b.z)
-			if tile and not tile:getGround() then
-				Game.createItem(SAND, 1, Position(x, y, b.z))
-				made = made + 1
+	for _, e in ipairs(OtsOpenPvpLayout or {}) do
+		local pos = Position(b.minX + e[1], b.minY + e[2], b.z)
+		local tile = Tile(pos) or Game.createTile(pos.x, pos.y, pos.z)
+		if tile then
+			local ground = tile:getGround()
+			if not ground then
+				Game.createItem(e[3], 1, pos)
+			elseif ground:getId() ~= e[3] and math.abs(pos.x - landing.x) <= 1 and math.abs(pos.y - landing.y) <= 1 then
+				ground:transform(e[3]) -- PZ przy wejsciu: piasek zamiast szarej podlogi
 			end
-		end
-	end
-	-- przeszkody z prostego, stalego losowania (ta sama mapa po kazdym restarcie)
-	local seed = 12345
-	local function rnd(n)
-		seed = (seed * 1103515245 + 12345) % 2147483648
-		return seed % n
-	end
-	local function free(x, y)
-		if math.abs(x - landing.x) <= 3 and math.abs(y - landing.y) <= 3 then
-			return false
-		end
-		if y - b.minY <= 6 then
-			return false -- pas startowy wrogow
-		end
-		local tile = Tile(x, y, b.z)
-		return tile and tile:getGround() and not tile:hasProperty(CONST_PROP_BLOCKSOLID) and tile:getCreatureCount() == 0
-	end
-	local function put(x, y, id)
-		if free(x, y) then
-			Game.createItem(id, 1, Position(x, y, b.z))
-		end
-	end
-	local singles = { PALM, PALM, PALM, SPILLAR, SPILLAR, SSTATUE, ROCKS, ROCKS }
-	for _ = 1, 55 do
-		put(b.minX + 1 + rnd(b.maxX - b.minX - 1), b.minY + 1 + rnd(b.maxY - b.minY - 1), singles[rnd(#singles) + 1])
-	end
-	-- kawalki murow 3-4 pola (poziome i pionowe) - oslony do chowania sie
-	for _ = 1, 12 do
-		local x, y = b.minX + 2 + rnd(b.maxX - b.minX - 5), b.minY + 2 + rnd(b.maxY - b.minY - 5)
-		local horizontal = rnd(2) == 0
-		for k = 0, 2 + rnd(2) do
-			put(horizontal and x + k or x, horizontal and y or y + k, SBLOCK)
+			for _, itemId in ipairs(e[4]) do
+				Game.createItem(itemId, 1, pos)
+			end
+			made = made + 1
 		end
 	end
 	return made
