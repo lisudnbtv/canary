@@ -91394,6 +91394,11 @@ Granted by TibiaGoals.com"/>
 		<attribute key="description" value="Use it on a melee or distance weapon: +3 attack, up to +15."/>
 		<attribute key="weight" value="500"/>
 	</item>
+	<item id="60124" article="a" name="experience stone">
+		<attribute key="primarytype" value="tools"/>
+		<attribute key="description" value="Use it: 500% experience (x5) for 1 hour. Using it again adds another hour."/>
+		<attribute key="weight" value="10"/>
+	</item>
 	<item id="60107" article="an" name="elemental champion amulet">
 		<attribute key="primarytype" value="amulets and necklaces"/>
 		<attribute key="description" value="Reward for the Champion of Elements: +30% protection against every kind of damage."/>
