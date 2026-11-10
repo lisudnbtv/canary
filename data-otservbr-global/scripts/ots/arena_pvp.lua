@@ -32,6 +32,8 @@ local ROOMS = {
 	tour = { label = "Turniej", landing = Position(30400, 30018, 7), limit = 180, seconds = 40 },
 }
 local MODE_ORDER = { "open", "waves", "team", "tour" }
+-- najazd: wrogowie z areny wytropia postac w dowolnym miejscu mapy (poza PZ) - bez sali
+ROOMS.raid = { label = "Najazd", landing = Position(32369, 32241, 7), limit = 360, free = true }
 
 local KV_POINTS = "ots-arena-points"
 local KV_DPS = "ots-arena-dps"
@@ -226,6 +228,9 @@ local function roomBounds(mode)
 end
 
 local function inRoom(mode, pos)
+	if ROOMS[mode].free then
+		return true -- najazd: walka w dowolnym miejscu mapy
+	end
 	local r = roomBounds(mode)
 	return pos.z == r.z and pos.x >= r.minX - 1 and pos.x <= r.maxX + 1 and pos.y >= r.minY - 3 and pos.y <= r.maxY + 2
 end
@@ -407,7 +412,7 @@ local function spawnFighter(run, spec, index)
 	elseif spec.title then
 		name = fighterName(spec.title, spec.voc)
 	end
-	local monster = Game.createMonster(name, stagingPos(run.mode), true, true)
+	local monster = Game.createMonster(name, spec.pos or stagingPos(run.mode), true, spec.pos == nil)
 	if not monster then
 		return nil
 	end
@@ -419,7 +424,6 @@ local function spawnFighter(run, spec, index)
 		monster:setSkull(spec.skull)
 	end
 	monster:registerEvent("OtsArenaFighterHealth")
-	logger.info("[OTS arena npc] {}: zycie {}/{} (cel {}), sila ciosu {}", name, monster:getHealth(), monster:getMaxHealth(), hp, math.floor(spec.base or 0))
 	monster:changeTargetDistance(voc.range, 24 * 60 * 60 * 1000)
 	local id = monster:getId()
 	OtsNoElite[id] = true
@@ -438,7 +442,9 @@ local function spawnFighter(run, spec, index)
 	end
 	fighters[id] = data
 	run.fighters[id] = true
-	monster:teleportTo(spec.pos or spawnSpot(run.mode, index or 1), true)
+	if not spec.pos then
+		monster:teleportTo(spawnSpot(run.mode, index or 1), true)
+	end
 	monster:getPosition():sendMagicEffect(CONST_ME_TELEPORT)
 	-- szybkosc jak postac, ktora ma zaatakowac
 	local ref = spec.prefer and Player(spec.prefer)
@@ -916,7 +922,11 @@ local function countdown(run, seconds, spawn)
 				for pid in pairs(r.players) do
 					local player = Player(pid)
 					if player then
-						player:say(tostring(i), TALKTYPE_MONSTER_SAY)
+						if r.mode == "raid" then
+							player:getPosition():sendMagicEffect(CONST_ME_SOUND_RED)
+						else
+							player:say(tostring(i), TALKTYPE_MONSTER_SAY)
+						end
 					end
 				end
 			end
@@ -955,6 +965,9 @@ local function countdown(run, seconds, spawn)
 end
 
 local function scheduleMenu(run, delay)
+	if run.mode == "raid" then
+		return
+	end
 	local pid = run.starter
 	local mode = run.mode
 	addEvent(function()
@@ -1176,8 +1189,246 @@ MODES.tour = {
 	end,
 }
 
+local logFight -- (zdefiniowane nizej, przy petli)
+
+-- NAJAZD: losowa grupa wrogow wytropila postac (gdziekolwiek poza PZ); w trakcie dochodza posilki,
+-- najwyzej 10 naraz. Exp za kazdego pokonanego i premia za odparcie calego najazdu. Smierc bez straty.
+local RAID_KILL_EXP = 0.03 -- czesc expa potrzebnego na nastepny poziom za kazdego wroga
+local RAID_WIN_EXP = 0.10 -- premia za odparcie calego najazdu
+local RAID_MAX = 10
+
+local function levelExp(player)
+	local level = player:getLevel()
+	return math.max(1, Game.getExperienceForLevel(level + 1) - Game.getExperienceForLevel(level))
+end
+
+local function giveRaidExp(run, part, why)
+	for pid in pairs(run.players) do
+		local player = Player(pid)
+		if player then
+			local amount = math.floor(levelExp(player) * part)
+			player:addExperience(amount, true)
+			player:sendTextMessage(MESSAGE_EVENT_ADVANCE, string.format("%s: +%d expa.", why, amount))
+		end
+	end
+end
+
+-- wolne pole 8-13 kratek od postaci (poza zasiegiem wzroku), poza PZ i domami
+local function raidSpot(player)
+	local p = player:getPosition()
+	for _ = 1, 60 do
+		local a = math.random() * 2 * math.pi
+		local r = math.random(8, 13)
+		local pos = Position(p.x + math.floor(math.cos(a) * r + 0.5), p.y + math.floor(math.sin(a) * r + 0.5), p.z)
+		local tile = Tile(pos)
+		if tile and tile:getGround() and not tile:hasFlag(TILESTATE_PROTECTIONZONE) and not tile:getHouse()
+			and not tile:hasProperty(CONST_PROP_BLOCKSOLID) and tile:getCreatureCount() == 0 then
+			return pos
+		end
+	end
+	return nil
+end
+
+local function raidAlive(run)
+	local n = 0
+	for _ in pairs(run.fighters) do
+		n = n + 1
+	end
+	return n
+end
+
+local function raidSpawnGroup(run, size)
+	local target = Player(run.starter)
+	if not target then
+		return 0
+	end
+	local count = 0
+	for _ = 1, size do
+		if (run.pending or 0) <= 0 or raidAlive(run) >= RAID_MAX then
+			break
+		end
+		local pos = raidSpot(target)
+		if pos then
+			local voc = OPEN_VOCS[math.random(#OPEN_VOCS)]
+			local f = spawnFighter(run, { voc = voc, base = mirrorHit(target), level = target:getLevel(), hp = target:getMaxHealth() * 0.5 * run.scale, dmg = 0.35 * run.scale, budget = 2, pos = pos }, count + 1)
+			if f then
+				count = count + 1
+				run.pending = run.pending - 1
+				run.spawned = (run.spawned or 0) + 1
+				f:say("utani gran hur", TALKTYPE_MONSTER_SAY)
+			end
+		end
+	end
+	return count
+end
+
+MODES.raid = {
+	spawn = function(run)
+		local first = math.min(run.pending, math.random(2, 4))
+		local n = raidSpawnGroup(run, first)
+		run.nextWave = (run.clock or 0) + math.random(15, 35) * 1000
+		run.lostFor = 0
+		tell(run, string.format("NAJAZD! %d wrogow cie wytropilo%s. Uciekaj albo walcz!", n, run.pending > 0 and " - i to nie wszyscy" or ""), MESSAGE_EVENT_ADVANCE)
+	end,
+	win = function(run)
+		giveRaidExp(run, RAID_WIN_EXP, string.format("NAJAZD ODPARTY (%d wrogow)", run.spawned or 0))
+		for pid in pairs(run.players) do
+			local player = Player(pid)
+			if player then
+				record(player, "raids", 1, true)
+				player:getPosition():sendMagicEffect(CONST_ME_FIREWORK_YELLOW)
+			end
+		end
+		run.phase = "idle"
+	end,
+	lose = function(run, why)
+		tell(run, string.format("Najazd sie skonczyl (%s). Bez zadnej straty.", why))
+		run.phase = "idle"
+		run.pending = 0
+	end,
+}
+
+-- co tik w trakcie najazdu: posilki i "zgubiony trop" (postac w PZ albo daleko przez minute)
+OtsRaidTick = function(run, now, remaining)
+	if (run.pending or 0) > 0 and now >= (run.nextWave or 0) then
+		raidSpawnGroup(run, math.random(1, 3))
+		run.nextWave = now + math.random(15, 35) * 1000
+		if remaining > 0 then
+			tell(run, "Nadciagaja posilki wroga!")
+		end
+	end
+	local target = Player(run.starter)
+	local tracked = false
+	if target and attackable(target) then
+		local tp = target:getPosition()
+		for id in pairs(run.fighters) do
+			local m = Creature(id)
+			if m then
+				local mp = m:getPosition()
+				if mp.z == tp.z and dist(mp, tp) <= 25 then
+					tracked = true
+					break
+				end
+			end
+		end
+	end
+	run.lostFor = tracked and 0 or ((run.lostFor or 0) + TICK)
+	if run.lostFor >= 60000 then
+		clearFighters(run)
+		logFight(run, "zgubiony trop")
+		MODES.raid.lose(run, "wrogowie zgubili trop")
+		return true
+	end
+	return false
+end
+
+OtsRaidKill = function(run)
+	giveRaidExp(run, RAID_KILL_EXP, "Najezdzca pokonany")
+end
+
+local nextRaid = os.time() + math.random(10 * 60, 30 * 60)
+
+local function raidCandidate(player)
+	if playerMode[player:getId()] and runs[playerMode[player:getId()]] and runs[playerMode[player:getId()]].phase ~= "idle" then
+		return false
+	end
+	local pos = player:getPosition()
+	if pos.x < 31000 then
+		return false -- hub, sale i areny (nasze mapy) - tylko prawdziwy swiat
+	end
+	local tile = Tile(pos)
+	return tile and not tile:hasFlag(TILESTATE_PROTECTIONZONE) and not tile:getHouse() and player:getHealth() > 0
+end
+
+local function startRaid(player)
+	local run = runs.raid
+	if run and run.phase ~= "idle" then
+		return false
+	end
+	run = newRun("raid", player)
+	run.starter = player:getId()
+	run.players = {}
+	addPlayer(run, player)
+	-- druzyna obok (np. boty) walczy razem
+	local party = player:getParty()
+	if party then
+		for _, member in ipairs(party:getMembers() or {}) do
+			if member:getId() ~= player:getId() and dist(member:getPosition(), player:getPosition()) <= 10 then
+				addPlayer(run, member)
+			end
+		end
+		local leader = party:getLeader()
+		if leader and leader:getId() ~= player:getId() and dist(leader:getPosition(), player:getPosition()) <= 10 then
+			addPlayer(run, leader)
+		end
+	end
+	local count = 0
+	for _ in pairs(run.players) do
+		count = count + 1
+	end
+	run.scale = math.sqrt(count)
+	run.pending = math.random(3, 14) -- ile lacznie przyjdzie (najwyzej 10 naraz)
+	run.spawned = 0
+	run.token = run.token + 1
+	run.knocked = {}
+	tell(run, "Ktos cie obserwuje... Za chwile NAJAZD!", MESSAGE_GAME_HIGHLIGHT or MESSAGE_EVENT_ADVANCE)
+	countdown(run, 5, MODES.raid.spawn)
+	return true
+end
+
+local raidTimer = GlobalEvent("OtsRaidTimer")
+
+function raidTimer.onThink(interval)
+	if os.time() < nextRaid then
+		return true
+	end
+	local list = {}
+	for _, player in ipairs(Game.getPlayers()) do
+		if raidCandidate(player) then
+			list[#list + 1] = player
+		end
+	end
+	if #list > 0 and startRaid(list[math.random(#list)]) then
+		nextRaid = os.time() + math.random(15 * 60, 45 * 60)
+	else
+		nextRaid = os.time() + 60
+	end
+	return true
+end
+
+raidTimer:interval(30 * 1000)
+raidTimer:register()
+
+-- !najazd - od razu (do testow; tylko konto lisu)
+local raidAccount
+local raidCommand = TalkAction("!najazd")
+
+function raidCommand.onSay(player, words, param)
+	if not raidAccount then
+		local result = db.storeQuery("SELECT `id` FROM `accounts` WHERE `name` = " .. db.escapeString("lisu"))
+		if result then
+			raidAccount = Result.getNumber(result, "id")
+			Result.free(result)
+		end
+	end
+	if player:getAccountId() ~= raidAccount then
+		return false
+	end
+	if not raidCandidate(player) then
+		player:sendCancelMessage("Najazd tylko w prawdziwym swiecie, poza PZ i domem.")
+		return true
+	end
+	if not startRaid(player) then
+		player:sendCancelMessage("Najazd juz trwa.")
+	end
+	return true
+end
+
+raidCommand:groupType("normal")
+raidCommand:register()
+
 -- ---------- petla ----------
-local function logFight(run, result)
+logFight = function(run, result)
 	saveHits(run)
 	clearFields(run)
 	run.dots = {}
@@ -1262,7 +1513,7 @@ loop = function(mode, token)
 		local monster = Monster(id)
 		if monster and monster:getHealth() > 0 then
 			remaining = remaining + 1
-			if not inRoom(mode, monster:getPosition()) then
+			if not ROOMS[mode].free and not inRoom(mode, monster:getPosition()) then
 				monster:teleportTo(spawnSpot(mode, 1), true)
 			end
 			think(run, monster, fighters[id], now)
@@ -1270,6 +1521,9 @@ loop = function(mode, token)
 			run.fighters[id] = nil
 			fighters[id] = nil
 			OtsNoElite[id] = nil
+			if mode == "raid" then
+				OtsRaidKill(run)
+			end
 			if mode == "open" then
 				run.kills = (run.kills or 0) + 1
 				local left = 0
@@ -1296,6 +1550,15 @@ loop = function(mode, token)
 		MODES[mode].lose(run, run.left and next(run.knocked or {}) == nil and "opusciles sale" or "wszyscy powaleni")
 		run.knocked = {}
 		return
+	end
+	if mode == "raid" then
+		if OtsRaidTick(run, now, remaining) then
+			return -- najazd zakonczony w OtsRaidTick
+		end
+		if remaining == 0 and (run.pending or 0) > 0 then
+			addEvent(loop, TICK, mode, token)
+			return -- czekamy na posilki
+		end
 	end
 	if remaining == 0 then
 		calibrate(run)
@@ -1330,7 +1593,7 @@ local function knockOut(pid, mode, token)
 	run.knocked[pid] = true
 	restore(player)
 	local from = player:getPosition()
-	player:teleportTo(ROOMS[mode].landing, true)
+	player:teleportTo(mode == "raid" and player:getTown():getTemplePosition() or ROOMS[mode].landing, true)
 	from:sendMagicEffect(CONST_ME_POFF)
 	player:getPosition():sendMagicEffect(CONST_ME_TELEPORT)
 	player:sendTextMessage(MESSAGE_EVENT_ADVANCE, "Powalony! Na arenie nie ma smierci - wracasz do wejscia z pelnym zyciem.")
@@ -1341,7 +1604,7 @@ local guard = CreatureEvent("OtsArenaGuard")
 -- w pojedynku, falach i turnieju walczy tylko ta postac, ktora zaczela - druzyna (np. boty, ktore
 -- teleportuja sie do lidera) nie moze jej leczyc ani bic przeciwnikow
 local function outsider(run, attacker)
-	return run and run.mode ~= "team" and run.mode ~= "open" and attacker and attacker:isPlayer() and attacker:getId() ~= run.starter
+	return run and run.mode ~= "team" and run.mode ~= "open" and attacker and attacker:isPlayer() and attacker:getId() ~= run.starter and not run.players[attacker:getId()]
 end
 
 function guard.onHealthChange(creature, attacker, primaryDamage, primaryType, secondaryDamage, secondaryType, origin)
@@ -1432,11 +1695,6 @@ function fighterHealth.onHealthChange(creature, attacker, primaryDamage, primary
 		local k = total > 0 and (total - absorbed) / total or 0
 		primaryDamage = math.floor(primaryDamage * k)
 		secondaryDamage = math.floor(secondaryDamage * k)
-	end
-	-- diagnostyka: kazdy cios, ktory zabiera NPC co najmniej 25% zycia
-	local after = math.abs(primaryDamage) + math.abs(secondaryDamage)
-	if after >= creature:getMaxHealth() * 0.25 then
-		logger.info("[OTS arena cios] {} -> {}: {} (typ {}/{}, zrodlo {}), zycie NPC {}/{}", attacker and attacker:getName() or "?", creature:getName(), after, primaryType, secondaryType, origin, creature:getHealth(), creature:getMaxHealth())
 	end
 	if run and run.token == data.token and attacker and attacker:isPlayer() then
 		local pid = attacker:getId()
