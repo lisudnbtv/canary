@@ -394,6 +394,7 @@ local function spawnFighter(run, spec, index)
 		monster:setSkull(spec.skull)
 	end
 	monster:registerEvent("OtsArenaFighterHealth")
+	logger.info("[OTS arena npc] {}: zycie {}/{} (cel {}), sila ciosu {}", name, monster:getHealth(), monster:getMaxHealth(), hp, math.floor(spec.base or 0))
 	monster:changeTargetDistance(voc.range, 24 * 60 * 60 * 1000)
 	local id = monster:getId()
 	OtsNoElite[id] = true
@@ -1082,6 +1083,11 @@ function fighterHealth.onHealthChange(creature, attacker, primaryDamage, primary
 	if data.utamoUntil > now then
 		primaryDamage = math.floor(primaryDamage * 0.65)
 		secondaryDamage = math.floor(secondaryDamage * 0.65)
+	end
+	-- diagnostyka: kazdy cios, ktory zabiera NPC co najmniej 25% zycia
+	local after = math.abs(primaryDamage) + math.abs(secondaryDamage)
+	if after >= creature:getMaxHealth() * 0.25 then
+		logger.info("[OTS arena cios] {} -> {}: {} (typ {}/{}, zrodlo {}), zycie NPC {}/{}", attacker and attacker:getName() or "?", creature:getName(), after, primaryType, secondaryType, origin, creature:getHealth(), creature:getMaxHealth())
 	end
 	if run and run.token == data.token and attacker and attacker:isPlayer() then
 		local pid = attacker:getId()
