@@ -1191,14 +1191,14 @@ end
 openDuel = function(player)
 	local streak = getNum(player, KV_DUEL)
 	local window = ModalWindow({ title = "Pojedynek 1 na 1", message = string.format("Wybierz profesje przeciwnika.\nSeria wygranych: %d (przeciwnik ma sile %d%%).\nWygrana: %d pkt areny. Przegrana: seria od zera, bez innej straty.", streak, math.floor(math.min(2.5, 1 + 0.05 * streak) * 100 + 0.5), math.min(50, 10 + 2 * streak)) })
+	window:addChoice("Losowa profesja", function(target)
+		start(target, "duel", {})
+	end)
 	for _, key in ipairs(VOC_ORDER) do
 		window:addChoice(VOC[key].label, function(target)
 			start(target, "duel", { voc = key })
 		end)
 	end
-	window:addChoice("Losowa profesja", function(target)
-		start(target, "duel", {})
-	end)
 	window:addButton("Walcz")
 	window:addButton("Zamknij", function() end)
 	window:setPriority(true)
