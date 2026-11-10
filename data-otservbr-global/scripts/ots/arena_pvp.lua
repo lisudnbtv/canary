@@ -1013,7 +1013,20 @@ end
 
 local guard = CreatureEvent("OtsArenaGuard")
 
+-- w pojedynku, falach i turnieju walczy tylko ta postac, ktora zaczela - druzyna (np. boty, ktore
+-- teleportuja sie do lidera) nie moze jej leczyc ani bic przeciwnikow
+local function outsider(run, attacker)
+	return run and run.mode ~= "team" and attacker and attacker:isPlayer() and attacker:getId() ~= run.starter
+end
+
 function guard.onHealthChange(creature, attacker, primaryDamage, primaryType, secondaryDamage, secondaryType, origin)
+	if primaryType == COMBAT_HEALING and creature:isPlayer() then
+		local mode = playerMode[creature:getId()]
+		local run = mode and runs[mode]
+		if run and run.phase == "fight" and run.alive[creature:getId()] and attacker and attacker:getId() ~= creature:getId() and outsider(run, attacker) then
+			return 0, primaryType, 0, secondaryType
+		end
+	end
 	if primaryType == COMBAT_HEALING or not creature:isPlayer() then
 		return primaryDamage, primaryType, secondaryDamage, secondaryType
 	end
@@ -1053,6 +1066,13 @@ function fighterHealth.onHealthChange(creature, attacker, primaryDamage, primary
 	end
 	local run = runs[data.mode]
 	local now = run and run.clock or 0
+	if outsider(run, attacker) then
+		if not run.warned then
+			run.warned = true
+			attacker:sendCancelMessage("To walka 1 na 1 - druzyna nie moze pomagac.")
+		end
+		return 0, primaryType, 0, secondaryType
+	end
 	if attacker and attacker:isPlayer() then
 		learnHit(attacker, math.abs(primaryDamage) + math.abs(secondaryDamage))
 		local factor = PVP
