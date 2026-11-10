@@ -25,16 +25,16 @@ local MAX_HIT = 25 -- jeden cios NPC zabiera najwyzej tyle % zycia celu
 local SPELL_EXHAUST = 1000 -- jak czary graczy na serwerze (spell_cooldown.lua: 1 s)
 
 local ROOMS = {
-	duel = { label = "Pojedynek 1 na 1", landing = Position(30310, 30018, 7), limit = 180, seconds = 40 },
+	-- Open PvP: duza pustynna sala (45x35), do 10 przeciwnikow naraz szuka postaci jak na wojnie
+	open = { label = "Open PvP", landing = Position(30322, 30101, 7), limit = 420, seconds = 40, bounds = { minX = 30300, maxX = 30344, minY = 30070, maxY = 30104, z = 7 } },
 	waves = { label = "Fale przeciwnikow", landing = Position(30340, 30018, 7), limit = 150, seconds = 18 },
 	team = { label = "Druzyna na druzyne", landing = Position(30370, 30018, 7), limit = 240, seconds = 40 },
 	tour = { label = "Turniej", landing = Position(30400, 30018, 7), limit = 180, seconds = 40 },
 }
-local MODE_ORDER = { "duel", "waves", "team", "tour" }
+local MODE_ORDER = { "open", "waves", "team", "tour" }
 
 local KV_POINTS = "ots-arena-points"
 local KV_DPS = "ots-arena-dps"
-local KV_DUEL = "ots-arena-duel-streak"
 local KV_TEAM = "ots-arena-team-streak"
 
 local SHOP = {
@@ -218,6 +218,9 @@ local function dist(a, b)
 end
 
 local function roomBounds(mode)
+	if ROOMS[mode].bounds then
+		return ROOMS[mode].bounds
+	end
 	local l, b = ROOMS[mode].landing, OtsRoomBounds
 	return { minX = l.x + b.minDx, maxX = l.x + b.maxDx, minY = l.y + b.minDy, maxY = l.y + b.maxDy, z = l.z }
 end
@@ -422,7 +425,7 @@ local function spawnFighter(run, spec, index)
 	OtsNoElite[id] = true
 	local data = {
 		id = id, voc = spec.voc, mode = run.mode, token = run.token, dmg = spec.dmg or 1, prefer = spec.prefer,
-		base = spec.base or 100, level = spec.level or 0, cds = {}, nextSpell = 0, nextAttack = 0, nextHeal = 0, healLeft = hp * HEAL_BUDGET, utamoUntil = 0, utamoReady = 0, mana = 0, maxMana = 0, shield = false,
+		base = spec.base or 100, level = spec.level or 0, cds = {}, nextSpell = 0, nextAttack = 0, nextHeal = 0, healLeft = hp * (spec.budget or HEAL_BUDGET), utamoUntil = 0, utamoReady = 0, mana = 0, maxMana = 0, shield = false,
 		fleeUntil = 0, fleeReady = 0, name = name,
 	}
 	if voc.utamo then
@@ -435,7 +438,7 @@ local function spawnFighter(run, spec, index)
 	end
 	fighters[id] = data
 	run.fighters[id] = true
-	monster:teleportTo(spawnSpot(run.mode, index or 1), true)
+	monster:teleportTo(spec.pos or spawnSpot(run.mode, index or 1), true)
 	monster:getPosition():sendMagicEffect(CONST_ME_TELEPORT)
 	-- szybkosc jak postac, ktora ma zaatakowac
 	local ref = spec.prefer and Player(spec.prefer)
@@ -776,6 +779,9 @@ local function think(run, monster, data, now)
 		monster:changeTargetDistance(voc.range, 24 * 60 * 60 * 1000)
 	end
 
+	if data.holdUntil and now < data.holdUntil then
+		return -- grupa czeka na swoja kolej (Open PvP)
+	end
 	local target = pickTarget(run, monster, data)
 	if not target then
 		return
@@ -787,7 +793,20 @@ local function think(run, monster, data, now)
 	end
 	local mpos, tpos = monster:getPosition(), target:getPosition()
 	local d = dist(mpos, tpos)
-	if mpos.z ~= tpos.z or not mpos:isSightClear(tpos) then
+	local sight = mpos.z == tpos.z and mpos:isSightClear(tpos)
+	-- szukanie postaci po duzej sali: gdy jest daleko albo za przeszkoda, NPC sam idzie w jej strone
+	if (d > 6 or not sight) and now >= (data.nextStep or 0) then
+		data.nextStep = now + 250
+		if not data.path or #data.path == 0 or now >= (data.pathAt or 0) then
+			local path = monster:getPathTo(tpos, voc.range == 1 and 1 or 3, voc.range == 1 and 1 or 4, true, voc.range > 1, 60)
+			data.path = type(path) == "table" and path or nil
+			data.pathAt = now + 1000
+		end
+		if data.path and #data.path > 0 then
+			monster:move(table.remove(data.path, 1))
+		end
+	end
+	if not sight then
 		return
 	end
 	local reach = voc.range == 1 and 1 or 6
@@ -850,7 +869,7 @@ end
 -- ---------------------------------------------------------------------------------------------
 -- przebieg walki
 local loop
-local openMenu, openDuel
+local openMenu
 
 local function newRun(mode, starter)
 	local old = runs[mode]
@@ -939,11 +958,7 @@ local function scheduleMenu(run, delay)
 	addEvent(function()
 		local player = Player(pid)
 		if player and inRoom(mode, player:getPosition()) then
-			if mode == "duel" then
-				openDuel(player)
-			else
-				openMenu(player)
-			end
+			openMenu(player)
 		end
 	end, delay)
 end
@@ -951,41 +966,64 @@ end
 -- ---------- tryby ----------
 local MODES = {}
 
--- POJEDYNEK
-MODES.duel = {
+-- OPEN PVP: 10 przeciwnikow w 3 grupach, ktore ruszaja po kolei i szukaja postaci po calej sali
+local OPEN_KILL_PTS = 4
+local OPEN_WIN_PTS = 40
+local OPEN_GROUPS = {
+	-- { start po sekundach, punkty startowe (przesuniecie od lewego gornego rogu sali) }
+	{ 0, { { 4, 3 }, { 6, 3 }, { 5, 5 }, { 3, 5 } } },
+	{ 8, { { 40, 3 }, { 38, 3 }, { 39, 5 } } },
+	{ 16, { { 22, 2 }, { 20, 3 }, { 24, 3 } } },
+}
+-- wiecej magow i paladynow, jak na wojnie
+local OPEN_VOCS = { "sorcerer", "sorcerer", "druid", "druid", "paladin", "paladin", "knight", "knight", "monk", "sorcerer" }
+
+MODES.open = {
 	spawn = function(run)
 		local player = Player(run.starter)
-		local streak = getNum(player, KV_DUEL)
-		local s = math.min(2.5, 1 + 0.05 * streak)
-		run.strength = s
-		local voc = run.duelVoc or VOC_ORDER[math.random(#VOC_ORDER)]
-		local f = spawnFighter(run, { voc = voc, base = mirrorHit(player), level = player:getLevel(), hp = player:getMaxHealth(), dmg = s, prefer = player:getId() }, 1)
-		if f then
-			tell(run, string.format("Pojedynek: %s (sila %d%%, seria wygranych: %d).", f:getName(), math.floor(s * 100 + 0.5), streak))
+		local count = 0
+		for _ in pairs(run.alive) do
+			count = count + 1
 		end
+		-- z druzyna (np. boty) przeciwnicy sa mocniejsi
+		local scale = math.sqrt(math.max(1, count))
+		local b = ROOMS.open.bounds
+		local vocs = {}
+		for i, v in ipairs(OPEN_VOCS) do
+			vocs[i] = v
+		end
+		for i = #vocs, 2, -1 do
+			local j = math.random(i)
+			vocs[i], vocs[j] = vocs[j], vocs[i]
+		end
+		local n = 0
+		for _, group in ipairs(OPEN_GROUPS) do
+			for _, off in ipairs(group[2]) do
+				n = n + 1
+				local f = spawnFighter(run, { voc = vocs[n], base = mirrorHit(player), level = player:getLevel(), hp = player:getMaxHealth() * 0.5 * scale, dmg = 0.35 * scale, budget = 2, pos = Position(b.minX + off[1], b.minY + off[2], b.z) }, n)
+				if f and fighters[f:getId()] then
+					fighters[f:getId()].holdUntil = (run.clock or 0) + group[1] * 1000
+				end
+			end
+		end
+		run.kills = 0
+		tell(run, string.format("OPEN PVP: %d wrogow na mapie - szukaja cie! Pierwsza grupa juz idzie, kolejne za 8 i 16 sekund.", n))
 	end,
 	win = function(run)
-		local player = Player(run.starter)
-		if not player then
-			return
+		for pid in pairs(run.players) do
+			local player = Player(pid)
+			if player then
+				addPoints(player, OPEN_WIN_PTS)
+				record(player, "open", 1, true)
+				player:sendTextMessage(MESSAGE_EVENT_ADVANCE, string.format("WOJNA WYGRANA! Wszyscy wrogowie pokonani. +%d pkt areny (masz %d).", OPEN_WIN_PTS, getNum(player, KV_POINTS)))
+				player:getPosition():sendMagicEffect(CONST_ME_FIREWORK_YELLOW)
+			end
 		end
-		local streak = getNum(player, KV_DUEL) + 1
-		setNum(player, KV_DUEL, streak)
-		local pts = math.min(50, 10 + 2 * (streak - 1))
-		addPoints(player, pts)
-		local best = record(player, "duel", streak)
-		player:sendTextMessage(MESSAGE_EVENT_ADVANCE, string.format("WYGRANA! Seria pojedynkow: %d%s. +%d pkt areny (masz %d). Nastepny przeciwnik bedzie o 5%% mocniejszy.", streak, best and " (nowy rekord)" or "", pts, getNum(player, KV_POINTS)))
-		player:getPosition():sendMagicEffect(CONST_ME_FIREWORK_YELLOW)
 		run.phase = "idle"
-		scheduleMenu(run, 2500)
+		scheduleMenu(run, 3000)
 	end,
 	lose = function(run, why)
-		local player = Player(run.starter)
-		if player then
-			local streak = getNum(player, KV_DUEL)
-			setNum(player, KV_DUEL, 0)
-			player:sendTextMessage(MESSAGE_EVENT_ADVANCE, string.format("Pojedynek przegrany (%s). Seria %d wygranych zakonczona - przeciwnicy wracaja do sily 100%%. Bez zadnej straty.", why, streak))
-		end
+		tell(run, string.format("Wojna przegrana (%s). Pokonani wrogowie: %d z 10. Bez zadnej straty.", why, run.kills or 0))
 		run.phase = "idle"
 		scheduleMenu(run, 2500)
 	end,
@@ -1161,7 +1199,7 @@ loop = function(mode, token)
 	run.clock = (run.clock or 0) + TICK -- zegar w ms (serwer nie ma zegara z milisekundami dla Lua)
 	local now = run.clock
 	-- druzyna: co 4 s wybor wspolnego celu - postac z najnizszym % zycia
-	if mode == "team" and now >= (run.nextFocus or 0) then
+	if (mode == "team" or mode == "open") and now >= (run.nextFocus or 0) then
 		run.nextFocus = now + 4000
 		local best, bp
 		for pid in pairs(run.alive) do
@@ -1232,6 +1270,22 @@ loop = function(mode, token)
 			run.fighters[id] = nil
 			fighters[id] = nil
 			OtsNoElite[id] = nil
+			if mode == "open" then
+				run.kills = (run.kills or 0) + 1
+				local left = 0
+				for _ in pairs(run.fighters) do
+					left = left + 1
+				end
+				for pid in pairs(run.players) do
+					local player = Player(pid)
+					if player then
+						addPoints(player, OPEN_KILL_PTS)
+						if left > 0 then
+							player:sendTextMessage(MESSAGE_EVENT_ADVANCE, string.format("Wrog pokonany! +%d pkt. Zostalo: %d.", OPEN_KILL_PTS, left))
+						end
+					end
+				end
+			end
 		end
 	end
 	local alive = aliveCount(run)
@@ -1287,7 +1341,7 @@ local guard = CreatureEvent("OtsArenaGuard")
 -- w pojedynku, falach i turnieju walczy tylko ta postac, ktora zaczela - druzyna (np. boty, ktore
 -- teleportuja sie do lidera) nie moze jej leczyc ani bic przeciwnikow
 local function outsider(run, attacker)
-	return run and run.mode ~= "team" and attacker and attacker:isPlayer() and attacker:getId() ~= run.starter
+	return run and run.mode ~= "team" and run.mode ~= "open" and attacker and attacker:isPlayer() and attacker:getId() ~= run.starter
 end
 
 function guard.onHealthChange(creature, attacker, primaryDamage, primaryType, secondaryDamage, secondaryType, origin)
@@ -1436,7 +1490,7 @@ local function enter(player, mode)
 	run.starter = player:getId()
 	run.players = {}
 	addPlayer(run, player)
-	if mode == "team" then
+	if mode == "team" or mode == "open" then
 		local party = player:getParty()
 		if party then
 			if party:getLeader():getId() ~= player:getId() then
@@ -1477,7 +1531,6 @@ local function start(player, mode, opts)
 	end
 	opts = opts or {}
 	run.token = run.token + 1
-	run.duelVoc = opts.voc
 	run.wave = 0
 	run.round = 0
 	run.knocked = {}
@@ -1504,28 +1557,9 @@ local function start(player, mode, opts)
 		}
 		player:showTextDialog(2814, table.concat(lines, "\n"))
 	end
-	local labels = { duel = "Pojedynek", waves = "Fale", team = "Walka druzyn", tour = "Turniej" }
+	local labels = { open = "Open PvP", waves = "Fale", team = "Walka druzyn", tour = "Turniej" }
 	tell(run, string.format("%s: walka za 3 sekundy! Przegrana nic nie kosztuje. Wyjscie: teleport przy wejsciu.", labels[mode]))
 	countdown(run, 3, MODES[mode].spawn)
-end
-
-openDuel = function(player)
-	local streak = getNum(player, KV_DUEL)
-	local window = ModalWindow({ title = "Pojedynek 1 na 1", message = string.format("Wybierz profesje przeciwnika.\nSeria wygranych: %d (przeciwnik ma sile %d%%).\nWygrana: %d pkt areny. Przegrana: seria od zera, bez innej straty.", streak, math.floor(math.min(2.5, 1 + 0.05 * streak) * 100 + 0.5), math.min(50, 10 + 2 * streak)) })
-	window:addChoice("Losowa profesja", function(target)
-		start(target, "duel", {})
-	end)
-	for _, key in ipairs(VOC_ORDER) do
-		window:addChoice(VOC[key].label, function(target)
-			start(target, "duel", { voc = key })
-		end)
-	end
-	window:addButton("Walcz")
-	window:addButton("Zamknij", function() end)
-	window:setPriority(true)
-	window:setDefaultEnterButton(2)
-	window:setDefaultEscapeButton(1)
-	window:sendToPlayer(player)
 end
 
 local function openShop(player)
@@ -1562,7 +1596,7 @@ local function showRanking(player)
 	local b = board()
 	local lines = { "RANKING ARENY PvP", "" }
 	local cats = {
-		{ "duel", "Najdluzsza seria pojedynkow" },
+		{ "open", "Wygrane wojny (Open PvP)" },
 		{ "waves", "Najwiecej fal (rekord)" },
 		{ "team", "Najdluzsza seria druzyny" },
 		{ "tour", "Wygrane turnieje" },
@@ -1593,10 +1627,10 @@ end
 
 openMenu = function(player)
 	local b = board()[player:getName()] or {}
-	local message = string.format("Walki z NPC, ktore walcza jak gracze, dopasowane do twojej postaci. Przegrana nic nie kosztuje.\nPunkty areny: %d. Twoje rekordy: pojedynki %d, fale %d, druzyna %d, turnieje %d.", getNum(player, KV_POINTS), tonumber(b.duel) or 0, tonumber(b.waves) or 0, tonumber(b.team) or 0, tonumber(b.tour) or 0)
+	local message = string.format("Walki z NPC, ktore walcza jak gracze, dopasowane do twojej postaci. Przegrana nic nie kosztuje.\nPunkty areny: %d. Twoje rekordy: wygrane wojny %d, fale %d, druzyna %d, turnieje %d.", getNum(player, KV_POINTS), tonumber(b.open) or 0, tonumber(b.waves) or 0, tonumber(b.team) or 0, tonumber(b.tour) or 0)
 	local window = ModalWindow({ title = "Arena PvP", message = message })
-	window:addChoice(string.format("Pojedynek 1 na 1 (seria: %d)", getNum(player, KV_DUEL)), function(target)
-		openDuel(target)
+	window:addChoice("Open PvP (wojna: 10 wrogow szuka cie po duzej sali)", function(target)
+		start(target, "open")
 	end)
 	window:addChoice("Fale przeciwnikow (az padniesz)", function(target)
 		start(target, "waves")
@@ -1670,16 +1704,71 @@ local OBSTACLES = {
 	{ -7, -2, BASIN }, { 6, -2, BASIN }, { -6, 1, PILLAR }, { 5, 1, PILLAR },
 }
 
+-- Open PvP: pustynia 45x35 z palmami, filarami, posagami, kamieniami i kawalkami murow (oslony)
+local SAND, PALM, SPILLAR, SSTATUE, ROCKS, SBLOCK = 231, 3639, 2188, 2034, 18629, 1316
+
+local function buildOpenRoom()
+	local b = ROOMS.open.bounds
+	local landing = ROOMS.open.landing
+	local made = 0
+	for x = b.minX, b.maxX do
+		for y = b.minY, b.maxY do
+			local tile = Tile(x, y, b.z) or Game.createTile(x, y, b.z)
+			if tile and not tile:getGround() then
+				Game.createItem(SAND, 1, Position(x, y, b.z))
+				made = made + 1
+			end
+		end
+	end
+	-- przeszkody z prostego, stalego losowania (ta sama mapa po kazdym restarcie)
+	local seed = 12345
+	local function rnd(n)
+		seed = (seed * 1103515245 + 12345) % 2147483648
+		return seed % n
+	end
+	local function free(x, y)
+		if math.abs(x - landing.x) <= 3 and math.abs(y - landing.y) <= 3 then
+			return false
+		end
+		if y - b.minY <= 6 then
+			return false -- pas startowy wrogow
+		end
+		local tile = Tile(x, y, b.z)
+		return tile and tile:getGround() and not tile:hasProperty(CONST_PROP_BLOCKSOLID) and tile:getCreatureCount() == 0
+	end
+	local function put(x, y, id)
+		if free(x, y) then
+			Game.createItem(id, 1, Position(x, y, b.z))
+		end
+	end
+	local singles = { PALM, PALM, PALM, SPILLAR, SPILLAR, SSTATUE, ROCKS, ROCKS }
+	for _ = 1, 55 do
+		put(b.minX + 1 + rnd(b.maxX - b.minX - 1), b.minY + 1 + rnd(b.maxY - b.minY - 1), singles[rnd(#singles) + 1])
+	end
+	-- kawalki murow 3-4 pola (poziome i pionowe) - oslony do chowania sie
+	for _ = 1, 12 do
+		local x, y = b.minX + 2 + rnd(b.maxX - b.minX - 5), b.minY + 2 + rnd(b.maxY - b.minY - 5)
+		local horizontal = rnd(2) == 0
+		for k = 0, 2 + rnd(2) do
+			put(horizontal and x + k or x, horizontal and y or y + k, SBLOCK)
+		end
+	end
+	return made
+end
+
 local startup = GlobalEvent("OtsArenaPvpStartup")
 
 function startup.onStartup()
 	local made = 0
+	made = made + buildOpenRoom()
 	for _, mode in ipairs(MODE_ORDER) do
 		local landing = ROOMS[mode].landing
-		made = made + OtsBuildRoom(landing)
+		if mode ~= "open" then
+			made = made + OtsBuildRoom(landing)
+		end
 		OtsReturnSpot(landing)
 		-- przeszkody: filary (zaslaniaja strzaly i droge), kosze z ogniem i posagi
-		for _, o in ipairs(OBSTACLES) do
+		for _, o in ipairs(mode == "open" and {} or OBSTACLES) do
 			local pos = Position(landing.x + o[1], landing.y + o[2], landing.z)
 			local tile = Tile(pos)
 			if tile and tile:getGround() and not tile:getItemById(o[3]) and not tile:hasProperty(CONST_PROP_BLOCKSOLID) then
