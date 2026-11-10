@@ -17,7 +17,7 @@ local TICK = 500
 -- LUSTRO: NPC ma tyle zycia, co postac, i bije jej wlasna sila (sredni cios najmocniejszego czaru jak w !czary).
 -- Jak w prawdziwym PvP obie strony zadaja sobie polowe obrazen (PVP).
 local PVP = 0.5
-local MAX_HIT = 45 -- jeden cios NPC zabiera najwyzej tyle % zycia celu
+local MAX_HIT = 25 -- jeden cios NPC zabiera najwyzej tyle % zycia celu
 local SPELL_EXHAUST = 1000 -- jak czary graczy na serwerze (spell_cooldown.lua: 1 s)
 
 local ROOMS = {
@@ -1083,6 +1083,17 @@ function fighterHealth.onHealthChange(creature, attacker, primaryDamage, primary
 	if data.utamoUntil > now then
 		primaryDamage = math.floor(primaryDamage * 0.65)
 		secondaryDamage = math.floor(secondaryDamage * 0.65)
+	end
+	-- lustrzany limit: jeden cios postaci zabiera NPC najwyzej MAX_HIT % zycia (tak samo jak cios NPC postaci);
+	-- krytyki i bonusy postaci potrafily zdjac lustro jednym strzalem
+	do
+		local total = math.abs(primaryDamage) + math.abs(secondaryDamage)
+		local cap = creature:getMaxHealth() * MAX_HIT / 100
+		if attacker and attacker:isPlayer() and total > cap then
+			local k = cap / total
+			primaryDamage = math.floor(primaryDamage * k)
+			secondaryDamage = math.floor(secondaryDamage * k)
+		end
 	end
 	-- diagnostyka: kazdy cios, ktory zabiera NPC co najmniej 25% zycia
 	local after = math.abs(primaryDamage) + math.abs(secondaryDamage)
