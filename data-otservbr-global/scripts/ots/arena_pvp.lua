@@ -4,8 +4,8 @@
 --  * Fale przeciwnikow - coraz wiecej i coraz mocniejszych "graczy", az padniesz.
 --  * Druzyna na druzyne - twoje party (np. postacie z bota) przeciw lustrzanej druzynie NPC.
 --  * Turniej - drabinka 8 zawodnikow: cwiercfinal, polfinal, final z Mistrzem Areny.
--- Przeciwnicy sa dopasowani do postaci: zycie liczone od obrazen, jakie postac zadaje (mierzone w walkach
--- na arenie, na poczatek szacowane z poziomu i skilli), a ich ciosy to procent maksymalnego zycia celu.
+-- Przeciwnicy to LUSTRO postaci: tyle samo zycia, bija sila jej najmocniejszego czaru (polowa jak w PvP,
+-- gracz tez zadaje im polowe), lecza sie potionami i czarami co sekunde jak gracz.
 -- Lecza sie (exura, potiony - z ograniczonym zapasem), uzywaja utamo vita, czarow i run swojej profesji,
 -- uciekaja przy niskim zyciu. Przegrana nic nie kosztuje: przy smiertelnym ciosie postac wraca do wejscia
 -- z pelnym zyciem. Za wygrane: punkty areny (sklep areny) i ranking.
@@ -14,7 +14,11 @@ local FIGHTER_TYPE = "Arena Fighter"
 local STAGING_DY = 32 -- poczekalnia NPC (poza zasiegiem wzroku) - tu dostaja imie, zanim wejda do sali
 local FLOOR = 11285 -- podloga z sali Obrona
 local TICK = 500
-local DMG_SCALE = 1.6 -- ogolny mnoznik ciosow NPC (1.0 = pierwsza wersja, byla za latwa)
+-- LUSTRO: NPC ma tyle zycia, co postac, i bije jej wlasna sila (sredni cios najmocniejszego czaru jak w !czary).
+-- Jak w prawdziwym PvP obie strony zadaja sobie polowe obrazen (PVP).
+local PVP = 0.5
+local MAX_HIT = 45 -- jeden cios NPC zabiera najwyzej tyle % zycia celu
+local SPELL_EXHAUST = 1000 -- jak czary graczy na serwerze (spell_cooldown.lua: 1 s)
 
 local ROOMS = {
 	duel = { label = "Pojedynek 1 na 1", landing = Position(30310, 30018, 7), limit = 180, seconds = 40 },
@@ -45,58 +49,69 @@ local PHYS, HOLY, FIRE, ENERGY, ICE, DEATH, EARTH = COMBAT_PHYSICALDAMAGE, COMBA
 local VOC = {
 	knight = {
 		label = "Knight", short = "EK", looks = { 131, 139 }, range = 1,
-		attack = { type = PHYS, min = 4, max = 7, effect = CONST_ME_DRAWBLOOD },
+		attack = { type = PHYS, min = 2, max = 3, effect = CONST_ME_DRAWBLOOD },
 		spells = {
 			{ words = "exori gran", self = true, area = 1, type = PHYS, min = 10, max = 15, cd = 8, effect = CONST_ME_HITAREA },
 			{ words = "exori", self = true, area = 1, type = PHYS, min = 8, max = 12, cd = 4, effect = CONST_ME_HITAREA },
 			{ words = "exori ico", type = PHYS, min = 7, max = 10, cd = 6, effect = CONST_ME_DRAWBLOOD },
+			-- glowny czar (jak ultima postaci, co 1 s); przed 4500 poziomem slabszy odpowiednik
+			{ words = "exori ultima", lowWords = "exori gran", self = true, area = 4, type = PHYS, min = 10, max = 14, cd = 1, effect = CONST_ME_EXPLOSIONAREA },
 		},
-		heal = { words = "exura med ico", pct = 7, below = 70 },
-		potion = { pct = 10, below = 40 },
+		heal = { words = "exura med ico", pct = 15, below = 60 },
+		potion = { pct = 11, below = 80 },
 	},
 	paladin = {
 		label = "Paladin", short = "RP", looks = { 129, 137 }, range = 4,
-		attack = { type = PHYS, min = 4, max = 6, shoot = CONST_ANI_ROYALSPEAR, effect = CONST_ME_DRAWBLOOD },
+		attack = { type = PHYS, min = 2, max = 3, shoot = CONST_ANI_ROYALSPEAR, effect = CONST_ME_DRAWBLOOD },
 		spells = {
 			{ words = "exevo mas san", self = true, area = 3, type = HOLY, min = 9, max = 13, cd = 8, effect = CONST_ME_HOLYAREA },
 			{ words = "exori con", type = PHYS, min = 8, max = 12, cd = 6, shoot = CONST_ANI_ROYALSPEAR, effect = CONST_ME_DRAWBLOOD },
 			{ words = "exori san", type = HOLY, min = 7, max = 11, cd = 2, shoot = CONST_ANI_SMALLHOLY, effect = CONST_ME_HOLYDAMAGE },
+			-- glowny czar (jak ultima postaci, co 1 s); przed 4500 poziomem slabszy odpowiednik
+			{ words = "exevo ultima san", lowWords = "exevo mas san", self = true, area = 4, type = HOLY, min = 10, max = 14, cd = 1, effect = CONST_ME_HOLYAREA },
 		},
-		heal = { words = "exura gran san", pct = 10, below = 60 },
-		potion = { pct = 8, below = 35 },
+		heal = { words = "exura gran san", pct = 18, below = 60 },
+		potion = { pct = 8, below = 80 },
 	},
 	sorcerer = {
 		label = "Sorcerer", short = "MS", looks = { 130, 138 }, range = 4, utamo = true,
-		attack = { type = ENERGY, min = 3, max = 5, shoot = CONST_ANI_ENERGY, effect = CONST_ME_ENERGYHIT },
+		attack = { type = ENERGY, min = 2, max = 3, shoot = CONST_ANI_ENERGY, effect = CONST_ME_ENERGYHIT },
 		spells = {
 			{ words = "exevo gran mas flam", self = true, area = 5, type = FIRE, min = 12, max = 18, cd = 20, effect = CONST_ME_FIREAREA },
 			{ rune = "sudden death rune", type = DEATH, min = 9, max = 13, cd = 2, shoot = CONST_ANI_SUDDENDEATH, effect = CONST_ME_MORTAREA },
 			{ words = "exori vis", type = ENERGY, min = 7, max = 11, cd = 2, effect = CONST_ME_ENERGYAREA },
+			-- glowny czar (jak ultima postaci, co 1 s); przed 4500 poziomem slabszy odpowiednik
+			{ words = "exevo ultima flam", lowWords = "exevo gran mas flam", self = true, area = 4, type = FIRE, min = 10, max = 14, cd = 1, effect = CONST_ME_FIREAREA },
 		},
-		heal = { words = "exura vita", pct = 12, below = 40 },
-		potion = { pct = 6, below = 30 },
+		heal = { words = "exura vita", pct = 18, below = 60 },
+		potion = { pct = 6, below = 80 },
 	},
 	druid = {
 		label = "Druid", short = "ED", looks = { 144, 148 }, range = 4, utamo = true,
-		attack = { type = ICE, min = 3, max = 5, shoot = CONST_ANI_SMALLICE, effect = CONST_ME_ICEATTACK },
+		attack = { type = ICE, min = 2, max = 3, shoot = CONST_ANI_SMALLICE, effect = CONST_ME_ICEATTACK },
 		spells = {
 			{ words = "exevo gran mas frigo", self = true, area = 5, type = ICE, min = 12, max = 18, cd = 20, effect = CONST_ME_ICETORNADO },
 			{ words = "adana ani", paralyze = 3000, cd = 25, effect = CONST_ME_STUN },
 			{ rune = "avalanche rune", area = 1, type = ICE, min = 8, max = 12, cd = 2, shoot = CONST_ANI_ICE, effect = CONST_ME_ICEAREA },
 			{ words = "exori tera", type = EARTH, min = 7, max = 11, cd = 2, effect = CONST_ME_SMALLPLANTS },
+			-- glowny czar (jak ultima postaci, co 1 s); przed 4500 poziomem slabszy odpowiednik
+			{ words = "exevo ultima frigo", lowWords = "exevo gran mas frigo", self = true, area = 4, type = ICE, min = 10, max = 14, cd = 1, effect = CONST_ME_ICETORNADO },
 		},
-		heal = { words = "exura vita", pct = 18, below = 50 },
+		heal = { words = "exura vita", pct = 25, below = 60 },
+		potion = { pct = 6, below = 80 },
 		allyHeal = { words = "exura sio", pct = 20, below = 50 },
 	},
 	monk = {
 		label = "Monk", short = "EM", looks = { 1824, 1825 }, range = 1,
-		attack = { type = PHYS, min = 4, max = 7, effect = CONST_ME_DRAWBLOOD },
+		attack = { type = PHYS, min = 2, max = 3, effect = CONST_ME_DRAWBLOOD },
 		spells = {
 			{ words = "exori mas nia", self = true, area = 1, type = PHYS, min = 10, max = 14, cd = 8, effect = CONST_ME_GROUNDSHAKER },
 			{ words = "exori nia", type = PHYS, min = 8, max = 12, cd = 2, effect = CONST_ME_HITAREA },
+			-- glowny czar (jak ultima postaci, co 1 s); przed 4500 poziomem slabszy odpowiednik
+			{ words = "exori ultima nia", lowWords = "exori mas nia", self = true, area = 4, type = PHYS, min = 10, max = 14, cd = 1, effect = CONST_ME_GROUNDSHAKER },
 		},
-		heal = { words = "exura nia", pct = 8, below = 65 },
-		potion = { pct = 10, below = 40 },
+		heal = { words = "exura nia", pct = 15, below = 60 },
+		potion = { pct = 11, below = 80 },
 	},
 }
 local VOC_ORDER = { "knight", "paladin", "sorcerer", "druid", "monk" }
@@ -226,6 +241,17 @@ local function baseDps(player)
 	return math.max(50, hit / 2)
 end
 
+-- sredni cios najmocniejszego czaru postaci (wzor ultima z !czary, x3 wzmocnienie czarow graczy);
+-- przed 4500 poziomem (bez ultimy) 60% tego
+local function mirrorHit(player)
+	local level, magic = player:getLevel(), player:getMagicLevel()
+	local avg = ((level * 0.25 + magic * 2) + (level * 0.4 + magic * 4)) / 2 * 5 * 3
+	if level < 4500 then
+		avg = avg * 0.6
+	end
+	return math.max(20, avg)
+end
+
 local function dpsOf(player)
 	local v = getNum(player, KV_DPS)
 	return v > 0 and v or baseDps(player)
@@ -346,7 +372,7 @@ local function spawnFighter(run, spec, index)
 	monster:setName(name, name)
 	local look = voc.looks[female and 2 or 1]
 	monster:setOutfit({ lookType = look, lookHead = math.random(0, 132), lookBody = math.random(0, 132), lookLegs = math.random(0, 132), lookFeet = math.random(0, 132), lookAddons = 3 })
-	local hp = math.max(500, math.floor(spec.hp))
+	local hp = math.max(100, math.floor(spec.hp))
 	monster:setMaxHealth(hp)
 	monster:setHealth(hp)
 	if spec.skull then
@@ -358,7 +384,7 @@ local function spawnFighter(run, spec, index)
 	OtsNoElite[id] = true
 	local data = {
 		id = id, voc = spec.voc, mode = run.mode, token = run.token, dmg = spec.dmg or 1, prefer = spec.prefer,
-		cds = {}, nextSpell = 0, nextAttack = 0, nextHeal = 0, healLeft = hp * 1.0, utamoUntil = 0, utamoReady = 0,
+		base = spec.base or 100, level = spec.level or 0, cds = {}, nextSpell = 0, nextAttack = 0, nextHeal = 0, healLeft = hp * 1.5, utamoUntil = 0, utamoReady = 0,
 		fleeUntil = 0, fleeReady = 0, name = name,
 	}
 	fighters[id] = data
@@ -398,9 +424,11 @@ end
 
 local function hit(monster, target, data, spell)
 	local max = target:getMaxHealth()
-	local mult = data.dmg * DMG_SCALE
-	local low = math.floor(max * spell.min / 100 * mult)
-	local high = math.floor(max * spell.max / 100 * mult)
+	-- wartosci w tabelach profesji: 12 = jeden sredni cios najmocniejszego czaru postaci-lustra
+	local unit = data.base * PVP * data.dmg / 12
+	local cap = max * MAX_HIT / 100
+	local low = math.floor(math.min(cap, unit * spell.min))
+	local high = math.floor(math.min(cap, unit * spell.max))
 	if spell.shoot then
 		monster:getPosition():sendDistanceEffect(target:getPosition(), spell.shoot)
 	end
@@ -409,8 +437,9 @@ end
 
 local function castSpell(run, monster, target, data, spell)
 	local mpos = monster:getPosition()
-	if spell.words then
-		monster:say(spell.words, TALKTYPE_MONSTER_SAY)
+	local words = (spell.lowWords and (data.level or 0) < 4500) and spell.lowWords or spell.words
+	if words then
+		monster:say(words, TALKTYPE_MONSTER_SAY)
 	end
 	if spell.paralyze then
 		local condition = Condition(CONDITION_PARALYZE)
@@ -485,9 +514,6 @@ local function think(run, monster, data, now)
 		if not healed and voc.potion and hpPct < voc.potion.below then
 			healed = heal(monster, data, voc.potion.pct, nil, CONST_ME_MAGIC_RED)
 		end
-		if not healed and voc.heal and hpPct < voc.heal.below then
-			healed = heal(monster, data, voc.heal.pct, voc.heal.words)
-		end
 		if healed then
 			data.nextHeal = now + 1000
 		end
@@ -528,7 +554,11 @@ local function think(run, monster, data, now)
 	end
 	local reach = voc.range == 1 and 1 or 6
 
-	-- czar albo runa (wspolne opoznienie 2 s jak u gracza)
+	-- czar leczacy: osobne opoznienie od czarow ataku (jak u gracza - moze leczyc i bic w tej samej sekundzie)
+	if now >= (data.nextHealSpell or 0) and voc.heal and hpPct < voc.heal.below and heal(monster, data, voc.heal.pct, voc.heal.words) then
+		data.nextHealSpell = now + SPELL_EXHAUST
+	end
+	-- czar albo runa (wspolne opoznienie jak u graczy)
 	if now >= data.nextSpell then
 		for i, spell in ipairs(voc.spells) do
 			local ready = now >= (data.cds[i] or 0)
@@ -536,7 +566,7 @@ local function think(run, monster, data, now)
 			if ready and inRange then
 				castSpell(run, monster, target, data, spell)
 				data.cds[i] = now + spell.cd * 1000
-				data.nextSpell = now + 2000
+				data.nextSpell = now + SPELL_EXHAUST
 				break
 			end
 		end
@@ -653,7 +683,7 @@ MODES.duel = {
 		local s = math.min(2.5, 1 + 0.05 * streak)
 		run.strength = s
 		local voc = run.duelVoc or VOC_ORDER[math.random(#VOC_ORDER)]
-		local f = spawnFighter(run, { voc = voc, hp = dpsOf(player) * ROOMS.duel.seconds * s, dmg = 0.6 + 0.4 * s, prefer = player:getId() }, 1)
+		local f = spawnFighter(run, { voc = voc, base = mirrorHit(player), level = player:getLevel(), hp = player:getMaxHealth(), dmg = 0.6 + 0.4 * s, prefer = player:getId() }, 1)
 		if f then
 			tell(run, string.format("Pojedynek: %s (sila %d%%, seria wygranych: %d).", f:getName(), math.floor(s * 100 + 0.5), streak))
 		end
@@ -696,10 +726,10 @@ MODES.waves = {
 		run.wave = run.wave + 1
 		local n = run.wave
 		local count = waveSize(n)
-		local hpMult = 0.4 + 0.06 * n
+		local hpMult = math.min(1, 0.3 + 0.05 * n)
 		local dmg = 0.45 + 0.04 * n
 		for i = 1, count do
-			spawnFighter(run, { voc = VOC_ORDER[math.random(#VOC_ORDER)], hp = dpsOf(player) * ROOMS.waves.seconds * hpMult, dmg = dmg, prefer = (i == 1) and player:getId() or nil }, i)
+			spawnFighter(run, { voc = VOC_ORDER[math.random(#VOC_ORDER)], base = mirrorHit(player), level = player:getLevel(), hp = player:getMaxHealth() * hpMult, dmg = dmg, prefer = (i == 1) and player:getId() or nil }, i)
 		end
 		tell(run, string.format("Fala %d: %d %s (zycie %d%%, obrazenia %d%%).", n, count, count == 1 and "przeciwnik" or "przeciwnikow", math.floor(hpMult * 100 + 0.5), math.floor(dmg * 100 + 0.5)))
 	end,
@@ -738,12 +768,12 @@ MODES.team = {
 		local index = 0
 		for _, member in ipairs(members) do
 			index = index + 1
-			spawnFighter(run, { voc = vocKey(member), hp = dpsOf(member) * ROOMS.team.seconds * s, dmg = 0.6 + 0.4 * s, prefer = member:getId() }, index)
+			spawnFighter(run, { voc = vocKey(member), base = mirrorHit(member), level = member:getLevel(), hp = member:getMaxHealth(), dmg = 0.6 + 0.4 * s, prefer = member:getId() }, index)
 		end
 		if #members == 1 then
 			-- sam: druzyna 2 slabszych przeciwnikow
 			index = index + 1
-			spawnFighter(run, { voc = VOC_ORDER[math.random(#VOC_ORDER)], hp = dpsOf(leader) * ROOMS.team.seconds * s * 0.6, dmg = (0.6 + 0.4 * s) * 0.6 }, index)
+			spawnFighter(run, { voc = VOC_ORDER[math.random(#VOC_ORDER)], base = mirrorHit(leader), level = leader:getLevel(), hp = leader:getMaxHealth() * 0.6, dmg = (0.6 + 0.4 * s) * 0.6 }, index)
 		end
 		tell(run, string.format("Druzyna na druzyne: %d na %d (sila %d%%, seria wygranych: %d).", #members, index, math.floor(s * 100 + 0.5), streak))
 	end,
@@ -793,7 +823,7 @@ MODES.tour = {
 		local round = TOUR_ROUNDS[run.round]
 		local opponent = run.bracket[run.round]
 		local s = round.strength
-		spawnFighter(run, { voc = opponent.voc, fullName = opponent.name, hp = dpsOf(player) * ROOMS.tour.seconds * s, dmg = 0.6 + 0.4 * s, prefer = player:getId(), skull = round.skull }, 1)
+		spawnFighter(run, { voc = opponent.voc, fullName = opponent.name, base = mirrorHit(player), level = player:getLevel(), hp = player:getMaxHealth(), dmg = 0.6 + 0.4 * s, prefer = player:getId(), skull = round.skull }, 1)
 		tell(run, string.format("TURNIEJ - %s: %s vs %s.", round.label, player:getName(), opponent.name))
 	end,
 	win = function(run)
@@ -935,6 +965,10 @@ function fighterHealth.onHealthChange(creature, attacker, primaryDamage, primary
 	end
 	local run = runs[data.mode]
 	local now = run and run.clock or 0
+	if attacker and attacker:isPlayer() then
+		primaryDamage = math.floor(primaryDamage * PVP)
+		secondaryDamage = math.floor(secondaryDamage * PVP)
+	end
 	if data.utamoUntil > now then
 		primaryDamage = math.floor(primaryDamage * 0.65)
 		secondaryDamage = math.floor(secondaryDamage * 0.65)
