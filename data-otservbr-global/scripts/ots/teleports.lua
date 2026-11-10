@@ -5584,6 +5584,11 @@ openMain = function(player)
 			OtsPartyHuntMenu(target)
 		end
 	end)
+	window:addChoice("Arena PvP (walki z NPC jak z graczami)", function(target)
+		if OtsArenaPvpMenu then
+			OtsArenaPvpMenu(target)
+		end
+	end)
 	window:addChoice("Hardcore Questy (5 trudnych wyzwan)", function(target)
 		if OtsHardcoreMenu then
 			OtsHardcoreMenu(target)
