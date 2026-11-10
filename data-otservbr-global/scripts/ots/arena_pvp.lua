@@ -122,16 +122,18 @@ local NAMES = {
 	{ "Gosia", true }, { "Ola", true }, { "Marta", true }, { "Kasia", true }, { "Ania", true }, { "Ewa", true },
 	{ "Magda", true }, { "Halina", true }, { "Zuzia", true }, { "Natalia", true },
 }
-local PREFIXES = { "", "", "", "Sir ", "Dark ", "Mroczny ", "Lord ", "Xx", "Wielki ", "Cichy " }
+local PREFIXES = { "", "", "", "Sir ", "Dark ", "Mroczny ", "Lord ", "Wielki " }
 
 -- ---------------------------------------------------------------------------------------------
--- typ potwora (jeden dla wszystkich; imie, stroj i zycie ustawiane przy tworzeniu)
-do
-	local mType = Game.createMonsterType(FIGHTER_TYPE)
+-- typy potworow: osobny typ na kazde imie (silnik szuka typu potwora po jego imieniu - np. przy
+-- krytykach i charmach - wiec zmiana imienia w trakcie gry psula obrazenia i spamowala bledami)
+local function registerFighter(name, lookType)
+	local mType = Game.createMonsterType(name)
 	local m = {}
-	m.description = "an arena fighter"
+	m.name = name
+	m.description = name
 	m.experience = 0
-	m.outfit = { lookType = 131, lookHead = 0, lookBody = 0, lookLegs = 0, lookFeet = 0, lookAddons = 3, lookMount = 0 }
+	m.outfit = { lookType = lookType, lookHead = 0, lookBody = 0, lookLegs = 0, lookFeet = 0, lookAddons = 3, lookMount = 0 }
 	m.health = 1000
 	m.maxHealth = 1000
 	m.race = "blood"
@@ -161,6 +163,25 @@ do
 		{ type = "invisible", condition = true }, { type = "drunk", condition = true }, { type = "outfit", condition = true },
 	}
 	mType:register(m)
+end
+
+local fighterNames = {} -- pelne imie -> true
+local function fighterName(base, voc)
+	return string.format("%s [%s]", base, VOC[voc].short)
+end
+
+for _, voc in ipairs(VOC_ORDER) do
+	for _, entry in ipairs(NAMES) do
+		for _, prefix in ipairs(PREFIXES) do
+			local name = fighterName(prefix .. entry[1], voc)
+			if not fighterNames[name] then
+				fighterNames[name] = true
+				registerFighter(name, VOC[voc].looks[entry[2] and 2 or 1])
+			end
+		end
+	end
+	registerFighter(fighterName("Mistrz Areny", voc), VOC[voc].looks[1])
+	fighterNames[fighterName("Mistrz Areny", voc)] = true
 end
 
 OtsNoElite = OtsNoElite or {}
@@ -325,11 +346,7 @@ end
 local function randomName(voc)
 	local entry = NAMES[math.random(#NAMES)]
 	local prefix = PREFIXES[math.random(#PREFIXES)]
-	local name = prefix .. entry[1]
-	if prefix == "Xx" then
-		name = name .. "xX"
-	end
-	return string.format("%s [%s]", name, VOC[voc].short), entry[2] == true
+	return fighterName(prefix .. entry[1], voc), entry[2] == true
 end
 
 local function stagingPos(mode)
@@ -359,19 +376,17 @@ end
 -- spec: voc, hp, dmg (mnoznik obrazen), prefer (id gracza), title (zamiast losowego imienia), skull
 local function spawnFighter(run, spec, index)
 	local voc = VOC[spec.voc]
-	local monster = Game.createMonster(FIGHTER_TYPE, stagingPos(run.mode), true, true)
-	if not monster then
-		return nil
-	end
-	local name, female = randomName(spec.voc)
+	local name = randomName(spec.voc)
 	if spec.fullName then
 		name = spec.fullName
 	elseif spec.title then
-		name = string.format("%s [%s]", spec.title, voc.short)
+		name = fighterName(spec.title, spec.voc)
 	end
-	monster:setName(name, name)
-	local look = voc.looks[female and 2 or 1]
-	monster:setOutfit({ lookType = look, lookHead = math.random(0, 132), lookBody = math.random(0, 132), lookLegs = math.random(0, 132), lookFeet = math.random(0, 132), lookAddons = 3 })
+	local monster = Game.createMonster(name, stagingPos(run.mode), true, true)
+	if not monster then
+		return nil
+	end
+	monster:setOutfit({ lookType = monster:getOutfit().lookType, lookHead = math.random(0, 132), lookBody = math.random(0, 132), lookLegs = math.random(0, 132), lookFeet = math.random(0, 132), lookAddons = 3 })
 	local hp = math.max(100, math.floor(spec.hp))
 	monster:setMaxHealth(hp)
 	monster:setHealth(hp)
@@ -384,7 +399,7 @@ local function spawnFighter(run, spec, index)
 	OtsNoElite[id] = true
 	local data = {
 		id = id, voc = spec.voc, mode = run.mode, token = run.token, dmg = spec.dmg or 1, prefer = spec.prefer,
-		base = spec.base or 100, level = spec.level or 0, cds = {}, nextSpell = 0, nextAttack = 0, nextHeal = 0, healLeft = hp * 1.5, utamoUntil = 0, utamoReady = 0,
+		base = spec.base or 100, level = spec.level or 0, cds = {}, nextSpell = 0, nextAttack = 0, nextHeal = 0, healLeft = hp * 3, utamoUntil = 0, utamoReady = 0,
 		fleeUntil = 0, fleeReady = 0, name = name,
 	}
 	fighters[id] = data
