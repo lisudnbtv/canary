@@ -54,6 +54,7 @@ local VOC = {
 			{ words = "exori gran", self = true, area = 1, type = PHYS, min = 10, max = 15, cd = 8, effect = CONST_ME_HITAREA },
 			{ words = "exori", self = true, area = 1, type = PHYS, min = 8, max = 12, cd = 4, effect = CONST_ME_HITAREA },
 			{ words = "exori ico", type = PHYS, min = 7, max = 10, cd = 6, effect = CONST_ME_DRAWBLOOD },
+			{ words = "exori min", wave = 2, type = PHYS, min = 8, max = 12, cd = 6, effect = CONST_ME_HITAREA },
 			-- glowny czar (jak ultima postaci, co 1 s); przed 4500 poziomem slabszy odpowiednik
 			{ words = "exori ultima", lowWords = "exori gran", self = true, area = 4, type = PHYS, min = 10, max = 14, cd = 1, effect = CONST_ME_EXPLOSIONAREA },
 		},
@@ -67,6 +68,7 @@ local VOC = {
 			{ words = "exevo mas san", self = true, area = 3, type = HOLY, min = 9, max = 13, cd = 8, effect = CONST_ME_HOLYAREA },
 			{ words = "exori con", type = PHYS, min = 8, max = 12, cd = 6, shoot = CONST_ANI_ROYALSPEAR, effect = CONST_ME_DRAWBLOOD },
 			{ words = "exori san", type = HOLY, min = 7, max = 11, cd = 2, shoot = CONST_ANI_SMALLHOLY, effect = CONST_ME_HOLYDAMAGE },
+			{ rune = "magic wall rune", support = true, mwall = true, cd = 15 },
 			-- glowny czar (jak ultima postaci, co 1 s); przed 4500 poziomem slabszy odpowiednik
 			{ words = "exevo ultima san", lowWords = "exevo mas san", self = true, area = 4, type = HOLY, min = 10, max = 14, cd = 1, effect = CONST_ME_HOLYAREA },
 		},
@@ -80,6 +82,9 @@ local VOC = {
 			{ words = "exevo gran mas flam", self = true, area = 5, type = FIRE, min = 12, max = 18, cd = 20, effect = CONST_ME_FIREAREA },
 			{ rune = "sudden death rune", type = DEATH, min = 9, max = 13, cd = 2, shoot = CONST_ANI_SUDDENDEATH, effect = CONST_ME_MORTAREA },
 			{ words = "exori vis", type = ENERGY, min = 7, max = 11, cd = 2, effect = CONST_ME_ENERGYAREA },
+			{ words = "exevo vis hur", wave = 5, type = ENERGY, min = 10, max = 14, cd = 6, effect = CONST_ME_ENERGYAREA },
+			{ rune = "energy bomb rune", support = true, field = 2122, type = ENERGY, cd = 10, shoot = CONST_ANI_ENERGY, effect = CONST_ME_ENERGYHIT },
+			{ rune = "magic wall rune", support = true, mwall = true, cd = 15 },
 			-- glowny czar (jak ultima postaci, co 1 s); przed 4500 poziomem slabszy odpowiednik
 			{ words = "exevo ultima flam", lowWords = "exevo gran mas flam", self = true, area = 4, type = FIRE, min = 10, max = 14, cd = 1, effect = CONST_ME_FIREAREA },
 		},
@@ -91,7 +96,10 @@ local VOC = {
 		attack = { type = ICE, min = 2, max = 3, shoot = CONST_ANI_SMALLICE, effect = CONST_ME_ICEATTACK },
 		spells = {
 			{ words = "exevo gran mas frigo", self = true, area = 5, type = ICE, min = 12, max = 18, cd = 20, effect = CONST_ME_ICETORNADO },
-			{ words = "adana ani", paralyze = 3000, cd = 25, effect = CONST_ME_STUN },
+			{ words = "adana ani", support = true, paralyze = 3000, cd = 12, effect = CONST_ME_STUN },
+			{ words = "exevo frigo hur", wave = 5, type = ICE, min = 10, max = 14, cd = 6, effect = CONST_ME_ICEATTACK },
+			{ rune = "fire bomb rune", support = true, field = 2120, type = FIRE, cd = 10, shoot = CONST_ANI_FIRE, effect = CONST_ME_HITBYFIRE },
+			{ rune = "magic wall rune", support = true, mwall = true, cd = 15 },
 			{ rune = "avalanche rune", area = 1, type = ICE, min = 8, max = 12, cd = 2, shoot = CONST_ANI_ICE, effect = CONST_ME_ICEAREA },
 			{ words = "exori tera", type = EARTH, min = 7, max = 11, cd = 2, effect = CONST_ME_SMALLPLANTS },
 			-- glowny czar (jak ultima postaci, co 1 s); przed 4500 poziomem slabszy odpowiednik
@@ -99,7 +107,7 @@ local VOC = {
 		},
 		heal = { words = "exura vita", pct = 25, below = 80 },
 		potion = { pct = 6, below = 92 },
-		allyHeal = { words = "exura sio", pct = 20, below = 50 },
+		allyHeal = { words = "exura sio", pct = 20, below = 70 },
 	},
 	monk = {
 		label = "Monk", short = "EM", looks = { 1824, 1825 }, range = 1,
@@ -418,7 +426,9 @@ local function spawnFighter(run, spec, index)
 	-- szybkosc jak postac, ktora ma zaatakowac
 	local ref = spec.prefer and Player(spec.prefer)
 	if ref then
-		monster:changeSpeed(ref:getSpeed() - monster:getSpeed())
+		-- utani gran hur: szybkosc jak postac z haste (albo jej aktualna, jesli wieksza)
+		local speed = math.max(ref:getSpeed(), math.floor(ref:getBaseSpeed() * 1.7))
+		monster:changeSpeed(speed - monster:getSpeed())
 	end
 	return monster
 end
@@ -429,6 +439,11 @@ local function attackable(player)
 end
 
 local function pickTarget(run, monster, data)
+	-- druzyna: wszyscy bija jeden cel (najslabszego), jak gracze na filmikach
+	local focus = run.focus and run.alive[run.focus] and Player(run.focus)
+	if focus and attackable(focus) then
+		return focus
+	end
 	local pref = data.prefer and run.alive[data.prefer] and Player(data.prefer)
 	if pref and attackable(pref) then
 		return pref
@@ -505,11 +520,111 @@ local function hit(monster, target, data, spell)
 	pendingHit[tid] = nil
 end
 
+local FIELD_SECONDS = 8 -- pola z bomb (ogien, energia) znikaja po tylu sekundach
+local WALL_SECONDS = 12 -- magic wall
+local MAGIC_WALL = 2128
+
+local function walkable(pos)
+	local tile = Tile(pos)
+	return tile and tile:getGround() and not tile:hasFlag(TILESTATE_PROTECTIONZONE) and tile:getCreatureCount() == 0
+		and not tile:hasProperty(CONST_PROP_BLOCKSOLID) and not tile:getItemById(MAGIC_WALL)
+end
+
+local function removeItemAt(pos, itemId)
+	local tile = Tile(pos)
+	local item = tile and tile:getItemById(itemId)
+	if item then
+		item:remove()
+	end
+end
+
+local function clearFields(run)
+	for _, f in ipairs(run.fields or {}) do
+		removeItemAt(f.pos, f.item)
+	end
+	run.fields = {}
+end
+
+-- kierunek fali: glowna os w strone celu
+local function waveTiles(from, to, length)
+	local dx, dy = to.x - from.x, to.y - from.y
+	local ux, uy = 0, 0
+	if math.abs(dx) >= math.abs(dy) then
+		ux = dx >= 0 and 1 or -1
+	else
+		uy = dy >= 0 and 1 or -1
+	end
+	local tiles = {}
+	for step = 1, length do
+		local width = step == 1 and 0 or (step <= 3 and 1 or 2)
+		for k = -width, width do
+			tiles[#tiles + 1] = Position(from.x + ux * step + uy * k, from.y + uy * step + ux * k, from.z)
+		end
+	end
+	return tiles
+end
+
 local function castSpell(run, monster, target, data, spell)
 	local mpos = monster:getPosition()
+	local tpos = target:getPosition()
+	-- magic wall: miedzy celem a NPC (blokuje dojscie i strzaly), gdy cel jest blisko albo NPC jest ranny
+	local wallPos
+	if spell.mwall then
+		local hpPct = monster:getHealth() * 100 / math.max(1, monster:getMaxHealth())
+		if dist(mpos, tpos) > 3 and hpPct > 60 then
+			return false
+		end
+		local sx = mpos.x > tpos.x and 1 or (mpos.x < tpos.x and -1 or 0)
+		local sy = mpos.y > tpos.y and 1 or (mpos.y < tpos.y and -1 or 0)
+		wallPos = Position(tpos.x + sx, tpos.y + sy, tpos.z)
+		if (wallPos.x == mpos.x and wallPos.y == mpos.y) or not walkable(wallPos) then
+			return false
+		end
+	end
 	local words = (spell.lowWords and (data.level or 0) < 4500) and spell.lowWords or spell.words
 	if words then
 		monster:say(words, TALKTYPE_MONSTER_SAY)
+	end
+	if wallPos then
+		mpos:sendDistanceEffect(wallPos, CONST_ANI_ENERGY)
+		local item = Game.createItem(MAGIC_WALL, 1, wallPos)
+		if item then
+			run.fields = run.fields or {}
+			run.fields[#run.fields + 1] = { pos = wallPos, item = MAGIC_WALL, expire = (run.clock or 0) + WALL_SECONDS * 1000, wall = true }
+		end
+		return true
+	end
+	if spell.field then
+		-- bomba: pola 3x3 pod celem; obrazenia co sekunde, gdy ktos na nich stoi (liczone w petli)
+		mpos:sendDistanceEffect(tpos, spell.shoot or CONST_ANI_FIRE)
+		run.fields = run.fields or {}
+		for dx = -1, 1 do
+			for dy = -1, 1 do
+				local pos = Position(tpos.x + dx, tpos.y + dy, tpos.z)
+				local tile = Tile(pos)
+				if tile and tile:getGround() and not tile:hasFlag(TILESTATE_PROTECTIONZONE) and not tile:hasProperty(CONST_PROP_BLOCKSOLID) and not tile:getItemById(spell.field) then
+					local item = Game.createItem(spell.field, 1, pos)
+					if item then
+						run.fields[#run.fields + 1] = { pos = pos, item = spell.field, expire = (run.clock or 0) + FIELD_SECONDS * 1000, owner = data.id, type = spell.type, effect = spell.effect, next = {} }
+					end
+				end
+			end
+		end
+		return true
+	end
+	if spell.wave then
+		local plain = { type = spell.type, min = spell.min, max = spell.max, effect = CONST_ME_NONE }
+		local hitIds = {}
+		for _, pos in ipairs(waveTiles(mpos, tpos, spell.wave)) do
+			pos:sendMagicEffect(spell.effect)
+			local tile = Tile(pos)
+			local creature = tile and tile:getTopCreature()
+			if creature and creature:isPlayer() and run.alive[creature:getId()] and attackable(creature) and not hitIds[creature:getId()] then
+				hitIds[creature:getId()] = true
+				hit(monster, creature, data, plain)
+			end
+		end
+		return true
 	end
 	if spell.paralyze then
 		local condition = Condition(CONDITION_PARALYZE)
@@ -517,7 +632,7 @@ local function castSpell(run, monster, target, data, spell)
 		condition:setFormula(-0.5, 0, -0.5, 0)
 		target:addCondition(condition)
 		target:getPosition():sendMagicEffect(spell.effect)
-		return
+		return true
 	end
 	if spell.area then
 		local center = spell.self and mpos or target:getPosition()
@@ -539,9 +654,10 @@ local function castSpell(run, monster, target, data, spell)
 				hit(monster, player, data, plain)
 			end
 		end
-		return
+		return true
 	end
 	hit(monster, target, data, spell)
+	return true
 end
 
 local function heal(monster, data, pct, words, effect)
@@ -612,8 +728,8 @@ local function think(run, monster, data, now)
 	end
 
 	-- ucieczka przy niskim zyciu
-	if hpPct < 20 and now >= data.fleeReady then
-		data.fleeReady = now + 15000
+	if hpPct < 35 and now >= data.fleeReady then
+		data.fleeReady = now + 12000
 		data.fleeUntil = now + 3000
 		monster:changeTargetDistance(8, 3000)
 		monster:say("utani hur", TALKTYPE_MONSTER_SAY)
@@ -645,12 +761,24 @@ local function think(run, monster, data, now)
 	-- czar albo runa (wspolne opoznienie jak u graczy)
 	if now >= data.nextSpell then
 		for i, spell in ipairs(voc.spells) do
-			local ready = now >= (data.cds[i] or 0)
-			local inRange = spell.self and d <= spell.area or (not spell.self and d <= (spell.area and 6 or reach))
-			if ready and inRange then
-				castSpell(run, monster, target, data, spell)
+			if not spell.support then
+				local ready = now >= (data.cds[i] or 0)
+				local range = spell.wave and spell.wave or (spell.area and 6 or reach)
+				local inRange = spell.self and d <= spell.area or (not spell.self and d <= range)
+				if ready and inRange and castSpell(run, monster, target, data, spell) then
+					data.cds[i] = now + spell.cd * 1000
+					data.nextSpell = now + SPELL_EXHAUST
+					break
+				end
+			end
+		end
+	end
+	-- runy wsparcia (bomby, magic wall, paraliz) - osobne opoznienie 2 s
+	if now >= (data.nextSupport or 0) then
+		for i, spell in ipairs(voc.spells) do
+			if spell.support and now >= (data.cds[i] or 0) and d <= 6 and castSpell(run, monster, target, data, spell) then
 				data.cds[i] = now + spell.cd * 1000
-				data.nextSpell = now + SPELL_EXHAUST
+				data.nextSupport = now + 2000
 				break
 			end
 		end
@@ -736,6 +864,13 @@ local function countdown(run, seconds, spawn)
 			if creature then
 				creature:say("Do boju!", TALKTYPE_MONSTER_SAY)
 				break
+			end
+		end
+		for id in pairs(r.fighters) do
+			local creature = Creature(id)
+			if creature then
+				creature:say("utani gran hur", TALKTYPE_MONSTER_SAY)
+				creature:getPosition():sendMagicEffect(CONST_ME_MAGIC_GREEN)
 			end
 		end
 		addEvent(loop, TICK, r.mode, r.token)
@@ -950,6 +1085,8 @@ MODES.tour = {
 -- ---------- petla ----------
 local function logFight(run, result)
 	saveHits(run)
+	clearFields(run)
+	run.focus = nil
 	local st = run.stats or { nominal = 0, got = 0, healed = 0 }
 	local dealt = 0
 	for _, v in pairs(run.dealt) do
@@ -966,6 +1103,43 @@ loop = function(mode, token)
 	end
 	run.clock = (run.clock or 0) + TICK -- zegar w ms (serwer nie ma zegara z milisekundami dla Lua)
 	local now = run.clock
+	-- druzyna: co 4 s wybor wspolnego celu - postac z najnizszym % zycia
+	if mode == "team" and now >= (run.nextFocus or 0) then
+		run.nextFocus = now + 4000
+		local best, bp
+		for pid in pairs(run.alive) do
+			local player = Player(pid)
+			if player and attackable(player) then
+				local pct = player:getHealth() / math.max(1, player:getMaxHealth())
+				if not bp or pct < bp then
+					best, bp = pid, pct
+				end
+			end
+		end
+		run.focus = best
+	end
+	-- pola z bomb i magic walle
+	if run.fields and #run.fields > 0 then
+		local keep = {}
+		for _, f in ipairs(run.fields) do
+			if now >= f.expire then
+				removeItemAt(f.pos, f.item)
+			else
+				keep[#keep + 1] = f
+				local owner = f.owner and Monster(f.owner)
+				local data = owner and fighters[f.owner]
+				if data then
+					local tile = Tile(f.pos)
+					local creature = tile and tile:getTopCreature()
+					if creature and creature:isPlayer() and run.alive[creature:getId()] and now >= (f.next[creature:getId()] or 0) then
+						f.next[creature:getId()] = now + 1000
+						hit(owner, creature, data, { type = f.type, min = 1.5, max = 2.5, effect = f.effect })
+					end
+				end
+			end
+		end
+		run.fields = keep
+	end
 	-- NPC
 	local remaining = 0
 	for id in pairs(run.fighters) do
