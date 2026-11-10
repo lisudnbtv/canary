@@ -13,7 +13,7 @@
 local FIGHTER_TYPE = "Arena Fighter"
 local STAGING_DY = 32 -- poczekalnia NPC (poza zasiegiem wzroku) - tu dostaja imie, zanim wejda do sali
 local FLOOR = 11285 -- podloga z sali Obrona
-local TICK = 500
+local TICK = 200 -- co tyle ms NPC sprawdza sytuacje (szybka reakcja na leczenie, jak dobry gracz)
 -- LUSTRO: NPC ma tyle zycia, co postac, i bije jej wlasna sila (sredni cios najmocniejszego czaru jak w !czary).
 -- Jak w prawdziwym PvP obie strony zadaja sobie polowe obrazen (PVP).
 local PVP = 0.5
@@ -57,8 +57,8 @@ local VOC = {
 			-- glowny czar (jak ultima postaci, co 1 s); przed 4500 poziomem slabszy odpowiednik
 			{ words = "exori ultima", lowWords = "exori gran", self = true, area = 4, type = PHYS, min = 10, max = 14, cd = 1, effect = CONST_ME_EXPLOSIONAREA },
 		},
-		heal = { words = "exura med ico", pct = 15, below = 60 },
-		potion = { pct = 11, below = 80 },
+		heal = { words = "exura med ico", pct = 15, below = 80 },
+		potion = { pct = 11, below = 92 },
 	},
 	paladin = {
 		label = "Paladin", short = "RP", looks = { 129, 137 }, range = 4,
@@ -70,8 +70,8 @@ local VOC = {
 			-- glowny czar (jak ultima postaci, co 1 s); przed 4500 poziomem slabszy odpowiednik
 			{ words = "exevo ultima san", lowWords = "exevo mas san", self = true, area = 4, type = HOLY, min = 10, max = 14, cd = 1, effect = CONST_ME_HOLYAREA },
 		},
-		heal = { words = "exura gran san", pct = 18, below = 60 },
-		potion = { pct = 8, below = 80 },
+		heal = { words = "exura gran san", pct = 18, below = 80 },
+		potion = { pct = 8, below = 92 },
 	},
 	sorcerer = {
 		label = "Sorcerer", short = "MS", looks = { 130, 138 }, range = 4, utamo = true,
@@ -83,8 +83,8 @@ local VOC = {
 			-- glowny czar (jak ultima postaci, co 1 s); przed 4500 poziomem slabszy odpowiednik
 			{ words = "exevo ultima flam", lowWords = "exevo gran mas flam", self = true, area = 4, type = FIRE, min = 10, max = 14, cd = 1, effect = CONST_ME_FIREAREA },
 		},
-		heal = { words = "exura vita", pct = 18, below = 60 },
-		potion = { pct = 6, below = 80 },
+		heal = { words = "exura vita", pct = 18, below = 80 },
+		potion = { pct = 6, below = 92 },
 	},
 	druid = {
 		label = "Druid", short = "ED", looks = { 144, 148 }, range = 4, utamo = true,
@@ -97,8 +97,8 @@ local VOC = {
 			-- glowny czar (jak ultima postaci, co 1 s); przed 4500 poziomem slabszy odpowiednik
 			{ words = "exevo ultima frigo", lowWords = "exevo gran mas frigo", self = true, area = 4, type = ICE, min = 10, max = 14, cd = 1, effect = CONST_ME_ICETORNADO },
 		},
-		heal = { words = "exura vita", pct = 25, below = 60 },
-		potion = { pct = 6, below = 80 },
+		heal = { words = "exura vita", pct = 25, below = 80 },
+		potion = { pct = 6, below = 92 },
 		allyHeal = { words = "exura sio", pct = 20, below = 50 },
 	},
 	monk = {
@@ -110,8 +110,8 @@ local VOC = {
 			-- glowny czar (jak ultima postaci, co 1 s); przed 4500 poziomem slabszy odpowiednik
 			{ words = "exori ultima nia", lowWords = "exori mas nia", self = true, area = 4, type = PHYS, min = 10, max = 14, cd = 1, effect = CONST_ME_GROUNDSHAKER },
 		},
-		heal = { words = "exura nia", pct = 15, below = 60 },
-		potion = { pct = 11, below = 80 },
+		heal = { words = "exura nia", pct = 15, below = 80 },
+		potion = { pct = 11, below = 92 },
 	},
 }
 local VOC_ORDER = { "knight", "paladin", "sorcerer", "druid", "monk" }
@@ -586,7 +586,7 @@ local function think(run, monster, data, now)
 			end
 		end
 		-- mag z utamo pije mana potiony (jego "zycie" to mana), a health potiony dopiero przy niskim zyciu
-		if not healed and voc.utamo and data.maxMana > 0 and data.healLeft > 0 and data.mana < data.maxMana * 0.7 and hpPct >= 50 then
+		if not healed and voc.utamo and data.maxMana > 0 and data.healLeft > 0 and data.mana < data.maxMana * 0.9 and hpPct >= 50 then
 			local amount = math.min(data.healLeft, math.floor(data.maxMana * 0.11), data.maxMana - data.mana)
 			if amount > 0 then
 				data.healLeft = data.healLeft - amount
@@ -604,7 +604,7 @@ local function think(run, monster, data, now)
 	end
 
 	-- utamo vita (MS i ED): wlaczona od poczatku, a gdy mana spadnie do zera - wlaczana znowu po manie z potionow
-	if voc.utamo and not data.shield and data.mana >= data.maxMana * 0.3 and now >= data.utamoReady then
+	if voc.utamo and not data.shield and data.mana >= data.maxMana * 0.15 and now >= data.utamoReady then
 		data.shield = true
 		data.utamoReady = now + 2000
 		monster:say("utamo vita", TALKTYPE_MONSTER_SAY)
