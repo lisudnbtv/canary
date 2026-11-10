@@ -46,80 +46,90 @@ local SHOP = {
 -- Profesje NPC. Obrazenia w % maksymalnego zycia celu (przy sile 1.0).
 -- area: promien wokol NPC (self) albo wokol celu; heal: % wlasnego zycia; budzet leczenia ograniczony.
 local PHYS, HOLY, FIRE, ENERGY, ICE, DEATH, EARTH = COMBAT_PHYSICALDAMAGE, COMBAT_HOLYDAMAGE, COMBAT_FIREDAMAGE, COMBAT_ENERGYDAMAGE, COMBAT_ICEDAMAGE, COMBAT_DEATHDAMAGE, COMBAT_EARTHDAMAGE
+-- Profesje NPC - zawsze najlepsze czary, runy i potiony (jak gracz na PvP).
+-- Liczby obrazen: 12 = jeden sredni cios najmocniejszego czaru postaci-lustra.
+-- support = runy/czary wsparcia (bomby, magic wall, paraliz, buffy) - osobne opoznienie od atakow.
+-- heal: czar leczacy (co 1 s), emergency: najmocniejsze leczenie z dlugim czasem odnowienia,
+-- potion: health potion (co 1 s, % zycia), manaPotion: mana potion magow (% many).
 local VOC = {
 	knight = {
-		label = "Knight", short = "EK", looks = { 131, 139 }, range = 1,
+		label = "Knight", short = "EK", looks = { 131, 139 }, range = 1, push = true,
 		attack = { type = PHYS, min = 2, max = 3, effect = CONST_ME_DRAWBLOOD },
 		spells = {
-			{ words = "exori gran", self = true, area = 1, type = PHYS, min = 10, max = 15, cd = 8, effect = CONST_ME_HITAREA },
-			{ words = "exori", self = true, area = 1, type = PHYS, min = 8, max = 12, cd = 4, effect = CONST_ME_HITAREA },
-			{ words = "exori ico", type = PHYS, min = 7, max = 10, cd = 6, effect = CONST_ME_DRAWBLOOD },
-			{ words = "exori min", wave = 2, type = PHYS, min = 8, max = 12, cd = 6, effect = CONST_ME_HITAREA },
-			-- glowny czar (jak ultima postaci, co 1 s); przed 4500 poziomem slabszy odpowiednik
-			{ words = "exori ultima", lowWords = "exori gran", self = true, area = 4, type = PHYS, min = 10, max = 14, cd = 1, effect = CONST_ME_EXPLOSIONAREA },
+			{ words = "utito tempo", support = true, buff = 10000, cd = 30, effect = CONST_ME_MAGIC_RED },
+			{ words = "exori gran", self = true, area = 1, type = PHYS, min = 11, max = 15, cd = 6, effect = CONST_ME_HITAREA },
+			{ words = "exori hur", type = PHYS, min = 9, max = 12, cd = 6, shoot = CONST_ANI_WHIRLWINDSWORD, effect = CONST_ME_DRAWBLOOD },
+			{ words = "exori min", wave = 2, type = PHYS, min = 9, max = 12, cd = 6, effect = CONST_ME_HITAREA },
+			{ words = "exori ico", type = PHYS, min = 8, max = 11, cd = 4, effect = CONST_ME_DRAWBLOOD },
+			{ words = "exori ultima", lowWords = "exori mas", self = true, area = 4, type = PHYS, min = 10, max = 14, cd = 1, effect = CONST_ME_EXPLOSIONAREA },
 		},
-		heal = { words = "exura med ico", pct = 15, below = 80 },
-		potion = { pct = 11, below = 92 },
+		heal = { words = "exura med ico", pct = 15, below = 85 },
+		emergency = { words = "exura gran ico", pct = 40, below = 40, cd = 30 },
+		potion = { name = "supreme health potion", pct = 14, below = 92 },
 	},
 	paladin = {
-		label = "Paladin", short = "RP", looks = { 129, 137 }, range = 4,
-		attack = { type = PHYS, min = 2, max = 3, shoot = CONST_ANI_ROYALSPEAR, effect = CONST_ME_DRAWBLOOD },
+		label = "Paladin", short = "RP", looks = { 129, 137 }, range = 4, push = true,
+		attack = { type = PHYS, min = 2, max = 3, shoot = CONST_ANI_ETHEREALSPEAR, effect = CONST_ME_DRAWBLOOD },
 		spells = {
-			{ words = "exevo mas san", self = true, area = 3, type = HOLY, min = 9, max = 13, cd = 8, effect = CONST_ME_HOLYAREA },
-			{ words = "exori con", type = PHYS, min = 8, max = 12, cd = 6, shoot = CONST_ANI_ROYALSPEAR, effect = CONST_ME_DRAWBLOOD },
-			{ words = "exori san", type = HOLY, min = 7, max = 11, cd = 2, shoot = CONST_ANI_SMALLHOLY, effect = CONST_ME_HOLYDAMAGE },
+			{ words = "utito tempo san", support = true, buff = 10000, cd = 30, effect = CONST_ME_MAGIC_RED },
 			{ rune = "magic wall rune", support = true, mwall = true, cd = 15 },
-			-- glowny czar (jak ultima postaci, co 1 s); przed 4500 poziomem slabszy odpowiednik
+			{ words = "exevo mas san", self = true, area = 3, type = HOLY, min = 10, max = 14, cd = 6, effect = CONST_ME_HOLYAREA },
+			{ words = "exori gran con", type = PHYS, min = 10, max = 14, cd = 8, shoot = CONST_ANI_ETHEREALSPEAR, effect = CONST_ME_DRAWBLOOD },
+			{ words = "exori san", type = HOLY, min = 8, max = 11, cd = 2, shoot = CONST_ANI_SMALLHOLY, effect = CONST_ME_HOLYDAMAGE },
 			{ words = "exevo ultima san", lowWords = "exevo mas san", self = true, area = 4, type = HOLY, min = 10, max = 14, cd = 1, effect = CONST_ME_HOLYAREA },
 		},
-		heal = { words = "exura gran san", pct = 18, below = 80 },
-		potion = { pct = 8, below = 92 },
+		heal = { words = "exura gran san", pct = 20, below = 85 },
+		potion = { name = "ultimate spirit potion", pct = 11, below = 92 },
 	},
 	sorcerer = {
-		label = "Sorcerer", short = "MS", looks = { 130, 138 }, range = 4, utamo = true,
+		label = "Sorcerer", short = "MS", looks = { 130, 138 }, range = 4, utamo = true, push = true,
 		attack = { type = ENERGY, min = 2, max = 3, shoot = CONST_ANI_ENERGY, effect = CONST_ME_ENERGYHIT },
 		spells = {
-			{ words = "exevo gran mas flam", self = true, area = 5, type = FIRE, min = 12, max = 18, cd = 20, effect = CONST_ME_FIREAREA },
-			{ rune = "sudden death rune", type = DEATH, min = 9, max = 13, cd = 2, shoot = CONST_ANI_SUDDENDEATH, effect = CONST_ME_MORTAREA },
-			{ words = "exori vis", type = ENERGY, min = 7, max = 11, cd = 2, effect = CONST_ME_ENERGYAREA },
-			{ words = "exevo vis hur", wave = 5, type = ENERGY, min = 10, max = 14, cd = 6, effect = CONST_ME_ENERGYAREA },
-			{ rune = "energy bomb rune", support = true, field = 2122, type = ENERGY, cd = 10, shoot = CONST_ANI_ENERGY, effect = CONST_ME_ENERGYHIT },
 			{ rune = "magic wall rune", support = true, mwall = true, cd = 15 },
-			-- glowny czar (jak ultima postaci, co 1 s); przed 4500 poziomem slabszy odpowiednik
+			{ rune = "energy bomb rune", support = true, field = 2122, type = ENERGY, cd = 10, shoot = CONST_ANI_ENERGY, effect = CONST_ME_ENERGYHIT },
+			{ words = "exevo gran mas vis", self = true, area = 5, type = ENERGY, min = 13, max = 18, cd = 20, effect = CONST_ME_BIGCLOUDS },
+			{ words = "exori max vis", type = ENERGY, min = 12, max = 16, cd = 8, effect = CONST_ME_ENERGYAREA },
+			{ words = "utori mort", dot = 5, type = DEATH, cd = 12, effect = CONST_ME_SMALLCLOUDS },
+			{ words = "exevo vis hur", wave = 5, type = ENERGY, min = 10, max = 14, cd = 6, effect = CONST_ME_ENERGYAREA },
+			{ rune = "sudden death rune", type = DEATH, min = 9, max = 13, cd = 2, shoot = CONST_ANI_SUDDENDEATH, effect = CONST_ME_MORTAREA },
 			{ words = "exevo ultima flam", lowWords = "exevo gran mas flam", self = true, area = 4, type = FIRE, min = 10, max = 14, cd = 1, effect = CONST_ME_FIREAREA },
 		},
-		heal = { words = "exura vita", pct = 18, below = 80 },
-		potion = { pct = 6, below = 92 },
+		heal = { words = "exura max vita", pct = 25, below = 70 },
+		potion = { name = "ultimate health potion", pct = 8, below = 50 },
+		manaPotion = { name = "ultimate mana potion", pct = 13, below = 92 },
 	},
 	druid = {
-		label = "Druid", short = "ED", looks = { 144, 148 }, range = 4, utamo = true,
+		label = "Druid", short = "ED", looks = { 144, 148 }, range = 4, utamo = true, push = true,
 		attack = { type = ICE, min = 2, max = 3, shoot = CONST_ANI_SMALLICE, effect = CONST_ME_ICEATTACK },
 		spells = {
-			{ words = "exevo gran mas frigo", self = true, area = 5, type = ICE, min = 12, max = 18, cd = 20, effect = CONST_ME_ICETORNADO },
-			{ words = "adana ani", support = true, paralyze = 3000, cd = 12, effect = CONST_ME_STUN },
-			{ words = "exevo frigo hur", wave = 5, type = ICE, min = 10, max = 14, cd = 6, effect = CONST_ME_ICEATTACK },
-			{ rune = "fire bomb rune", support = true, field = 2120, type = FIRE, cd = 10, shoot = CONST_ANI_FIRE, effect = CONST_ME_HITBYFIRE },
+			{ words = "adana ani", support = true, paralyze = 4000, cd = 10, effect = CONST_ME_STUN },
 			{ rune = "magic wall rune", support = true, mwall = true, cd = 15 },
-			{ rune = "avalanche rune", area = 1, type = ICE, min = 8, max = 12, cd = 2, shoot = CONST_ANI_ICE, effect = CONST_ME_ICEAREA },
-			{ words = "exori tera", type = EARTH, min = 7, max = 11, cd = 2, effect = CONST_ME_SMALLPLANTS },
-			-- glowny czar (jak ultima postaci, co 1 s); przed 4500 poziomem slabszy odpowiednik
+			{ rune = "fire bomb rune", support = true, field = 2120, type = FIRE, cd = 10, shoot = CONST_ANI_FIRE, effect = CONST_ME_HITBYFIRE },
+			{ words = "exevo gran mas frigo", self = true, area = 5, type = ICE, min = 13, max = 18, cd = 20, effect = CONST_ME_ICETORNADO },
+			{ words = "exori max frigo", type = ICE, min = 12, max = 16, cd = 8, effect = CONST_ME_ICEATTACK },
+			{ words = "utori pox", dot = 5, type = EARTH, cd = 12, effect = CONST_ME_SMALLPLANTS },
+			{ words = "exevo frigo hur", wave = 5, type = ICE, min = 10, max = 14, cd = 6, effect = CONST_ME_ICEATTACK },
+			{ rune = "avalanche rune", area = 1, type = ICE, min = 9, max = 13, cd = 2, shoot = CONST_ANI_ICE, effect = CONST_ME_ICEAREA },
 			{ words = "exevo ultima frigo", lowWords = "exevo gran mas frigo", self = true, area = 4, type = ICE, min = 10, max = 14, cd = 1, effect = CONST_ME_ICETORNADO },
 		},
-		heal = { words = "exura vita", pct = 25, below = 80 },
-		potion = { pct = 6, below = 92 },
-		allyHeal = { words = "exura sio", pct = 20, below = 70 },
+		heal = { words = "exura max vita", pct = 30, below = 70 },
+		potion = { name = "ultimate health potion", pct = 8, below = 50 },
+		manaPotion = { name = "ultimate mana potion", pct = 13, below = 92 },
+		allyHeal = { words = "exura gran sio", pct = 30, below = 70 },
 	},
 	monk = {
-		label = "Monk", short = "EM", looks = { 1824, 1825 }, range = 1,
+		label = "Monk", short = "EM", looks = { 1824, 1825 }, range = 1, push = true,
 		attack = { type = PHYS, min = 2, max = 3, effect = CONST_ME_DRAWBLOOD },
 		spells = {
-			{ words = "exori mas nia", self = true, area = 1, type = PHYS, min = 10, max = 14, cd = 8, effect = CONST_ME_GROUNDSHAKER },
+			{ words = "utito tempo", support = true, buff = 10000, cd = 30, effect = CONST_ME_MAGIC_RED },
+			{ words = "exori mas nia", self = true, area = 1, type = PHYS, min = 11, max = 15, cd = 6, effect = CONST_ME_GROUNDSHAKER },
+			{ words = "exori gran nia", wave = 3, type = PHYS, min = 9, max = 13, cd = 6, effect = CONST_ME_HITAREA },
 			{ words = "exori nia", type = PHYS, min = 8, max = 12, cd = 2, effect = CONST_ME_HITAREA },
-			-- glowny czar (jak ultima postaci, co 1 s); przed 4500 poziomem slabszy odpowiednik
 			{ words = "exori ultima nia", lowWords = "exori mas nia", self = true, area = 4, type = PHYS, min = 10, max = 14, cd = 1, effect = CONST_ME_GROUNDSHAKER },
 		},
-		heal = { words = "exura nia", pct = 15, below = 80 },
-		potion = { pct = 11, below = 92 },
+		heal = { words = "exura gran tio", pct = 18, below = 85 },
+		emergency = { words = "exura med tio", pct = 35, below = 40, cd = 30 },
+		potion = { name = "supreme health potion", pct = 14, below = 92 },
 	},
 }
 local VOC_ORDER = { "knight", "paladin", "sorcerer", "druid", "monk" }
@@ -501,7 +511,9 @@ local function hit(monster, target, data, spell)
 	local max = target:getMaxHealth()
 	local base = math.max(data.base, target:isPlayer() and realHit(target) or 0)
 	-- wartosci w tabelach profesji: 12 = jeden sredni cios najmocniejszego czaru postaci-lustra
-	local unit = base * PVP * data.dmg / 12
+	local run0 = runs[data.mode]
+	local buffed = data.buffUntil and run0 and (run0.clock or 0) < data.buffUntil
+	local unit = base * PVP * data.dmg / 12 * (buffed and 1.2 or 1)
 	local cap = max * MAX_HIT / 100
 	local low = math.floor(math.min(cap, unit * spell.min))
 	local high = math.floor(math.min(cap, unit * spell.max))
@@ -584,6 +596,18 @@ local function castSpell(run, monster, target, data, spell)
 	local words = (spell.lowWords and (data.level or 0) < 4500) and spell.lowWords or spell.words
 	if words then
 		monster:say(words, TALKTYPE_MONSTER_SAY)
+	end
+	if spell.buff then
+		data.buffUntil = (run.clock or 0) + spell.buff
+		mpos:sendMagicEffect(spell.effect)
+		return true
+	end
+	if spell.dot then
+		-- utori: obrazenia co sekunde przez kilka sekund
+		run.dots = run.dots or {}
+		run.dots[#run.dots + 1] = { target = target:getId(), owner = data.id, type = spell.type, left = spell.dot, next = (run.clock or 0) + 1000, effect = spell.effect }
+		tpos:sendMagicEffect(spell.effect)
+		return true
 	end
 	if wallPos then
 		mpos:sendDistanceEffect(wallPos, CONST_ANI_ENERGY)
@@ -702,8 +726,9 @@ local function think(run, monster, data, now)
 			end
 		end
 		-- mag z utamo pije mana potiony (jego "zycie" to mana), a health potiony dopiero przy niskim zyciu
-		if not healed and voc.utamo and data.maxMana > 0 and data.healLeft > 0 and data.mana < data.maxMana * 0.9 and hpPct >= 50 then
-			local amount = math.min(data.healLeft, math.floor(data.maxMana * 0.11), data.maxMana - data.mana)
+		local mp = voc.manaPotion
+		if not healed and mp and data.maxMana > 0 and data.healLeft > 0 and data.mana < data.maxMana * mp.below / 100 and hpPct >= 50 then
+			local amount = math.min(data.healLeft, math.floor(data.maxMana * mp.pct / 100), data.maxMana - data.mana)
 			if amount > 0 then
 				data.healLeft = data.healLeft - amount
 				data.mana = data.mana + amount
@@ -717,6 +742,15 @@ local function think(run, monster, data, now)
 		if healed then
 			data.nextHeal = now + 1000
 		end
+	end
+
+	-- czar leczacy: osobne opoznienie od czarow ataku (jak u gracza - moze leczyc i bic w tej samej sekundzie);
+	-- najmocniejsze leczenie (exura gran ico itp.) przy niskim zyciu, z dlugim odnowieniem
+	if voc.emergency and hpPct < voc.emergency.below and now >= (data.nextEmergency or 0) and heal(monster, data, voc.emergency.pct, voc.emergency.words) then
+		data.nextEmergency = now + voc.emergency.cd * 1000
+		data.nextHealSpell = now + SPELL_EXHAUST
+	elseif now >= (data.nextHealSpell or 0) and voc.heal and hpPct < voc.heal.below and heal(monster, data, voc.heal.pct, voc.heal.words) then
+		data.nextHealSpell = now + SPELL_EXHAUST
 	end
 
 	-- utamo vita (MS i ED): wlaczona od poczatku, a gdy mana spadnie do zera - wlaczana znowu po manie z potionow
@@ -754,9 +788,27 @@ local function think(run, monster, data, now)
 	end
 	local reach = voc.range == 1 and 1 or 6
 
-	-- czar leczacy: osobne opoznienie od czarow ataku (jak u gracza - moze leczyc i bic w tej samej sekundzie)
-	if now >= (data.nextHealSpell or 0) and voc.heal and hpPct < voc.heal.below and heal(monster, data, voc.heal.pct, voc.heal.words) then
-		data.nextHealSpell = now + SPELL_EXHAUST
+	-- pchanie: stojac obok celu, NPC przesuwa go o kratke - najchetniej na pole z bomby
+	if voc.push and d <= 1 and now >= (data.nextPush or 0) then
+		data.nextPush = now + 6000
+		local best
+		for _, f in ipairs(run.fields or {}) do
+			if not f.wall and dist(f.pos, tpos) == 1 and dist(f.pos, mpos) >= 1 and walkable(f.pos) then
+				best = f.pos
+				break
+			end
+		end
+		if not best then
+			local sx = tpos.x > mpos.x and 1 or (tpos.x < mpos.x and -1 or 0)
+			local sy = tpos.y > mpos.y and 1 or (tpos.y < mpos.y and -1 or 0)
+			local away = Position(tpos.x + sx, tpos.y + sy, tpos.z)
+			if walkable(away) and inRoom(run.mode, away) then
+				best = away
+			end
+		end
+		if best then
+			target:teleportTo(best, true)
+		end
 	end
 	-- czar albo runa (wspolne opoznienie jak u graczy)
 	if now >= data.nextSpell then
@@ -1086,6 +1138,7 @@ MODES.tour = {
 local function logFight(run, result)
 	saveHits(run)
 	clearFields(run)
+	run.dots = {}
 	run.focus = nil
 	local st = run.stats or { nominal = 0, got = 0, healed = 0 }
 	local dealt = 0
@@ -1139,6 +1192,27 @@ loop = function(mode, token)
 			end
 		end
 		run.fields = keep
+	end
+	if run.dots and #run.dots > 0 then
+		local keep = {}
+		for _, dot in ipairs(run.dots) do
+			local owner = Monster(dot.owner)
+			local data = owner and fighters[dot.owner]
+			local target = Player(dot.target)
+			if data and target and run.alive[dot.target] and dot.left > 0 then
+				if now >= dot.next then
+					dot.next = now + 1000
+					dot.left = dot.left - 1
+					if attackable(target) then
+						hit(owner, target, data, { type = dot.type, min = 1.2, max = 1.8, effect = dot.effect })
+					end
+				end
+				if dot.left > 0 then
+					keep[#keep + 1] = dot
+				end
+			end
+		end
+		run.dots = keep
 	end
 	-- NPC
 	local remaining = 0
@@ -1580,6 +1654,14 @@ end
 login:register()
 
 -- ---------- budowa sal ----------
+-- przeszkody w kazdej sali (przesuniecie od wejscia, przedmiot): wejscie 3x3 i rzad startowy NPC zostaja wolne
+local PILLAR, MARBLE, BASIN, STATUE = 2152, 2153, 171, 2026
+local OBSTACLES = {
+	{ -5, -4, PILLAR }, { 5, -4, PILLAR }, { -2, -3, MARBLE }, { 2, -3, MARBLE },
+	{ -3, -5, PILLAR }, { 3, -5, PILLAR }, { 0, -4, STATUE },
+	{ -7, -2, BASIN }, { 6, -2, BASIN }, { -6, 1, PILLAR }, { 5, 1, PILLAR },
+}
+
 local startup = GlobalEvent("OtsArenaPvpStartup")
 
 function startup.onStartup()
@@ -1588,6 +1670,14 @@ function startup.onStartup()
 		local landing = ROOMS[mode].landing
 		made = made + OtsBuildRoom(landing)
 		OtsReturnSpot(landing)
+		-- przeszkody: filary (zaslaniaja strzaly i droge), kosze z ogniem i posagi
+		for _, o in ipairs(OBSTACLES) do
+			local pos = Position(landing.x + o[1], landing.y + o[2], landing.z)
+			local tile = Tile(pos)
+			if tile and tile:getGround() and not tile:getItemById(o[3]) and not tile:hasProperty(CONST_PROP_BLOCKSOLID) then
+				Game.createItem(o[3], 1, pos)
+			end
+		end
 		-- poczekalnia NPC
 		local s = stagingPos(mode)
 		for dx = -4, 4 do
