@@ -427,10 +427,42 @@ end
 local pendingHit = {} -- id gracza -> obrazenia ciosu NPC przed ochrona (na czas jednego ciosu)
 local protection = {} -- id gracza -> jaka czesc ciosu dochodzi (1 = brak ochrony)
 
+-- PRAWDZIWA sila postaci: srednia z jej mocnych ciosow w NPC (z krytykami, ekwipunkiem, Wheel itd.),
+-- zapamietywana na stale. Lustro bije co najmniej tak mocno, jak postac naprawde bije.
+local KV_HIT = "ots-arena-hit"
+local realHits = {}
+
+local function realHit(player)
+	local pid = player:getId()
+	if realHits[pid] == nil then
+		realHits[pid] = tonumber(player:kv():get(KV_HIT)) or 0
+	end
+	return realHits[pid]
+end
+
+local function learnHit(player, raw)
+	local known = realHit(player)
+	local floor = mirrorHit(player) * 0.2 -- drobne ciosy (zwykly atak, slabe czary) pomijamy
+	if raw < floor or raw < known * 0.3 then
+		return
+	end
+	realHits[player:getId()] = known > 0 and (known * 0.8 + raw * 0.2) or raw
+end
+
+local function saveHits(run)
+	for pid in pairs(run.players) do
+		local player = Player(pid)
+		if player and realHits[pid] and realHits[pid] > 0 then
+			player:kv():set(KV_HIT, math.floor(realHits[pid]))
+		end
+	end
+end
+
 local function hit(monster, target, data, spell)
 	local max = target:getMaxHealth()
+	local base = math.max(data.base, target:isPlayer() and realHit(target) or 0)
 	-- wartosci w tabelach profesji: 12 = jeden sredni cios najmocniejszego czaru postaci-lustra
-	local unit = data.base * PVP * data.dmg / 12
+	local unit = base * PVP * data.dmg / 12
 	local cap = max * MAX_HIT / 100
 	local low = math.floor(math.min(cap, unit * spell.min))
 	local high = math.floor(math.min(cap, unit * spell.max))
@@ -883,13 +915,14 @@ MODES.tour = {
 
 -- ---------- petla ----------
 local function logFight(run, result)
+	saveHits(run)
 	local st = run.stats or { nominal = 0, got = 0, healed = 0 }
 	local dealt = 0
 	for _, v in pairs(run.dealt) do
 		dealt = dealt + v
 	end
 	local starter = Player(run.starter)
-	logger.info("[OTS arena] {} {} ({}): {} s, ciosy NPC {} -> doszlo {} ({}%), postac zadala NPC {}, NPC wyleczyl {}", run.mode, starter and starter:getName() or "?", result, os.time() - (run.fightStart or os.time()), math.floor(st.nominal), math.floor(st.got), st.nominal > 0 and math.floor(st.got * 100 / st.nominal) or 0, math.floor(dealt), math.floor(st.healed))
+	logger.info("[OTS arena] {} {} ({}): {} s, ciosy NPC {} -> doszlo {} ({}%), postac zadala NPC {}, NPC wyleczyl {}, sredni mocny cios postaci {}", run.mode, starter and starter:getName() or "?", result, os.time() - (run.fightStart or os.time()), math.floor(st.nominal), math.floor(st.got), st.nominal > 0 and math.floor(st.got * 100 / st.nominal) or 0, math.floor(dealt), math.floor(st.healed), starter and math.floor(realHit(starter)) or 0)
 end
 
 loop = function(mode, token)
@@ -1006,6 +1039,7 @@ function fighterHealth.onHealthChange(creature, attacker, primaryDamage, primary
 	local run = runs[data.mode]
 	local now = run and run.clock or 0
 	if attacker and attacker:isPlayer() then
+		learnHit(attacker, math.abs(primaryDamage) + math.abs(secondaryDamage))
 		local factor = PVP
 		primaryDamage = math.floor(primaryDamage * factor)
 		secondaryDamage = math.floor(secondaryDamage * factor)
