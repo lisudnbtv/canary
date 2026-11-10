@@ -3483,9 +3483,15 @@ local function unlockQuestDoors(player, box)
 	return unlocked
 end
 
+-- hub z teleportami (bez potworow): tu walka nie blokuje teleportow - np. postacie z party bota,
+-- ktore bot przeniosl do lidera, maja jeszcze znacznik walki z expowiska
+local function inHubArea(pos)
+	return pos.z == 7 and pos.x >= 29990 and pos.x <= 30165 and pos.y >= 29880 and pos.y <= 30290
+end
+
 local function inFight(player)
 	local here = Tile(player:getPosition())
-	local protected = isSafe(player) or (here and here:hasFlag(TILESTATE_PROTECTIONZONE))
+	local protected = isSafe(player) or (here and here:hasFlag(TILESTATE_PROTECTIONZONE)) or inHubArea(player:getPosition())
 	if player:getCondition(CONDITION_INFIGHT, CONDITIONID_DEFAULT) and not protected and not player:getGroup():getAccess() then
 		player:sendCancelMessage("Nie mozesz sie teleportowac w trakcie walki.")
 		return true
