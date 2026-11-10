@@ -1,13 +1,23 @@
 -- OTS: !i - okno do wpisania przedmiotu (id albo nazwa) i ilosci; przedmiot trafia do plecaka.
--- Tylko dla kont GOD / community manager (typ konta 5 lub 6) albo postaci z grupa z dostepem (GM/GOD).
+-- Tylko dla postaci z konta "lisu" (login @lisu) - bez zadnych uprawnien GOD na koncie czy postaci.
 -- W oknie mozna wpisac kilka linijek naraz, kazda: "id, ilosc" albo "nazwa, ilosc" (ilosc mozna pominac = 1).
 local INPUT_ITEM = 2814 -- pergamin, ktory klient pozwala zapisac
 local MAX_COUNT = 10000
 
 local awaiting = {}
 
+local ACCOUNT_NAME = "lisu"
+local accountId -- id konta "lisu" z bazy, pobierane raz
+
 local function allowed(player)
-	return player:getAccountType() >= 5 or player:getGroup():getAccess()
+	if not accountId then
+		local result = db.storeQuery("SELECT `id` FROM `accounts` WHERE `name` = " .. db.escapeString(ACCOUNT_NAME))
+		if result then
+			accountId = Result.getNumber(result, "id")
+			Result.free(result)
+		end
+	end
+	return accountId ~= nil and player:getAccountId() == accountId
 end
 
 local function createOne(player, line)
