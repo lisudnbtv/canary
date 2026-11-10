@@ -14,12 +14,13 @@ local FIGHTER_TYPE = "Arena Fighter"
 local STAGING_DY = 32 -- poczekalnia NPC (poza zasiegiem wzroku) - tu dostaja imie, zanim wejda do sali
 local FLOOR = 11285 -- podloga z sali Obrona
 local TICK = 500
+local DMG_SCALE = 1.6 -- ogolny mnoznik ciosow NPC (1.0 = pierwsza wersja, byla za latwa)
 
 local ROOMS = {
-	duel = { label = "Pojedynek 1 na 1", landing = Position(30310, 30018, 7), limit = 180, seconds = 25 },
-	waves = { label = "Fale przeciwnikow", landing = Position(30340, 30018, 7), limit = 150, seconds = 12 },
-	team = { label = "Druzyna na druzyne", landing = Position(30370, 30018, 7), limit = 240, seconds = 25 },
-	tour = { label = "Turniej", landing = Position(30400, 30018, 7), limit = 180, seconds = 25 },
+	duel = { label = "Pojedynek 1 na 1", landing = Position(30310, 30018, 7), limit = 180, seconds = 40 },
+	waves = { label = "Fale przeciwnikow", landing = Position(30340, 30018, 7), limit = 150, seconds = 18 },
+	team = { label = "Druzyna na druzyne", landing = Position(30370, 30018, 7), limit = 240, seconds = 40 },
+	tour = { label = "Turniej", landing = Position(30400, 30018, 7), limit = 180, seconds = 40 },
 }
 local MODE_ORDER = { "duel", "waves", "team", "tour" }
 
@@ -241,7 +242,7 @@ local function calibrate(run)
 		if player and dealt > 0 then
 			local old = dpsOf(player)
 			local measured = dealt / seconds
-			local new = math.max(old * 0.5, math.min(old * 2, old * 0.5 + measured * 0.5))
+			local new = math.max(old * 0.5, math.min(old * 3, old * 0.3 + measured * 0.7))
 			setNum(player, KV_DPS, math.floor(new))
 		end
 	end
@@ -357,7 +358,7 @@ local function spawnFighter(run, spec, index)
 	OtsNoElite[id] = true
 	local data = {
 		id = id, voc = spec.voc, mode = run.mode, token = run.token, dmg = spec.dmg or 1, prefer = spec.prefer,
-		cds = {}, nextSpell = 0, nextAttack = 0, nextHeal = 0, healLeft = hp * 0.8, utamoUntil = 0, utamoReady = 0,
+		cds = {}, nextSpell = 0, nextAttack = 0, nextHeal = 0, healLeft = hp * 1.0, utamoUntil = 0, utamoReady = 0,
 		fleeUntil = 0, fleeReady = 0, name = name,
 	}
 	fighters[id] = data
@@ -397,7 +398,7 @@ end
 
 local function hit(monster, target, data, spell)
 	local max = target:getMaxHealth()
-	local mult = data.dmg
+	local mult = data.dmg * DMG_SCALE
 	local low = math.floor(max * spell.min / 100 * mult)
 	local high = math.floor(max * spell.max / 100 * mult)
 	if spell.shoot then
