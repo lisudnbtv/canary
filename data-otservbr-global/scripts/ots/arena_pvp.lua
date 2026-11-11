@@ -715,6 +715,62 @@ local function heal(monster, data, pct, words, effect)
 	return true
 end
 
+-- pole, na ktorym NPC moze stanac: bez PZ, domow, schodow i przeszkod
+local DIRS = {
+	[DIRECTION_NORTH] = { 0, -1 }, [DIRECTION_EAST] = { 1, 0 }, [DIRECTION_SOUTH] = { 0, 1 }, [DIRECTION_WEST] = { -1, 0 },
+	[DIRECTION_SOUTHWEST] = { -1, 1 }, [DIRECTION_SOUTHEAST] = { 1, 1 }, [DIRECTION_NORTHWEST] = { -1, -1 }, [DIRECTION_NORTHEAST] = { 1, -1 },
+}
+
+local function npcCanStand(pos)
+	local tile = Tile(pos)
+	return tile and tile:getGround() and not tile:hasFlag(TILESTATE_PROTECTIONZONE) and not tile:hasFlag(TILESTATE_FLOORCHANGE)
+		and not tile:getHouse() and not tile:hasProperty(CONST_PROP_BLOCKSOLID) and tile:getCreatureCount() == 0
+end
+
+local function spotNear(center, rmin, rmax)
+	for r = rmin, rmax do
+		local list = {}
+		for dx = -r, r do
+			for dy = -r, r do
+				if math.max(math.abs(dx), math.abs(dy)) == r then
+					list[#list + 1] = Position(center.x + dx, center.y + dy, center.z)
+				end
+			end
+		end
+		for i = #list, 2, -1 do
+			local j = math.random(i)
+			list[i], list[j] = list[j], list[i]
+		end
+		for _, pos in ipairs(list) do
+			if npcCanStand(pos) then
+				return pos
+			end
+		end
+	end
+	return nil
+end
+
+-- NPC "przechodzi" za postacia: po schodach, drabinie, linie albo dziurze (pojawia sie tam, gdzie ona weszla)
+local function followAcross(run, monster, data, target, now)
+	if not data.chaseAt then
+		data.chaseAt = now + math.random(2000, 5000) -- czas na dojscie do schodow
+		return
+	end
+	if now < data.chaseAt then
+		return
+	end
+	data.chaseAt = nil
+	data.path = nil
+	data.noPathSince = nil
+	local tpos = target:getPosition()
+	local exit = run.exitPos and run.exitPos.z == tpos.z and run.exitPos or tpos
+	local pos = spotNear(exit, 1, 4) or spotNear(tpos, 2, 6)
+	if pos then
+		monster:getPosition():sendMagicEffect(CONST_ME_POFF)
+		monster:teleportTo(pos)
+	end
+end
+
 local function think(run, monster, data, now)
 	local voc = VOC[data.voc]
 	local hpPct = monster:getHealth() * 100 / math.max(1, monster:getMaxHealth())
@@ -798,6 +854,15 @@ local function think(run, monster, data, now)
 		monster:selectTarget(target)
 	end
 	local mpos, tpos = monster:getPosition(), target:getPosition()
+	-- najazd: postac poszla na inne pietro albo nie ma do niej drogi - NPC idzie za nia schodami
+	if ROOMS[run.mode].free then
+		local stuck = data.noPathSince and now - data.noPathSince > 6000
+		if mpos.z ~= tpos.z or stuck then
+			followAcross(run, monster, data, target, now)
+			return
+		end
+		data.chaseAt = nil
+	end
 	local d = dist(mpos, tpos)
 	local sight = mpos.z == tpos.z and mpos:isSightClear(tpos)
 	-- szukanie postaci po duzej sali: gdy jest daleko albo za przeszkoda, NPC sam idzie w jej strone
@@ -807,11 +872,26 @@ local function think(run, monster, data, now)
 		data.nextStep = now + math.max(150, math.floor(1000 * 150 / math.max(100, monster:getSpeed())))
 		if not data.path or #data.path == 0 or now >= (data.pathAt or 0) then
 			local path = monster:getPathTo(tpos, voc.range == 1 and 1 or 3, voc.range == 1 and 1 or 4, true, voc.range > 1, 60)
-			data.path = type(path) == "table" and path or nil
+			data.path = type(path) == "table" and #path > 0 and path or nil
 			data.pathAt = now + 1000
+			if data.path then
+				data.noPathSince = nil
+			else
+				data.noPathSince = data.noPathSince or now
+			end
 		end
 		if data.path and #data.path > 0 then
-			monster:move(table.remove(data.path, 1))
+			-- krok tylko na dozwolone pole (bez PZ!) - reczny ruch omija zwykle zasady silnika
+			local dir = data.path[1]
+			local v = DIRS[dir]
+			local nextPos = v and Position(mpos.x + v[1], mpos.y + v[2], mpos.z)
+			if nextPos and npcCanStand(nextPos) then
+				table.remove(data.path, 1)
+				monster:move(dir)
+			else
+				data.path = nil
+				data.pathAt = 0
+			end
 		end
 	end
 	if not sight then
@@ -1298,6 +1378,13 @@ OtsRaidTick = function(run, now, remaining)
 		end
 	end
 	local target = Player(run.starter)
+	if target then
+		local tp = target:getPosition()
+		if run.lastZ and run.lastZ ~= tp.z then
+			run.exitPos = Position(tp.x, tp.y, tp.z) -- tu postac wyszla ze schodow / drabiny
+		end
+		run.lastZ = tp.z
+	end
 	local tracked = false
 	if target and attackable(target) then
 		local tp = target:getPosition()
@@ -1305,7 +1392,7 @@ OtsRaidTick = function(run, now, remaining)
 			local m = Creature(id)
 			if m then
 				local mp = m:getPosition()
-				if mp.z == tp.z and dist(mp, tp) <= 25 then
+				if dist(mp, tp) <= 25 and math.abs(mp.z - tp.z) <= 2 then
 					tracked = true
 					break
 				end
@@ -1515,6 +1602,14 @@ loop = function(mode, token)
 			remaining = remaining + 1
 			if not ROOMS[mode].free and not inRoom(mode, monster:getPosition()) then
 				monster:teleportTo(spawnSpot(mode, 1), true)
+			end
+			-- NPC nigdy nie stoi w PZ
+			local mtile = Tile(monster:getPosition())
+			if mtile and mtile:hasFlag(TILESTATE_PROTECTIONZONE) then
+				local out = spotNear(monster:getPosition(), 1, 6)
+				if out then
+					monster:teleportTo(out)
+				end
 			end
 			think(run, monster, fighters[id], now)
 		else
